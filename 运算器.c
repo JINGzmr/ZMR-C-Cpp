@@ -187,4 +187,82 @@
 // }
 
 
+// #include<stdio.h>
+// #include<math.h>
+// int main()
+// {
+//     double x1,y1;
+//     double x2,y2;
+//     double x3,y3;
+//     scanf("%lf %lf %lf %lf %lf %lf",&x1,&y1,&x2,&y2,&x3,&y3);
+//     double a,b,c,d=0.0;
+//     int i;
+   
+//         a=pow(x2-x1,2);
+//         b=pow(y2-y1,2);
+//         c=sqrt(a+b);
+//         d+=c;
 
+//         a=pow(x3-x1,2);
+//         b=pow(y3-y1,2);
+//         c=sqrt(a+b);
+//         d+=c;
+    
+//         a=pow(x2-x3,2);
+//         b=pow(y2-y3,2);
+//         c=sqrt(a+b);
+//         d+=c;
+    
+//     printf("%.2f",d);
+
+//     return 0;
+// }
+
+
+// #include<stdio.h>
+// int main()
+// {
+//     int n,m;
+//     scanf("%d %d",&n,&m);
+//     int i,j,k,l,max=0,t,sum=0;
+//     int a[20]={0};
+//     for(i=0;i<n;i++){
+//         sum=0;
+//         for(j=0;j<m;j++){
+//             scanf("%d",&a[j]);
+//             sum+=a[j];
+//         }
+//         for(k=0;k<m-1;k++){
+//             for(l=0;l<m-1-k;l++){
+//                 if(a[l]>a[l+1]){
+//                     int t=a[l];
+//                     a[l]=a[l+1];
+//                     a[l+1]=t;
+//                 }
+//             }
+//         }
+//         int sum=0;
+//         for(k=1;k<m-1;k++){
+//             sum+=a[k];
+//         }
+//         // printf("%d\n",sum);
+//         // sum=sum-a[0]-a[m-1];
+//         if(sum>max){
+//             max=sum;
+//             t=i;
+//         }
+//     }
+//     // printf("%d %d\n",max,t);
+//     printf("%.2f\n",(double)max/(m-2));
+
+//     return 0;
+// }
+
+
+#include<stdio.h>
+int main()
+{
+
+
+    return 0;
+}
