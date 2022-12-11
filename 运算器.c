@@ -259,10 +259,58 @@
 // }
 
 
-#include<stdio.h>
-int main()
-{
+// #include<stdio.h>
+// int main()
+// {
 
 
-    return 0;
-}
+//     return 0;
+// }
+
+// #include <stdio.h>
+// int f(int n)
+// {
+// if(n==1)
+// return 1;
+// return (n*f(n-1));
+// }
+// int main (void)
+// {
+// int a;
+// scanf("%d",&a);
+// printf("%d\n",f(a));
+// }
+
+
+
+
+// #include <stdio.h>
+// #include <math.h>
+// int fact(int n)
+// {
+//     int i,t=sqrt(n);
+//     if(n<=1)return 0;
+    
+//     else for(i=2;i<=t;i++){
+//             if(n%i==0)return 0;
+//         }
+
+//     return 1;
+// }
+// int main()
+// {
+// int n,i,a;
+// scanf("%d",&n);
+// for(i=0;i<n;i++)
+// {
+// scanf("%d",&a);
+// if(fact(a)==1)
+// {
+// printf("Yes\n");
+// }else
+// {
+// printf("No\n");
+// }
+// }
+// return 0;
+// }
