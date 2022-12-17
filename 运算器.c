@@ -431,3 +431,28 @@
 // }
 
 
+// #include<stdio.h>
+// int main()
+// {
+//     struct student{
+//         char a[6];
+//         char b[11];
+//         int c;
+//     }x[10];
+
+//     int n,i;
+//     double sum=0;
+//     scanf("%d",&n);
+//     for(i=0;i<n;i++){
+//         scanf("%s %s %d",x[i].a,x[i].b,&x[i].c);
+//         sum+=x[i].c;
+//     }
+
+//     printf("%.2f\n",sum*1.00/n);
+//     for(i=0;i<n;i++){
+//         if(sum*1.00/n>x[i].c)
+//             printf("%s %s\n",x[i].b,x[i].a);
+//     }
+
+//     return 0;
+// }
