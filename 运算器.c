@@ -314,3 +314,120 @@
 // }
 // return 0;
 // }
+
+
+// #include<stdio.h>
+// int main()
+// {
+//     int n,m;
+//     scanf("%d",&n);
+//     m=n;
+//     int a[n][n];
+//     int i,j;
+//     for(i=0;i<n;i++){
+//         for(j=0;j<n;j++){
+//             scanf("%d",&a[i][j]);
+//         }
+//     }
+
+//     int h,l,x,y,tag=0;
+//     i=0;
+//     while(m--){
+//         int max=-1,min=1000000;
+//         for(j=0;j<n;j++){
+//             if(a[i][j]>max){
+//                 max=a[i][j];
+//                 h=i;
+//                 l=j;
+//             }
+//         }
+//         for(j=l,x=0;x<n;x++){
+//             if(a[x][j]<min){
+//                 min=a[x][j];
+//                 y=x;//hangshu
+//             }
+//         }
+
+//         if(y==h){
+//             printf("%d %d\n",h,l);
+//             tag=1;
+//         }
+
+//         i++;
+//     }
+
+//     if(tag==0)printf("NONE");
+
+//     return 0;
+// }
+
+
+
+// #include<stdio.h>
+// int main()
+// {
+//     char a[1001];
+//     char b[1001];
+//     gets(a);
+
+//     int i,j,x,y;
+//     for(i=0,j=0;a[i]!='\0';i++,j++){
+//         while(a[i]==' '&&a[i]!='\0'){
+//             i++;
+//             j++;
+//         }if(a[i]=='\0')break;
+//         while(a[j]!=' '&&a[j]!='\0'){
+//             j++;
+//         }
+//         j--;
+
+//         x=i;y=j;
+//         for(;x<=y;y--){
+//             printf("%c",a[y]);
+//         }
+//         printf(" ");
+
+//         i=j;
+
+
+
+//     }
+// printf("...");
+
+//     return 0;
+// }
+
+
+// #include <stdio.h>
+// #include <string.h>
+// struct book{
+// char name[31];
+// double price;
+// }a[10];
+// int main()
+// {
+// int i,n,max1,min1;
+// double max=-1,min=100000;
+// scanf("%d",&n);
+// getchar();
+// for(i=0;i<n;i++)
+// {
+// gets(a[i].name);
+// scanf("%lf",&a[i].price);
+// getchar();
+// if(a[i].price>max)
+// {
+// max=a[i].price;
+// max1=i;
+// }
+// if(a[i].price<min)
+// {
+// min=a[i].price;
+// min1=i;
+// }
+// }
+// printf("%.2f %s\n",a[max1].price,a[max1].name);
+// printf("%.2f %s",a[min1].price,a[min1].name);
+// }
+
+
