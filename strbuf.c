@@ -121,5 +121,48 @@ void strbuf_reset(struct strbuf *sb)
 void strbuf_grow(struct strbuf *sb, size_t extra)
 {
     sb->buf=(char*)realloc(sb->buf,extra);//默认buf之前申请过一块内存，返回值为刚申请到的内存首地址
-    //(还要)
+    // strbuf_init(sb, extra);//更新alloc
+    sb->alloc += extra;
 }
+
+//向 sb 追加长度为 len 的数据 data 。
+void strbuf_add(struct strbuf *sb, const void *data, size_t len)
+{
+    if(sb->len+len <= sb->alloc){ //（要不要考虑\0?）
+        sb->buf=strcat(sb->buf,data);//(要不要强制类型转换为char*？)
+    }
+    else {
+        strbuf_grow(sb,sb->alloc);//再来一倍
+        sb->buf=strcat(sb->buf,data);
+    }
+    sb->len+=len;//更新len（ alloc？）
+}
+
+//向 sb 追加一个字符 c。
+void strbuf_addch(struct strbuf *sb, int c)
+{
+    if(sb->len+1 <= sb->alloc){ 
+        sb->buf=strcat(sb->buf,c);
+    }
+    else {
+        strbuf_grow(sb,sb->alloc);
+        sb->buf=strcat(sb->buf,c);
+    }
+    sb->len+=1;
+}
+
+//向 sb 追加一个字符串 s。
+void strbuf_addstr(struct strbuf *sb, const char *s)
+{
+    int n;
+    n=strlen(s);
+    if(sb->len+n <= sb->alloc){ 
+        sb->buf=strcat(sb->buf,s);
+    }
+    else {
+        strbuf_grow(sb,sb->alloc);
+        sb->buf=strcat(sb->buf,s);
+    }
+    sb->len+=n;
+}
+
