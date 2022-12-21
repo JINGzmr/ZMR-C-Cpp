@@ -156,13 +156,69 @@ void strbuf_addstr(struct strbuf *sb, const char *s)
 {
     int n;
     n=strlen(s);
-    if(sb->len+n <= sb->alloc){ 
-        sb->buf=strcat(sb->buf,s);
-    }
-    else {
+    // if(sb->len+n <= sb->alloc){ 
+    //     sb->buf=strcat(sb->buf,s);
+    // }
+    // else {
+    //     strbuf_grow(sb,sb->alloc);
+    //     sb->buf=strcat(sb->buf,s);
+    // }
+    // sb->len+=n;
+
+    while(sb->len+n > sb->alloc)
+    {
         strbuf_grow(sb,sb->alloc);
-        sb->buf=strcat(sb->buf,s);
     }
+    sb->buf=strcat(sb->buf,s);
     sb->len+=n;
 }
 
+//向一个 sb 追加另一个 strbuf 的数据。
+void strbuf_addbuf(struct strbuf *sb, const struct strbuf *sb2)//追加一个结构体
+{
+    // if(sb->len+sb2->len <= sb->alloc){ 
+    //     sb->buf=strcat(sb->buf,sb2->buf);
+    // }
+    // else {
+    //     strbuf_grow(sb,sb->alloc);
+    //     sb->buf=strcat(sb->buf,sb2->buf);
+    // }
+    // sb->len+=(sb2->len);
+
+    while(sb->len+sb2->len > sb->alloc)
+    {
+        strbuf_grow(sb,sb->alloc);
+    }
+    sb->buf=strcat(sb->buf,sb2->buf);
+    sb->len+=(sb2->len);
+}
+
+//设置 sb 的长度 len。
+void strbuf_setlen(struct strbuf *sb, size_t len)
+{
+    while(sb->alloc < len)
+    {
+        strbuf_grow(sb,sb->alloc);
+    }
+    sb->len=len;
+}
+
+//计算 sb 目前仍可以向后追加的字符串长度。
+size_t strbuf_avail(const struct strbuf *sb)
+{
+    return (sb->alloc-(sb->len+1));//末尾的\0
+}
+
+//向 sb 内存坐标为 pos 位置插入长度为 len 的数据 data 。
+void strbuf_insert(struct strbuf *sb, size_t pos, const void *data, size_t len)
+{
+    while(sb->len+len > sb->alloc)
+    {
+        strbuf_grow(sb,sb->alloc);
+    }
+    int i;
+    for(i=0;i<len;i++){
+        sb->buf[pos+i]=(char*)data;
+        data++;
+    }
+}
