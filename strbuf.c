@@ -28,6 +28,11 @@ void strbuf_setlen(struct strbuf *sb, size_t len);
 size_t strbuf_avail(const struct strbuf *sb);
 void strbuf_insert(struct strbuf *sb, size_t pos, const void *data, size_t len);
 
+//Part 2C
+void strbuf_ltrim(struct strbuf *sb);
+void strbuf_rtrim(struct strbuf *sb);
+void strbuf_remove(struct strbuf *sb, size_t pos, size_t len);
+
 int main() {
   struct strbuf sb;
   strbuf_init(&sb, 10);
@@ -114,7 +119,7 @@ void strbuf_reset(struct strbuf *sb)
     // sb=NULL;
 }
 
-/*---------------------------------------------------------------------------------*/
+/*------------------------------------------------------------------------------------------------------------------------*/
 
 //确保在 len 之后 strbuf 中至少有 extra 个字节的空闲空间可用。
 //                           （包括alloc的4字节吗？）
@@ -218,7 +223,37 @@ void strbuf_insert(struct strbuf *sb, size_t pos, const void *data, size_t len)
     }
     int i;
     for(i=0;i<len;i++){
-        sb->buf[pos+i]=(char*)data;
+        sb->buf[pos+i]=(char*)data;  //默认原来位置没有数据
         data++;
     }
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------*/
+
+//去除 sb 缓冲区左端的所有 空格，tab,'\t'。
+void strbuf_ltrim(struct strbuf *sb)
+{
+    while((sb->buf==' '||sb->buf=='\t')&&sb->buf!='\0')
+    {
+        sb->buf=(char*)memmove(sb->buf,sb->buf+1,sb->len-1);
+        sb->len--;
+    }
+}
+
+//去除 sb 缓冲区右端的所有 空格，tab, '\t'。
+void strbuf_rtrim(struct strbuf *sb)
+{
+    while((sb->buf+(sb->len)-1==' '||sb->buf+(sb->len)-1=='\t')&&sb->buf+(sb->len)-1!='\0')
+    {
+        // sb->buf+(sb->len)-1='\0';
+        sb->buf=(char*)memmove(sb->buf+(sb->len)-1,sb->buf+(sb->len),1);
+        sb->len--;
+    }
+}
+
+//删除 sb 缓冲区从 pos 坐标长度为 len 的内容。
+void strbuf_remove(struct strbuf *sb, size_t pos, size_t len)
+{
+    
 }

@@ -584,6 +584,6 @@
 #include<string.h>
 int main()
 {
-    char a[]="123\0a456";
+    char a[]="123a456 ";
     printf("%d",sizeof(a));
 }
