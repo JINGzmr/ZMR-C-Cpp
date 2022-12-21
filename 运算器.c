@@ -538,3 +538,44 @@
 //     return 0;
 // }
 
+
+//写一个函数交换两个结构体变量
+// #include<stdio.h>
+// struct Cat{
+//     char name[20];
+//     char sex;
+//     int age;
+//     int score;
+// };
+ 
+// void change(struct Cat *a,struct Cat *b)
+// {
+//     struct Cat change = {};
+//     change = *a;
+//     *a = *b;
+//     *b = change;
+ 
+//     printf("%s %c %d %d\n",a->name,a->sex,a->age,a->score);
+//     printf("%s %c %d %d\n",b->name,b->sex,b->age,b->score);
+// }
+ 
+// int main()
+// {
+ 
+//     struct Cat cat1 = {"tom",'m',28,0};
+//     struct Cat *p1 = &cat1;
+ 
+//     struct Cat cat2 = {"heimao",'f',18,100};
+//     struct Cat *p2 = &cat2;
+
+//     printf("%s %c %d %d\n",cat1.name,cat1.sex,cat1.age,cat1.score);
+//     printf("%s %c %d %d\n",cat2.name,cat2.sex,cat2.age,cat2.score);
+//     printf("\n");
+ 
+//     change(p1 , p2);
+ 
+//     printf("%s %c %d %d\n",cat1.name,cat1.sex,cat1.age,cat1.score);
+//     printf("%s %c %d %d\n",cat2.name,cat2.sex,cat2.age,cat2.score);
+ 
+//     return 0;
+// }

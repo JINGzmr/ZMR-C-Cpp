@@ -121,5 +121,5 @@ void strbuf_reset(struct strbuf *sb)
 void strbuf_grow(struct strbuf *sb, size_t extra)
 {
     sb->buf=(char*)realloc(sb->buf,extra);//默认buf之前申请过一块内存，返回值为刚申请到的内存首地址
-
+    //(还要)
 }
