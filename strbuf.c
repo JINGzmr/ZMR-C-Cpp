@@ -2,6 +2,7 @@
 #include<string.h>
 #include<assert.h>
 #include<stdlib.h>
+#include<stdbool.h>
 
 struct strbuf {
   int len;     //当前缓冲区（字符串）长度
@@ -33,15 +34,19 @@ void strbuf_ltrim(struct strbuf *sb);
 void strbuf_rtrim(struct strbuf *sb);
 void strbuf_remove(struct strbuf *sb, size_t pos, size_t len);
 
-int main() {
-  struct strbuf sb;
-  strbuf_init(&sb, 10);
-  strbuf_attach(&sb, "xiyou", 5, 10);
-  assert(strcmp(sb.buf, "xiyou") == 0);
-  strbuf_addstr(&sb, "linux");
-  assert(strcmp(sb.buf, "xiyoulinux") == 0);
-  strbuf_release(&sb);
-}
+//Part 2D
+ssize_t strbuf_read(struct strbuf *sb, int fd, size_t hint);
+int strbuf_getline(struct strbuf *sb, FILE *fp);
+
+// int main() {
+//   struct strbuf sb;
+//   strbuf_init(&sb, 10);
+//   strbuf_attach(&sb, "xiyou", 5, 10);
+//   assert(strcmp(sb.buf, "xiyou") == 0);
+//   strbuf_addstr(&sb, "linux");
+//   assert(strcmp(sb.buf, "xiyoulinux") == 0);
+//   strbuf_release(&sb);
+// }
 
 
 //初始化 sb 结构体，容量为 alloc。
@@ -134,11 +139,11 @@ void strbuf_grow(struct strbuf *sb, size_t extra)
 void strbuf_add(struct strbuf *sb, const void *data, size_t len)
 {
     if(sb->len+len <= sb->alloc){ //（要不要考虑\0?）
-        sb->buf=strcat(sb->buf,data);//(要不要强制类型转换为char*？)
+        sb->buf=strcat(sb->buf,(const char*)data);//(要不要强制类型转换为char*？)要！
     }
     else {
         strbuf_grow(sb,sb->alloc);//再来一倍
-        sb->buf=strcat(sb->buf,data);
+        sb->buf=strcat(sb->buf,(const char*)data);
     }
     sb->len+=len;//更新len（ alloc？）
 }
@@ -146,12 +151,14 @@ void strbuf_add(struct strbuf *sb, const void *data, size_t len)
 //向 sb 追加一个字符 c。
 void strbuf_addch(struct strbuf *sb, int c)
 {
+    char a[1];
+    a[0]=c;
     if(sb->len+1 <= sb->alloc){ 
-        sb->buf=strcat(sb->buf,c);
+        sb->buf=strcat(sb->buf,a);
     }
     else {
         strbuf_grow(sb,sb->alloc);
-        sb->buf=strcat(sb->buf,c);
+        sb->buf=strcat(sb->buf,a);
     }
     sb->len+=1;
 }
@@ -222,9 +229,10 @@ void strbuf_insert(struct strbuf *sb, size_t pos, const void *data, size_t len)
         strbuf_grow(sb,sb->alloc);
     }
     int i;
+    char a[len];
+    strcpy(a,(const char*)data);
     for(i=0;i<len;i++){
-        sb->buf[pos+i]=(char*)data;  //默认原来位置没有数据
-        data++;
+        sb->buf[pos+i]=a[i];  //默认原来位置没有数据
     }
 }
 
@@ -234,8 +242,8 @@ void strbuf_insert(struct strbuf *sb, size_t pos, const void *data, size_t len)
 //去除 sb 缓冲区左端的所有 空格，tab,'\t'。
 void strbuf_ltrim(struct strbuf *sb)
 {
-    while((sb->buf==' '||sb->buf=='\t')&&sb->buf!='\0')
-    {
+    while((*(sb->buf)==' '||sb->buf[0]=='\t')&&sb->buf[0]!='\0')//这两种都可以，就是不行sb->buf==' '，因为
+    {                                                        //C++ forbids comparison between pointer and integer
         sb->buf=(char*)memmove(sb->buf,sb->buf+1,sb->len-1);
         sb->len--;
     }
@@ -244,7 +252,7 @@ void strbuf_ltrim(struct strbuf *sb)
 //去除 sb 缓冲区右端的所有 空格，tab, '\t'。
 void strbuf_rtrim(struct strbuf *sb)
 {
-    while((sb->buf+(sb->len)-1==' '||sb->buf+(sb->len)-1=='\t')&&sb->buf+(sb->len)-1!='\0')
+    while((sb->buf[(sb->len)-1]==' '||sb->buf[(sb->len)-1]=='\t')&&sb->buf[(sb->len)-1]!='\0')
     {
         // sb->buf+(sb->len)-1='\0';
         sb->buf=(char*)memmove(sb->buf+(sb->len)-1,sb->buf+(sb->len),1);
@@ -255,5 +263,40 @@ void strbuf_rtrim(struct strbuf *sb)
 //删除 sb 缓冲区从 pos 坐标长度为 len 的内容。
 void strbuf_remove(struct strbuf *sb, size_t pos, size_t len)
 {
-    
+    sb->buf=(char*)memmove(sb->buf+pos,sb->buf+pos+len,sb->len-pos-len+1);
+}
+
+
+/*------------------------------------------------------------------------------------------------------------------------*/
+
+//sb 增长 hint ? hint : 8192 大小， 然后将文件描述符为 fd 的所有文件内容追加到 sb 中。
+ssize_t strbuf_read(struct strbuf *sb, int fd, size_t hint)
+{
+    return 0;
+}
+
+//将 将文件句柄为 fp 的一行内容（抛弃换行符）读取到 sb 。
+int strbuf_getline(struct strbuf *sb, FILE *fp)
+{
+    return 0;
+}
+
+//将长度为 len 的字符串 str 根据切割字符 terminator 切成多个 strbuf,并从结果返回，
+//max 可以用来限定最大切割数量。返回 struct strbuf 的指针数组，数组的最后元素为 NULL
+struct strbuf **strbuf_split_buf(const char *str, size_t len, int terminator, int max)
+{
+    return 0;
+}
+
+//target_str : 目标字符串，str : 前缀字符串，strlen : target_str 长度 ，前缀相同返回 true 失败返回 false
+bool strbuf_begin_judge(char* target_str, const char* str, int strlen)
+{
+    return 0;
+}
+
+//target_str : 目标字符串，begin : 开始下标，end 结束下标。len : target_buf的长度，参数不合法返回 NULL. 
+//下标从0开始，[begin, end)区间。
+char* strbuf_get_mid_buf(char* target_buf, int begin, int end, int len)
+{
+    return 0;
 }
