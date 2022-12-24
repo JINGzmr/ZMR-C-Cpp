@@ -10,43 +10,33 @@ struct strbuf {
   char *buf;   //缓冲区（字符串）
 };
 
-//Part 2A
-void strbuf_init(struct strbuf *sb, size_t alloc);
-void strbuf_attach(struct strbuf *sb, void *str, size_t len, size_t alloc);
-void strbuf_release(struct strbuf *sb);
-void strbuf_swap(struct strbuf *a, struct strbuf *b);
-char *strbuf_detach(struct strbuf *sb, size_t *sz);
-int strbuf_cmp(const struct strbuf *first, const struct strbuf *second);
-void strbuf_reset(struct strbuf *sb);
+// //Part 2A
+// void strbuf_init(struct strbuf *sb, size_t alloc);
+// void strbuf_attach(struct strbuf *sb, void *str, size_t len, size_t alloc);
+// void strbuf_release(struct strbuf *sb);
+// void strbuf_swap(struct strbuf *a, struct strbuf *b);
+// char *strbuf_detach(struct strbuf *sb, size_t *sz);
+// int strbuf_cmp(const struct strbuf *first, const struct strbuf *second);
+// void strbuf_reset(struct strbuf *sb);
 
-//Part 2B
-void strbuf_grow(struct strbuf *sb, size_t extra);
-void strbuf_add(struct strbuf *sb, const void *data, size_t len);
-void strbuf_addch(struct strbuf *sb, int c);
-void strbuf_addstr(struct strbuf *sb, const char *s);
-void strbuf_addbuf(struct strbuf *sb, const struct strbuf *sb2);
-void strbuf_setlen(struct strbuf *sb, size_t len);
-size_t strbuf_avail(const struct strbuf *sb);
-void strbuf_insert(struct strbuf *sb, size_t pos, const void *data, size_t len);
+// //Part 2B
+// void strbuf_grow(struct strbuf *sb, size_t extra);
+// void strbuf_add(struct strbuf *sb, const void *data, size_t len);
+// void strbuf_addch(struct strbuf *sb, int c);
+// void strbuf_addstr(struct strbuf *sb, const char *s);
+// void strbuf_addbuf(struct strbuf *sb, const struct strbuf *sb2);
+// void strbuf_setlen(struct strbuf *sb, size_t len);
+// size_t strbuf_avail(const struct strbuf *sb);
+// void strbuf_insert(struct strbuf *sb, size_t pos, const void *data, size_t len);
 
-//Part 2C
-void strbuf_ltrim(struct strbuf *sb);
-void strbuf_rtrim(struct strbuf *sb);
-void strbuf_remove(struct strbuf *sb, size_t pos, size_t len);
+// //Part 2C
+// void strbuf_ltrim(struct strbuf *sb);
+// void strbuf_rtrim(struct strbuf *sb);
+// void strbuf_remove(struct strbuf *sb, size_t pos, size_t len);
 
-//Part 2D
-ssize_t strbuf_read(struct strbuf *sb, int fd, size_t hint);
-int strbuf_getline(struct strbuf *sb, FILE *fp);
-
-// int main() {
-//   struct strbuf sb;
-//   strbuf_init(&sb, 10);
-//   strbuf_attach(&sb, "xiyou", 5, 10);
-//   assert(strcmp(sb.buf, "xiyou") == 0);
-//   strbuf_addstr(&sb, "linux");
-//   assert(strcmp(sb.buf, "xiyoulinux") == 0);
-//   strbuf_release(&sb);
-// }
+// //Part 2D
+// ssize_t strbuf_read(struct strbuf *sb, int fd, size_t hint);
+// int strbuf_getline(struct strbuf *sb, FILE *fp);
 
 
 //初始化 sb 结构体，容量为 alloc。
@@ -104,24 +94,31 @@ char *strbuf_detach(struct strbuf *sb, size_t *sz)
 }
 
 //比较两个 strbuf 的内存是否相同。
-int strbuf_cmp(const struct strbuf *first, const struct strbuf *second)
+int strbuf_cmp(const struct strbuf *first, const struct strbuf *second)//内存看len，返回的是比较结果（1、0、-1）
 {
-    int tag=1;
-    if(first->len!=second->len)tag=0;
-    if(first->alloc!=second->alloc)tag=0;
-    if(strcmp(first->buf,second->buf)!=0)tag=0;
-    return tag;//相同‘1’,不同‘0’
+    if(first->len>second->len)
+        return 1;
+    if(first->len<second->len)
+        return -1;
+    else 
+        return 0;
 }
 
 //清空 sb 。
-void strbuf_reset(struct strbuf *sb)
+void strbuf_reset(struct strbuf *sb)//清空指的是让内存没有东西，而非释放(128G内存恢复出场设置)
 {
-    sb->len=0;
-    sb->alloc=0;
-    free(sb->buf);
-    sb->buf=NULL;
+    // sb->len=0;
+    // sb->alloc=0;
+    // free(sb->buf);
+    // sb->buf=NULL;
 
-    // sb=NULL;
+    int i;
+    for(i=0;i<sb->len;i++){
+        sb->buf[i]='\0';
+    }
+    sb->len=0;
+    // sb->alloc=0  因为alloc是申请到的内存大小，所以不能令为零（否则恢复出场设置后128G空间都没了）
+
 }
 
 /*------------------------------------------------------------------------------------------------------------------------*/
