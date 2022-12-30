@@ -164,7 +164,8 @@ void strbuf_add(struct strbuf *sb, const void *data, size_t len)
     }
     memcpy(sb->buf+sb->len,data,len);
     sb->len+=len;
-    // sb->buf+sb->len='\0';
+    // sb->buf+sb->len='\0'; //错
+    //*(sb->buf+sb->len)='\0';  //ok!
     sb->buf[sb->len]='\0';
 
 }
@@ -297,7 +298,7 @@ void strbuf_remove(struct strbuf *sb, size_t pos, size_t len)
     // for(i=0;i<len;i++){
     //     sb->buf[pos+i]=0;
     // }
-    memmove(sb->buf+pos,sb->buf+pos+len,sb->len-pos-len);//strlen(sb->buf+pos+len)+1
+    memmove(sb->buf+pos,sb->buf+pos+len,sb->len-pos-len);//strlen(sb->buf+pos+len)+1  OK！
     sb->len=sb->len-len;
     // sb->buf[sb->len]='\0';
 }
