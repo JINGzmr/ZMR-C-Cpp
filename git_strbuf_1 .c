@@ -300,7 +300,7 @@ void strbuf_remove(struct strbuf *sb, size_t pos, size_t len)
     // }
     memmove(sb->buf+pos,sb->buf+pos+len,sb->len-pos-len);//strlen(sb->buf+pos+len)+1  OK！
     sb->len=sb->len-len;
-    // sb->buf[sb->len]='\0';
+    sb->buf[sb->len]='\0';
 }
 
 
