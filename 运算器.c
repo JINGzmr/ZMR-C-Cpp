@@ -580,11 +580,18 @@
 //     return 0;
 // }
 
+// #include<stdio.h>
+// #include<string.h>
+// int main()
+// {
+//     int b=99;
+//     char a=b;
+//     printf("%c",a);
+// }
+
 #include<stdio.h>
-#include<string.h>
 int main()
 {
-    int b=99;
-    char a=b;
-    printf("%c",a);
+    if(1)printf("666");
+    return 0;
 }

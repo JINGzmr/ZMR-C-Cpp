@@ -92,7 +92,8 @@ void strbuf_swap(struct strbuf *a, struct strbuf *b)
 //将 sb 中的原始内存取出，并将 sz 设置为其 alloc 大小 。
 char *strbuf_detach(struct strbuf *sb, size_t *sz)
 {
-    *sz=sb->alloc;
+    // *sz=sb->alloc;
+    sz=(size_t*)&(sb->alloc);
     return sb->buf;
 }
 
@@ -137,12 +138,12 @@ void strbuf_reset(struct strbuf *sb)//清空指的是让内存没有东西，而
 /*------------------------------------------------------------------------------------------------------------------------*/
 
 //确保在 len 之后 strbuf 中至少有 extra 个字节的空闲空间可用。
-//                           （包括alloc的4字节吗？）
 void strbuf_grow(struct strbuf *sb, size_t extra)
 {
-    sb->buf=(char*)realloc(sb->buf,extra);//默认buf之前申请过一块内存，返回值为刚申请到的内存首地址
-    // strbuf_init(sb, extra);//更新alloc
-    sb->alloc += extra;
+    if(sb->alloc-sb->len < extra){
+        sb->buf=(char*)realloc(sb->buf,sb->alloc+extra);//默认buf之前申请过一块内存，返回值为刚申请到的内存首地址
+        sb->alloc += extra;
+    }
 }
 
 //向 sb 追加长度为 len 的数据 data 。
@@ -266,7 +267,7 @@ void strbuf_insert(struct strbuf *sb, size_t pos, const void *data, size_t len)
 
 }
 
-
+=
 /*----------------------------------------------------------------------------------------------------------------*/
 
 //去除 sb 缓冲区左端的所有 空格，tab,'\t'。
