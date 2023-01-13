@@ -267,7 +267,7 @@ void strbuf_insert(struct strbuf *sb, size_t pos, const void *data, size_t len)
 
 }
 
-=
+
 /*----------------------------------------------------------------------------------------------------------------*/
 
 //去除 sb 缓冲区左端的所有 空格，tab,'\t'。
@@ -326,7 +326,7 @@ ssize_t strbuf_read(struct strbuf *sb, int fd, size_t hint)
 int strbuf_getline(struct strbuf *sb, FILE *fp)
 {
     char ch;
-    // ch=fgetc(fp);//返回值为int,然后再ch！=EOF错（wen）
+    // ch=fgetc(fp);//返回值为int,然后再ch！=EOF错
     while((ch=fgetc(fp))!=EOF){
         if(feof(fp)!=0||ch=='\n')
             break;
@@ -341,42 +341,6 @@ int strbuf_getline(struct strbuf *sb, FILE *fp)
 //实现字符串切割
 //将长度为 len 的字符串 str 根据切割字符 terminator 切成多个 strbuf,并从结果返回，
 //max 可以用来限定最大切割数量。返回 struct strbuf 的指针数组，数组的最后元素为 NULL
-// struct strbuf **strbuf_split_buf(const char *str, size_t len, int terminator, int max)
-// {
-//     struct strbuf **p=(struct strbuf**)malloc(sizeof(struct strbuf*)*max+1);//分配内存
-//     const char* begin=str;//加const，因为str类型
-//     const char* end=str+len;
-//     const char* next;
-//     int i=0;
-//     int len2;
-
-//     while (*begin==terminator)
-//         begin++;
-
-//     for(next=begin; next<=end; next++)
-//     {
-//         if (*next==terminator||next==end){
-//             len2=next-begin;
-//             p[i]=(struct strbuf*)malloc(sizeof(struct strbuf));
-//             p[i]->len=len2;
-//             p[i]->alloc=len2+1;
-//             p[i]->buf=(char*)malloc(len2+1);
-//             memcpy(p[i]->buf,begin,len2);
-//             *(p[i]->buf+len2)='\0';
-//             // p[i]->buf[len2]='\0';
-//             i++;
-
-//             while (*next==terminator&&next<=end)
-//                 next++;
-
-//             begin=next;
-//         }
-//         if (i==max)
-//             break;
-//     }
-//     p[i]=NULL;
-//     return p;
-// }
 struct strbuf **strbuf_split_buf(const char *str, size_t len, int terminator, int max)
 {
     struct strbuf **p=(struct strbuf**)malloc(sizeof(struct strbuf*)*(max+1));

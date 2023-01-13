@@ -140,6 +140,7 @@
 // //     printf("%d %d %d\n",x,y,z);
     
 //     return c;
+
 // }
 
 
@@ -592,6 +593,6 @@
 #include<stdio.h>
 int main()
 {
-    if(1)printf("666");
+    if(-1)printf("666");
     return 0;
 }
