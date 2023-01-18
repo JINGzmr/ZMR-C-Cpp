@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<stdbool.h>
 //  Definition for singly-linked list.
   struct ListNode {
       int val;
@@ -49,26 +50,46 @@
 //     return list3->next;//如果是list3,则会把list3->val中的乱码输出
 // }
 
-struct ListNode* deleteDuplicates(struct ListNode* head){
-    if(head==NULL)
-        return head;
+// struct ListNode* deleteDuplicates(struct ListNode* head){
+//     if(head==NULL)
+//         return head;
     
-    struct ListNode* p,*q;
-    p=head;
-    q=head->next;
+//     struct ListNode* p,*q;
+//     p=head;
+//     q=head->next;
 
-    while(q)
-    {
-        if(p->val == q->val){
-            p->next=q->next;
-            q=q->next;
-        }
-        else{
-            p=p->next;
-            q=q->next;
-        }
+//     while(q)
+//     {
+//         if(p->val == q->val){
+//             p->next=q->next;
+//             q=q->next;
+//         }
+//         else{
+//             p=p->next;
+//             q=q->next;
+//         }
        
+//     }
+
+//     return head;
+// }
+
+
+bool hasCycle(struct ListNode *head) {
+    if(head==NULL)
+        return false;
+
+    struct ListNode *p;
+    p=head;
+    int i=1;
+
+    while(p)
+    {
+        p=p->next;
+        if(i>10000)
+            return true;
+        i++;
     }
 
-    return head;
+    return false;   
 }
