@@ -8,7 +8,7 @@
  };
  
 // struct ListNode* mergeTwoLists(struct ListNode* list1, struct ListNode* list2){
-// //排除空表
+// //排除空表 
 //     if(list1==NULL)/*不是list1->next=NULL，因为list1指向第一个节点，而非头节点*/
 //         return list2;/*list1->next=NULL表示他有且只有第一个节点（也就是有val，像[1]）*/
 //     if(list2==NULL)
