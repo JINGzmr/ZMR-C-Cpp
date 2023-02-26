@@ -7,15 +7,20 @@
 #include<sys/types.h>
 #include<pwd.h>
 #include<grp.h>
+#include <time.h>
 
-int main(int argc,char*argv[])
+void myls(const char* dirpath_name);
+void mystat(const char* file_name);
+void print_file_information(const char* file_name, struct stat *buf_ptr);
+
+int main(int argc,char* argv[])
 {
     if(argc == 1){
         myls(".");
     }
     else{
         while(--argc){
-            myls(*(argv));
+            myls(*(++argv));
         }
     }
     return 0;
@@ -114,13 +119,13 @@ void print_file_information(const char* file_name, struct stat *buf_ptr)
     //该文件或目录的所有者
     struct passwd *getpwuid();
     struct passwd *pwuid_ptr;
-    static char num[10];
+    static char numstr[10];
     if((pwuid_ptr = getpwuid(buf_ptr ->st_uid)) == NULL){
-        sprintf(num, "%d", buf_ptr ->st_uid);
-        printf("%s ",num);
+        sprintf(numstr, "%d", buf_ptr ->st_uid);
+        printf("%s ",numstr);
     }
     else{
-        printf("%s ",pwuid_ptr -> pw_name);
+        printf("%-8s ",pwuid_ptr -> pw_name);//-8向左对齐
     }
 
     //第四列
@@ -132,16 +137,22 @@ void print_file_information(const char* file_name, struct stat *buf_ptr)
         sprintf(num, "%d", buf_ptr ->st_gid);
         printf("%s ",num);
     }else{
-        printf("%s ",group_ptr -> gr_name);
+        printf("%-8s ",group_ptr -> gr_name);//-8向左对齐
     }
 
     //第五列
     //文件大小
-    printf("%ld ",(long)buf_ptr -> st_size);
+    printf("%8ld ",(long)buf_ptr -> st_size);//8ld向右对齐
 
     //第六、七、八列
     //月、日、时
-    
+    char *time = ctime(&(buf_ptr -> st_mtime));
+    char file_time[512] = {0};
+    strncpy(file_time, time, strlen(time) - 1);
+    printf("%s ",4+file_time);//不用星期，星期占前4地址
 
+    //第九列
+    //文件名
+    printf("%s\n",file_name);
 
 }
