@@ -7,7 +7,7 @@
 #include<sys/types.h>
 #include<pwd.h>
 #include<grp.h>
-#include <time.h>
+#include<time.h>
 
 void myls(const char* dirpath_name);
 void mystat(const char* file_name);
