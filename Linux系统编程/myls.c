@@ -70,6 +70,8 @@ int main(int argc, char *argv[])
     // }
 
     char ch;
+    int num = 0;    // 记录-l/-lai的数目，若小于argc-1(即相差大于等于2时），则有可能是指定目录
+    char dir[256]; // 存指定目录
     while ((ch = getopt(argc, argv, "alRtris")) != -1)
     {
         switch (ch)
@@ -96,8 +98,20 @@ int main(int argc, char *argv[])
             has[s] = 1;
             break;
         }
+        num++;
     }
+    // printf("%d",num);
+    // printf("%d",argc);
+    // printf("%s",argv[2]);
+    if (argc - num >= 2)
+    {
+        if(strncmp(argv[1],'-',1)==0)
+            *dir=argv[argc];    
+        else    
+            *dir=argv[1];    
 
+    }
+    printf("%s",dir);
 }
 
 // 打开、读取、关闭目录
