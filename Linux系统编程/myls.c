@@ -8,10 +8,12 @@
 #include<pwd.h>
 #include<grp.h>
 #include<time.h>
+#include <locale.h>
+#include <langinfo.h>
 
 void myls(const char* dirpath_name);
 void mystat(const char* file_name);
-void print_file_information(const char* file_name, struct stat *buf_ptr);
+void print_file_information(char* file_name, struct stat *buf_ptr);
 
 int main(int argc,char* argv[])
 {
@@ -64,7 +66,7 @@ void mystat(const char* file_name)
 }
 
 //打印文件具体信息
-void print_file_information(const char* file_name, struct stat *buf_ptr)
+void print_file_information(char* file_name, struct stat *buf_ptr)
 {
     //第一列
     char first_column[11] = {0};
@@ -149,7 +151,7 @@ void print_file_information(const char* file_name, struct stat *buf_ptr)
     char *time = ctime(&(buf_ptr -> st_mtime));
     char file_time[512] = {0};
     strncpy(file_time, time, strlen(time) - 1);
-    printf("%s ",4+file_time);//不用星期，星期占前4地址
+    printf("%12.12s ",4+file_time);//不用星期，星期占前4地址,12.12为截取日期长度为12
 
     //第九列
     //文件名
