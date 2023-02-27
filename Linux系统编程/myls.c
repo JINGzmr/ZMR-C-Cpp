@@ -10,6 +10,12 @@
 #include<time.h>
 #include <locale.h>
 #include <langinfo.h>
+//存放文件名的数组，方便a-z排序
+char *filenames[4096];
+//目录中文件个数，用来计数    
+int file_cnt = 0;   
+//-a -l -i -s
+//-a、-l、-R、-t、-r、-i、-s 
 
 void myls(const char* dirpath_name);
 void mystat(const char* file_name);
@@ -45,14 +51,24 @@ void myls(const char* dirpath_name)
             cur_item = readdir(cur_dir);
             if(errno != 0)printf("文件读取错误!\n");
             if(cur_item == NULL)break;
-            if(strcmp(cur_item -> d_name,".") == 0 || strcmp(cur_item -> d_name,"..") == 0)continue;
+            // if(strcmp(cur_item -> d_name,".") == 0 || strcmp(cur_item -> d_name,"..") == 0)continue;//好像没用？
+            if(cur_item -> d_name[0]=='.')continue;//在有-a参数时就不能跳过了
+            restored_ls(cur_item);
+        }
+        if()//有什么参数，就。。。
+        {
             mystat(cur_item -> d_name);
-
         }
         printf("\n");
         //关目录
         closedir(cur_item);
     }
+}
+
+//将目录中的文件依次存入数组中
+void restored_ls(struct dirent* cur_item)
+{
+    filenames[file_cnt++] = cur_item->d_name;
 }
 
 //获取文件具体信息
@@ -61,9 +77,34 @@ void mystat(const char* file_name)
     struct stat buf;
     if(stat(file_name, &buf) == -1)printf("获取文件信息错误!\n");
     else{
+        if(1){  //如果有-i参数，则执行
+            myls_i(&buf);
+        }
+        if(1){  //如果有-s参数，则执行
+            myls_s(&buf);
+        }
         print_file_information(file_name,&buf);//注意是&buf
     }
 }
+
+void myls_i(struct stat *buf_ptr)
+{
+    printf("%d ",buf_ptr -> st_ino);
+}
+
+//在文件左侧显示文件大小（在-l左边，-i右边），以1024字节为块单位
+//ls -s
+void myls_s(struct stat *buf_ptr)//数据有问题
+{
+    long long size=buf_ptr -> st_size/1024;                              
+    if(size<=4){           
+        printf("%5d ",4);   
+    }             
+    else{   
+        printf("%5lld ",size);   
+    } 
+}
+
 
 //打印文件具体信息
 void print_file_information(char* file_name, struct stat *buf_ptr)
@@ -158,3 +199,50 @@ void print_file_information(char* file_name, struct stat *buf_ptr)
     printf("%s\n",file_name);
 
 }
+
+//排序
+void sort(char** filenames,int start,int end)
+{
+    if(start < end){
+        int position = partition(filenames,start,end);
+        sort(filenames,start,position - 1);
+        sort(filenames,position + 1,end);
+    }
+}
+
+//比较两字符串的字典序
+int compare(char* s1,char* s2)
+{
+    if(*s1=='.')s1++;
+    if(*s2=='.')s2++;
+    while(*s1 && *s2 && *s1 == *s2){
+        ++s1;
+        ++s2;
+    if(*s1=='.')s1++;
+    if(*s2=='.')s2++;
+    }
+    return *s1 - *s2;//s1靠前，返回负数，s1靠后，返回正数；s1和s2完全一样，返回0
+}
+
+//交换两字符串
+void swap(char** s1,char** s2)
+{
+    char* temp = *s1;
+    *s1 = *s2;
+    *s2 = temp;
+}
+
+int partition(char** filenames,int start,int end)
+{
+    char* privot = filenames[start];
+    while(start < end){
+        while(start < end && compare(privot,filenames[end]) < 0)
+            --end;
+        swap(&filenames[start],&filenames[end]);
+        while(start < end && compare(privot,filenames[start]) >= 0)
+            ++start;
+        swap(&filenames[start],&filenames[end]);
+    }
+    return start;
+}
+
