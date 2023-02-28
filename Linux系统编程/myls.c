@@ -24,8 +24,9 @@ int file_cnt = 0;
 //-a -l -i -s
 //-a、-l、-R、-t、-r、-i、-s
 
-void myls(int has[], const char *dirpath_name);                    // 打开、读取、关闭目录
-void mystat(const char *file_name);                                 // 获取文件具体信息
+void myls(int has[], const char *dirpath_name);  // 打开、读取、关闭目录
+void mystat(int has[], const char *file_name);    // 获取文件具体信息
+void print(int has[], const char *file_name);  // 打印没有-l的普通文件名
 void print_file_information(char *file_name, struct stat *buf_ptr); // 打印文件具体信息
 long long int total(struct stat *buf_ptr);
 void myls_i(struct stat *buf_ptr);
@@ -135,7 +136,7 @@ int main(int argc, char *argv[])
     }
 
     // 如果没有输入路径，就设置为当前路径
-    if (argc==1||*argv[argc-1]=='-')
+    if (argc == 1 || *argv[argc - 1] == '-')
     {
         myls(has, ".");
         return 0;
@@ -217,15 +218,21 @@ void myls(int has[], const char *dirpath_name)
         }
         sort(filenames, 0, file_cnt - 1);
 
-        // if()//有什么参数，就。。。
+        if (has[l]) // 有什么参数，就。。。
+        {
+            int n;
+            // total(struct stat *buf_ptr);
+            for (n = 0; n < file_cnt; n++)
+                mystat(has, filenames[n]);
+        }
+        else
         {
             int n;
             for (n = 0; n < file_cnt; n++)
-                mystat(filenames[n]);
+                print(has, filenames[n]);
         }
         printf("\n");
-        // 关目录
-        closedir(cur_item);
+        closedir(cur_item); // 关目录
     }
 }
 
@@ -235,19 +242,38 @@ void restored_ls(struct dirent *cur_item)
     filenames[file_cnt++] = cur_item->d_name;
 }
 
-// 获取文件具体信息
-void mystat(const char *file_name)
+void print(int has[], const char *file_name)
 {
     struct stat buf;
     if (stat(file_name, &buf) == -1)
         printf("获取文件信息错误!\n");
     else
     {
-        if (1)
+        if (has[i])
         { // 如果有-i参数，则执行
             myls_i(&buf);
         }
-        if (1)
+        if (has[s])
+        { // 如果有-s参数，则执行
+            myls_s(&buf);
+        }
+    }
+    printf("%s    ", file_name);//不是很对奇
+}
+
+// 获取文件具体信息
+void mystat(int has[], const char *file_name)
+{
+    struct stat buf;
+    if (stat(file_name, &buf) == -1)
+        printf("获取文件信息错误!\n");
+    else
+    {
+        if (has[i])
+        { // 如果有-i参数，则执行
+            myls_i(&buf);
+        }
+        if (has[s])
         { // 如果有-s参数，则执行
             myls_s(&buf);
         }
