@@ -24,7 +24,7 @@ int file_cnt = 0;
 //-a -l -i -s
 //-a、-l、-R、-t、-r、-i、-s
 
-void myls(char has[], const char *dirpath_name);                    // 打开、读取、关闭目录
+void myls(int has[], const char *dirpath_name);                    // 打开、读取、关闭目录
 void mystat(const char *file_name);                                 // 获取文件具体信息
 void print_file_information(char *file_name, struct stat *buf_ptr); // 打印文件具体信息
 long long int total(struct stat *buf_ptr);
@@ -188,7 +188,7 @@ int main(int argc, char *argv[])
 }
 
 // 打开、读取、关闭目录
-void myls(char has[], const char *dirpath_name)
+void myls(int has[], const char *dirpath_name)
 {
     DIR *cur_dir = NULL;
     struct dirent *cur_item = NULL;
@@ -209,15 +209,14 @@ void myls(char has[], const char *dirpath_name)
                 printf("文件读取错误!\n");
             if (cur_item == NULL)
                 break;
-
             // 判断-a
             if ((cur_item->d_name[0] == '.' || cur_item->d_name[0] == '..') && has[a] == 0)
                 continue; // 在有-a参数时就不能跳过了
 
             restored_ls(cur_item);
         }
-        printf("%d",file_cnt);
         sort(filenames, 0, file_cnt - 1);
+
         // if()//有什么参数，就。。。
         {
             int n;
@@ -234,7 +233,6 @@ void myls(char has[], const char *dirpath_name)
 void restored_ls(struct dirent *cur_item)
 {
     filenames[file_cnt++] = cur_item->d_name;
-            printf("%d",file_cnt);
 }
 
 // 获取文件具体信息
