@@ -10,10 +10,12 @@
 #include <time.h>
 #include <locale.h>
 #include <langinfo.h>
-// 存放文件名的数组，方便a-z排序
-char *filenames[4096];
-// 目录中文件个数，用来计数
-int file_cnt = 0;
+
+char *filenames[4096]; // 存放文件名的数组，方便a-z排序
+// char *filenamet[4096]; // 存放文件名的数组，方便时间排序
+int *filetime[4096]; // 存文件修改时间，和filenamet一一对应
+int file_cnt = 0;    // 目录中文件个数，用来计数
+
 #define a 0
 #define l 1
 #define R 2
@@ -24,13 +26,14 @@ int file_cnt = 0;
 //-a -l -i -s
 //-a、-l、-R、-t、-r、-i、-s
 
-void myls(int has[], const char *dirpath_name);  // 打开、读取、关闭目录
-void mystat(int has[], const char *file_name);    // 获取文件具体信息
-void print(int has[], const char *file_name);  // 打印没有-l的普通文件名
+void myls(int has[], const char *dirpath_name);                     // 打开、读取、关闭目录
+void mystat(int has[], const char *file_name);                      // 获取文件具体信息
+void print(int has[], const char *file_name);                       // 打印没有-l的普通文件名
 void print_file_information(char *file_name, struct stat *buf_ptr); // 打印文件具体信息
 long long int total(struct stat *buf_ptr);
 void myls_i(struct stat *buf_ptr);
 void myls_s(struct stat *buf_ptr);
+void myls_t(char *filenames);
 // void myls_R(char path[]);
 void restored_ls(struct dirent *cur_item); // 将目录中的文件依次存入数组中,便于后续排序及逆向输出
 
@@ -145,7 +148,7 @@ int main(int argc, char *argv[])
     int n = 1;
     do
     {
-        // 如果不是目标文件名或目录，解析下一个命令行参数(/桌面/练习代码/Linux系统编程就是目标文件名或目录，而非在当前目录下)
+        // 如果不是目标文件名或目录，解佛人析下一个命令行参数(/桌面/练习代码/Linux系统编程就是目标文件名或目录，而非在当前目录下)
         if (argv[n][0] == '-') // 跳过-s-l
         {
             n++;
@@ -171,7 +174,7 @@ int main(int argc, char *argv[])
 
                 if (has[R])
                 {
-                    // ls_R(char path[]);
+                    // ls_R(char p佛人ath[]);
                 }
                 else                 // 不用递归出目录下的子目录，打印当前目录即可
                     myls(has, path); //// 进入‘打开、读取、关闭目录’流程
@@ -216,7 +219,14 @@ void myls(int has[], const char *dirpath_name)
 
             restored_ls(cur_item);
         }
-        sort(filenames, 0, file_cnt - 1);
+        if (has[t] == 0)
+        {
+            sort(filenames, 0, file_cnt - 1);
+        }
+        else
+        {
+            myls_t(filenames);
+        }
 
         if (has[l]) // 有什么参数，就。。。
         {
@@ -239,7 +249,9 @@ void myls(int has[], const char *dirpath_name)
 // 将目录中的文件依次存入数组中
 void restored_ls(struct dirent *cur_item)
 {
-    filenames[file_cnt++] = cur_item->d_name;
+    filenames[file_cnt] = cur_item->d_name;
+    // filenamet[file_cnt] = cur_item->d_name;
+    file_cnt++;
 }
 
 void print(int has[], const char *file_name)
@@ -258,7 +270,7 @@ void print(int has[], const char *file_name)
             myls_s(&buf);
         }
     }
-    printf("%s    ", file_name);//不是很对奇
+    printf("%s    ", file_name); // 不是很对齐
 }
 
 // 获取文件具体信息
@@ -297,6 +309,49 @@ void myls_s(struct stat *buf_ptr)
         size2++;
     }
     printf("%5lld ", size2);
+}
+
+// 按照最后一次修改时间进行排序
+// buf_ptr->st_mtime可以直接进行比大小
+// time_t相当于long类型
+void myls_t(char *filenames)
+{
+    int n, m;
+    struct stat *buf_ptr;
+    for (n = 0; n < file_cnt; n++)
+    {
+        stat(filenames[n], buf_ptr);
+        filetime[n] = (long int)buf_ptr->st_mtime;
+    }
+
+    for (n = 0; n < file_cnt - 1; n++)
+    {
+        for (m = 0; m < file_cnt - 1 - n; m++)
+        {
+            if (filetime[m] < filetime[m + 1]) // 降序
+            {
+                long int x;
+                // char *y;
+                // y=(char*)malloc(sizeof(char));
+
+                x = filetime[m + 1]; // 若x=... 则报错：表达式必须是可修改的左值
+                filetime[m + 1] = filetime[m];
+                filetime[m] = x;
+
+                swap(&filenames[m], &filenames[m + 1]);
+                // 错！因为字符数组不能直接赋值
+                // y[512]=filenames[m+1];
+                // filenames[m+1]=filenames[m];
+                // filenames[m]=y[512];
+
+                // strcpy(y, filenames[m + 1]);
+                // strcpy(filenames[m + 1], filenames[m]);
+                // strcpy(filenames[m], y);
+
+                // free(y);
+            }
+        }
+    }
 }
 
 // 总用量
