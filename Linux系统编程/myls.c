@@ -12,9 +12,8 @@
 #include <langinfo.h>
 
 char *filenames[4096]; // 存放文件名的数组，方便a-z排序
-// char *filenamet[4096]; // 存放文件名的数组，方便时间排序
-int *filetime[4096]; // 存文件修改时间，和filenamet一一对应
-int file_cnt = 0;    // 目录中文件个数，用来计数
+int *filetime[4096];   // 存文件修改时间，和filenamet一一对应
+int file_cnt = 0;      // 目录中文件个数，用来计数
 
 #define a 0
 #define l 1
@@ -23,7 +22,7 @@ int file_cnt = 0;    // 目录中文件个数，用来计数
 #define r 4
 #define i 5
 #define s 6
-//-a  -l     -t     -i  -s
+//-a  -l     -t  -r -i  -s
 //-a、-l、-R、-t、-r、-i、-s
 
 void myls(int has[], const char *dirpath_name);                     // 打开、读取、关闭目录
@@ -34,7 +33,7 @@ long long int total(struct stat *buf_ptr);
 void myls_i(struct stat *buf_ptr);
 void myls_s(struct stat *buf_ptr);
 void myls_t(char *filenames[]); // 不是*filenames
-// void myls_R(char path[]);
+void myls_R(int has[],char path[]);
 void restored_ls(struct dirent *cur_item); // 将目录中的文件依次存入数组中,便于后续排序及逆向输出
 
 // 按a-z排序
@@ -174,7 +173,7 @@ int main(int argc, char *argv[])
 
                 if (has[R])
                 {
-                    // ls_R(char p佛人ath[]);
+                    // myls_R(has,path);
                 }
                 else                 // 不用递归出目录下的子目录，打印当前目录即可
                     myls(has, path); //// 进入‘打开、读取、关闭目录’流程
@@ -256,7 +255,7 @@ void myls(int has[], const char *dirpath_name)
                     print(has, filenames[n]);
             }
         }
-        
+
         printf("\n");
         closedir(cur_item); // 关目录
     }
@@ -319,13 +318,7 @@ void myls_i(struct stat *buf_ptr)
 // ls -s
 void myls_s(struct stat *buf_ptr)
 {
-    long long int size1 = buf_ptr->st_size;
-    long long int size2 = size1 / 1024;
-    while (size2 % 4 != 0)
-    {
-        size2++;
-    }
-    printf("%5lld ", size2);
+    printf("%5lld ", (buf_ptr->st_blocks)/2);
 }
 
 // 按照最后一次修改时间进行排序
@@ -462,6 +455,106 @@ long long int total(struct stat *buf_ptr)
 
 //     }
 //   }
+// }
+
+// void myls_R(char path[])
+// {
+//     DIR* root;
+//     int ret,n,m;
+//     char c;
+//     struct dirent* dir;
+//     struct stat info;
+//     char dirList[100][256];
+//     root = opendir(path);
+//     if(root == NULL)
+//     {
+//         perror("opendir error");
+//         exit(1);
+//     }
+//     //展示根目录
+//     printf("%s:\n",path);
+//     n = 0;
+//     while( (dir=readdir(root))!=NULL )
+//     {
+//         if(dir->d_name[0]=='.')
+//         {
+//             continue;
+//         }
+//         char temp[256];
+//         char last = path[strlen(*path)-1];
+//         if(last == '/')
+//         {
+//             sprintf(temp,"%s%s",path,dir->d_name);
+//         }
+//         else
+//         {
+//             sprintf(temp,"%s/%s",path,dir->d_name);
+//         }
+//         //printf("%s\n",temp);
+//         ret = lstat(temp,&info);
+//         if(ret < 0)
+//         {
+//             perror("lstat error");
+//             exit(0);
+//         }
+//         c = GetFileTypeCh(info.st_mode);
+//         //printf("name:%20s,type:%c,size:%ld\n",dir->d_name,c,info.st_size) ;
+//         printf("%s\t",dir->d_name) ;
+//         //路径为 目录，进行递归遍历
+//         if(c == 'd')
+//         {
+//             strcpy(dirList[n++],temp);
+//             if( n > 100 )
+//             {
+//                 n--;
+//                 break;
+//             }
+//         }
+//     }
+//     closedir(root);
+//     printf("\n\n");
+//     //递归展示目录下的目录项
+//     for(m = 0; m < n; m++)
+//     {
+//         ListDir(dirList[m]);
+//     }
+//     return;
+// }
+
+// void myls_R(int has[],char pathname[])
+// {
+//     char nextpath[512];
+
+//     DIR *ret_opendir = opendir(pathname); // 打开目录"pathname"
+//     if (ret_opendir == NULL)
+//         error_printf("opendir");
+
+//     printf("%s:\n", pathname); // 显示pathname目录路径
+//     myls(has, pathname);  // 显示pathname目录下所有非隐藏文件名称
+
+//     struct dirent *ret_readdir = NULL;         // 定义readdir函数返回的结构体变量
+//     while (ret_readdir = readdir(ret_opendir)) // 判断是否读取到目录尾
+//     {
+//         char *filename = ret_readdir->d_name; // 获取文件名
+
+//         int end = 0; // 优化显示路径（处理"./test/"与"./test"）
+//         while (pathname[end])
+//             end++;
+//         strcpy(nextpath, pathname);
+//         if (pathname[end - 1] != '/')
+//             strcat(nextpath, "/");
+//         strcat(nextpath, filename);
+
+//         struct stat file_message = {};                 // 定义stat函数返回的结构体变量
+//         int ret_stat = lstat(nextpath, &file_message); // 获取文件信息
+//         if (ret_stat == -1)                            // stat读取文件错误则输出提示信息
+//             printf("%s error!", filename);
+//         else if (S_ISDIR(file_message.st_mode) && filename[0] != '.') // 筛选"."、".."与隐藏文件
+//         {
+//             myls_R(has,nextpath);
+//         }
+//     }
+//     closedir(ret_opendir);
 // }
 
 // 打印文件具体信息
