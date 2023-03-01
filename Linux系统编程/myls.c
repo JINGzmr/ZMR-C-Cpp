@@ -10,6 +10,7 @@
 #include <time.h>
 #include <locale.h>
 #include <langinfo.h>
+#include <unistd.h> //getcwd的头文件
 
 char *filenames[4096]; // 存放文件名的数组，方便a-z排序
 int *filetime[4096];   // 存文件修改时间，和filenamet一一对应
@@ -33,7 +34,7 @@ long long int total(struct stat *buf_ptr);
 void myls_i(struct stat *buf_ptr);
 void myls_s(struct stat *buf_ptr);
 void myls_t(char *filenames[]); // 不是*filenames
-void myls_R(int has[],char path[]);
+void myls_R(int has[], char path[]);
 void restored_ls(struct dirent *cur_item); // 将目录中的文件依次存入数组中,便于后续排序及逆向输出
 
 // 按a-z排序
@@ -44,64 +45,6 @@ int partition(char **filenames, int start, int end);
 
 int main(int argc, char *argv[])
 {
-    /*
-        if(argc == 1){
-            myls(".");
-        }
-        else{
-            while(--argc){
-                myls(*(++argv));
-            }
-        }
-        return 0;
-        char param[100];
-        int cnt = 0; // 命令个数
-        int num = 0;
-        对命令行参数进行解析，提取到param数组中
-        for (n = 1; n < argc; n++)
-        {
-            if (argv[n][0] == '-')
-            {
-                for (int j = 1; j < strlen(argv[i]); cnt++, j++)
-                {
-                    param[cnt] = argv[i][j]; // 获取-后面的参数保存到数组param中
-                }
-                num++; // 保存 - 的个数
-            }
-        }
-
-        for (n = 0; n < cnt; n++)
-        {
-            if (param[n] == 'a')has[a]=1;
-            else if (param[n] == 'l')has[l]=1;
-            else if (param[n] == 'R')has[R]=1;
-            else if (param[n] == 't')has[t]=1;
-            else if (param[n] == 'r')has[r]=1;
-            else if (param[n] == 'i')has[i]=1;
-            else if (param[n] == 's')has[s]=1;
-        }
-        printf("%d",num);
-        printf("%d",argc);
-        printf("%s",argv[2]);
-        char c = '-';
-        if (argc - num >= 2)
-        {
-            if (strncmp(argv[1], c, 1) == 0)
-                myls(argv[argc - 1]);
-        dir = argv[argc-1];
-        printf("%s", argv[argc-1]);
-        else
-            myls(argv[1]);
-        printf("%s", argv[1]);
-        dir = argv[1];
-        }
-        else
-        {
-            myls(".");
-        }
-        printf("%s", dir);
-    */
-
     char ch;
     int has[8] = {0};
     int num = 0; // 记录-l/-lai的数目，若小于argc-1(即相差大于等于2时），则有可能是指定目录
@@ -137,62 +80,33 @@ int main(int argc, char *argv[])
         num++;
     }
 
-    // 如果没有输入路径，就设置为当前路径
-    if (argc == 1 || *argv[argc - 1] == '-')
+    getcwd(path, sizeof(path)); // 获取当前路径函数，并存入path
+
+    int n;
+    for (n = 1; n < argc; n++)
     {
-        myls(has, ".");
-        return 0;
+        if (argv[n][0] != '-')
+        {
+            strcpy(path, argv[n]);
+        }
     }
 
-    int n = 1;
-    do
+    if (has[R])
     {
-        // 如果不是目标文件名或目录，解析下一个命令行参数(/桌面/练习代码/Linux系统编程就是目标文件名或目录，而非在当前目录下)
-        if (argv[n][0] == '-') // 跳过-s-l
-        {
-            n++;
-            continue;
-        }
-        else
-        {
-            struct stat buf;
-            strcpy(path, argv[n]); // path存储目标文件名或目录（路径）
+        myls_R(has, path);
+    }
+    else
+    {
+        myls(has, path);
+    }
 
-            // 如果目标文件或目录不存在，报错并退出程序
-            if (stat(path, &buf) == -1)
-                perror("stat fail:");
-            // 判断该路径是不是目录
-            if (S_ISDIR(buf.st_mode)) // S_ISDIR判断路径目录函数
-            {
-                // 是目录但是没带 '/'就加上'/'
-                if (path[strlen(argv[n]) - 1] != '/')
-                {
-                    path[strlen(argv[n])] = '/';
-                    path[strlen(argv[n]) + 1] = '\0';
-                }
-
-                if (has[R])
-                {
-                    // myls_R(has,path);
-                }
-                else                 // 不用递归出目录下的子目录，打印当前目录即可
-                    myls(has, path); //// 进入‘打开、读取、关闭目录’流程
-
-                n++;
-            }
-            else // argv[i]是一个文件
-            {
-                myls(has, path);
-                n++;
-            }
-        }
-    } while (n < argc);
     return 0;
 }
 
 // 打开、读取、关闭目录
 void myls(int has[], const char *dirpath_name)
 {
+    chdir(dirpath_name);
     DIR *cur_dir = NULL;
     struct dirent *cur_item = NULL;
     // 开目录
@@ -265,15 +179,17 @@ void myls(int has[], const char *dirpath_name)
 void restored_ls(struct dirent *cur_item)
 {
     filenames[file_cnt] = cur_item->d_name;
-    // filenamet[file_cnt] = cur_item->d_name;
+    // strcpy(filenames[file_cnt], cur_item->d_name); ????????
+    // printf("%s\n",filenames[file_cnt]);
     file_cnt++;
 }
 
 void print(int has[], const char *file_name)
 {
     struct stat buf;
-    if (stat(file_name, &buf) == -1)
-        printf("获取文件信息错误!\n");
+    if (stat(file_name, &buf) == -1);
+        // perror("stat");             // 有这一句会出现path不是当前路径时，报错‘ 获取文件信息错误!! ’
+    // printf("获取文件信息错误!!\n");
     else
     {
         if (has[i])
@@ -292,9 +208,11 @@ void print(int has[], const char *file_name)
 // 有-l时执行
 void mystat(int has[], const char *file_name)
 {
+
     struct stat buf;
     if (stat(file_name, &buf) == -1)
-        printf("获取文件信息错误!\n");
+        ;
+    // perror("stat");         // 有这一句会出现path不是当前路径时，报错‘ 获取文件信息错误!! ’
     else
     {
         if (has[i])
@@ -318,7 +236,7 @@ void myls_i(struct stat *buf_ptr)
 // ls -s
 void myls_s(struct stat *buf_ptr)
 {
-    printf("%5lld ", (buf_ptr->st_blocks)/2);
+    printf("%5lld ", (buf_ptr->st_blocks) / 2);
 }
 
 // 按照最后一次修改时间进行排序
@@ -382,180 +300,42 @@ long long int total(struct stat *buf_ptr)
     printf("总用量：%lld", totall);
 }
 
-// //递归调用
-// //ls -R
-// void mydls_R(char path[])
-// {
-//   printf("%s:\n",path);
-//   DIR* dir_ptr;
-//   struct dirent* direntp;
-//   if((dir_ptr=opendir(path)) != NULL)//打开目录
-//   {
-//     while((direntp=readdir(dir_ptr)) != NULL)//读取当前目录文件
-//     {
-//       restored_ls(direntp);
-//     }
-//        sort(filenames,0,file_cnt-1);
-//     int j=0;
-//     int i=0;
-//     for(j=0;j<file_cnt;++j)
-//     {
-//       if(has_aRl==1||has_Rl==1)
-//       {
-//           char temp1[PATH_MAX];
-//          sprintf(temp1,"%s/%s",path,filenames[j]);
-//          dostat(temp1,filenames[j]);
-//         continue;
-//       }
-//       if(filenames[j][0]=='.'&&(has_aR!=1&&has_aRl!=1))
-//         continue;
-//       struct stat info;
-//       char temp1[PATH_MAX];
-//       sprintf(temp1,"%s/%s",path,filenames[j]);
-//       if(lstat(temp1,&info)==-1)
-//         perror(temp1);
-//       int color=get_color(info);
-//          if(has_s==1)
-//           {
-//              long long size=info.st_size/1024;
-//                if(size<=4)
-//                   printf("4   ");
-//                else
-//                   printf("%-4lld",size);
-//            }
-//       printf_name2(filenames[j],color);
-//     }
-//   }
-//   printf("\n");
-//   printf("\n");
-//   file_cnt=0;
-//   closedir(dir_ptr);
-//   if((dir_ptr=opendir(path))==NULL)//打开目录
-//     fprintf(stderr,"lsl:cannot open %s\n",path);
-//   else
-//   {
-//     while((direntp=readdir(dir_ptr))!=NULL)
-//     {
-//       if(strcmp(direntp->d_name,".")==0||strcmp(direntp->d_name,"..")==0)
-//         continue;
-//       if(has_R==1)
-//       {
-//         if(direntp->d_name[0]=='.')
-//           continue;
-//       }
-//       struct stat info;
-//       char temp[PATH_MAX];
-//       sprintf(temp,"%s/%s",path,direntp->d_name);
-//       if(lstat(temp,&info)==-1)
-//         perror(temp);
-//       if(S_ISDIR(info.st_mode))//判断是否为目录，如果是目录就进入递归
-//       {
-//         ls_R(temp);
-//       }
+void myls_R(int has[], char pathname[])
+{
+    chdir(pathname);
+    char nextpath[512];
 
-//     }
-//   }
-// }
+    DIR *ret_opendir = opendir(pathname); // 打开目录"pathname"
+    if (ret_opendir == NULL)
+        perror(ret_opendir);
 
-// void myls_R(char path[])
-// {
-//     DIR* root;
-//     int ret,n,m;
-//     char c;
-//     struct dirent* dir;
-//     struct stat info;
-//     char dirList[100][256];
-//     root = opendir(path);
-//     if(root == NULL)
-//     {
-//         perror("opendir error");
-//         exit(1);
-//     }
-//     //展示根目录
-//     printf("%s:\n",path);
-//     n = 0;
-//     while( (dir=readdir(root))!=NULL )
-//     {
-//         if(dir->d_name[0]=='.')
-//         {
-//             continue;
-//         }
-//         char temp[256];
-//         char last = path[strlen(*path)-1];
-//         if(last == '/')
-//         {
-//             sprintf(temp,"%s%s",path,dir->d_name);
-//         }
-//         else
-//         {
-//             sprintf(temp,"%s/%s",path,dir->d_name);
-//         }
-//         //printf("%s\n",temp);
-//         ret = lstat(temp,&info);
-//         if(ret < 0)
-//         {
-//             perror("lstat error");
-//             exit(0);
-//         }
-//         c = GetFileTypeCh(info.st_mode);
-//         //printf("name:%20s,type:%c,size:%ld\n",dir->d_name,c,info.st_size) ;
-//         printf("%s\t",dir->d_name) ;
-//         //路径为 目录，进行递归遍历
-//         if(c == 'd')
-//         {
-//             strcpy(dirList[n++],temp);
-//             if( n > 100 )
-//             {
-//                 n--;
-//                 break;
-//             }
-//         }
-//     }
-//     closedir(root);
-//     printf("\n\n");
-//     //递归展示目录下的目录项
-//     for(m = 0; m < n; m++)
-//     {
-//         ListDir(dirList[m]);
-//     }
-//     return;
-// }
+    printf("%s:\n", pathname); // 显示pathname目录路径
+    myls(has, pathname);       // 显示pathname目录下所有非隐藏文件名称
 
-// void myls_R(int has[],char pathname[])
-// {
-//     char nextpath[512];
+    struct dirent *ret_readdir = NULL;         // 定义readdir函数返回的结构体变量
+    while (ret_readdir = readdir(ret_opendir)) // 判断是否读取到目录尾
+    {
+        char *filename = ret_readdir->d_name; // 获取文件名
 
-//     DIR *ret_opendir = opendir(pathname); // 打开目录"pathname"
-//     if (ret_opendir == NULL)
-//         error_printf("opendir");
+        int end = 0; // 优化显示路径（处理"./test/"与"./test"）
+        while (pathname[end])
+            end++;
+        strcpy(nextpath, pathname);
+        if (pathname[end - 1] != '/')
+            strcat(nextpath, "/");
+        strcat(nextpath, filename);
 
-//     printf("%s:\n", pathname); // 显示pathname目录路径
-//     myls(has, pathname);  // 显示pathname目录下所有非隐藏文件名称
-
-//     struct dirent *ret_readdir = NULL;         // 定义readdir函数返回的结构体变量
-//     while (ret_readdir = readdir(ret_opendir)) // 判断是否读取到目录尾
-//     {
-//         char *filename = ret_readdir->d_name; // 获取文件名
-
-//         int end = 0; // 优化显示路径（处理"./test/"与"./test"）
-//         while (pathname[end])
-//             end++;
-//         strcpy(nextpath, pathname);
-//         if (pathname[end - 1] != '/')
-//             strcat(nextpath, "/");
-//         strcat(nextpath, filename);
-
-//         struct stat file_message = {};                 // 定义stat函数返回的结构体变量
-//         int ret_stat = lstat(nextpath, &file_message); // 获取文件信息
-//         if (ret_stat == -1)                            // stat读取文件错误则输出提示信息
-//             printf("%s error!", filename);
-//         else if (S_ISDIR(file_message.st_mode) && filename[0] != '.') // 筛选"."、".."与隐藏文件
-//         {
-//             myls_R(has,nextpath);
-//         }
-//     }
-//     closedir(ret_opendir);
-// }
+        struct stat file_message;                      // 定义stat函数返回的结构体变量
+        int ret_stat = lstat(nextpath, &file_message); // 获取文件信息
+        if (ret_stat == -1)                            // stat读取文件错误则输出提示信息
+            printf("%s error!", filename);
+        else if (S_ISDIR(file_message.st_mode) && filename[0] != '.') // 筛选"."、".."与隐藏文件
+        {
+            myls_R(has, nextpath);
+        }
+    }
+    closedir(ret_opendir);
+}
 
 // 打印文件具体信息
 void print_file_information(char *file_name, struct stat *buf_ptr)
@@ -614,7 +394,7 @@ void print_file_information(char *file_name, struct stat *buf_ptr)
     // 第二列
     // 目录：表示当前这个目录下面的一级目录个数
     // 文件：表示硬链接个数
-    printf("%d ", (int)buf_ptr->st_nlink);
+    printf("%2d ", (int)buf_ptr->st_nlink);
 
     // 第三列
     // 该文件或目录的所有者
