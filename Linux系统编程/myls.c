@@ -23,7 +23,7 @@ int file_cnt = 0;    // 目录中文件个数，用来计数
 #define r 4
 #define i 5
 #define s 6
-//-a -l -i -s
+//-a  -l     -t     -i  -s
 //-a、-l、-R、-t、-r、-i、-s
 
 void myls(int has[], const char *dirpath_name);                     // 打开、读取、关闭目录
@@ -33,7 +33,7 @@ void print_file_information(char *file_name, struct stat *buf_ptr); // 打印文
 long long int total(struct stat *buf_ptr);
 void myls_i(struct stat *buf_ptr);
 void myls_s(struct stat *buf_ptr);
-void myls_t(char *filenames);
+void myls_t(char *filenames[]);
 // void myls_R(char path[]);
 void restored_ls(struct dirent *cur_item); // 将目录中的文件依次存入数组中,便于后续排序及逆向输出
 
@@ -274,6 +274,7 @@ void print(int has[], const char *file_name)
 }
 
 // 获取文件具体信息
+// 有-l时执行
 void mystat(int has[], const char *file_name)
 {
     struct stat buf;
@@ -314,14 +315,14 @@ void myls_s(struct stat *buf_ptr)
 // 按照最后一次修改时间进行排序
 // buf_ptr->st_mtime可以直接进行比大小
 // time_t相当于long类型
-void myls_t(char *filenames)
+void myls_t(char *filenames[])
 {
-    int n, m;
-    struct stat *buf_ptr;
+    int n, m;                                  //改成这样出来的filetime都一样，就错了，无法进行时间排序
+    struct stat buf;                          //struct stat *buf_ptr
     for (n = 0; n < file_cnt; n++)
     {
-        stat(filenames[n], buf_ptr);
-        filetime[n] = (long int)buf_ptr->st_mtime;
+        stat(filenames[n], &buf);             //buf_ptr
+        filetime[n] = (long int)buf.st_mtime;//buf_ptr->st_mtime
     }
 
     for (n = 0; n < file_cnt - 1; n++)
