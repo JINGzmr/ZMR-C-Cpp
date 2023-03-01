@@ -106,6 +106,14 @@ int main(int argc, char *argv[])
 // 打开、读取、关闭目录
 void myls(int has[], const char *dirpath_name)
 {
+    // 每次把filenames里面的内容清除，file_cnt归零，否则-R会在打印子目录时打印出上级目录的内容
+    int n;
+    for (n = 0; n < file_cnt; n++)
+    {
+        filenames[n] = "\0";
+    }
+    file_cnt = 0;
+
     chdir(dirpath_name);
     DIR *cur_dir = NULL;
     struct dirent *cur_item = NULL;
@@ -169,7 +177,6 @@ void myls(int has[], const char *dirpath_name)
                     print(has, filenames[n]);
             }
         }
-
         printf("\n");
         closedir(cur_item); // 关目录
     }
@@ -187,8 +194,9 @@ void restored_ls(struct dirent *cur_item)
 void print(int has[], const char *file_name)
 {
     struct stat buf;
-    if (stat(file_name, &buf) == -1);
-        // perror("stat");             // 有这一句会出现path不是当前路径时，报错‘ 获取文件信息错误!! ’
+    if (stat(file_name, &buf) == -1)
+        ;
+    // perror("stat");             // 有这一句会出现path不是当前路径时，报错‘ 获取文件信息错误!! ’
     // printf("获取文件信息错误!!\n");
     else
     {
@@ -289,12 +297,8 @@ long long int total(struct stat *buf_ptr)
     int n;
     for (n = 0; n < file_cnt; n++)
     {
-        long long int size1 = buf_ptr->st_size;
-        long long int size2 = size1 / 1024;
-        while (size2 % 4 != 0)
-        {
-            size2++;
-        }
+        long long int size1 = buf_ptr->st_blocks;
+        long long int size2 = size1 / 2;
         totall += size2;
     }
     printf("总用量：%lld", totall);
@@ -327,10 +331,16 @@ void myls_R(int has[], char pathname[])
 
         struct stat file_message;                      // 定义stat函数返回的结构体变量
         int ret_stat = lstat(nextpath, &file_message); // 获取文件信息
-        if (ret_stat == -1)                            // stat读取文件错误则输出提示信息
-            printf("%s error!", filename);
+        if (ret_stat == -1)
+        {
+            printf("%s error!", filename); // stat读取文件错误则输出提示信息
+        }
         else if (S_ISDIR(file_message.st_mode) && filename[0] != '.') // 筛选"."、".."与隐藏文件
         {
+            if (has[l] == 0)
+            {
+                printf("\n");
+            }
             myls_R(has, nextpath);
         }
     }
@@ -435,7 +445,7 @@ void print_file_information(char *file_name, struct stat *buf_ptr)
     char *time = ctime(&(buf_ptr->st_mtime));
     char file_time[512] = {0};
     strncpy(file_time, time, strlen(time) - 1);
-    printf("%12.12s ", 4 + file_time); // 不用星期，星期占前4地址,12.12为截取日期长度为12
+    printf("%.12s ", 4 + file_time); // 不用星期，星期占前4地址,.12为截取日期长度为12
 
     // 第九列
     // 文件名
