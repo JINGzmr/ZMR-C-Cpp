@@ -33,7 +33,7 @@ void print_file_information(char *file_name, struct stat *buf_ptr); // 打印文
 long long int total(struct stat *buf_ptr);
 void myls_i(struct stat *buf_ptr);
 void myls_s(struct stat *buf_ptr);
-void myls_t(char *filenames[]);
+void myls_t(char *filenames[]); // 不是*filenames
 // void myls_R(char path[]);
 void restored_ls(struct dirent *cur_item); // 将目录中的文件依次存入数组中,便于后续排序及逆向输出
 
@@ -148,7 +148,7 @@ int main(int argc, char *argv[])
     int n = 1;
     do
     {
-        // 如果不是目标文件名或目录，解佛人析下一个命令行参数(/桌面/练习代码/Linux系统编程就是目标文件名或目录，而非在当前目录下)
+        // 如果不是目标文件名或目录，解析下一个命令行参数(/桌面/练习代码/Linux系统编程就是目标文件名或目录，而非在当前目录下)
         if (argv[n][0] == '-') // 跳过-s-l
         {
             n++;
@@ -231,16 +231,32 @@ void myls(int has[], const char *dirpath_name)
         if (has[l]) // 有什么参数，就。。。
         {
             int n;
-            // total(struct stat *buf_ptr);
-            for (n = 0; n < file_cnt; n++)
-                mystat(has, filenames[n]);
+            if (has[r])
+            {
+                for (n = file_cnt - 1; n >= 0; n--)
+                    mystat(has, filenames[n]);
+            }
+            else
+            {
+                for (n = 0; n < file_cnt; n++)
+                    mystat(has, filenames[n]);
+            }
         }
         else
         {
             int n;
-            for (n = 0; n < file_cnt; n++)
-                print(has, filenames[n]);
+            if (has[r])
+            {
+                for (n = file_cnt - 1; n >= 0; n--)
+                    print(has, filenames[n]);
+            }
+            else
+            {
+                for (n = 0; n < file_cnt; n++)
+                    print(has, filenames[n]);
+            }
         }
+        
         printf("\n");
         closedir(cur_item); // 关目录
     }
@@ -317,12 +333,12 @@ void myls_s(struct stat *buf_ptr)
 // time_t相当于long类型
 void myls_t(char *filenames[])
 {
-    int n, m;                                  //改成这样出来的filetime都一样，就错了，无法进行时间排序
-    struct stat buf;                          //struct stat *buf_ptr
+    int n, m;        // 改成这样出来的filetime都一样，就错了，无法进行时间排序
+    struct stat buf; // struct stat *buf_ptr
     for (n = 0; n < file_cnt; n++)
     {
-        stat(filenames[n], &buf);             //buf_ptr
-        filetime[n] = (long int)buf.st_mtime;//buf_ptr->st_mtime
+        stat(filenames[n], &buf);             // buf_ptr
+        filetime[n] = (long int)buf.st_mtime; // buf_ptr->st_mtime
     }
 
     for (n = 0; n < file_cnt - 1; n++)
