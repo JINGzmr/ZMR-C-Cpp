@@ -152,14 +152,13 @@ void myls(int has[], const char *dirpath_name)
             sort(filenames, 0, file_cnt - 1);
         }
 
-        if(has[s])//打印总用量
+        if(has[s]||has[l])//打印总用量
         {
-            // total(filenames);
+            total(filenames);
         }
 
         if (has[l]) // 有什么参数，就。。。
         {
-            // total(filenames);
             int n;
             if (has[r])
             {
@@ -198,12 +197,12 @@ long long int total(const char *file_name[])
     int n;
     for (n = 0; n < file_cnt; n++)
     {
-        struct stat* file_message;
-        stat(file_name[n], file_message);
-        long long int size = (file_message->st_blocks)/2;
+        struct stat file_message;   //就是不能定义成struct stat* file_message，否则一直段错误
+        stat(file_name[n], &file_message);
+        long long int size = (file_message.st_blocks)/2;
         totall += size;
     }
-    printf("总用量：%lld\n", totall);
+    printf("总用量 %lld\n", totall);
 }
 
 // 将目录中的文件依次存入数组中
