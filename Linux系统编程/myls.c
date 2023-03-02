@@ -12,9 +12,9 @@
 #include <langinfo.h>
 #include <unistd.h> //getcwd的头文件
 
-char *filenames[4096]; // 存放文件名的数组，方便a-z排序
-int *filetime[4096];   // 存文件修改时间，和filenamet一一对应
-int file_cnt = 0;      // 目录中文件个数，用来计数
+char *filenames[4096];    // 存放文件名的数组，方便a-z排序
+long int *filetime[4096]; // 存文件修改时间，和filenamet一一对应
+int file_cnt = 0;         // 目录中文件个数，用来计数
 
 #define a 0
 #define l 1
@@ -27,10 +27,10 @@ int file_cnt = 0;      // 目录中文件个数，用来计数
 //-a、-l、-R、-t、-r、-i、-s
 
 void myls(int has[], const char *dirpath_name);                     // 打开、读取、关闭目录
-void mystat(int has[], const char *file_name);                      // 获取文件具体信息
+void mystat(int has[], char *file_name);                            // 获取文件具体信息
 void print(int has[], const char *file_name);                       // 打印没有-l的普通文件名
 void print_file_information(char *file_name, struct stat *buf_ptr); // 打印文件具体信息
-long long int total(struct stat *buf_ptr);
+long long int total(const char *file_name[]);
 void myls_i(struct stat *buf_ptr);
 void myls_s(struct stat *buf_ptr);
 void myls_t(char *filenames[]); // 不是*filenames
@@ -135,22 +135,31 @@ void myls(int has[], const char *dirpath_name)
             if (cur_item == NULL)
                 break;
             // 判断-a
-            if ((cur_item->d_name[0] == '.' || cur_item->d_name[0] == '..') && has[a] == 0)
+            // if ((cur_item->d_name[0] == '.' || cur_item->d_name[0] == '..') && has[a] == 0)// 报错：multi-character character constant，即..不是字符
+            if ((cur_item->d_name[0] == '.' || strncmp(cur_item->d_name, "..", 2) == 0) && has[a] == 0)
                 continue; // 在有-a参数时就不能跳过了
 
             restored_ls(cur_item);
         }
-        if (has[t] == 0)
-        {
-            sort(filenames, 0, file_cnt - 1);
+
+        //参数判断
+        if (has[t])
+        { 
+            myls_t(filenames);
         }
         else
         {
-            myls_t(filenames);
+            sort(filenames, 0, file_cnt - 1);
+        }
+
+        if(has[s])//打印总用量
+        {
+            // total(filenames);
         }
 
         if (has[l]) // 有什么参数，就。。。
         {
+            // total(filenames);
             int n;
             if (has[r])
             {
@@ -178,8 +187,23 @@ void myls(int has[], const char *dirpath_name)
             }
         }
         printf("\n");
-        closedir(cur_item); // 关目录
+        closedir(cur_dir); // 关目录
     }
+}
+
+// 总用量
+long long int total(const char *file_name[])
+{
+    long long int totall = 0;
+    int n;
+    for (n = 0; n < file_cnt; n++)
+    {
+        struct stat* file_message;
+        stat(file_name[n], file_message);
+        long long int size = (file_message->st_blocks)/2;
+        totall += size;
+    }
+    printf("总用量：%lld\n", totall);
 }
 
 // 将目录中的文件依次存入数组中
@@ -214,9 +238,8 @@ void print(int has[], const char *file_name)
 
 // 获取文件具体信息
 // 有-l时执行
-void mystat(int has[], const char *file_name)
+void mystat(int has[], char *file_name)
 {
-
     struct stat buf;
     if (stat(file_name, &buf) == -1)
         ;
@@ -237,14 +260,14 @@ void mystat(int has[], const char *file_name)
 
 void myls_i(struct stat *buf_ptr)
 {
-    printf("%d ", buf_ptr->st_ino);
+    printf("%ld ", buf_ptr->st_ino); // ino_t是long int 类型
 }
 
 // 在文件左侧显示文件大小（在-l左边，-i右边），以1024字节为块单位
 // ls -s
 void myls_s(struct stat *buf_ptr)
 {
-    printf("%5lld ", (buf_ptr->st_blocks) / 2);
+    printf("%5ld ", (buf_ptr->st_blocks) / 2); // blkcnt_t是long int 类型
 }
 
 // 按照最后一次修改时间进行排序
@@ -252,13 +275,13 @@ void myls_s(struct stat *buf_ptr)
 // time_t相当于long类型
 void myls_t(char *filenames[])
 {
-    int n, m;        // 改成这样出来的filetime都一样，就错了，无法进行时间排序
-    struct stat buf; // struct stat *buf_ptr
+    int n, m;                                    // 改成这样出来的filetime都一样，就错了，无法进行时间排序
+    struct stat buf;                             // struct stat *buf_ptr
     for (n = 0; n < file_cnt; n++)
     {
-        stat(filenames[n], &buf);             // buf_ptr
-        filetime[n] = (long int)buf.st_mtime; // buf_ptr->st_mtime
-    }
+        stat(filenames[n], &buf);               // buf_ptr
+        filetime[n] = (long int *)buf.st_mtime; // buf_ptr->st_mtime
+    }//如果只是long int，会有警告long int类型赋值给了long int*
 
     for (n = 0; n < file_cnt - 1; n++)
     {
@@ -266,7 +289,7 @@ void myls_t(char *filenames[])
         {
             if (filetime[m] < filetime[m + 1]) // 降序
             {
-                long int x;
+                long int *x;         //这也要一起改，加上*
                 // char *y;
                 // y=(char*)malloc(sizeof(char));
 
@@ -290,19 +313,6 @@ void myls_t(char *filenames[])
     }
 }
 
-// 总用量
-long long int total(struct stat *buf_ptr)
-{
-    long long int totall = 0;
-    int n;
-    for (n = 0; n < file_cnt; n++)
-    {
-        long long int size1 = buf_ptr->st_blocks;
-        long long int size2 = size1 / 2;
-        totall += size2;
-    }
-    printf("总用量：%lld", totall);
-}
 
 void myls_R(int has[], char pathname[])
 {
@@ -344,6 +354,7 @@ void myls_R(int has[], char pathname[])
             myls_R(has, nextpath);
         }
     }
+
     closedir(ret_opendir);
 }
 
