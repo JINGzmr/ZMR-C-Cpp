@@ -23,7 +23,7 @@ int file_cnt = 0;         // 目录中文件个数，用来计数
 #define r 4
 #define i 5
 #define s 6
-//-a  -l     -t  -r -i  -s
+//-a  -l -R  -t  -r -i  -s
 //-a、-l、-R、-t、-r、-i、-s
 
 void myls(int has[], const char *dirpath_name);                     // 打开、读取、关闭目录
@@ -83,20 +83,16 @@ int main(int argc, char *argv[])
     getcwd(path, sizeof(path)); // 获取当前路径函数，并存入path
 
     int n;
-    for (n = 1; n < argc; n++)
-    {
-        if (argv[n][0] != '-')
-        {
+    for (n = 1; n < argc; n++){
+        if (argv[n][0] != '-'){
             strcpy(path, argv[n]);
         }
     }
 
-    if (has[R])
-    {
+    if (has[R]){
         myls_R(has, path);
     }
-    else
-    {
+    else{
         myls(has, path);
     }
 
@@ -108,8 +104,7 @@ void myls(int has[], const char *dirpath_name)
 {
     // 每次把filenames里面的内容清除，file_cnt归零，否则-R会在打印子目录时打印出上级目录的内容
     int n;
-    for (n = 0; n < file_cnt; n++)
-    {
+    for (n = 0; n < file_cnt; n++){
         filenames[n] = "\0";
     }
     file_cnt = 0;
@@ -119,12 +114,10 @@ void myls(int has[], const char *dirpath_name)
     struct dirent *cur_item = NULL;
     // 开目录
     cur_dir = opendir(dirpath_name);
-    if (cur_dir == NULL)
-    {
+    if (cur_dir == NULL){
         printf("目录打开错误!\n");
     }
-    else
-    {
+    else{
         // 读目录
         while (1)
         {
@@ -143,44 +136,35 @@ void myls(int has[], const char *dirpath_name)
         }
 
         //参数判断
-        if (has[t])
-        { 
+        if (has[t]){ 
             myls_t(filenames);
         }
-        else
-        {
+        else{
             sort(filenames, 0, file_cnt - 1);
         }
 
-        if(has[s]||has[l])//打印总用量
-        {
+        if(has[s]||has[l]){ //打印总用量
             total(filenames);
         }
 
-        if (has[l]) // 有什么参数，就。。。
-        {
+        if (has[l]) {
             int n;
-            if (has[r])
-            {
+            if (has[r]){
                 for (n = file_cnt - 1; n >= 0; n--)
                     mystat(has, filenames[n]);
             }
-            else
-            {
+            else{
                 for (n = 0; n < file_cnt; n++)
                     mystat(has, filenames[n]);
             }
         }
-        else
-        {
+        else{
             int n;
-            if (has[r])
-            {
+            if (has[r]){
                 for (n = file_cnt - 1; n >= 0; n--)
                     print(has, filenames[n]);
             }
-            else
-            {
+            else{
                 for (n = 0; n < file_cnt; n++)
                     print(has, filenames[n]);
             }
@@ -195,8 +179,7 @@ long long int total(const char *file_name[])
 {
     long long int totall = 0;
     int n;
-    for (n = 0; n < file_cnt; n++)
-    {
+    for (n = 0; n < file_cnt; n++){
         struct stat file_message;   //就是不能定义成struct stat* file_message，否则一直段错误
         stat(file_name[n], &file_message);
         long long int size = (file_message.st_blocks)/2;
@@ -221,14 +204,11 @@ void print(int has[], const char *file_name)
         ;
     // perror("stat");             // 有这一句会出现path不是当前路径时，报错‘ 获取文件信息错误!! ’
     // printf("获取文件信息错误!!\n");
-    else
-    {
-        if (has[i])
-        { // 如果有-i参数，则执行
+    else{
+        if (has[i]){ // 如果有-i参数，则执行
             myls_i(&buf);
         }
-        if (has[s])
-        { // 如果有-s参数，则执行
+        if (has[s]){ // 如果有-s参数，则执行
             myls_s(&buf);
         }
     }
@@ -243,14 +223,11 @@ void mystat(int has[], char *file_name)
     if (stat(file_name, &buf) == -1)
         ;
     // perror("stat");         // 有这一句会出现path不是当前路径时，报错‘ 获取文件信息错误!! ’
-    else
-    {
-        if (has[i])
-        { // 如果有-i参数，则执行
+    else{
+        if (has[i]){ // 如果有-i参数，则执行
             myls_i(&buf);
         }
-        if (has[s])
-        { // 如果有-s参数，则执行
+        if (has[s]){ // 如果有-s参数，则执行
             myls_s(&buf);
         }
         print_file_information(file_name, &buf); // 注意是&buf
@@ -276,18 +253,14 @@ void myls_t(char *filenames[])
 {
     int n, m;                                    // 改成这样出来的filetime都一样，就错了，无法进行时间排序
     struct stat buf;                             // struct stat *buf_ptr
-    for (n = 0; n < file_cnt; n++)
-    {
+    for (n = 0; n < file_cnt; n++){
         stat(filenames[n], &buf);               // buf_ptr
         filetime[n] = (long int *)buf.st_mtime; // buf_ptr->st_mtime
     }//如果只是long int，会有警告long int类型赋值给了long int*
 
-    for (n = 0; n < file_cnt - 1; n++)
-    {
-        for (m = 0; m < file_cnt - 1 - n; m++)
-        {
-            if (filetime[m] < filetime[m + 1]) // 降序
-            {
+    for (n = 0; n < file_cnt - 1; n++){
+        for (m = 0; m < file_cnt - 1 - n; m++){
+            if (filetime[m] < filetime[m + 1]) {// 降序
                 long int *x;         //这也要一起改，加上*
                 // char *y;
                 // y=(char*)malloc(sizeof(char));
@@ -340,14 +313,11 @@ void myls_R(int has[], char pathname[])
 
         struct stat file_message;                      // 定义stat函数返回的结构体变量
         int ret_stat = lstat(nextpath, &file_message); // 获取文件信息
-        if (ret_stat == -1)
-        {
+        if (ret_stat == -1){
             printf("%s error!", filename); // stat读取文件错误则输出提示信息
         }
-        else if (S_ISDIR(file_message.st_mode) && filename[0] != '.') // 筛选"."、".."与隐藏文件
-        {
-            if (has[l] == 0)
-            {
+        else if (S_ISDIR(file_message.st_mode) && filename[0] != '.'){  // 筛选"."、".."与隐藏文件
+            if (has[l] == 0){
                 printf("\n");
             }
             myls_R(has, nextpath);
@@ -363,32 +333,25 @@ void print_file_information(char *file_name, struct stat *buf_ptr)
     // 第一列
     char first_column[11] = {0};
     // 第一个字母
-    if (S_ISLNK(buf_ptr->st_mode))
-    {
+    if (S_ISLNK(buf_ptr->st_mode)){
         first_column[0] = 'l';
     }
-    else if (S_ISDIR(buf_ptr->st_mode))
-    {
+    else if (S_ISDIR(buf_ptr->st_mode)){
         first_column[0] = 'd';
     }
-    else if (S_ISCHR(buf_ptr->st_mode))
-    {
+    else if (S_ISCHR(buf_ptr->st_mode)){
         first_column[0] = 'c';
     }
-    else if (S_ISSOCK(buf_ptr->st_mode))
-    {
+    else if (S_ISSOCK(buf_ptr->st_mode)){
         first_column[0] = 's';
     }
-    else if (S_ISFIFO(buf_ptr->st_mode))
-    {
+    else if (S_ISFIFO(buf_ptr->st_mode)){
         first_column[0] = 'p';
     }
-    else if (S_ISBLK(buf_ptr->st_mode))
-    {
+    else if (S_ISBLK(buf_ptr->st_mode)){
         first_column[0] = 'b';
     }
-    else
-    {
+    else{
         first_column[0] = '-';
     }
 
@@ -421,13 +384,11 @@ void print_file_information(char *file_name, struct stat *buf_ptr)
     struct passwd *getpwuid();
     struct passwd *pwuid_ptr;
     static char numstr[10];
-    if ((pwuid_ptr = getpwuid(buf_ptr->st_uid)) == NULL)
-    {
+    if ((pwuid_ptr = getpwuid(buf_ptr->st_uid)) == NULL){
         sprintf(numstr, "%d", buf_ptr->st_uid);
         printf("%s ", numstr);
     }
-    else
-    {
+    else{
         printf("%-8s ", pwuid_ptr->pw_name); //-8向左对齐
     }
 
@@ -436,13 +397,11 @@ void print_file_information(char *file_name, struct stat *buf_ptr)
     struct group *getgrgid();
     struct group *group_ptr;
     static char num[10];
-    if ((group_ptr = getgrgid(buf_ptr->st_gid)) == NULL)
-    {
+    if ((group_ptr = getgrgid(buf_ptr->st_gid)) == NULL){
         sprintf(num, "%d", buf_ptr->st_gid);
         printf("%s ", num);
     }
-    else
-    {
+    else{
         printf("%-8s ", group_ptr->gr_name); //-8向左对齐
     }
 
@@ -465,8 +424,7 @@ void print_file_information(char *file_name, struct stat *buf_ptr)
 // 排序
 void sort(char **filenames, int start, int end)
 {
-    if (start < end)
-    {
+    if (start < end){
         int position = partition(filenames, start, end);
         sort(filenames, start, position - 1);
         sort(filenames, position + 1, end);
@@ -480,6 +438,7 @@ int compare(char *s1, char *s2)
         s1++;
     if (*s2 == '.')
         s2++;
+
     while (*s1 && *s2 && *s1 == *s2)
     {
         ++s1;
