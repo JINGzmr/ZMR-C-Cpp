@@ -5,12 +5,12 @@
 #include <string.h>
 #include <stdlib.h>
 #include <sys/types.h>
-#include <pwd.h>
-#include <grp.h>
-#include <time.h>
+#include <pwd.h> // getpwuid的头文件
+#include <grp.h> // getgrgid的头文件
+#include <time.h> // ctime的头文件
 #include <locale.h>
 #include <langinfo.h>
-#include <unistd.h> //getcwd的头文件
+#include <unistd.h> //getcwd、chdir的头文件
 
 char *filenames[4096];    // 存放文件名的数组，方便a-z排序
 long int *filetime[4096]; // 存文件修改时间，和filenamet一一对应
@@ -53,8 +53,7 @@ int main(int argc, char *argv[])
     char path[256]; // 存储路径
     while ((ch = getopt(argc, argv, "alRtris")) != -1)
     {
-        switch (ch)
-        {
+        switch (ch){
         case 'a':
             has[a] = 1;
             break;
@@ -219,18 +218,18 @@ void print(int has[], const char *file_name)
 // 有-l时执行
 void mystat(int has[], char *file_name)
 {
-    struct stat buf;
-    if (stat(file_name, &buf) == -1)
+    struct stat file_message;
+    if (stat(file_name, &file_message) == -1)
         ;
     // perror("stat");         // 有这一句会出现path不是当前路径时，报错‘ 获取文件信息错误!! ’
     else{
         if (has[i]){ // 如果有-i参数，则执行
-            myls_i(&buf);
+            myls_i(&file_message);
         }
         if (has[s]){ // 如果有-s参数，则执行
-            myls_s(&buf);
+            myls_s(&file_message);
         }
-        print_file_information(file_name, &buf); // 注意是&buf
+        print_file_information(file_name, &file_message); // 注意是&file_message
     }
 }
 
@@ -288,36 +287,36 @@ void myls_t(char *filenames[])
 
 void myls_R(int has[], char pathname[])
 {
-    chdir(pathname);
+    chdir(pathname);  //更改进程的当前工作目录,否则一直报错：无法获取除本.c文件目录下的其他文件
     char nextpath[512];
 
     DIR *ret_opendir = opendir(pathname); // 打开目录"pathname"
     if (ret_opendir == NULL)
         perror(ret_opendir);
 
-    printf("%s:\n", pathname); // 显示pathname目录路径
-    myls(has, pathname);       // 显示pathname目录下所有非隐藏文件名称
+    printf("%s:\n", pathname); // 打印pathname目录路径 "/home/zhangminrui/桌面/练习代码/Linux系统编程/notes:"
+    myls(has, pathname);       // 打印该目录路径下的文件相关信息
 
     struct dirent *ret_readdir = NULL;         // 定义readdir函数返回的结构体变量
     while (ret_readdir = readdir(ret_opendir)) // 判断是否读取到目录尾
     {
         char *filename = ret_readdir->d_name; // 获取文件名
 
-        int end = 0; // 优化显示路径（处理"./test/"与"./test"）
+        // 优化显示路径（处理"./note/"与"./note"）
+        int end = 0;  
         while (pathname[end])
             end++;
-        strcpy(nextpath, pathname);
+        strcpy(nextpath, pathname);  // 先把当前路径名给nextpath
         if (pathname[end - 1] != '/')
             strcat(nextpath, "/");
-        strcat(nextpath, filename);
+        strcat(nextpath, filename); // 再把当前文件名给nextpath
 
-        struct stat file_message;                      // 定义stat函数返回的结构体变量
-        int ret_stat = lstat(nextpath, &file_message); // 获取文件信息
-        if (ret_stat == -1){
-            printf("%s error!", filename); // stat读取文件错误则输出提示信息
+        struct stat file_message;                      
+        if (lstat(nextpath, &file_message) == -1){  // 获取文件信息
+            perror("lstat"); // stat读取文件错误则输出提示信息
         }
-        else if (S_ISDIR(file_message.st_mode) && filename[0] != '.'){  // 筛选"."、".."与隐藏文件
-            if (has[l] == 0){
+        else if (S_ISDIR(file_message.st_mode) && filename[0] != '.'){  // S_ISDIR() 判断一个路径是不是目录                                                 
+            if (has[l] == 0){                                           // 筛选"."、".."与隐藏文件
                 printf("\n");
             }
             myls_R(has, nextpath);
@@ -381,40 +380,28 @@ void print_file_information(char *file_name, struct stat *buf_ptr)
 
     // 第三列
     // 该文件或目录的所有者
-    struct passwd *getpwuid();
     struct passwd *pwuid_ptr;
-    static char numstr[10];
-    if ((pwuid_ptr = getpwuid(buf_ptr->st_uid)) == NULL){
-        sprintf(numstr, "%d", buf_ptr->st_uid);
-        printf("%s ", numstr);
-    }
-    else{
+    if ((pwuid_ptr = getpwuid(buf_ptr->st_uid)) != NULL){
         printf("%-8s ", pwuid_ptr->pw_name); //-8向左对齐
     }
 
     // 第四列
     // 表示所属的组
-    struct group *getgrgid();
     struct group *group_ptr;
-    static char num[10];
-    if ((group_ptr = getgrgid(buf_ptr->st_gid)) == NULL){
-        sprintf(num, "%d", buf_ptr->st_gid);
-        printf("%s ", num);
-    }
-    else{
+    if ((group_ptr = getgrgid(buf_ptr->st_gid)) != NULL){
         printf("%-8s ", group_ptr->gr_name); //-8向左对齐
     }
 
     // 第五列
     // 文件大小
-    printf("%8ld ", (long)buf_ptr->st_size); // 8ld向右对齐
+    printf("%8ld ", (long int)buf_ptr->st_size); // 8ld向右对齐
 
     // 第六、七、八列
     // 月、日、时
-    char *time = ctime(&(buf_ptr->st_mtime));
+    char *time = ctime(&(buf_ptr->st_mtime));  //将st_mtime转为标准日历时间字符串
     char file_time[512] = {0};
     strncpy(file_time, time, strlen(time) - 1);
-    printf("%.12s ", 4 + file_time); // 不用星期，星期占前4地址,.12为截取日期长度为12
+    printf("%.12s ", 4 + file_time); // 不用星期，星期占前4地址, .12 为截取日期长度为12
 
     // 第九列
     // 文件名
