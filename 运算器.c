@@ -622,13 +622,13 @@
 //     return 0;
 // }
 
-#include<stdio.h>
-#include<stdlib.h>
-//  Definition for singly-linked list.
-  struct ListNode {
-      int val;
-      struct ListNode *next;
- };
+// #include<stdio.h>
+// #include<stdlib.h>
+// //  Definition for singly-linked list.
+//   struct ListNode {
+//       int val;
+//       struct ListNode *next;
+//  };
 
 // struct ListNode* mergeTwoLists(struct ListNode* list1, struct ListNode* list2){
 // //排除空表
@@ -674,26 +674,29 @@
 // }
 
 
-struct ListNode* deleteDuplicates(struct ListNode* head){
-    if(head==NULL)
-        return head;
+// struct ListNode* deleteDuplicates(struct ListNode* head){
+//     if(head==NULL)
+//         return head;
     
-    struct ListNode* p,*q;
-    p=head;
-    q=head->next;
+//     struct ListNode* p,*q;
+//     p=head;
+//     q=head->next;
 
-    while(q)
-    {
-        if(p->val == q->val){
-            p->next=q->next;
-            q=q->next;
-        }
-        else{
-            p=p->next;
-            q=q->next;
-        }
+//     while(q)
+//     {
+//         if(p->val == q->val){
+//             p->next=q->next;
+//             q=q->next;
+//         }
+//         else{
+//             p=p->next;
+//             q=q->next;
+//         }
        
-    }
+//     }
 
-    return head;
-}
+//     return head;
+// }
+
+
+
