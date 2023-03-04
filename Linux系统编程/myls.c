@@ -19,7 +19,7 @@ int file_cnt = 0;         // 目录中文件个数，用来计数
 #define a 0
 #define l 1
 #define R 2
-#define t 3
+#define t 3 
 #define r 4
 #define i 5
 #define s 6
