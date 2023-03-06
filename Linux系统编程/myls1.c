@@ -80,43 +80,20 @@ int main(int argc, char *argv[])
     }
 
     getcwd(path, sizeof(path)); // 获取当前路径函数，并存入path
-    char path0[256];  
-    strcpy(path0,path);//让path0始终存的是当前文件路径
 
-    int n,tag=0,cnt=0;
+    int n;
     for (n = 1; n < argc; n++){
         if (argv[n][0] != '-'){
-            cnt++;   //看下有多少路径，如果>=2个，就要每次打印出路径名，再进行文件的打印
-        }
-    }
-
-    for (n = 1; n < argc; n++){
-        if (argv[n][0] != '-'){
-            chdir(path0);
             strcpy(path, argv[n]);
-            if(cnt>=2){            //就是这里进行判断一下
-                printf("%s:\n",path);
-            }
-
-            if (has[R]){
-                myls_R(has, path);
-            }
-            else{
-                myls(has, path);
-            }
-            tag=1;
-        }  
-    }
-    
-        if(tag==0){
-            if (has[R]){
-                myls_R(has, path);
-            }
-            else{
-                myls(has, path);
-            }
         }
+    }
 
+    if (has[R]){
+        myls_R(has, path);
+    }
+    else{
+        myls(has, path);
+    }
 
     return 0;
 }
@@ -258,7 +235,7 @@ void mystat(int has[], char *file_name)
 
 void myls_i(struct stat *buf_ptr)
 {
-    printf("%8ld ", buf_ptr->st_ino); // ino_t是long int 类型
+    printf("%ld ", buf_ptr->st_ino); // ino_t是long int 类型
 }
 
 // 在文件左侧显示文件大小（在-l左边，-i右边），以1024字节为块单位
