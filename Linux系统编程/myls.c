@@ -30,7 +30,7 @@ void myls(int has[], const char *dirpath_name);                     // 打开、
 void mystat(int has[], char *file_name);                            // 获取文件具体信息
 void print(int has[], const char *file_name);                       // 打印没有-l的普通文件名
 void print_file_information(char *file_name, struct stat *buf_ptr); // 打印文件具体信息
-long long int total(const char *file_name[]);
+long long int total(char *file_name[]);
 void myls_i(struct stat *buf_ptr);
 void myls_s(struct stat *buf_ptr);
 void myls_t(char *filenames[]); // 不是*filenames
@@ -197,7 +197,7 @@ void myls(int has[], const char *dirpath_name)
 }
 
 // 总用量
-long long int total(const char *file_name[])
+long long int total(char *file_name[])
 {
     long long int totall = 0;
     int n;
@@ -214,8 +214,8 @@ long long int total(const char *file_name[])
 void restored_ls(struct dirent *cur_item)
 {
     filenames[file_cnt] = cur_item->d_name;
-    // strcpy(filenames[file_cnt], cur_item->d_name); ????????
-    // printf("%s\n",filenames[file_cnt]);
+    // strcpy(filenames[file_cnt], cur_item->d_name); --->错，因为d_name是char数组类型，filenames[file_cnt]是char*类型，
+                                                        //字符串赋值给指针就直接a=b即可，而不是strcpy(a,b),因为这种是针对于char数组给char数组的
     file_cnt++;
 }
 
