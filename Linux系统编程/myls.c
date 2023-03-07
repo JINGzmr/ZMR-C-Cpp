@@ -47,9 +47,6 @@ int main(int argc, char *argv[])
 {
     char ch;
     int has[8] = {0};
-    int num = 0; // 记录-l/-lai的数目，若小于argc-1(即相差大于等于2时），则有可能是指定目录
-    // char *dir;   // 存指定目录
-    // dir = (char *)malloc(sizeof(char));
     char path[256]; // 存储路径
     while ((ch = getopt(argc, argv, "alRtris")) != -1)
     {
@@ -76,7 +73,6 @@ int main(int argc, char *argv[])
             has[s] = 1;
             break;
         }
-        num++;
     }
 
     getcwd(path, sizeof(path)); // 获取当前路径函数，并存入path
