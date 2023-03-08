@@ -295,7 +295,7 @@ void myls_t(char *filenames[])
 
                 // strcpy(y, filenames[m + 1]);
                 // strcpy(filenames[m + 1], filenames[m]);
-                // strcpy(filenames[m], y);
+                // strcpy(filenames[m], y);录
 
                 // free(y);
             }
@@ -311,7 +311,7 @@ void myls_R(int has[], char pathname[])
 
     DIR *ret_opendir = opendir(pathname); // 打开目录"pathname"
     if (ret_opendir == NULL)
-        perror(ret_opendir);
+        printf("目录打开错误!\n");
 
     printf("%s:\n", pathname); // 打印pathname目录路径 "/home/zhangminrui/桌面/练习代码/Linux系统编程/notes:"
     myls(has, pathname);       // 打印该目录路径下的文件相关信息
