@@ -233,24 +233,6 @@ void print(int has[], const char *file_name)
     printf("%s    ", file_name); // 不是很对齐
 }
 
-// 获取文件具体信息
-// 有-l时执行
-void mystat(int has[], char *file_name)
-{
-    struct stat file_message;
-    if (stat(file_name, &file_message) == -1)
-        ;
-    // perror("stat");         // 有这一句会出现path不是当前路径时，报错‘ 获取文件信息错误!! ’
-    else{
-        if (has[i]){ // 如果有-i参数，则执行
-            myls_i(&file_message);
-        }
-        if (has[s]){ // 如果有-s参数，则执行
-            myls_s(&file_message);
-        }
-        print_file_information(file_name, &file_message); // 注意是&file_message
-    }
-}
 
 void myls_i(struct stat *buf_ptr)
 {
@@ -343,6 +325,26 @@ void myls_R(int has[], char pathname[])
     }
 
     closedir(ret_opendir);
+}
+
+
+// 获取文件具体信息
+// 有-l时执行
+void mystat(int has[], char *file_name)
+{
+    struct stat file_message;
+    if (stat(file_name, &file_message) == -1)
+        ;
+    // perror("stat");         // 有这一句会出现path不是当前路径时，报错‘ 获取文件信息错误!! ’
+    else{
+        if (has[i]){ // 如果有-i参数，则执行
+            myls_i(&file_message);
+        }
+        if (has[s]){ // 如果有-s参数，则执行
+            myls_s(&file_message);
+        }
+        print_file_information(file_name, &file_message); // 注意是&file_message
+    }
 }
 
 // 打印文件具体信息
