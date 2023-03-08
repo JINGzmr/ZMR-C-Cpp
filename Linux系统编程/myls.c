@@ -192,6 +192,17 @@ void myls(int has[], const char *dirpath_name)
     }
 }
 
+
+// 将目录中的文件依次存入数组中
+void restored_ls(struct dirent *cur_item)
+{
+    filenames[file_cnt] = cur_item->d_name;
+    // strcpy(filenames[file_cnt], cur_item->d_name); --->错，因为d_name是char数组类型，filenames[file_cnt]是char*类型，
+                                                        //字符串赋值给指针就直接a=b即可，而不是strcpy(a,b),因为这种是针对于char数组给char数组的
+    file_cnt++;
+}
+
+
 // 总用量
 long long int total(char *file_name[])
 {
@@ -206,32 +217,6 @@ long long int total(char *file_name[])
     printf("总用量 %lld\n", totall);
 }
 
-// 将目录中的文件依次存入数组中
-void restored_ls(struct dirent *cur_item)
-{
-    filenames[file_cnt] = cur_item->d_name;
-    // strcpy(filenames[file_cnt], cur_item->d_name); --->错，因为d_name是char数组类型，filenames[file_cnt]是char*类型，
-                                                        //字符串赋值给指针就直接a=b即可，而不是strcpy(a,b),因为这种是针对于char数组给char数组的
-    file_cnt++;
-}
-
-void print(int has[], const char *file_name)
-{
-    struct stat buf;
-    if (stat(file_name, &buf) == -1)
-        ;
-    // perror("stat");             // 有这一句会出现path不是当前路径时，报错‘ 获取文件信息错误!! ’
-    // printf("获取文件信息错误!!\n");
-    else{
-        if (has[i]){ // 如果有-i参数，则执行
-            myls_i(&buf);
-        }
-        if (has[s]){ // 如果有-s参数，则执行
-            myls_s(&buf);
-        }
-    }
-    printf("%s    ", file_name); // 不是很对齐
-}
 
 
 void myls_i(struct stat *buf_ptr)
@@ -325,6 +310,26 @@ void myls_R(int has[], char pathname[])
     }
 
     closedir(ret_opendir);
+}
+
+
+//打印没有-l的普通文件名
+void print(int has[], const char *file_name)
+{
+    struct stat buf;
+    if (stat(file_name, &buf) == -1)
+        ;
+    // perror("stat");             // 有这一句会出现path不是当前路径时，报错‘ 获取文件信息错误!! ’
+    // printf("获取文件信息错误!!\n");
+    else{
+        if (has[i]){ // 如果有-i参数，则执行
+            myls_i(&buf);
+        }
+        if (has[s]){ // 如果有-s参数，则执行
+            myls_s(&buf);
+        }
+    }
+    printf("%s    ", file_name); // 不是很对齐
 }
 
 
