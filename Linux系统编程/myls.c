@@ -224,12 +224,14 @@ void myls_i(struct stat *buf_ptr)
     printf("%8ld ", buf_ptr->st_ino); // ino_t是long int 类型
 }
 
+
 // 在文件左侧显示文件大小（在-l左边，-i右边），以1024字节为块单位
 // ls -s
 void myls_s(struct stat *buf_ptr)
 {
     printf("%5ld ", (buf_ptr->st_blocks) / 2); // blkcnt_t是long int 类型
 }
+
 
 // 按照最后一次修改时间进行排序
 // buf_ptr->st_mtime可以直接进行比大小
