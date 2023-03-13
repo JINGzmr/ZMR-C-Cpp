@@ -689,13 +689,15 @@
 // }
 
 
-#include<stdio.h>
-#include<stdlib.h>
+// #include<stdio.h>
+// #include<stdlib.h>
 
-int main()
-{
-    setenv("PATH","666",1);
-    puts(getenv("PATH"));
+// int main()
+// {
+//     setenv("PATH","666",1);
+//     puts(getenv("PATH"));
 
-    exit(0);
-}
+//     exit(0);
+// }
+
+
