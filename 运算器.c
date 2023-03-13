@@ -35,7 +35,7 @@
 // #include<string.h>
 // int ss(int a);
 // int main()
-// {   
+// {
 //     int i;
 //     // printf("%d\n",ss(2));
 //     int a[150]={0};
@@ -89,7 +89,7 @@
 //         if(ss(a))printf("Yes\n");
 //         else printf("No\n");
 //     }
-    
+
 //     return 0;
 // }
 // int ss(int a)
@@ -103,11 +103,9 @@
 //             break;
 //         }
 //     }
-    
-    
+
 //     return tag;
 // }
-
 
 // #include<stdio.h>
 // double fact(int a,int b);
@@ -117,8 +115,7 @@
 //     scanf("%d %d",&m,&n);
 //     double x=fact(m,n);
 //     printf("result = %d",x);
-    
-    
+
 //     return 0;
 // }
 // double fact(int a,int b)
@@ -134,42 +131,39 @@
 //     for(i=b-a;i>0;i--){
 //         z*=i;
 //         printf("%d\n",z);
-        
+
 //     }
 //     double c=x/(y*z);
 // //     printf("%d %d %d\n",x,y,z);
-    
+
 //     return c;
 
 // }
-
-
 
 // #include <stdio.h>
 // #include <stdlib.h>
 // #include <math.h>
 // #include <string.h>
-// int main(){   
+// int main(){
 //     int bir[4];
-//     int year, n;   
+//     int year, n;
 //     scanf("%d %d",&year, &n);
-//     int i, count = 0;   
-//     for(i=year; i<3020; i++){      
-//         count = 1;       
-//         bir[0] = i/1000;      
-//         bir[1] = i/100%10;       
-//         bir[2] = i/10%10;       
+//     int i, count = 0;
+//     for(i=year; i<3020; i++){
+//         count = 1;
+//         bir[0] = i/1000;
+//         bir[1] = i/100%10;
+//         bir[2] = i/10%10;
 //         bir[3] = i%10;
-//         if(bir[0] != bir[1] && bir[0] != bir[2] && bir[0] != bir[3]) count++;      
-//         if(bir[1] != bir[2] && bir[1] != bir[3]) count++;        
+//         if(bir[0] != bir[1] && bir[0] != bir[2] && bir[0] != bir[3]) count++;
+//         if(bir[1] != bir[2] && bir[1] != bir[3]) count++;
 //         if(bir[2] != bir[3]) count++;
-//         if(count == n) break;  
-// }   
-//         printf("%d %04d", i-year, i);      
-//         // system("pause");    
+//         if(count == n) break;
+// }
+//         printf("%d %04d", i-year, i);
+//         // system("pause");
 //         return 0;
 // }
-
 
 // #include <stdio.h>
 // int main()
@@ -187,7 +181,6 @@
 //     return 0;
 // }
 
-
 // #include<stdio.h>
 // #include<math.h>
 // int main()
@@ -198,7 +191,7 @@
 //     scanf("%lf %lf %lf %lf %lf %lf",&x1,&y1,&x2,&y2,&x3,&y3);
 //     double a,b,c,d=0.0;
 //     int i;
-   
+
 //         a=pow(x2-x1,2);
 //         b=pow(y2-y1,2);
 //         c=sqrt(a+b);
@@ -208,17 +201,16 @@
 //         b=pow(y3-y1,2);
 //         c=sqrt(a+b);
 //         d+=c;
-    
+
 //         a=pow(x2-x3,2);
 //         b=pow(y2-y3,2);
 //         c=sqrt(a+b);
 //         d+=c;
-    
+
 //     printf("%.2f",d);
 
 //     return 0;
 // }
-
 
 // #include<stdio.h>
 // int main()
@@ -259,11 +251,9 @@
 //     return 0;
 // }
 
-
 // #include<stdio.h>
 // int main()
 // {
-
 
 //     return 0;
 // }
@@ -282,16 +272,13 @@
 // printf("%d\n",f(a));
 // }
 
-
-
-
 // #include <stdio.h>
 // #include <math.h>
 // int fact(int n)
 // {
 //     int i,t=sqrt(n);
 //     if(n<=1)return 0;
-    
+
 //     else for(i=2;i<=t;i++){
 //             if(n%i==0)return 0;
 //         }
@@ -315,7 +302,6 @@
 // }
 // return 0;
 // }
-
 
 // #include<stdio.h>
 // int main()
@@ -362,8 +348,6 @@
 //     return 0;
 // }
 
-
-
 // #include<stdio.h>
 // int main()
 // {
@@ -390,14 +374,11 @@
 
 //         i=j;
 
-
-
 //     }
 // printf("...");
 
 //     return 0;
 // }
-
 
 // #include <stdio.h>
 // #include <string.h>
@@ -431,7 +412,6 @@
 // printf("%.2f %s",a[min1].price,a[min1].name);
 // }
 
-
 // #include<stdio.h>
 // int main()
 // {
@@ -458,7 +438,6 @@
 //     return 0;
 // }
 
-
 // #include <stdio.h>
 // #define MAXN 10
 
@@ -474,15 +453,15 @@
 // int main()
 // {   struct student stu[MAXN], *ptr;
 //     int n, i, count;
-    
+
 //     ptr = stu;
 //     scanf("%d\n", &n);
 //     for(i = 0; i < n; i++){
 //        scanf("%d%s%d", &stu[i].num, stu[i].name, &stu[i].score);
-//     } 
+//     }
 //    count = set_grade(ptr, n);
 //    printf("The count for failed (<60): %d\n", count);
-//    printf("The grades:\n"); 
+//    printf("The grades:\n");
 //    for(i = 0; i < n; i++)
 //        printf("%d %s %c\n", stu[i].num, stu[i].name, stu[i].grade);
 //     return 0;
@@ -503,7 +482,6 @@
 
 //     return cnt;
 // }
-
 
 // #include<stdio.h>
 // int main()
@@ -543,66 +521,65 @@
 // #include <stdlib.h>
 // #include <math.h>
 // #include <string.h>
-// int main(){   
+// int main(){
 //     int bir[4];
-//     int year, n;   
+//     int year, n;
 //     scanf("%d %d",&year, &n);
-//     int i, count = 0;   
-//     for(i=year; i<3020; i++){      
-//         count = 1;       
-//         bir[0] = i/1000;      
-//         bir[1] = i/100%10;       
-//         bir[2] = i/10%10;       
+//     int i, count = 0;
+//     for(i=year; i<3020; i++){
+//         count = 1;
+//         bir[0] = i/1000;
+//         bir[1] = i/100%10;
+//         bir[2] = i/10%10;
 //         bir[3] = i%10;
-//         if(bir[0] != bir[1] && bir[0] != bir[2] && bir[0] != bir[3]) count++;      
-//         if(bir[1] != bir[2] && bir[1] != bir[3]) count++;        
+//         if(bir[0] != bir[1] && bir[0] != bir[2] && bir[0] != bir[3]) count++;
+//         if(bir[1] != bir[2] && bir[1] != bir[3]) count++;
 //         if(bir[2] != bir[3]) count++;
-//         if(count == n) break;  
-// }   
-//         printf("%d %04d", i-year, i);      
-//         // system("pause");    
+//         if(count == n) break;
+// }
+//         printf("%d %04d", i-year, i);
+//         // system("pause");
 //         return 0;
 // }
 
+// 写一个函数交换两个结构体变量
+//  #include<stdio.h>
+//  struct Cat{
+//      char name[20];
+//      char sex;
+//      int age;
+//      int score;
+//  };
 
-//写一个函数交换两个结构体变量
-// #include<stdio.h>
-// struct Cat{
-//     char name[20];
-//     char sex;
-//     int age;
-//     int score;
-// };
- 
 // void change(struct Cat *a,struct Cat *b)
 // {
 //     struct Cat change = {};
 //     change = *a;
 //     *a = *b;
 //     *b = change;
- 
+
 //     printf("%s %c %d %d\n",a->name,a->sex,a->age,a->score);
 //     printf("%s %c %d %d\n",b->name,b->sex,b->age,b->score);
 // }
- 
+
 // int main()
 // {
- 
+
 //     struct Cat cat1 = {"tom",'m',28,0};
 //     struct Cat *p1 = &cat1;
- 
+
 //     struct Cat cat2 = {"heimao",'f',18,100};
 //     struct Cat *p2 = &cat2;
 
 //     printf("%s %c %d %d\n",cat1.name,cat1.sex,cat1.age,cat1.score);
 //     printf("%s %c %d %d\n",cat2.name,cat2.sex,cat2.age,cat2.score);
 //     printf("\n");
- 
+
 //     change(p1 , p2);
- 
+
 //     printf("%s %c %d %d\n",cat1.name,cat1.sex,cat1.age,cat1.score);
 //     printf("%s %c %d %d\n",cat2.name,cat2.sex,cat2.age,cat2.score);
- 
+
 //     return 0;
 // }
 
@@ -673,11 +650,10 @@
 //     return list3->next;//如果是list3,则会把list3->val中的乱码输出
 // }
 
-
 // struct ListNode* deleteDuplicates(struct ListNode* head){
 //     if(head==NULL)
 //         return head;
-    
+
 //     struct ListNode* p,*q;
 //     p=head;
 //     q=head->next;
@@ -692,11 +668,34 @@
 //             p=p->next;
 //             q=q->next;
 //         }
-       
+
 //     }
 
 //     return head;
 // }
 
+// #include <stdio.h>
+// #include <stdlib.h>
+
+// extern char **environ;
+
+// int main()
+// {
+//     int i;
+//     for (i = 0; environ[i] != NULL; i++)
+//     {
+//         puts(environ[i]);
+//     }
+// }
 
 
+#include<stdio.h>
+#include<stdlib.h>
+
+int main()
+{
+    setenv("PATH","666",1);
+    puts(getenv("PATH"));
+
+    exit(0);
+}
