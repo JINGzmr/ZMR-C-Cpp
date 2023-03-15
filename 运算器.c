@@ -688,7 +688,6 @@
 //     }
 // }
 
-
 // #include<stdio.h>
 // #include<stdlib.h>
 
@@ -700,4 +699,34 @@
 //     exit(0);
 // }
 
+#include <stdio.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <stdlib.h>
 
+int main()
+{
+    pid_t pid;
+
+    printf("[%d]begin!\n", getpid());
+
+    pid = fork();
+    if (pid < 0)
+    {
+        perror("fork()");
+        exit(1);
+    }
+
+    if (pid == 0) // child
+    {
+        printf("[%d]:child is working!\n", getpid());
+    }
+    else // parent
+    {
+        printf("[%d]:parent is working!\n", getpid());
+    }
+
+    printf("[%d]End!\n", getpid());
+
+    exit(0);
+}
