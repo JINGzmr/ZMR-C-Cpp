@@ -699,34 +699,74 @@
 //     exit(0);
 // }
 
+// #include <stdio.h>
+// #include <sys/types.h>
+// #include <unistd.h>
+// #include <stdlib.h>
+
+// int main()
+// {
+//     pid_t pid;
+
+//     printf("[%d]begin!\n", getpid());
+
+//     pid = fork();
+//     if (pid < 0)
+//     {
+//         perror("fork()");
+//         exit(1);
+//     }
+
+//     if (pid == 0) // child
+//     {
+//         printf("[%d]:child is working!\n", getpid());
+//     }
+//     else // parent
+//     {
+//         printf("[%d]:parent is working!\n", getpid());
+//     }
+
+//     printf("[%d]End!\n", getpid());
+
+//     exit(0);
+// }
+
 #include <stdio.h>
-#include <sys/types.h>
-#include <unistd.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+
+#define L 30000000
+#define R 30000200
 
 int main()
 {
+    int i, j;
+    int tag = 1;
     pid_t pid;
 
-    printf("[%d]begin!\n", getpid());
+    for (i = L; i <= R; i++){
+        tag = 1;  //每轮重置tag
+        pid = fork(); //每个数i的判断都交给子进程来完成
+                      //父进程只是用来递增i的，每次i++
+        if(pid < 0){
+            perror("fork()");
+            exit(1);
+        }
 
-    pid = fork();
-    if (pid < 0)
-    {
-        perror("fork()");
-        exit(1);
+        if(pid == 0){
+            for (j = 2; j < i / 2; j++){
+                if (i % j == 0){
+                    tag = 0; // 不是素数primer
+                    break;
+                }
+            }
+            if (tag == 1){
+                printf("%d is a primer\n", i);
+            }
+            exit(0); //该子进程的判断任务完成了，就退出当前子进程，使子进程都是由bash的这个子进程fork出来的
+        }
     }
-
-    if (pid == 0) // child
-    {
-        printf("[%d]:child is working!\n", getpid());
-    }
-    else // parent
-    {
-        printf("[%d]:parent is working!\n", getpid());
-    }
-
-    printf("[%d]End!\n", getpid());
 
     exit(0);
 }
