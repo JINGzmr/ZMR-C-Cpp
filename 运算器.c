@@ -764,6 +764,7 @@ int main()
             if (tag == 1){
                 printf("%d is a primer\n", i);
             }
+            sleep(10000);
             exit(0); //该子进程的判断任务完成了，就退出当前子进程，使子进程都是由bash的这个子进程fork出来的
         }
     }
