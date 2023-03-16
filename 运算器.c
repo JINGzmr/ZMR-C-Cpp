@@ -769,5 +769,11 @@ int main()
         }
     }
 
+    int st;  //存储子进程的状态
+    for(i = L; i < R; i++){
+        wait(&st);
+        //wait(NULL);  或者只要这个也行
+    }
+
     exit(0);
 }
