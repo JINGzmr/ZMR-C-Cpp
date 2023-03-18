@@ -3,10 +3,10 @@
 #include <unistd.h>
 #include <glob.h> //glob()
 #include <sys/types.h>
-#include <string.h>
+#include <string.h> // strsep()
 #include <sys/wait.h>
 
-#define DELIMS " \t\n"
+#define DELIMS " \t\n" //strsep要的分割符，包括空格
 
 struct cmd_st
 {
@@ -70,19 +70,19 @@ void prompt(void)
 
 
 static void parse(char *line, struct cmd_st *res)  //将一段文本或数据解析成特定格式
-{ // ls -a -l /etc  .....
-    char *tok;
+{ // ls -a -l   /etc  .....
+    char *tok;  //strsep要的返回值是一个char*类型，存每次while循环扣出来的小串
     int i = 0;
 
-    while (1)
+    while (1)//循环解析这些命令
     {
-        tok = strsep(&line, DELIMS);
+        tok = strsep(&line, DELIMS);  //strtok:将一个字符串分解为0个或多个非空标记的序列
         if (tok == NULL)
             break;
-        if (tok[0] == '\0')
+        if (tok[0] == '\0') //解析出来是一个空串
             continue;
 
-        glob(tok, GLOB_NOCHECK | GLOB_APPEND * i, NULL, &res->globres);
+        glob(tok, GLOB_NOCHECK | GLOB_APPEND * i, NULL, &res->globres); //把结果带回去
         i = 1;
     }
 }
