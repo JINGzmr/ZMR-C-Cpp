@@ -18,15 +18,15 @@ static void parse(char *line, struct cmd_st *res); // 将一段文本或数据�
 
 int main()
 {
-    char *linebuf = NULL;
-    size_t linebuf_size = 0; // *linebuf缓冲区的大小
+    char *linebuf = NULL;  //存从终端输入的一整行命令
+    size_t linebuf_size = 0; // 是一个指向 lineptr 指向的缓冲区大小的指针（如果缓冲区太小，则会自动调整大小）
     struct cmd_st cmd;
     pid_t pid;
 
     while (1)
     {
-        prompt(); // 打印提示符
-
+        prompt(); // 打印提示符$
+                                            //readline()函数好像也行
         if (getline(&linebuf, &linebuf_size, stdin) < 0) // 从终端获取用户的输入  stdin->从标准输入来读
             break;                                       // getline()从流中读取整行，将包含文本的缓冲区地址存储到*linebuf中
 
@@ -56,6 +56,10 @@ int main()
                 wait(NULL); // 收尸完再进行循环
             }
         }
+        
+        // if (linebuf)   //要free，但会显示 “free(): double free detected in tcache 2” 以及 “zsh: abort (core dumped)  ./a.out”
+        //     free(linebuf);
+
     }
 
     exit(0);
