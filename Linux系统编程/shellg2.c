@@ -42,7 +42,7 @@ int main()
     while (1)
     {
         // 打印提示符和当前路径
-        printf("myshell:%s$ ", getcwd(path, MAX_PATH_LENGTH));
+        printf("myshell_zmr:%s$ ", getcwd(path, MAX_PATH_LENGTH));
         fflush(stdout);
 
         // 读取命令行输入
@@ -124,7 +124,7 @@ void parse_command(char *command)
                 args[num_args] = token;
                 num_args++;
             }
-            // 复制参数数组到命令数组
+            // 复制参数数组到命令数组->参数数组存ls\-l（是散的），命令数组存“ls -l”（是整体的）
             for (int i = 0; i < num_args; i++)
             {
                 commands[num_commands][i] = args[i];
@@ -148,33 +148,35 @@ void execute_command()
         return;
     }
 
+// printf("%s1\n",commands[0][1]);
     // 执行 cd 命令
     if (strcmp(commands[0][0], "cd") == 0)
     {
         // 处理 cd - 命令，切换到上一个工作路径
         if (commands[0][1] != NULL && strcmp(commands[0][1], "-") == 0)
         {
-            char prev_path[MAX_PATH_LENGTH];
-            strcpy(prev_path, path);
-            chdir(getenv("OLDPWD"));
-            strcpy(path, prev_path);
+            char prev_path[MAX_PATH_LENGTH];//不懂有什么用，prev_path和path存的都是当前路径
+            strcpy(prev_path, path);                                   //getenv()函数是一个C标准库中的函数，用于获取环境变量列表中相应变量的值
+            chdir(getenv("OLDPWD"));//将当前工作目录更改为之前的工作目录。使用了getenv()获取OLDPWD的值，然后将其作为参数传递给chdir()
+            strcpy(path, prev_path);                                             //“OLDPWD”，它是一个Shell内置环境变量，表示之前的工作目录
         }
-        // 处理普通 cd 命令，切换到指定路径
-        else if (commands[0][1] != NULL)
-        {
-            char prev_path[MAX_PATH_LENGTH];
-            strcpy(prev_path, path);
-            chdir(commands[0][1]);
-            strcpy(path, prev_path);
-        }
-        // 处理 cd 命令没有参数的情况，切换到用户主目录
-        else
+         // 处理 cd 命令没有参数或cd ~ 的情况，切换到用户主目录
+        else if((commands[0][1] != NULL && strcmp(commands[0][1],"~") == 0 ) || commands[0][1] == NULL)
         {
             char prev_path[MAX_PATH_LENGTH];
             strcpy(prev_path, path);
             chdir(getenv("HOME"));
             strcpy(path, prev_path);
         }
+        // 处理普通 cd 命令，切换到指定路径
+        else
+        {
+            char prev_path[MAX_PATH_LENGTH];
+            strcpy(prev_path, path);
+            chdir(commands[0][1]);
+            strcpy(path, prev_path);
+        }
+       
         return;
     }
 
@@ -234,37 +236,3 @@ void execute_command()
         waitpid(pid, NULL, 0);
     }
 }
-
-// int main()
-// {
-//     // 初始化路径为当前工作路径
-//     getcwd(path, MAX_PATH_LENGTH);
-
-//     // 显示欢迎信息
-//     printf("Welcome to myshell!\n");
-
-//     // 进入命令循环
-//     while (1)
-//     {
-//         // 显示提示符
-//         printf("%s > ", path);
-
-//         // 读取用户输入的命令行
-//         char input[MAX_INPUT_LENGTH];
-//         fgets(input, MAX_INPUT_LENGTH, stdin);
-
-//         // 解析命令行
-//         parse_command(input);
-
-//         // 执行命令
-//         execute_command();
-
-//         // 重置标志位
-//         in_redirect = 0;
-//         out_redirect = 0;
-//         append_redirect = 0;
-//         num_commands = 0;
-//     }
-
-//     return 0;
-// }
