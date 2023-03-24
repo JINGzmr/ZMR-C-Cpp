@@ -81,7 +81,7 @@ void printname()
 }
 void commodAnalsy(char *argv[], int number)
 {
-    int flag = isdo(argv, number); ////ls -a -l | grep abc | wc -l > 2.txt 返回的是 > 对应的flag = 2
+    int flag = isdo(argv, number); //ls -a -l | grep abc | wc -l > 2.txt 返回的是 > 对应的flag = 2
     if (pass == 1)
     {
         number--;

@@ -19,6 +19,7 @@ int argc = 0;
 int num_commands = 0;       // 命令数量
 char path[MAX_PATH_LENGTH]; // 当前工作路径
 
+void prompt(void);             // 打印提示符
 void parse_command(char *cmd); // 分割命令
 void do_cmd(char *cmd);        // 分析命令
 void command_with_Pipe(char *buf);
@@ -30,6 +31,7 @@ int main()
 {
     // while (1)
     {
+        prompt(); // 打印提示符$
         getcwd(path, MAX_PATH_LENGTH);
         char cmd[MAX_COMMAND_LENGTH]; // 存一整行命令
         fgets(cmd, MAX_COMMAND_LENGTH, stdin);
@@ -37,6 +39,15 @@ int main()
         do_cmd(cmd);
     }
 }
+
+
+void prompt(void)
+{
+    // 打印提示符和当前路径
+    printf("zmr-super-shell:%s$ ", getcwd(path, MAX_PATH_LENGTH));
+    flush(stdout);//清空标准输出缓冲区，确保之前的输出内容被立即写入到输出设备中，如果不清空缓冲区，可能会导致输出的内容不及时或不完整
+}
+
 
 void parse_command(char *cmd)
 {
@@ -47,8 +58,8 @@ void parse_command(char *cmd)
     {
         i++;
     }
-    argc = i; // 命令数
-    argv[argc] = NULL; //argv[argc-1]存最后一个命令
+    argc = i;          // 命令数
+    argv[argc] = NULL; // argv[argc-1]存最后一个命令
 }
 
 // void do_cmd(char *cmd)
