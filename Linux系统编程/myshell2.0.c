@@ -17,17 +17,16 @@
 #define MAX_PATH_LENGTH 1024    // 最大路径长度
 #define DELIMS " \t\n"          // strsep要的分割符，包括空格
 
-int has[10]={0};
+int has[10] = {0};
 #define cd_ 0
 #define echo_ 1
 #define exit_ 2
-#define output 3
-#define append_output 4
-#define input 5
-#define Background_running 6
-#define pipeline 7
+#define output 3             // >
+#define append_output 4      // >>
+#define input 5              // <
+#define Background_running 6 // &
+#define pipeline 7           // |
 #define ls_ 8
-
 
 char *argv[MAX_ARGS] = {NULL}; // 放 ls / -a / -t / > / 1.txt
 int argc = 0;
@@ -36,8 +35,9 @@ char commands[MAX_COMMANDS][MAX_ARGS]; // 命令数组
 int num_commands = 0;                  // 命令数量
 char path[MAX_PATH_LENGTH];            // 当前工作路径
 
-void prompt(void);                          // 打印提示符 zmr-super-shell:路径$ 
+void prompt(void);                          // 打印提示符 zmr-super-shell:路径$
 void Split_command(char *cmd);              // 分割命令 strtok()
+void has_(char *cmd);                       // 看看有啥命令参数
 void parse_command(char *argv[], int argc); // 解析命令 根据有的东东(><>>|cd&)来调用相应的函数
 
 void command_with_Pipe(char *buf);
@@ -54,6 +54,7 @@ int main()
         char cmd[MAX_COMMAND_LENGTH]; // 存一整行命令
         fgets(cmd, MAX_COMMAND_LENGTH, stdin);
         Split_command(cmd);
+        has_(cmd);
         parse_command(argv, argc);
     }
 }
@@ -78,43 +79,61 @@ void Split_command(char *cmd)
     argv[argc] = NULL; // argv[argc-1]存最后一个命令
 }
 
-void parse_command(char *argv[], int argc)
+void has_(char *cmd)
 {
-    
-    
+    if (argv[0] == NULL)
+    {
+        return;
+    }
+
+    // 内部命令
+    if (strcmp(argv[0], "cd") == 0)
+    {
+        has[cd_]++;
+    }
+    else if (strcmp(argv[0], "echo") == 0)
+    {
+        has[echo_]++;
+    }
+    else if (strcmp(argv[0], "exit") == 0)
+    {
+        has[exit_]++;
+    }
+
+    // 外部命令
+    int i;
+    for (i = 0; i < argc; i++)
+    {
+        if (strcmp(argv[i], ">") == 0)
+        {
+            has[output]++;
+        }
+        if (strcmp(argv[i], ">>") == 0)
+        {
+            has[append_output]++;
+        }
+        if (strcmp(argv[i], "<") == 0)
+        {
+            has[input]++;
+        }
+        if (strcmp(argv[i], "&") == 0)
+        {
+            has[Background_running]++;
+        }
+        if (strcmp(argv[i], "&") == 0)
+        {
+            has[pipeline]++;
+        }
+        if (strcmp(argv[i], "&") == 0)
+        {
+            has[ls_]++;
+        }
+    }
 }
 
-// void command_with_OutRe(char *buf)
-// {
-//     char outfile_name[1024]; // >后面的文件名
-//     memset(outfile_name, 0, MAX_PATH_LENGTH);
+void parse_command(char *argv[], int argc)
+{
 
-//     int i;
-//     char *argv1[MAX_ARGS];
-//     for (i = 0; i < argc; i++)
-//     {
-//         argv1[i] = argv[i];
-//         if (strcmp(argv[i], ">") == 0)
-//         {
-//             strcpy(outfile_name, argv[i + 1]);
-//             argv1[i] = '\0';
-//             break;
-//         }
-//     }
+}
 
-//     pid_t pid = fork();
-//     if (pid == 0)
-//     {
-//         int fd = open(outfile_name, O_RDWR | O_CREAT | O_TRUNC, 0666); // 0666：设置文件权限为用户、组和其他用户均可读写，其中 0 表示八进制数，6 表示用户可读写，6 表示组可读写，6 表示其他用户可读写。
-//         dup2(fd,STDOUT_FILENO);
-//         execvp(argv[0],argv);
-//     }
-//     else if (pid > 0)
-//     {
-//         int status;
-//         waitpid(pid, &status, 0);
-//     }else{
-//         perror("fork()");
-//         exit(1);
-//     }
-// }
+
