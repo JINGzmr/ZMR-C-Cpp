@@ -25,8 +25,6 @@ void mydup(char *argv[]);
 void mydup2(char *argv[]);
 // 输入重定向'<'
 void mydup3(char *argv[]);
-// 管道'|'
-void mypipe(char *argv[], int count);
 // 实现多重管道'|'
 void callCommandWithPipe(char *argv[], int count);
 int pass = 0; // 标记是否有&
@@ -69,16 +67,17 @@ int main()
         free(commod);
     }
 }
-void printname()
-{
-    char *name1 = "gty@gty-Lenovo-Legion";
-    printf("\033[1m\033[32m%s\033[0m", name1);
-    printf(":");
-    getcwd(arr, sizeof(arr));
-    printf("\033[1m\033[34m%s\033[0m", arr);
-    printf("$ ");
-    fflush(stdout); // 清空缓冲区,默认为行缓冲，提示符不是以\n结尾的
-}
+// void printname()
+// {
+//     char *name1 = "gty@gty-Lenovo-Legion";
+//     printf("\033[1m\033[32m%s\033[0m", name1);
+//     printf(":");
+//     getcwd(arr, sizeof(arr));
+//     printf("\033[1m\033[34m%s\033[0m", arr);
+//     printf("$ ");
+//     fflush(stdout); // 清空缓冲区,默认为行缓冲，提示符不是以\n结尾的
+// }
+
 void commodAnalsy(char *argv[], int number)
 {
     int flag = isdo(argv, number); //ls -a -l | grep abc | wc -l > 2.txt 返回的是 > 对应的flag = 2
@@ -148,6 +147,7 @@ void commodAnalsy(char *argv[], int number)
         }
     }
 }
+
 char strpwd[MAX]; // 用来存放上一次的路劲  实现 cd -
 void mycd(char *argv[])
 {
@@ -175,6 +175,7 @@ void mycd(char *argv[])
         chdir(argv[1]);
     }
 }
+
 void mydup(char *argv[])
 {
     char *strc[MAX] = {NULL};
@@ -188,7 +189,7 @@ void mydup(char *argv[])
     int flag = isdo(argv, number);
     i++;
     // 出现 echo "adcbe" > test.c  这种情况
-    int fdout = dup(1);                                         // 让标准输出获取一个新的文件描述符
+    int fdout = dup(1); // 让标准输出获取一个新的文件描述符，（ 标准输入、标准输出和标准错误输出默认分别使用文件描述符 0、1 和 2 ）
     int fd = open(argv[i], O_WRONLY | O_CREAT | O_TRUNC, 0666); // 只写模式|表示如果指定文件不存在，则创建这个文件|表示截断，如果文件存在，并且以只写、读写方式打开，则将其长度截断为0。
     dup2(fd, 1);
     pid_t pid = fork();
@@ -217,8 +218,9 @@ void mydup(char *argv[])
         }
         waitpid(pid, NULL, 0);
     }
-    dup2(fdout, 1); //
+    dup2(fdout, 1); //调用 dup2() 函数将标准输出文件描述符恢复到原来的设置，以确保后续输出能够正常显示在终端上。
 }
+
 void mydup2(char *argv[])
 {
     char *strc[MAX] = {NULL};

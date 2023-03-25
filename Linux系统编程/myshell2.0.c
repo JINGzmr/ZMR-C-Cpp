@@ -1,11 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <dirent.h>
 #include <unistd.h>
-#include <fcntl.h>
-#include <errno.h>
 #include <signal.h>
-#include <sys/wait.h>
+#include <readline/readline.h>
+#include <readline/history.h>
+#include <wait.h>
+#include <fcntl.h>
 
 #define MAX_COMMAND_LENGTH 1024 // 最大命令长度
 #define MAX_ARGS 64             // 最大参数数量
@@ -13,15 +17,29 @@
 #define MAX_PATH_LENGTH 1024    // 最大路径长度
 #define DELIMS " \t\n"          // strsep要的分割符，包括空格
 
-char *argv[MAX_ARGS] = {NULL};
-char commands[MAX_COMMANDS][MAX_ARGS]; // 命令数组
-int argc = 0;
-int num_commands = 0;       // 命令数量
-char path[MAX_PATH_LENGTH]; // 当前工作路径
+int has[10]={0};
+#define cd_ 0
+#define echo_ 1
+#define exit_ 2
+#define output 3
+#define append_output 4
+#define input 5
+#define Background_running 6
+#define pipeline 7
+#define ls_ 8
 
-void prompt(void);             // 打印提示符
-void parse_command(char *cmd); // 分割命令
-void do_cmd(char *cmd);        // 分析命令
+
+char *argv[MAX_ARGS] = {NULL}; // 放 ls / -a / -t / > / 1.txt
+int argc = 0;
+
+char commands[MAX_COMMANDS][MAX_ARGS]; // 命令数组
+int num_commands = 0;                  // 命令数量
+char path[MAX_PATH_LENGTH];            // 当前工作路径
+
+void prompt(void);                          // 打印提示符 zmr-super-shell:路径$ 
+void Split_command(char *cmd);              // 分割命令 strtok()
+void parse_command(char *argv[], int argc); // 解析命令 根据有的东东(><>>|cd&)来调用相应的函数
+
 void command_with_Pipe(char *buf);
 void command_with_OutRe(char *buf);
 void command_with_InRe(char *buf);
@@ -35,21 +53,19 @@ int main()
         getcwd(path, MAX_PATH_LENGTH);
         char cmd[MAX_COMMAND_LENGTH]; // 存一整行命令
         fgets(cmd, MAX_COMMAND_LENGTH, stdin);
-        parse_command(cmd);
-        do_cmd(cmd);
+        Split_command(cmd);
+        parse_command(argv, argc);
     }
 }
-
 
 void prompt(void)
 {
     // 打印提示符和当前路径
     printf("zmr-super-shell:%s$ ", getcwd(path, MAX_PATH_LENGTH));
-    flush(stdout);//清空标准输出缓冲区，确保之前的输出内容被立即写入到输出设备中，如果不清空缓冲区，可能会导致输出的内容不及时或不完整
+    flush(stdout); // 清空标准输出缓冲区，确保之前的输出内容被立即写入到输出设备中，如果不清空缓冲区，可能会导致输出的内容不及时或不完整
 }
 
-
-void parse_command(char *cmd)
+void Split_command(char *cmd)
 {
     const char *sep = " "; // 分割表示符，将每个指令分割出来
     argv[0] = strtok(cmd, sep);
@@ -62,60 +78,11 @@ void parse_command(char *cmd)
     argv[argc] = NULL; // argv[argc-1]存最后一个命令
 }
 
-// void do_cmd(char *cmd)
-// {
-//     char buf[1024]; // 存放原始命令
-// /// 识别管道命令
-// for (int i = 0; i < MAX_PATH_LENGTH; i++)
-// {
-//     if (cmd[i] == '|')
-//     {
-//         strcpy(buf, cmd);
-//         command_with_Pipe(buf);
-//         return;
-//     }
-// }
-// 识别输出重定向
-// for (int j = 0; j < argc; j++)
-// {
-//     if (strcmp(argv[j], ">") == 0)
-//     {
-//         strcpy(buf, cmd);
-//         command_with_OutRe(buf);
-//         return;
-//     }
-// }
-// // 识别输入重定向
-// for (int j = 0; j < MAX_COMMAND_LENGTH; j++)
-// {
-//     if (strcmp(commands[j], "<") == 0)
-//     {
-//         strcpy(buf, cmd);
-//         command_with_InRe(buf);
-//         return;
-//     }
-// }
-// // 识别追加写重定向
-// for (int j = 0; j < MAX_COMMAND_LENGTH; j++)
-// {
-//     if (strcmp(commands[j], ">>") == 0)
-//     {
-//         strcpy(buf, cmd);
-//         command_with_OutRePlus(buf);
-//         return;
-//     }
-// }
-// // 识别后台运行命令
-// for (int j = 0; j < MAX_COMMAND_LENGTH; j++)
-// {
-//     if (strcmp(commands[j], "&") == 0)
-//     {
-//         strcpy(buf, cmd);
-//         command_with_Back(buf);
-//         return;
-//     }
-// }
-// }
+void parse_command(char *argv[], int argc)
+{
+    
+    
+}
 
 // void command_with_OutRe(char *buf)
 // {
