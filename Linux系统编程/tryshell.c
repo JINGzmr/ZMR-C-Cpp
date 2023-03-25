@@ -306,6 +306,12 @@ void mydup3(char *argv[])
     }
     dup2(fdin, 0);
 }
+
+
+
+
+
+
 void callCommandWithPipe(char *argv[], int count)
 {
     pid_t pid;
@@ -425,6 +431,13 @@ void callCommandWithPipe(char *argv[], int count)
     for (int j = 0; j < cmd_count; j++) // 父进程等待子进程
         wait(NULL);
 }
+
+
+
+
+
+
+
 
 int isdo(char *argv[], int count)
 {

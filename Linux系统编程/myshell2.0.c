@@ -60,6 +60,7 @@ int main()
         Split_command(cmd);
         has_(cmd);
         parse_command(argv, argc);
+        printf("\n");
     }
 }
 
@@ -172,7 +173,7 @@ void parse_command(char *argv[], int argc)
     // }
     if (has[ls_])
     {
-        myInRe(argv);
+        myls(argv);
     }
 }
 
@@ -259,6 +260,7 @@ void myOutRe(char *argv[])
     }
 
     dup2(fdout, 1); // 将标准输出文件描述符恢复到原来的设置，以确保后续输出能够正常显示在终端上
+    close(fd);
 }
 
 void myOutRePlus(char *argv[])
@@ -310,6 +312,7 @@ void myOutRePlus(char *argv[])
     }
 
     dup2(fdout, 1);
+    close(fd);
 }
 
 void myInRe(char *argv[])
@@ -361,6 +364,7 @@ void myInRe(char *argv[])
     }
 
     dup2(fdin, 0);
+    close(fd);
 }
 
 void myls(char *argv[])
@@ -373,8 +377,17 @@ void myls(char *argv[])
     }
     else if (pid == 0)
     {
-        execvp(argv[0],argv);
+        execvp(argv[0], argv);
         perror("execvp()");
         exit(1);
+    }
+    else
+    {
+        // if(has[Background_running]){   //有&时
+        //     has[Background_running]=0;
+        //     printf("%d\n",pid);
+        //     return ;
+        // }
+        waitpid(pid,NULL,0);
     }
 }
