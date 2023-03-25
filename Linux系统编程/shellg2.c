@@ -155,10 +155,12 @@ void execute_command()
         // 处理 cd - 命令，切换到上一个工作路径
         if (commands[0][1] != NULL && strcmp(commands[0][1], "-") == 0)
         {
-            char prev_path[MAX_PATH_LENGTH];//不懂有什么用，prev_path和path存的都是当前路径
-            strcpy(prev_path, path);                                   //getenv()函数是一个C标准库中的函数，用于获取环境变量列表中相应变量的值
-            chdir(getenv("OLDPWD"));//将当前工作目录更改为之前的工作目录。使用了getenv()获取OLDPWD的值，然后将其作为参数传递给chdir()
-            strcpy(path, prev_path);                                             //“OLDPWD”，它是一个Shell内置环境变量，表示之前的工作目录
+        // char prev_path[MAX_PATH_LENGTH]; // 不懂有什么用，prev_path和path存的都是当前路径
+        // strcpy(prev_path, path);         // getenv()函数是一个C标准库中的函数，用于获取环境变量列表中相应变量的值
+        chdir(getenv("OLDPWD"));         // 将当前工作目录更改为之前的工作目录。使用了getenv()获取OLDPWD的值，然后将其作为参数传递给chdir()
+        // strcpy(path, prev_path);         // “OLDPWD”，它是一个Shell内置环境变量，表示之前的工作目录
+        getcwd(path,MAX_PATH_LENGTH);
+        printf("%s\n",path);                                         //“OLDPWD”，它是一个Shell内置环境变量，表示之前的工作目录
         }
          // 处理 cd 命令没有参数或cd ~ 的情况，切换到用户主目录
         else if((commands[0][1] != NULL && strcmp(commands[0][1],"~") == 0 ) || commands[0][1] == NULL)
