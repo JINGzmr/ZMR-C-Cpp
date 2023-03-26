@@ -367,6 +367,22 @@ void myInRe(char *argv[])
     close(fd);
 }
 
+void myPipe(char *argv[])
+{
+    int i;
+    int index[8]; // 记录管道在命令中的位置，好分割命令，最大管道数为8
+    for (i = 0; i < argc; i++)
+    {
+        if (strcmp(argv[i], "|") == 0)
+        {
+            index[i]++;
+        }
+    }
+
+    
+
+}
+
 void myls(char *argv[])
 {
     pid_t pid = fork();
@@ -388,6 +404,6 @@ void myls(char *argv[])
         //     printf("%d\n",pid);
         //     return ;
         // }
-        waitpid(pid,NULL,0);
+        waitpid(pid, NULL, 0);
     }
 }
