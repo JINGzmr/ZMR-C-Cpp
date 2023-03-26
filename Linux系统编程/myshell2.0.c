@@ -377,7 +377,7 @@ void myPipe(char *argv[])
         {
             index[i]++;
         }
-    }
+    } 
 
     
 
