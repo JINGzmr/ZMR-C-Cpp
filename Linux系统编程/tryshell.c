@@ -374,7 +374,7 @@ void callCommandWithPipe(char *argv[], int count)
         {
             if (i == 0) // 第一个子进程
             {
-                dup2(fd[0][1], 1); // 绑定写端`
+                dup2(fd[0][1], 1); // 绑定写端
                 close(fd[0][0]);   // 关闭读端
                 // 其他进程读写端全部关闭
                 for (int j = 1; j < number; j++)

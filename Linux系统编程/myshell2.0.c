@@ -48,6 +48,8 @@ void myInRe(char *argv[]);
 void myPipe(char *argv[]);
 void myls(char *argv[]);
 
+// 可以输入到文件里，但cat文件时会出现莫名其妙的东西
+
 int main()
 {
     while (1)
@@ -377,10 +379,7 @@ void myPipe(char *argv[])
         {
             index[i]++;
         }
-    } 
-
-    
-
+    }
 }
 
 void myls(char *argv[])
