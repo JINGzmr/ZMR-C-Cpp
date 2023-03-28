@@ -80,7 +80,7 @@ void printname()
 
 void commodAnalsy(char *argv[], int number)
 {
-    int flag = isdo(argv, number); //ls -a -l | grep abc | wc -l > 2.txt 返回的是 > 对应的flag = 2
+    int flag = isdo(argv, number); // ls -a -l | grep abc | wc -l > 2.txt 返回的是 > 对应的flag = 2
     if (pass == 1)
     {
         number--;
@@ -189,7 +189,7 @@ void mydup(char *argv[])
     int flag = isdo(argv, number);
     i++;
     // 出现 echo "adcbe" > test.c  这种情况
-    int fdout = dup(1); // 让标准输出获取一个新的文件描述符，（ 标准输入、标准输出和标准错误输出默认分别使用文件描述符 0、1 和 2 ）
+    int fdout = dup(1);                                         // 让标准输出获取一个新的文件描述符，（ 标准输入、标准输出和标准错误输出默认分别使用文件描述符 0、1 和 2 ）
     int fd = open(argv[i], O_WRONLY | O_CREAT | O_TRUNC, 0666); // 只写模式|表示如果指定文件不存在，则创建这个文件|表示截断，如果文件存在，并且以只写、读写方式打开，则将其长度截断为0。
     dup2(fd, 1);
     pid_t pid = fork();
@@ -218,7 +218,7 @@ void mydup(char *argv[])
         }
         waitpid(pid, NULL, 0);
     }
-    dup2(fdout, 1); //调用 dup2() 函数将标准输出文件描述符恢复到原来的设置，以确保后续输出能够正常显示在终端上。
+    dup2(fdout, 1); // 调用 dup2() 函数将标准输出文件描述符恢复到原来的设置，以确保后续输出能够正常显示在终端上。
 }
 
 void mydup2(char *argv[])
@@ -307,11 +307,6 @@ void mydup3(char *argv[])
     dup2(fdin, 0);
 }
 
-
-
-
-
-
 void callCommandWithPipe(char *argv[], int count)
 {
     pid_t pid;
@@ -325,6 +320,8 @@ void callCommandWithPipe(char *argv[], int count)
         }
     }
     int cmd_count = number + 1; // 命令个数
+
+    
     char *cmd[cmd_count][10];
     for (int i = 0; i < cmd_count; i++) // 将命令以管道分割存放组数组里
     {
@@ -355,59 +352,63 @@ void callCommandWithPipe(char *argv[], int count)
             }
             cmd[i][n] = NULL;
         }
-    }                                // 经过上述操作，我们已经将指令以管道为分隔符分好,下面我们就可以创建管道了
+    }    
+    
+    
+                                // 经过上述操作，我们已经将指令以管道为分隔符分好,下面我们就可以创建管道了
     int fd[number][2];               // 存放管道的描述符
     for (int i = 0; i < number; i++) // 循环创建多个管道
     {
         pipe(fd[i]);
     }
+
+
     int i = 0;
-    for (i = 0; i < cmd_count; i++) // 父进程循环创建多个并列子进程
+    for (i = 0; i < cmd_count; i++) // 父进程循环创建多个并列子进程 
     {
         pid = fork();
         if (pid == 0) // 子进程直接退出循环，不参与进程的创建
             break;
     }
+
+
     if (pid == 0) // 子进程
     {
-        if (number)
+        if (i == 0) // 第一个子进程
         {
-            if (i == 0) // 第一个子进程
+            dup2(fd[0][1], 1); // 绑定写端
+            close(fd[0][0]);   // 关闭读端
+            // 其他进程读写端全部关闭
+            for (int j = 1; j < number; j++)
             {
-                dup2(fd[0][1], 1); // 绑定写端
-                close(fd[0][0]);   // 关闭读端
-                // 其他进程读写端全部关闭
-                for (int j = 1; j < number; j++)
-                {
-                    close(fd[j][1]);
-                    close(fd[j][0]);
-                }
+                close(fd[j][1]);
+                close(fd[j][0]);
             }
-            else if (i == number) // 最后一个进程
+        }
+        else if (i == number) // 最后一个进程
+        {
+            dup2(fd[i - 1][0], 0); // 打开读端
+            close(fd[i - 1][1]);   // 关闭写端
+                                   // 其他进程读写端全部关闭
+            for (int j = 0; j < number - 1; j++)
             {
-                dup2(fd[i - 1][0], 0); // 打开读端
-                close(fd[i - 1][1]);   // 关闭写端
-                                       // 其他进程读写端全部关闭
-                for (int j = 0; j < number - 1; j++)
-                {
-                    close(fd[j][1]);
-                    close(fd[j][0]);
-                }
+                close(fd[j][1]);
+                close(fd[j][0]);
             }
-            else // 中间进程
+        }
+        else // 中间进程
+        {
+            dup2(fd[i - 1][0], 0); // 前一个管道的读端打开
+            close(fd[i - 1][1]);   // 前一个写端关闭
+            dup2(fd[i][1], 1);     // 后一个管道的写端打开
+            close(fd[i][0]);       // 后一个读端关闭
+            // 其他的全部关闭
+            for (int j = 0; j < number; j++)
             {
-                dup2(fd[i - 1][0], 0); // 前一个管道的读端打开
-                close(fd[i - 1][1]);   // 前一个写端关闭
-                dup2(fd[i][1], 1);     // 后一个管道的写端打开
-                close(fd[i][0]);       // 后一个读端关闭
-                // 其他的全部关闭
-                for (int j = 0; j < number; j++)
+                if (j != i && j != (i - 1))
                 {
-                    if (j != i && j != (i - 1))
-                    {
-                        close(fd[j][0]);
-                        close(fd[j][1]);
-                    }
+                    close(fd[j][0]);
+                    close(fd[j][1]);
                 }
             }
         }
@@ -416,28 +417,29 @@ void callCommandWithPipe(char *argv[], int count)
         perror("execvp");
         exit(1);
     }
+
+
     // 父进程什么都不干，把管道的所有口都关掉
     for (i = 0; i < number; i++)
     {
         close(fd[i][0]);
         close(fd[i][1]); // 父进程端口全部关掉
     }
+
+
     if (pass == 1)
     {
         pass = 0;
         printf("%d\n", pid);
         return;
     }
+
+
     for (int j = 0; j < cmd_count; j++) // 父进程等待子进程
         wait(NULL);
+
+        
 }
-
-
-
-
-
-
-
 
 int isdo(char *argv[], int count)
 {
