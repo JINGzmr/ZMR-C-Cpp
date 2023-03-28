@@ -321,7 +321,7 @@ void callCommandWithPipe(char *argv[], int count)
     }
     int cmd_count = number + 1; // 命令个数
 
-    
+
     char *cmd[cmd_count][10];
     for (int i = 0; i < cmd_count; i++) // 将命令以管道分割存放组数组里
     {
@@ -371,7 +371,7 @@ void callCommandWithPipe(char *argv[], int count)
             break;
     }
 
-
+//看根据i的值来确定现在执行到第几个子进程了，以下只有子进程会执行
     if (pid == 0) // 子进程
     {
         if (i == 0) // 第一个子进程
@@ -413,13 +413,13 @@ void callCommandWithPipe(char *argv[], int count)
             }
         }
 
-        execvp(cmd[i][0], cmd[i]); // 执行命令
+        execvp(cmd[i][0], cmd[i]); // 执行命令  //子进程去执行相应命令去了，不会运行到该行以下的代码，然后父进程继续创建子进程，直至i = cmd_count
         perror("execvp");
         exit(1);
     }
 
 
-    // 父进程什么都不干，把管道的所有口都关掉
+    // 父进程什么都不干，把管道的所有口都关掉  
     for (i = 0; i < number; i++)
     {
         close(fd[i][0]);
