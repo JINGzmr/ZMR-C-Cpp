@@ -50,9 +50,9 @@ void myls(char *argv[]);
 
 int main()
 {
-    //屏蔽信号
-    signal(SIGINT, SIG_IGN);//用户在终端上按下 Ctrl-C 键触发的中断信号
-    signal(SIGHUP, SIG_IGN);//由终端关闭或会话结束时触发的挂起信号
+    // 屏蔽信号
+    signal(SIGINT, SIG_IGN); // 用户在终端上按下 Ctrl-C 键触发的中断信号
+    signal(SIGHUP, SIG_IGN); // 由终端关闭或会话结束时触发的挂起信号
     while (1)
     {
         memset(has, 0, sizeof(has_));
@@ -497,8 +497,8 @@ void myPipe(char *argv[], int argc) // ls -a 算两个命令
             close(fd[i][0]);
             close(fd[i][i]);
         }
-        for (i = 0; i < cmd_num; i++)// 父进程等待子进程
-        { 
+        for (i = 0; i < cmd_num; i++) // 父进程等待子进程
+        {
             waitpid(pid, NULL, 0);
         }
     }
