@@ -3,7 +3,8 @@
         "types.h": "c",
         "readline.h": "c",
         "type_traits": "c",
-        "limits": "c"
+        "limits": "c",
+        "cstdlib": "c"
     },
     "C_Cpp.errorSquiggles": "enabled"
 }
