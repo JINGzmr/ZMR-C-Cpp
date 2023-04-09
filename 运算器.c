@@ -731,49 +731,89 @@
 //     exit(0);
 // }
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/types.h>
+// #include <stdio.h>
+// #include <stdlib.h>
+// #include <unistd.h>
+// #include <sys/types.h>
 
-#define L 30000000
-#define R 30000200
+// #define L 30000000
+// #define R 30000200
 
+// int main()
+// {
+//     int i, j;
+//     int tag = 1;
+//     pid_t pid;
+
+//     for (i = L; i <= R; i++){
+//         tag = 1;  //每轮重置tag
+//         pid = fork(); //每个数i的判断都交给子进程来完成
+//                       //父进程只是用来递增i的，每次i++
+//         if(pid < 0){
+//             perror("fork()");
+//             exit(1);
+//         }
+
+//         if(pid == 0){
+//             for (j = 2; j < i / 2; j++){
+//                 if (i % j == 0){
+//                     tag = 0; // 不是素数primer
+//                     break;
+//                 }
+//             }
+//             if (tag == 1){
+//                 printf("%d is a primer\n", i);
+//             }
+//             sleep(10000);
+//             exit(0); //该子进程的判断任务完成了，就退出当前子进程，使子进程都是由bash的这个子进程fork出来的
+//         }
+//     }
+
+//     int st;  //存储子进程的状态
+//     for(i = L; i < R; i++){
+//         wait(&st);
+//         //wait(NULL);  或者只要这个也行
+//     }
+
+//     exit(0);
+// }
+
+#include<stdio.h>
+// #include<math.h>
 int main()
 {
-    int i, j;
-    int tag = 1;
-    pid_t pid;
-
-    for (i = L; i <= R; i++){
-        tag = 1;  //每轮重置tag
-        pid = fork(); //每个数i的判断都交给子进程来完成
-                      //父进程只是用来递增i的，每次i++
-        if(pid < 0){
-            perror("fork()");
-            exit(1);
+    int n;
+    scanf("%d",&n);
+    int i,j;
+    int sum=1,count=0,max=0,l=0;//sum多个因子的乘积,count连续个数,max最大连续个数
+    int tag=0;
+    for(i=2;i<n/2;i++){
+        count=0;
+        tag=0;
+        for(j=i;j<n/2;j++){
+            if(sum<n){
+                sum*=j;
+                count++;
+            }else if(sum==n){
+                tag=1;//说明是因为sum==n而出循环的，可以记入
+                break;
+            }else
+            break;
         }
-
-        if(pid == 0){
-            for (j = 2; j < i / 2; j++){
-                if (i % j == 0){
-                    tag = 0; // 不是素数primer
-                    break;
-                }
-            }
-            if (tag == 1){
-                printf("%d is a primer\n", i);
-            }
-            sleep(10000);
-            exit(0); //该子进程的判断任务完成了，就退出当前子进程，使子进程都是由bash的这个子进程fork出来的
+        if(count>max && tag==1){//如果连续个数大于之前的，且因为sum==n而出循环的，则将开头元素记下来
+            l=i;
+            max=count;
         }
     }
-
-    int st;  //存储子进程的状态
-    for(i = L; i < R; i++){
-        wait(&st);
-        //wait(NULL);  或者只要这个也行
+    printf("%d\n",max);
+    for(i=l;i<=max;i++){
+        printf("%d",i);
+        if(i!=max){
+            printf("*");
+        }
     }
-
-    exit(0);
+        
+    
+    
+    return 0;
 }
