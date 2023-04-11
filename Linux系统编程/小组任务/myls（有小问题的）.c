@@ -249,8 +249,8 @@ void myls_s(struct stat *buf_ptr)
 // buf_ptr->st_mtime可以直接进行比大小
 // time_t相当于long类型
 void myls_t(char *filenames[])
-{
-    int n, m;                                    // 改成这样出来的filetime都一样，就错了，无法进行时间排序
+{                                                           
+    int n, m;                                    // 改成这样出来的filetime都一样，就错了，无法进行时间排序-->因为struct stat *buf_ptr需要对 buf_ptr 进行动态内存分配，否则在调用 stat() 函数时会出现段错误
     struct stat buf;                             // struct stat *buf_ptr
     for (n = 0; n < file_cnt; n++){
         stat(filenames[n], &buf);               // buf_ptr
@@ -283,6 +283,34 @@ void myls_t(char *filenames[])
         }
     }
 }
+
+
+//下面这个是可以的！！！！！！！！
+
+// void myls_t(char *filenames[])
+// {
+//     int n, m;
+//     struct stat *buf; // 将 buf 声明为指向 struct stat 的指针
+//     buf = (struct stat *)malloc(sizeof(struct stat) * file_cnt); // 动态分配内存空间
+//     for (n = 0; n < file_cnt; n++){
+//         stat(filenames[n], buf + n); // 使用指针访问元素
+//         filetime[n] = (long int*)buf[n].st_mtime; // 使用指针访问元素
+//     }
+
+//     for (n = 0; n < file_cnt - 1; n++){
+//         for (m = 0; m < file_cnt - 1 - n; m++){
+//             if (filetime[m] < filetime[m + 1]) {// 降序
+//                 long int *x;
+//                 x = filetime[m + 1];
+//                 filetime[m + 1] = filetime[m];
+//                 filetime[m] = x;
+
+//                 swap(&filenames[m], &filenames[m + 1]);
+//             }
+//         }
+//     }
+//     free(buf); // 释放动态分配的内存空间
+// }
 
 
 void myls_R(int has[], char pathname[])

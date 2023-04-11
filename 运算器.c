@@ -790,6 +790,7 @@ int main()
     for(i=2;i<n/2;i++){
         count=0;
         tag=0;
+        sum=1;
         for(j=i;j<n/2;j++){
             if(sum<n){
                 sum*=j;
@@ -814,6 +815,48 @@ int main()
     }
         
     
-    
     return 0;
 }
+
+// #include <stdio.h>  
+// #include <stdlib.h>  
+// #include <pthread.h>
+
+// #define NUM_THREADS 2
+
+// int global_variable = 0;
+
+// void *worker_thread(void *threadarg) {  
+//     printf("Worker thread started.\n");  
+//     while (1) {  
+//         printf("Worker thread updating global variable.\n");  
+//         global_variable++;  
+//         printf("Worker thread finished.\n");  
+//         break;
+//     }  
+//     printf("Main thread waiting for worker thread to finish.\n");  
+//     pthread_exit(NULL);  
+// }
+
+// int main() {  
+//     pthread_t threads[NUM_THREADS];  
+//     int exit_code = 0;  
+//     for (int i = 0; i < NUM_THREADS; i++) {  
+//         printf("Main thread started.\n");  
+//         printf("Creating thread %d ...\n", i + 1);  
+//         exit_code = pthread_create(&threads[i], NULL, worker_thread, (void *)(i + 1));  
+//         if (exit_code != 0) {  
+//             printf("Failed to create thread %d!\n", i + 1);  
+//             exit(-1);  
+//         }  
+//         printf("Thread %d created.\n", i + 1);  
+//     }  
+//     for (int i = 0; i < NUM_THREADS; i++) {  
+//         printf("Main thread waiting for thread %d to finish.\n", i + 1);  
+//         pthread_join(threads[i], NULL);  
+//         printf("Thread %d joined.\n", i + 1);  
+//     }  
+//     printf("Main thread finished.\n");  
+//     printf("Global variable = %d.\n", global_variable);  
+//     exit(0);  
+// }
