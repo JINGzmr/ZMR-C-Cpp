@@ -778,45 +778,45 @@
 //     exit(0);
 // }
 
-#include<stdio.h>
-// #include<math.h>
-int main()
-{
-    int n;
-    scanf("%d",&n);
-    int i,j;
-    int sum=1,count=0,max=0,l=0;//sum多个因子的乘积,count连续个数,max最大连续个数
-    int tag=0;
-    for(i=2;i<n/2;i++){
-        count=0;
-        tag=0;
-        sum=1;
-        for(j=i;j<n/2;j++){
-            if(sum<n){
-                sum*=j;
-                count++;
-            }else if(sum==n){
-                tag=1;//说明是因为sum==n而出循环的，可以记入
-                break;
-            }else
-            break;
-        }
-        if(count>max && tag==1){//如果连续个数大于之前的，且因为sum==n而出循环的，则将开头元素记下来
-            l=i;
-            max=count;
-        }
-    }
-    printf("%d\n",max);
-    for(i=l;i<=max;i++){
-        printf("%d",i);
-        if(i!=max){
-            printf("*");
-        }
-    }
+// #include<stdio.h>
+// // #include<math.h>
+// int main()
+// {
+//     int n;
+//     scanf("%d",&n);
+//     int i,j;
+//     int sum=1,count=0,max=0,l=0;//sum多个因子的乘积,count连续个数,max最大连续个数
+//     int tag=0;
+//     for(i=2;i<n/2;i++){
+//         count=0;
+//         tag=0;
+//         sum=1;
+//         for(j=i;j<n/2;j++){
+//             if(sum<n){
+//                 sum*=j;
+//                 count++;
+//             }else if(sum==n){
+//                 tag=1;//说明是因为sum==n而出循环的，可以记入
+//                 break;
+//             }else
+//             break;
+//         }
+//         if(count>max && tag==1){//如果连续个数大于之前的，且因为sum==n而出循环的，则将开头元素记下来
+//             l=i;
+//             max=count;
+//         }
+//     }
+//     printf("%d\n",max);
+//     for(i=l;i<=max;i++){
+//         printf("%d",i);
+//         if(i!=max){
+//             printf("*");
+//         }
+//     }
         
     
-    return 0;
-}
+//     return 0;
+// }
 
 // #include <stdio.h>  
 // #include <stdlib.h>  
@@ -859,4 +859,30 @@ int main()
 //     printf("Main thread finished.\n");  
 //     printf("Global variable = %d.\n", global_variable);  
 //     exit(0);  
+// }
+
+// struct thrd
+// {
+//     int var;
+//     char str[128];
+// };
+// void *tfn(void *arg)
+// {
+//     struct thrd *tval;
+
+//     tval = malloc(sizeof(tval));
+//     tval->var=100;
+//     strcpy(tval->str,"hello thread");
+
+//     return (void *)tval;
+// }
+
+// void *tfn(void *arg)
+// {
+//     struct thrd tval;
+    
+//     tval.var=100;
+//     strcpy(tval.str,"hello thread");
+
+//     return (void *)&tval;
 // }
