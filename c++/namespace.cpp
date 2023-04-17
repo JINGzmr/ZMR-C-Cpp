@@ -9,6 +9,7 @@ void test01()
     // LOL::goAtk();
 }
 
+
 // 2.命名空间下可以存放的东西：变量、函数、结构体、类...
 namespace A
 {
@@ -22,11 +23,13 @@ namespace A
     };
 }
 
+
 // 3.命名空间必须要声明在全局作用域
 void test02()
 {
     // namespace B{}; 不可以命名到局部作用域
 }
+
 
 // 4. 命名空间可以嵌套命名空间
 namespace B
@@ -43,16 +46,18 @@ void test03()
     cout << "C空间下的A= " << B::C::m_A << endl; // 20
 }
 
+
 // 5.命名空间是开放的，可以随时将新成员添加到命名空间下
 namespace B // 上面写过一次B了
 {
     int m_B = 100;
 }
-void test03()
+void test04()
 {
     cout << "B空间下的A= " << B::m_A << endl; // 10  ->说明之前命名空间B里的东西没有被后来的给覆盖掉，而是进行了追加
     cout << "B空间下的A= " << B::m_B << endl; // 100
 }
+
 
 // 6.命名空间可以是匿名的  相当于写了static int m_C = 1000; static int m_D = 2000;
 namespace
@@ -66,6 +71,7 @@ void test05()
     cout << "m_D = " << ::m_D << endl;
 }
 
+
 // 7.命名空间可以起别名
 namespace aaa
 {
@@ -76,4 +82,18 @@ void test06()
     namespace bbb = aaa;
     cout << bbb ::m_E << endl; //1000
     cout << aaa ::m_E << endl; //1000 
+}
+
+
+int main()
+{
+    test01();
+    test02();
+    test03();
+    test04();
+    test05();
+    test06();
+
+    system("pause");
+    return 0;
 }
