@@ -934,8 +934,45 @@
 #include<stdio.h>
 int main()
 {
-    printf("hello wangwenxuan");
+    int a[17]={7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2};
+    char x[11]={'1','0','X','9','8','7','6','5','4','3','2'};
+    int n,m=0;
+    char b[100][19]={""};
+    char c[100][19]={""};
+    scanf("%d",&n);
+    int i,j,cnt=0;
+//     getchar();
 
+    for(i=0;i<n;i++){
+        scanf("%s",b[i]);
+//         gets(b[i]);
+    }
+    for(i=0;i<n;i++){
+        m=0;
+        int tag=0;
+        for(j=0;j<17;j++){
+            if(b[i][j]>'9'&&b[i][j]<'0'){
+                tag=1;
+                break;
+            }
+            m+=(b[i][j]-'0')*a[j];
+        }
+        m=m%11;
+        if(b[i][j]!=x[m]||tag==1){
+            strcpy(c[cnt++],b[i]);
+        }
+    }
+    if(cnt==0){
+        printf("All passed");
+    }else{
+        
+        for(i=0;i<cnt;i++){
+            printf("%s\n",c[i]);
+        }
+    }
+//        for(i=0;i<n;i++){
+//             printf("%s\n",b[i]);
+//         }
 
     return 0;
-}  
+}
