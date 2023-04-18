@@ -931,48 +931,108 @@
 // }
 
 
+// #include<stdio.h>
+// int main()
+// {
+//     int a[17]={7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2};
+//     char x[11]={'1','0','X','9','8','7','6','5','4','3','2'};
+//     int n,m=0;
+//     char b[100][19]={""};
+//     char c[100][19]={""};
+//     scanf("%d",&n);
+//     int i,j,cnt=0;
+// //     getchar();
+
+//     for(i=0;i<n;i++){
+//         scanf("%s",b[i]);
+// //         gets(b[i]);
+//     }
+//     for(i=0;i<n;i++){
+//         m=0;
+//         int tag=0;
+//         for(j=0;j<17;j++){
+//             if(b[i][j]>'9'&&b[i][j]<'0'){
+//                 tag=1;
+//                 break;
+//             }
+//             m+=(b[i][j]-'0')*a[j];
+//         }
+//         m=m%11;
+//         if(b[i][j]!=x[m]||tag==1){
+//             strcpy(c[cnt++],b[i]);
+//         }
+//     }
+//     if(cnt==0){
+//         printf("All passed");
+//     }else{
+        
+//         for(i=0;i<cnt;i++){
+//             printf("%s\n",c[i]);
+//         }
+//     }
+// //        for(i=0;i<n;i++){
+// //             printf("%s\n",b[i]);
+// //         }
+
+//     return 0;
+// }
+
 #include<stdio.h>
+
 int main()
 {
-    int a[17]={7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2};
-    char x[11]={'1','0','X','9','8','7','6','5','4','3','2'};
-    int n,m=0;
-    char b[100][19]={""};
-    char c[100][19]={""};
+    int n;
     scanf("%d",&n);
-    int i,j,cnt=0;
-//     getchar();
-
-    for(i=0;i<n;i++){
-        scanf("%s",b[i]);
-//         gets(b[i]);
-    }
-    for(i=0;i<n;i++){
-        m=0;
-        int tag=0;
-        for(j=0;j<17;j++){
-            if(b[i][j]>'9'&&b[i][j]<'0'){
-                tag=1;
-                break;
-            }
-            m+=(b[i][j]-'0')*a[j];
-        }
-        m=m%11;
-        if(b[i][j]!=x[m]||tag==1){
-            strcpy(c[cnt++],b[i]);
-        }
-    }
-    if(cnt==0){
-        printf("All passed");
-    }else{
+    int m=n;
+    int i;
+    int b[100]={0};
+    int a[100][1000]={0};
+    
+    while(m--)
+    {
+        int k;
+        scanf("%d",&k);
+        b[n-m-1]=k;
         
-        for(i=0;i<cnt;i++){
-            printf("%s\n",c[i]);
+        for(i=0;i<k;i++){
+            int x;
+            scanf("%d",&x);
+            a[n-m-1][i]=x;
         }
     }
-//        for(i=0;i<n;i++){
-//             printf("%s\n",b[i]);
-//         }
+    
+    scanf("%d",&m);
+    int c[10000]={0};
+    for(i=0;i<m;i++){
+        int id;
+        scanf("%d",&id);
+        c[i]=id;
+    }
+    
+    int x,y;
+
+
+    int tag=0;
+    for(i=0;i<m;i++){
+//         tag=0;
+
+        for(x=0;x<n;x++){
+            for(y=0;y<b[i];y++){
+                if(c[i]==a[x][y]&&b[i]>1)c[i]=-1;
+            }
+        }
+    }
+
+    for(i=0;i<m;i++){
+        if(c[i]!=-1){
+            printf("%d ",c[i]);
+                tag=1;
+            }
+        if(tag==0)printf("No one is handsome");
+    }
+    
+
+
 
     return 0;
 }
