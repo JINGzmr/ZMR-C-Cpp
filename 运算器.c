@@ -977,62 +977,64 @@
 //     return 0;
 // }
 
-#include<stdio.h>
+// #include<stdio.h>
 
-int main()
-{
-    int n;
-    scanf("%d",&n);
-    int m=n;
-    int i;
-    int b[100]={0};
-    int a[100][1000]={0};
+// int main()
+// {
+//     int n;
+//     scanf("%d",&n);
+//     int m=n;
+//     int i;
+//     int b[100]={0};
+//     int a[100][1000]={0};
     
-    while(m--)
-    {
-        int k;
-        scanf("%d",&k);
-        b[n-m-1]=k;
+//     while(m--)
+//     {
+//         int k;
+//         scanf("%d",&k);
+//         b[n-m-1]=k;
         
-        for(i=0;i<k;i++){
-            int x;
-            scanf("%d",&x);
-            a[n-m-1][i]=x;
-        }
-    }
+//         for(i=0;i<k;i++){
+//             int x;
+//             scanf("%d",&x);
+//             a[n-m-1][i]=x;
+//         }
+//     }
     
-    scanf("%d",&m);
-    int c[10000]={0};
-    for(i=0;i<m;i++){
-        int id;
-        scanf("%d",&id);
-        c[i]=id;
-    }
+//     scanf("%d",&m);
+//     int c[10000]={0};
+//     for(i=0;i<m;i++){
+//         int id;
+//         scanf("%d",&id);
+//         c[i]=id;
+//     }
     
-    int x,y;
+//     int x,y;
 
 
-    int tag=0;
-    for(i=0;i<m;i++){
-//         tag=0;
+//     int tag=0;
+//     for(i=0;i<m;i++){
+// //         tag=0;
 
-        for(x=0;x<n;x++){
-            for(y=0;y<b[i];y++){
-                if(c[i]==a[x][y]&&b[i]>1)c[i]=-1;
-            }
-        }
-    }
+//         for(x=0;x<n;x++){
+//             for(y=0;y<b[i];y++){
+//                 if(c[i]==a[x][y]&&b[i]>1)c[i]=-1;
+//             }
+//         }
+//     }
 
-    for(i=0;i<m;i++){
-        if(c[i]!=-1){
-            printf("%d ",c[i]);
-                tag=1;
-            }
-        if(tag==0)printf("No one is handsome");
-    }
+//     for(i=0;i<m;i++){
+//         if(c[i]!=-1){
+//             printf("%d ",c[i]);
+//                 tag=1;
+//             }
+//         if(tag==0)printf("No one is handsome");
+//     }
     
 
 
 
-    return 0;
-}
+//     return 0;
+// }
+
+
