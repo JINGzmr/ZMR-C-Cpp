@@ -1038,3 +1038,35 @@
 // }
 
 
+#include<stdio.h>
+int main()
+{
+    int n;//行数
+    scanf("%d",&n);
+    char a[10000]="";
+    getchar();
+    gets(a);
+    
+    char b[100][1000]={""};
+    int x=strlen(a);
+    int i,j;
+    int m=x/n;//列数，五列m=4
+    int hang=0;
+    int nn=0;//a[]的指针
+    for(i=m;i>=0;i--){
+        for(j=0;j<n;j++){
+            b[j][i]=a[nn++];
+        }        
+    }
+
+
+    for(i=0;i<n;i++){
+        for(j=0;j<=m;j++){
+            printf("%c",b[i][j]);
+        }
+        printf("\n");
+    }
+
+
+    return 0;
+}
