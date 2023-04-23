@@ -1038,34 +1038,79 @@
 // }
 
 
+// #include<stdio.h>
+// int main()
+// {
+//     int n;//行数
+//     scanf("%d",&n);
+//     char a[10000]="";
+//     getchar();
+//     gets(a);
+    
+//     char b[100][1000]={""};
+//     int x=strlen(a);
+//     int i,j;
+//     int m=x/n;//列数，五列m=4
+//     int hang=0;
+//     int nn=0;//a[]的指针
+//     for(i=m;i>=0;i--){
+//         for(j=0;j<n;j++){
+//             b[j][i]=a[nn++];
+//         }        
+//     }
+
+
+//     for(i=0;i<n;i++){
+//         for(j=0;j<=m;j++){
+//             printf("%c",b[i][j]);
+//         }
+//         printf("\n");
+//     }
+
+
+//     return 0;
+// }
+
+// #include <stdio.h>
+// #include <string.h>
+
+// int main() {
+//     char str1[20] = "Hello";
+//     char str2[20];
+//     strcpy(str2, str1); // 将 str1 复制到 str2 中
+//     printf("str1 = %s\n", str1);
+//     printf("str2 = %s\n", str2);
+//     return 0;
+// }
+
+// #include <stdio.h>
+// #include <string.h>
+
+// int main() {
+//     char str1[] = "Hello, world!";
+//     char str2[] = "Hello, there!";
+//     int n = 8;
+//     int result = strncmp(str1, str2, n);
+//     if (result < 0) {
+//         printf("str1 is less than str2\n");
+//     }
+//     else if (result == 0) {
+//         printf("str1 is equal to str2\n");
+//     }
+//     else {
+//         printf("str1 is greater than str2\n");
+//     }
+//     return 0;
+// }
+
 #include<stdio.h>
 int main()
 {
-    int n;//行数
-    scanf("%d",&n);
-    char a[10000]="";
-    getchar();
-    gets(a);
+    char a[5]={0};
+    scanf("%s",a);
     
-    char b[100][1000]={""};
-    int x=strlen(a);
-    int i,j;
-    int m=x/n;//列数，五列m=4
-    int hang=0;
-    int nn=0;//a[]的指针
-    for(i=m;i>=0;i--){
-        for(j=0;j<n;j++){
-            b[j][i]=a[nn++];
-        }        
-    }
+    printf("%s",a);
 
-
-    for(i=0;i<n;i++){
-        for(j=0;j<=m;j++){
-            printf("%c",b[i][j]);
-        }
-        printf("\n");
-    }
 
 
     return 0;

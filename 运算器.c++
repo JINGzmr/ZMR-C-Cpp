@@ -48,25 +48,41 @@
 
 // }
 
-#include<iostream>
-using namespace std;
-class stu{
-    public:
+// #include<iostream>
+// using namespace std;
+// class stu{
+//     public:
 
-    string name;
-    int id;
+//     string name;
+//     int id;
 
-    void xw()
-    {
-        getline(cin,name);
-        cin >> id;
+//     void xw()
+//     {
+//         getline(cin,name);
+//         cin >> id;
         
-        cout << name << endl << id << endl;
-    }
-};
+//         cout << name << endl << id << endl;
+//     }
+// };
 
-int main()
-{     
-    stu pp;
-    pp.xw();
+// int main()
+// {     
+//     stu pp;
+//     pp.xw();
+// }
+
+// #include <iostream>
+// using namespace std;
+
+// int main() {
+//     int a = 66;
+//     int b = 333;
+//     int c = a % b;
+//     cout << c << endl; // 输出 1
+//     return 0;
+// }
+
+int gdb(int a,int b)
+{
+    return b?gdb(b,a%b):a;
 }
