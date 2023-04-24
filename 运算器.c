@@ -1103,15 +1103,83 @@
 //     return 0;
 // }
 
-#include<stdio.h>
-int main()
-{
-    char a[5]={0};
-    scanf("%s",a);
+// #include<stdio.h>
+// int main()
+// {
+//     char a[5]={0};
+//     scanf("%s",a);
     
-    printf("%s",a);
+//     printf("%s",a);
 
 
+
+//     return 0;
+// }
+
+#include <stdio.h>
+#include <pthread.h>
+
+pthread_mutex_t var1_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t var2_mutex = PTHREAD_MUTEX_INITIALIZER;
+int var1 = 0;
+int var2 = 0;
+
+void* thread1(void* arg) {
+    pthread_mutex_lock(&var1_mutex);
+    printf("线程1获得了var1_mutex锁。\n");
+
+    // 模拟一些工作
+    sleep(1);
+
+    // 尝试获取 var2_mutex 锁
+    pthread_mutex_lock(&var2_mutex);
+    printf("线程1获得了var2_mutex锁。\n");
+
+    // 对 var1 和 var2 进行一些操作
+    var1++;
+    var2++;
+
+    // 释放锁
+    pthread_mutex_unlock(&var2_mutex);
+    pthread_mutex_unlock(&var1_mutex);
+
+    return NULL;
+}
+
+void* thread2(void* arg) {
+    pthread_mutex_lock(&var2_mutex);
+    printf("线程2获得了var2_mutex锁。\n");
+
+    // 模拟一些工作
+    sleep(1);
+
+    // 尝试获取 var1_mutex 锁
+    pthread_mutex_lock(&var1_mutex);
+    printf("线程2获得了var1_mutex锁。\n");
+
+    // 对 var1 和 var2 进行一些操作
+    var1++;
+    var2++;
+
+    // 释放锁
+    pthread_mutex_unlock(&var1_mutex);
+    pthread_mutex_unlock(&var2_mutex);
+
+    return NULL;
+}
+
+int main() {
+    pthread_t t1, t2;
+
+    // 创建两个线程
+    pthread_create(&t1, NULL, thread1, NULL);
+    pthread_create(&t2, NULL, thread2, NULL);
+
+    // 等待线程结束
+    pthread_join(t1, NULL);
+    pthread_join(t2, NULL);
+
+    printf("%d %d",var1,var2);
 
     return 0;
 }
