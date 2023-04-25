@@ -8,7 +8,7 @@
 pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER; //  初始化互斥锁🔓（总共一把锁就够了）
 pthread_cond_t cond = PTHREAD_COND_INITIALIZER;   //  初始化条件变量
 
-struct SPSCQueue // 链表
+struct SPSCQueue // 链表结点
 {
     int num;
     struct SPSCQueue *next;
@@ -90,3 +90,11 @@ void SPSCQueueDestory(SPSCQueue *queue)
 {
     return ;
 }
+
+//把队列定义成全局变量，要的时候就直接访问就行了
+/**
+ * 自己再根据视频搞两个生产者和消费者的函数
+ * 要生产和消费时，调用相应的队列函数
+ * 再main一开始进行队列的初始化
+ * 所有线程回收后，再调用函数进行对队列的销毁
+*/
