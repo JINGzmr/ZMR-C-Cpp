@@ -49,12 +49,16 @@ void *consumer(void *arg)
 {
     pthread_mutex_lock(&mutex);     //加锁🔓 互斥量
 
-     if(Q.front==Q.rear)    //队列为空(注意：front指向的是头结点，而头结点没有存放数据，真正有数据且是第一个的是Q.front->next)
+    if(Q.front==Q.rear)    //队列为空(注意：front指向的是头结点，而头结点没有存放数据，真正有数据且是第一个的是Q.front->next)
     {
-        pthread_cond_wait(&cond, &mutex);   //阻塞条件变量
-
+        pthread_cond_wait(&cond, &mutex);   //阻塞等待条件变量，解锁，并在返回时重新加锁🔓
     }
 
+    SPSCQueuePop(&Q);
+
+    pthread_mutex_unlock(&mutex);
+
+    sleep(rand()%3);    //把时间交回生产者
 }
 
 int main()
@@ -98,6 +102,8 @@ void SPSCQueuePush(SPSCQueue *queue, Qnode *s)  //因为我定义了全局变量
 {
     queue->rear->next=s;    //尾插法
     queue->rear=s;
+
+    printf("produce %d\n",s->num);
 }
 
 void *SPSCQueuePop(SPSCQueue *queue)
@@ -105,14 +111,25 @@ void *SPSCQueuePop(SPSCQueue *queue)
     QueuePtr p;
     p=queue->front->next;   // 之后要进行free，先保存一下（front是头结点，没有数据，第一个数据在front->next里面）
     
+    queue->front->next = p->next;   
+    
+    printf("comsume %d\n",p->num);
 
-  
-    return NULL;
+    if(queue->rear == p){   //既然队尾指针指向的是要删除的结点p
+        queue->rear = queue->front;     //那就让尾指针也指向啥也没有的头结点
+    }
+    free(p);
 }
 
 void SPSCQueueDestory(SPSCQueue *queue)
 {
-    return ;
+    while(queue->front){
+        queue->rear = queue->front->next;   //让队尾指针指向第一个有数据的结点
+        free(queue->front); //释放第一个结点（从没有数据的也是第一个的结点开始删除）
+        
+        //接下来rear不再指向队尾（也没有必要再回到队尾的位置），而是每次来恢复被释放掉的front，使之重新指向队列的最前面
+        queue->front = queue->rear; 
+    }
 }
 
 //把队列定义成全局变量，要的时候就直接访问就行了
