@@ -82,7 +82,7 @@ void *SPSCQueuePop(SPSCQueue *queue)
 {
     
 
-
+  
     return NULL;
 }
 
