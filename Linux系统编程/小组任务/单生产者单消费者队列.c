@@ -5,23 +5,25 @@
 #include <stdlib.h>
 // #include <err_thread.h>
 
-pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER; //  初始化互斥锁🔓（总共一把锁就够了）
+pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER; //  初始化互斥锁🔓（总共一把锁就够了）
 pthread_cond_t cond = PTHREAD_COND_INITIALIZER;   //  初始化条件变量
 
-struct SPSCQueue // 链表结点
+typedef struct Qnode    // 链表结点
 {
     int num;
     struct SPSCQueue *next;
+}Qnode,*QueuePtr;
 
+struct SPSCQueue    // 队列的链表结构
+{
+    QueuePtr front, rear;   // 两个指针，分别指向队头和队尾
 } typedef SPSCQueue;
 
-typedef struct // 队列的链表结构
-{
-    SPSCQueue *front, rear; // 两个指针，分别指向队头和队尾
-} LinkQueue;
+
+SPSCQueue Q;  //定义一个队列
 
 SPSCQueue *SPSCQueueInit(int capacity);        // 初始化一个 SPSC 队列，并返回一个指向 SPSCQueue 结构体的指针。capacity: 队列可以存储的元素数量的最大值。
-void SPSCQueuePush(SPSCQueue *queue, void *s); // 将一个指向 void 类型的数据指针 s 推入队列中
+void SPSCQueuePush(SPSCQueue *queue, Qnode *s); // 将一个指向 void 类型的数据指针 s 推入队列中
 void *SPSCQueuePop(SPSCQueue *queue);          // 从队列中弹出一个数据指针
 void SPSCQueueDestory(SPSCQueue *queue);            // 销毁一个 SPSC 队列，并释放相关的内存资源
 
@@ -29,15 +31,29 @@ void SPSCQueueDestory(SPSCQueue *queue);            // 销毁一个 SPSC 队列�
 //生产者
 void *produser(void *arg)
 {
-    pthread_mutex_lock(&lock);
+    pthread_mutex_lock(&mutex);
 
-    if()
+    QueuePtr s = (QueuePtr)malloc(sizeof(Qnode));
+    s->num = rand()%1000+1; //随机产生1-1000的随机数（模拟生产）
+    s->next = NULL;
+    SPSCQueuePush(&Q, s);   //把该结点搞到队列里面去
 
+    pthread_mutex_unlock(&mutex);   //解锁 互斥量
+    pthread_cond_signal(&cond);     // 唤醒阻塞在条件变量cond上的线程
+
+    sleep(rand()%3);    //用于在程序执行过程中产生不同的延迟，最大可能的延迟为2秒
 }
 
 //消费者
 void *consumer(void *arg)
 {
+    pthread_mutex_lock(&mutex);     //加锁🔓 互斥量
+
+     if(Q.front==Q.rear)    //队列为空(注意：front指向的是头结点，而头结点没有存放数据，真正有数据且是第一个的是Q.front->next)
+    {
+        pthread_cond_wait(&cond, &mutex);   //阻塞条件变量
+
+    }
 
 }
 
@@ -66,20 +82,28 @@ int main()
     return 0;
 }
 
-SPSCQueue *SPSCQueueInit(int capacity)
+SPSCQueue *SPSCQueueInit(int capacity)  //容量大小capacity没有用到
 {
-
-    return ;
+    Q.front=Q.rear=(QueuePtr)malloc(sizeof(Qnode));
+    if(!Q.front){
+        prror("SPSCQueueInit()");
+    }
+    else{
+        Q.front->next=NULL;
+        return &Q;    
+    }
 }
 
-void SPSCQueuePush(SPSCQueue *queue, void *s)
+void SPSCQueuePush(SPSCQueue *queue, Qnode *s)  //因为我定义了全局变量Q，其实这里传不传队列都无所谓～
 {
-
-    return;
+    queue->rear->next=s;    //尾插法
+    queue->rear=s;
 }
 
 void *SPSCQueuePop(SPSCQueue *queue)
 {
+    QueuePtr p;
+    p=queue->front->next;   // 之后要进行free，先保存一下（front是头结点，没有数据，第一个数据在front->next里面）
     
 
   
