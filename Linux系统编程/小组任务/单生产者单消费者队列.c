@@ -1,8 +1,18 @@
 // Single-producer , single-consumer Queue
+/**
+ * 因为是spsc队列
+ * 所以运行结果所打印出的 生产者和消费者 的线程号都是唯一的
+ * 
+ * 当然，只要多创建几个生产者和消费者的线程，并改消费者里的while循环，那就算是mpmc了
+ * 
+ * 如果要实现的是父亲放苹果，儿子吃苹果；母亲放橘子，女儿吃橘子的模型的话，
+ * 就得用三把锁：一把公共锁，一把父亲儿子共用的，另一把母亲女儿共用的
+*/
 
 #include <stdio.h>
 #include <pthread.h>
 #include <stdlib.h>
+#include <unistd.h>
 // #include <err_thread.h>
 
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER; //  初始化互斥锁🔓（总共一把锁就够了）
@@ -113,7 +123,7 @@ void SPSCQueuePush(SPSCQueue *queue, Qnode *s)  //因为我定义了全局变量
     queue->rear->next=s;    //尾插法
     queue->rear=s;
 
-    printf("produce %d\n",s->num);
+    printf("produce data: %d \tpthread_id: %lu\n",s->num, pthread_self());
 }
 
 void *SPSCQueuePop(SPSCQueue *queue)
@@ -123,7 +133,7 @@ void *SPSCQueuePop(SPSCQueue *queue)
     
     queue->front->next = p->next;   
     
-    printf("comsume %d\n",p->num);
+    printf("comsume data: %d \tpthread_id: %lu\n",p->num, pthread_self());
 
     if(queue->rear == p){   //既然队尾指针指向的是要删除的结点p
         queue->rear = queue->front;     //那就让尾指针也指向啥也没有的头结点
@@ -142,11 +152,12 @@ void SPSCQueueDestory(SPSCQueue *queue)
     }
 }
 
-//把队列定义成全局变量，要的时候就直接访问就行了
+
 /**
+ * 把队列定义成全局变量，要的时候就直接访问就行了
  * 自己再根据视频搞两个生产者和消费者的函数
  * 要生产和消费时，调用相应的队列函数
- * 再main一开始进行队列的初始化
+ * 在main一开始进行队列的初始化
  * 所有线程回收后，再调用函数进行对队列的销毁
 */
 
