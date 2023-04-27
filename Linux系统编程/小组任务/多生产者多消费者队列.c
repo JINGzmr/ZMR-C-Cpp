@@ -31,11 +31,13 @@ void *producer(void* arg)
 
     while(1)
     {
+        pthread_mutex_lock(&mutex);
+
         while((Q->rear+1)%MAXSIZE==Q->front){
             pthread_cond_wait(&pro_cond, &mutex); //满的时候可以阻塞生产者吗？
         }
 
-        pthread_mutex_lock(&mutex);
+        //pthread_mutex_lock(&mutex);
 
         int num = rand()%1000+1;
         MPMCQueuePush(Q, &num);
@@ -53,11 +55,13 @@ void *consumer(void* arg)
 
     while(1)
     {
+        pthread_mutex_lock(&mutex);
+
         while(Q->front==Q->rear){
             pthread_cond_wait(&con_cond, &mutex);
         }
 
-        pthread_mutex_lock(&mutex);
+        // pthread_mutex_lock(&mutex);
 
         MPMCQueuePop(Q);
 
@@ -86,6 +90,8 @@ int main()
     for(i=0;i<PTHREAD_COUNT;i++){
         pthread_join(threads_pid[i], NULL);
         pthread_join(threads_cid[i], NULL);
+        pthread_detach(threads_pid[i]);
+        pthread_detach(threads_cid[i]);
     }
 
     MPMCQueueDestory(Q);
@@ -96,7 +102,7 @@ int main()
 
 MPMCQueue *MPMCQueueInit(int capacity)
 {
-    MPMCQueue *Q;
+    MPMCQueue *Q = (MPMCQueue*)malloc(sizeof(MPMCQueue));
     Q->data = (int*)malloc(sizeof(int)*capacity);
     Q->front=0;
     Q->rear=0;
@@ -125,7 +131,9 @@ void *MPMCQueuePop(MPMCQueue *queue)
 
 void MPMCQueueDestory(MPMCQueue *queue)
 {
-    free(queue);
+    //不能先free再赋值为0,因为这样就会访问了已释放的内存
     queue->front=0;
     queue->rear=0;
+    free(queue->data);
+    free(queue);
 }
