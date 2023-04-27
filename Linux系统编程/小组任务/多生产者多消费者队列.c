@@ -9,36 +9,39 @@
 #define PTHREAD_COUNT 10
 
 struct MPMCQueue {
-    int data[MAXSIZE];
+    int *data;
     int front;
     int rear;
 } typedef MPMCQueue;
 
-MPMCQueue Q;
+// MPMCQueue Q;
 
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER; 
-pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
+pthread_cond_t pro_cond = PTHREAD_COND_INITIALIZER;
+pthread_cond_t con_cond = PTHREAD_COND_INITIALIZER;
 
-MPMCQueue *MPMCQueueInit(void);
+MPMCQueue *MPMCQueueInit(int capacity);
 void MPMCQueuePush(MPMCQueue *queue, void *s);
 void *MPMCQueuePop(MPMCQueue *queue);
 void MPMCQueueDestory(MPMCQueue *queue);
 
 void *producer(void* arg)
 {
+    MPMCQueue *Q = (MPMCQueue*)arg;
+
     while(1)
     {
-        // while((Q.rear+1)%MAXSIZE==Q.front){
-        //     pthread_cond_wait(&cond, &mutex); //满的时候可以阻塞生产者吗？
-        // }
+        while((Q->rear+1)%MAXSIZE==Q->front){
+            pthread_cond_wait(&pro_cond, &mutex); //满的时候可以阻塞生产者吗？
+        }
 
         pthread_mutex_lock(&mutex);
 
         int num = rand()%1000+1;
-        MPMCQueuePush(&Q, &num);
+        MPMCQueuePush(Q, &num);
 
         pthread_mutex_unlock(&mutex);
-        pthread_cond_broadcast(&cond);  //试试broadcast()
+        pthread_cond_broadcast(&con_cond);  //试试broadcast()
 
         sleep(rand()%3);
     }
@@ -46,17 +49,20 @@ void *producer(void* arg)
 
 void *consumer(void* arg)
 {
+    MPMCQueue *Q = (MPMCQueue*)arg;
+
     while(1)
     {
-        while(Q.front==Q.rear){
-            pthread_cond_wait(&cond, &mutex);
+        while(Q->front==Q->rear){
+            pthread_cond_wait(&con_cond, &mutex);
         }
 
         pthread_mutex_lock(&mutex);
 
-        MPMCQueuePop(&Q);
+        MPMCQueuePop(Q);
 
         pthread_mutex_unlock(&mutex);
+        pthread_cond_broadcast(&pro_cond);
 
         sleep(rand()%3);
     }
@@ -70,11 +76,11 @@ int main()
     pthread_t threads_pid[PTHREAD_COUNT];
     pthread_t threads_cid[PTHREAD_COUNT];
 
-    MPMCQueueInit();
+    MPMCQueue *Q = MPMCQueueInit(MAXSIZE);
 
     for(i=0;i<PTHREAD_COUNT;i++){   //循环创建多个线程
-        pthread_create(&threads_pid[i], NULL, producer, NULL);
-        pthread_create(&threads_cid[i], NULL, consumer, NULL);
+        pthread_create(&threads_pid[i], NULL, producer, Q);
+        pthread_create(&threads_cid[i], NULL, consumer, Q);
     }
 
     for(i=0;i<PTHREAD_COUNT;i++){
@@ -82,17 +88,18 @@ int main()
         pthread_join(threads_cid[i], NULL);
     }
 
-    MPMCQueueDestory(&Q);
-
+    MPMCQueueDestory(Q);
 
     return 0;
 }
 
 
-MPMCQueue *MPMCQueueInit(void)
+MPMCQueue *MPMCQueueInit(int capacity)
 {
-    Q.front=0;
-    Q.rear=0;
+    MPMCQueue *Q;
+    Q->data = (int*)malloc(sizeof(int)*capacity);
+    Q->front=0;
+    Q->rear=0;
 }
 
 
@@ -118,6 +125,7 @@ void *MPMCQueuePop(MPMCQueue *queue)
 
 void MPMCQueueDestory(MPMCQueue *queue)
 {
+    free(queue);
     queue->front=0;
     queue->rear=0;
 }
