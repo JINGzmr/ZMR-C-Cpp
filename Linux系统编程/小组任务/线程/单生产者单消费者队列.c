@@ -15,7 +15,10 @@
 #include <unistd.h>
 // #include <err_thread.h>
 
-pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER; //  初始化互斥锁🔓（总共一把锁就够了）
+int a = 5;
+int b = 5;
+
+pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER; //  初始化互斥锁🔓*+3（总共一把锁就够了）
 pthread_cond_t cond = PTHREAD_COND_INITIALIZER;   //  初始化条件变量
 
 typedef struct Qnode    // 链表结点
@@ -41,8 +44,9 @@ void SPSCQueueDestory(SPSCQueue *queue);            // 销毁一个 SPSC 队列�
 //生产者
 void *produser(void *arg)
 {
-    while(1)
+    while(a--)
     {
+        printf(" ----%d----- \n",a);
         pthread_mutex_lock(&mutex);
 
         QueuePtr s = (QueuePtr)malloc(sizeof(Qnode));
@@ -54,14 +58,17 @@ void *produser(void *arg)
         pthread_cond_signal(&cond);     // 唤醒阻塞在条件变量cond上的线程
 
         sleep(rand()%3);    //用于在程序执行过程中产生不同的延迟，最大可能的延迟为2秒
+
+
     }
 }
 
 //消费者
 void *consumer(void *arg)
 {
-    while(1)
+    while(b--)
     {
+        printf(" ----%d----- \n",b);
         pthread_mutex_lock(&mutex);     //加锁🔓 互斥量
 
         if(Q.front==Q.rear)    //队列为空(注意：front指向的是头结点，而头结点没有存放数据，真正有数据且是第一个的是Q.front->next)
