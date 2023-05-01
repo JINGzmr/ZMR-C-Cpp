@@ -44,10 +44,10 @@ void SPSCQueueDestory(SPSCQueue *queue);            // 销毁一个 SPSC 队列�
 //生产者
 void *produser(void *arg)
 {
-    while(a--)
+    while(a)
     {
-        printf(" ----%d----- \n",a);
         pthread_mutex_lock(&mutex);
+        printf(" ----%d----- \n",a--);
 
         QueuePtr s = (QueuePtr)malloc(sizeof(Qnode));
         s->num = rand()%1000+1; //随机产生1-1000的随机数（模拟生产）
@@ -66,15 +66,16 @@ void *produser(void *arg)
 //消费者
 void *consumer(void *arg)
 {
-    while(b--)
+    while(b)
     {
-        printf(" ----%d----- \n",b);
         pthread_mutex_lock(&mutex);     //加锁🔓 互斥量
 
         if(Q.front==Q.rear)    //队列为空(注意：front指向的是头结点，而头结点没有存放数据，真正有数据且是第一个的是Q.front->next)
         {
             pthread_cond_wait(&cond, &mutex);   //阻塞等待条件变量，解锁，并在返回时重新加锁🔓
         }
+
+        printf(" ----%d----- \n",b--);
 
         SPSCQueuePop(&Q);
 
