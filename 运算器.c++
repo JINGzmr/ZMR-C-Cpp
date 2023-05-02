@@ -174,7 +174,7 @@ typedef struct {
 void* add_apple(void* arg) {
     Plate* plate = (Plate*)arg;
     while (1) {
-        sleep(1);
+        // sleep(1);
         pthread_mutex_lock(&plate->lock);
         while (plate->orange == 1 || plate->apple == 1) {
             pthread_cond_wait(&plate->fmther, &plate->lock);
@@ -191,7 +191,7 @@ void* add_apple(void* arg) {
 void* add_orange(void* arg) {
     Plate* plate = (Plate*)arg;
     while (1) {
-        sleep(1);
+        // sleep(1);
         pthread_mutex_lock(&plate->lock);
         while (plate->orange == 1 || plate->apple == 1) {
             pthread_cond_wait(&plate->fmther, &plate->lock);
@@ -208,7 +208,7 @@ void* add_orange(void* arg) {
 void* eat_apple(void* arg) {
     Plate* plate = (Plate*)arg;
     while (1) {
-        sleep(1);
+        // sleep(1);
         pthread_mutex_lock(&plate->lock);
         while (plate->apple < 1) {
             pthread_cond_wait(&plate->sonCond, &plate->lock);
@@ -224,7 +224,7 @@ void* eat_apple(void* arg) {
 void* eat_orange(void* arg) {
     Plate* plate = (Plate*)arg;
     while (1) {
-        sleep(1);
+        // sleep(1);
         pthread_mutex_lock(&plate->lock);
         while (plate->orange < 1) {
             pthread_cond_wait(&plate->daughterCond, &plate->lock);
