@@ -129,7 +129,7 @@ void MPMCQueuePush(MPMCQueue *queue, void *s)
 void *MPMCQueuePop(MPMCQueue *queue)
 {
     int num = queue->data[queue->front];
-
+ 
     printf("consume data: %d \tpthread_id: %lu\n", num, pthread_self());
 
     queue->front = (queue->front + 1) % MAXSIZE; // front后移一位
