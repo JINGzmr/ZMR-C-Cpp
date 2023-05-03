@@ -12,6 +12,8 @@ void *eat(void *arg);
 
 int main()
 {
+    srand(time(NULL));
+
     int i;
     for(i=0;i<5;i++){
         pthread_mutex_init(&ch[i],NULL);
@@ -42,10 +44,12 @@ void *eat(void *arg)
         pthread_mutex_unlock(&mutex);
 
         printf("%d号哲学家正在吃%d\n",id,rice--);
-        sleep(1); //eat
+        sleep(rand()%2); //eat
 
         pthread_mutex_unlock(&ch[id]);
         pthread_mutex_unlock(&ch[(id+1)%5]);
+
+        sleep(rand()%3); //休息0-2秒，让其他哲学家能够吃上
     }
 
 
