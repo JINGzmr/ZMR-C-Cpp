@@ -1,3 +1,9 @@
+/**
+ * 每个哲学家先尝试拿起一支筷子
+ * 成功后再尝试拿第二支
+ * 如果失败，就把之前拿起的那只筷子放下，同时continue结束本次任务，等待下一次再和其他线程抢夺cpu
+*/
+
 #include<stdio.h>
 #include<pthread.h>
 #include<stdlib.h>
