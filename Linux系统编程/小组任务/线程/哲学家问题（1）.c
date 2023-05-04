@@ -6,7 +6,7 @@
 
 int rice = 100;
 pthread_mutex_t ch[5];
-pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER; //很重要，将全局锁了之后 再拿筷子，避免五个中哲学家同时拿起一支筷子，导致死锁 （去掉sleep和该行代码 可以直观感受）
 
 void *eat(void *arg);
 
