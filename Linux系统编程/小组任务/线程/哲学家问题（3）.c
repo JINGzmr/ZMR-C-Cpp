@@ -71,7 +71,7 @@ void *eat(void *arg)
     while (1)
     {
         if (philosopher_id < (philosopher_id + 1) % 5) // 如果是0-3号哲学家
-        {
+        {  
             sleep(1);
             pthread_mutex_lock(&ch[philosopher_id]); // 先拿右边的（编号小的）
             pthread_mutex_lock(&ch[(philosopher_id + 1) % 5]);
