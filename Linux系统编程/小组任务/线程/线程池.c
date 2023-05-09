@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
-#include <unistd.h> 
+#include <unistd.h>
 
 #define THREAD_POOL_SIZE 4
 #define QUEUE_SIZE 16
