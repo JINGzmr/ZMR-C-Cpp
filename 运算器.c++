@@ -154,114 +154,263 @@
 //   return 0;
 // }
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <pthread.h>
-#include <unistd.h>
+// #include <stdio.h>
+// #include <stdlib.h>
+// #include <pthread.h>
+// #include <unistd.h>
 
-typedef struct {
-    int apple;
-    int count_apple;
-    int orange;
-    int count_orange;
-    pthread_mutex_t lock;
-    pthread_cond_t fmther;
-    pthread_cond_t sonCond;
-    pthread_cond_t daughterCond;
-} Plate;
+// typedef struct {
+//     int apple;
+//     int count_apple;
+//     int orange;
+//     int count_orange;
+//     pthread_mutex_t lock;
+//     pthread_cond_t fmther;
+//     pthread_cond_t sonCond;
+//     pthread_cond_t daughterCond;
+// } Plate;
 
-// 父亲放苹果的函数
-void* add_apple(void* arg) {
-    Plate* plate = (Plate*)arg;
-    while (1) {
-        // sleep(1);
-        pthread_mutex_lock(&plate->lock);
-        while (plate->orange == 1 || plate->apple == 1) {
-            pthread_cond_wait(&plate->fmther, &plate->lock);
-        }
-        plate->apple++;
-        plate->count_apple++;
-        printf("父亲: 开始放第 %d 个苹果\n", plate->count_apple);
-        pthread_cond_signal(&plate->sonCond);
-        pthread_mutex_unlock(&plate->lock);
+// // 父亲放苹果的函数
+// void* add_apple(void* arg) {
+//     Plate* plate = (Plate*)arg;
+//     while (1) {
+//         // sleep(1);
+//         pthread_mutex_lock(&plate->lock);
+//         while (plate->orange == 1 || plate->apple == 1) {
+//             pthread_cond_wait(&plate->fmther, &plate->lock);
+//         }
+//         plate->apple++;
+//         plate->count_apple++;
+//         printf("父亲: 开始放第 %d 个苹果\n", plate->count_apple);
+//         pthread_cond_signal(&plate->sonCond);
+//         pthread_mutex_unlock(&plate->lock);
+//     }
+// }
+
+// // 母亲放橘子的函数
+// void* add_orange(void* arg) {
+//     Plate* plate = (Plate*)arg;
+//     while (1) {
+//         // sleep(1);
+//         pthread_mutex_lock(&plate->lock);
+//         while (plate->orange == 1 || plate->apple == 1) {
+//             pthread_cond_wait(&plate->fmther, &plate->lock);
+//         }
+//         plate->orange++;
+//         plate->count_orange++;
+//         printf("母亲: 开始放第 %d 个橘子\n", plate->count_orange);
+//         pthread_cond_signal(&plate->daughterCond);
+//         pthread_mutex_unlock(&plate->lock);
+//     }
+// }
+
+// // 儿子吃苹果的函数
+// void* eat_apple(void* arg) {
+//     Plate* plate = (Plate*)arg;
+//     while (1) {
+//         // sleep(1);
+//         pthread_mutex_lock(&plate->lock);
+//         while (plate->apple < 1) {
+//             pthread_cond_wait(&plate->sonCond, &plate->lock);
+//         }
+//         plate->apple = 0;
+//         printf("儿子: 开始吃第 %d 个苹果\n", plate->count_apple);
+//         pthread_cond_signal(&plate->fmther);
+//         pthread_mutex_unlock(&plate->lock);
+//     }
+// }
+
+// // 女儿吃橘子的函数
+// void* eat_orange(void* arg) {
+//     Plate* plate = (Plate*)arg;
+//     while (1) {
+//         // sleep(1);
+//         pthread_mutex_lock(&plate->lock);
+//         while (plate->orange < 1) {
+//             pthread_cond_wait(&plate->daughterCond, &plate->lock);
+//         }
+//         plate->orange = 0;
+//         printf("女儿: 开始吃第 %d 个橘子\n", plate->count_orange);
+//         pthread_cond_signal(&plate->fmther);
+//         pthread_mutex_unlock(&plate->lock);
+//     }
+// }
+
+// int main() {
+//     Plate plate;
+//     plate.apple = 0;
+//     plate.count_apple = 0;
+//     plate.orange = 0;
+//     plate.count_orange = 0;
+//     pthread_mutex_init(&plate.lock, NULL);
+//     pthread_cond_init(&plate.fmther, NULL);
+//     pthread_cond_init(&plate.sonCond, NULL);
+//     pthread_cond_init(&plate.daughterCond, NULL);
+
+//     pthread_t father, mother, son, daughter;
+//     pthread_create(&father, NULL, add_apple, &plate);
+//     pthread_create(&mother, NULL, add_orange, &plate);
+//     pthread_create(&son, NULL, eat_apple, &plate);
+//     pthread_create(&daughter, NULL, eat_orange, &plate);
+
+//     pthread_join(father, NULL);
+//     pthread_join(mother, NULL);
+//     pthread_join(son, NULL);
+//     pthread_join(daughter, NULL);
+
+//     pthread_mutex_destroy(&plate.lock);
+//     pthread_cond_destroy(&plate.fmther);
+//     pthread_cond_destroy(&plate.sonCond);
+//     pthread_cond_destroy(&plate.daughterCond);
+
+//     return 0;
+// }
+
+// #include <iostream>
+// #include <string>
+// using namespace std;
+
+// class Person {
+// public:
+//     string name;
+//     int age;
+
+//     // 深拷贝
+//     Person* DeepCopy() {
+//         Person* p = new Person();
+//         p->name = this->name;
+//         p->age = this->age;
+//         return p;
+//     }
+
+//     // 浅拷贝
+//     Person* ShallowCopy() {
+//         return this;
+//     }
+// };
+
+// int main() {
+//     // 创建一个原始对象
+//     Person* john = new Person();
+//     john->name = "John";
+//     john->age = 25;
+
+//     // 浅拷贝
+//     Person* johnCopy = john->ShallowCopy();
+
+//     // 修改原始对象的属性
+//     john->name = "Jack";
+//     john->age = 30;
+
+//     // 输出浅拷贝对象的属性
+//     cout << johnCopy->name << endl; // 输出 Jack
+//     cout << johnCopy->age << endl;  // 输出 30
+
+//     // 深拷贝
+//     johnCopy = john->DeepCopy();
+
+//     // 修改原始对象的属性
+//     john->name = "Tom";
+//     john->age = 35;
+
+//     // 输出深拷贝对象的属性
+//     cout << johnCopy->name << endl; // 输出 Jack
+//     cout << johnCopy->age << endl;  // 输出 30
+
+//     delete johnCopy;
+//     delete john;
+
+//     return 0;
+// }
+
+
+// #include <iostream>
+// using namespace std;
+
+// class MyClass {
+// public:
+//     int* a;
+
+//     MyClass(int value) {
+//         a = new int(value);
+//     }
+
+//     ~MyClass() {
+//         delete a;
+//     }
+
+//     MyClass* ShallowCopy() {
+//         return this;
+//     }
+// };
+
+// int main() {
+//     MyClass* obj1 = new MyClass(10);
+//     MyClass* obj2 = obj1->ShallowCopy();
+
+//     // 修改原始对象的a属性
+//     *obj1->a = 20;
+
+//     // 输出拷贝对象的a属性
+//     cout << *obj2->a << endl;  // 输出 20  -->因为共享一块内存
+
+//     delete obj1;
+//     delete obj2;
+
+//     return 0;
+// }
+
+#include <iostream>
+using namespace std;
+
+class MyClass {
+
+public:
+    int *value;
+
+    // 默认构造函数
+    MyClass() {
+        value = 0;
+        cout << "Default constructor called." << endl;
     }
-}
 
-// 母亲放橘子的函数
-void* add_orange(void* arg) {
-    Plate* plate = (Plate*)arg;
-    while (1) {
-        // sleep(1);
-        pthread_mutex_lock(&plate->lock);
-        while (plate->orange == 1 || plate->apple == 1) {
-            pthread_cond_wait(&plate->fmther, &plate->lock);
-        }
-        plate->orange++;
-        plate->count_orange++;
-        printf("母亲: 开始放第 %d 个橘子\n", plate->count_orange);
-        pthread_cond_signal(&plate->daughterCond);
-        pthread_mutex_unlock(&plate->lock);
+    // 带参数的构造函数
+    MyClass(int* v) {
+        value = v;
+        cout << "Parameterized constructor called." << endl;
     }
-}
 
-// 儿子吃苹果的函数
-void* eat_apple(void* arg) {
-    Plate* plate = (Plate*)arg;
-    while (1) {
-        // sleep(1);
-        pthread_mutex_lock(&plate->lock);
-        while (plate->apple < 1) {
-            pthread_cond_wait(&plate->sonCond, &plate->lock);
-        }
-        plate->apple = 0;
-        printf("儿子: 开始吃第 %d 个苹果\n", plate->count_apple);
-        pthread_cond_signal(&plate->fmther);
-        pthread_mutex_unlock(&plate->lock);
+    // 拷贝构造函数
+    MyClass(const MyClass& other) {  //注意我们不需要修改原来的值，所以传的值用const修饰，且是“引用&”
+       this->value = other.value;
+        cout << "Copy constructor called." << endl;
     }
-}
 
-// 女儿吃橘子的函数
-void* eat_orange(void* arg) {
-    Plate* plate = (Plate*)arg;
-    while (1) {
-        // sleep(1);
-        pthread_mutex_lock(&plate->lock);
-        while (plate->orange < 1) {
-            pthread_cond_wait(&plate->daughterCond, &plate->lock);
-        }
-        plate->orange = 0;
-        printf("女儿: 开始吃第 %d 个橘子\n", plate->count_orange);
-        pthread_cond_signal(&plate->fmther);
-        pthread_mutex_unlock(&plate->lock);
+    // 成员函数
+    void printValue() {
+        cout << "Value = " << value << endl;
     }
-}
+};
 
 int main() {
-    Plate plate;
-    plate.apple = 0;
-    plate.count_apple = 0;
-    plate.orange = 0;
-    plate.count_orange = 0;
-    pthread_mutex_init(&plate.lock, NULL);
-    pthread_cond_init(&plate.fmther, NULL);
-    pthread_cond_init(&plate.sonCond, NULL);
-    pthread_cond_init(&plate.daughterCond, NULL);
+    // 使用默认构造函数创建对象
+    MyClass obj1;  //不要这样：obj1 ( ) ---> 没有括号（）
+    obj1.printValue();
 
-    pthread_t father, mother, son, daughter;
-    pthread_create(&father, NULL, add_apple, &plate);
-    pthread_create(&mother, NULL, add_orange, &plate);
-    pthread_create(&son, NULL, eat_apple, &plate);
-    pthread_create(&daughter, NULL, eat_orange, &plate);
+    // 使用带参数的构造函数创建对象
+    int a = 10;
+    int *x = &a;
+    MyClass obj2(x);
+    obj2.printValue();
 
-    pthread_join(father, NULL);
-    pthread_join(mother, NULL);
-    pthread_join(son, NULL);
-    pthread_join(daughter, NULL);
+    // 使用拷贝构造函数创建对象
+    MyClass obj3 = obj2;   //用括号法也ok
+    obj3.printValue();
 
-    pthread_mutex_destroy(&plate.lock);
-    pthread_cond_destroy(&plate.fmther);
-    pthread_cond_destroy(&plate.sonCond);
-    pthread_cond_destroy(&plate.daughterCond);
+    obj3.value=666;
+    obj3.printValue();
+    obj2.printValue();
+
 
     return 0;
 }
