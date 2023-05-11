@@ -41,7 +41,7 @@ namespace YOUR_NAME
     };
 
     template <class T>
-    //迭代器类,(类比指针)   //////相当于一个类的指针？？？？
+    //迭代器类,(类比指针)
     //提供了访问链表中元素的方法
     struct iterator
     {
