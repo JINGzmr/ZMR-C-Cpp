@@ -1,58 +1,80 @@
 #include <iostream>
-//使用你的名字替换YOUR_NAME
+// 使用你的名字替换YOUR_NAME
 namespace YOUR_NAME
 {
-    template <class T>
+    template <class T> 
+/**
+ * template: 声明创建一个模板
+ * class:表明他后面的符号是一种数据类型
+ * T ：通用的数据类型，名称可以替换，一般是大写字母
+ * 
+ * 然后在这行代码后面紧跟着写一个类
+*/
+
     // list存储的节点
     // 可以根据你的需要添加适当的成员函数与成员变量
-    struct node
+    struct node  //链表中的节点
     {
-        node<T> *prev_;
-        node<T> *next_;
-        T data_;
+        node<T> *prev_; //指向前一个节点的指针，类型为 node<T>*，T是模板类的类型参数
+        node<T> *next_; //指向后一个节点的指针
+        T data_; //当前节点的数据
+        
         //构造函数
+        //使用传入的参数 data 构造一个新节点，将 data 存储到节点中，并将指针 prev_ 和 next_ 初始化为 nullptr。
         node(const T &data)
             : data_(data), prev_(nullptr), next_(nullptr)
         {
         }
+
+        //默认构造函数
+        //创建一个空节点，将指针 prev_ 和 next_ 初始化为 nullptr
         node()
             : prev_(nullptr), next_(nullptr)
         {
         }
+
         //析构函数
         ~node()
         {
         }
+
     };
 
     template <class T>
-    //迭代器类,(类比指针)
-
+    //迭代器类,(类比指针)   //////相当于一个类的指针？？？？
+    //提供了访问链表中元素的方法
     struct iterator
     {
         typedef node<T> node_;
         typedef iterator<T> iterator_;
-        node_ * node_ptr_;
+        node_ * node_ptr_;  //指向当前节点的指针
         iterator(node_ *node_ptr)
             : node_ptr_(node_ptr)
         {
         }
         ~iterator()
+        
         {
         }
         //迭代到下一个节点
         //++it
         iterator_ &operator++()
         {
+            node_ptr_ = node_ptr_->next_;
+            return *this;
         }
         //迭代到前一个节点
         //--it
         iterator_ &operator--()
         {
-        }
+            node_ptr_ = node_ptr_->prev_;
+            return *this;
+
+        }    
         // it++
         iterator operator++(int)
         {
+
         }
         // it--
         iterator operator--(int)
@@ -70,17 +92,20 @@ namespace YOUR_NAME
         //重载==
         bool operator==(const iterator_ &t)
         {
+            return node_ptr_ == t.node_ptr_;
         }
         //重载！=
         bool operator!=(const iterator_ &t)
         {
+
         }
 
         //**可以添加需要的成员变量与成员函数**
     };
 
+
     template <class T>
-    class list
+    class list  //双向链表
     {
     public:
         typedef node<T> node_;
@@ -99,20 +124,22 @@ namespace YOUR_NAME
         list(const list<T> &lt)
         {
         }
+        
         template <class inputIterator>
         //迭代器构造
         list(inputIterator begin, inputIterator end)
         {
         }
-
+        //析构函数
         ~list()
         {
         }
+
         //拷贝赋值
         list<T> &operator=(const list<T> &lt)
         {
         }
-        //清空list中的数据
+        //清空list中的数据（清空链表）
         void clear()
         {
         }
@@ -175,3 +202,5 @@ namespace YOUR_NAME
         //可以添加你需要的成员函数
     };
 };
+
+

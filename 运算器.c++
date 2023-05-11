@@ -360,57 +360,134 @@
 //     return 0;
 // }
 
+// #include <iostream>
+// using namespace std;
+
+// class MyClass {
+
+// public:
+//     int *value;
+
+//     // 默认构造函数
+//     MyClass() {
+//         value = 0;
+//         cout << "Default constructor called." << endl;
+//     }
+
+//     // 带参数的构造函数
+//     MyClass(int* v) {
+//         value = v;
+//         cout << "Parameterized constructor called." << endl;
+//     }
+
+//     // 拷贝构造函数
+//     MyClass(const MyClass& other) {  //注意我们不需要修改原来的值，所以传的值用const修饰，且是“引用&”
+//        this->value = other.value;
+//         cout << "Copy constructor called." << endl;
+//     }
+
+//     // 成员函数
+//     void printValue() {
+//         cout << "Value = " << value << endl;
+//     }
+// };
+
+// int main() {
+//     // 使用默认构造函数创建对象
+//     MyClass obj1;  //不要这样：obj1 ( ) ---> 没有括号（）
+//     obj1.printValue();
+
+//     // 使用带参数的构造函数创建对象
+//     int a = 10;
+//     int *x = &a;
+//     MyClass obj2(x);
+//     obj2.printValue();
+
+//     // 使用拷贝构造函数创建对象
+//     MyClass obj3 = obj2;   //用括号法也ok
+//     obj3.printValue();
+
+//     obj3.value=666;
+//     obj3.printValue();
+//     obj2.printValue();
+
+
+//     return 0;
+// }
+
+
 #include <iostream>
-using namespace std;
 
-class MyClass {
-
-public:
-    int *value;
-
-    // 默认构造函数
-    MyClass() {
-        value = 0;
-        cout << "Default constructor called." << endl;
+template <class T>
+struct node
+{
+    node<T> *prev_;
+    node<T> *next_;
+    T data_;
+    node(const T &data)
+        : data_(data), prev_(nullptr), next_(nullptr)
+    {
     }
-
-    // 带参数的构造函数
-    MyClass(int* v) {
-        value = v;
-        cout << "Parameterized constructor called." << endl;
+    node()
+        : prev_(nullptr), next_(nullptr)
+    {
     }
-
-    // 拷贝构造函数
-    MyClass(const MyClass& other) {  //注意我们不需要修改原来的值，所以传的值用const修饰，且是“引用&”
-       this->value = other.value;
-        cout << "Copy constructor called." << endl;
-    }
-
-    // 成员函数
-    void printValue() {
-        cout << "Value = " << value << endl;
+    ~node()
+    {
     }
 };
 
-int main() {
-    // 使用默认构造函数创建对象
-    MyClass obj1;  //不要这样：obj1 ( ) ---> 没有括号（）
-    obj1.printValue();
+template <class T>
+class list
+{
+public:
+    typedef node<T> node_;
+    node_ *head_;
 
-    // 使用带参数的构造函数创建对象
-    int a = 10;
-    int *x = &a;
-    MyClass obj2(x);
-    obj2.printValue();
+    list()
+        : head_(new node_<T>())
+    {
+        head_->prev_ = head_->next_ = head_;
+    }
 
-    // 使用拷贝构造函数创建对象
-    MyClass obj3 = obj2;   //用括号法也ok
-    obj3.printValue();
+    ~list()
+    {
+        node_ *p = head_;
+        while (p != nullptr)
+        {
+            node_ *q = p->next_;
+            delete p;
+            p = q;
+        }
+    }
 
-    obj3.value=666;
-    obj3.printValue();
-    obj2.printValue();
+    void push_back(const T &data)
+    {
+        node_ *p = new node_<T>(data);
+        p->prev_ = head_->prev_;
+        p->next_ = head_;
+        head_->prev_->next_ = p;
+        head_->prev_ = p;
+    }
 
+    void print()
+    {
+        node_ *p = head_->next_;
+        while (p != head_)
+        {
+            std::cout << p->data_ << " ";
+            p = p->next_;
+        }
+        std::cout << std::endl;
+    }
+};
 
+int main()
+{
+    list<int> mylist;
+    mylist.push_back(1);
+    mylist.push_back(2);
+    mylist.push_back(3);
+    mylist.print();
     return 0;
 }
