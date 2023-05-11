@@ -45,17 +45,31 @@ namespace YOUR_NAME
     //提供了访问链表中元素的方法
     struct iterator
     {
-        typedef node<T> node_;
-        typedef iterator<T> iterator_;
-        node_ * node_ptr_;  //指向当前节点的指针
-        iterator(node_ *node_ptr)
+        typedef node<T> node_;  //以后链表中的节点用这个表示，不是指向节点的指针，就只是单纯的一个节点
+        
+        /**
+         * 迭代器喽，
+         * 这struct iterator里的所有的东西都是iterator_的，可以通过它来访问
+         * 所以下面的node_ptr_也是迭代器iterator_的
+         * 因此在重载==时，可以通过定义的迭代器类型t来访问里面的元素，如t.node_ptr_
+        */
+        typedef iterator<T> iterator_;   
+
+        node_ * node_ptr_;  //指向当前节点的指针  -->这个才是节点指针
+        
+        /**
+         * 迭代器(iterator)的构造函数
+         * 参数为指向一个节点的指针(node_ptr)
+         * 用于初始化迭代器的成员变量node_ptr_，指向当前节点。
+        */
+        iterator(node_ *node_ptr) 
             : node_ptr_(node_ptr)
         {
         }
         ~iterator()
-        
         {
         }
+
         //迭代到下一个节点
         //++it
         iterator_ &operator++()
@@ -69,20 +83,25 @@ namespace YOUR_NAME
         {
             node_ptr_ = node_ptr_->prev_;
             return *this;
-
         }    
         // it++
-        iterator operator++(int)
+        iterator operator++(int)  //int参数作为占位符来区分前置++和后置++，该参数没有实际用途
         {
-
+            iterator tmp(this->node_ptr_);
+            node_ptr_ = node_ptr_->next_;
+            return tmp;
         }
         // it--
         iterator operator--(int)
         {
+            iterator tmp = node_ptr_;
+            node_ptr_ = node_ptr_->prev_;
+            return tmp;
         }
         //指向迭代器中被访问的成员值
         T &operator*()
         {
+
         }
 
         //指向迭代器中被访问的成员指针
