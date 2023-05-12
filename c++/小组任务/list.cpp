@@ -177,6 +177,18 @@ namespace YOUR_NAME
         // 清空list中的数据（清空链表）
         void clear()
         {
+            node_ *p = head_->next_;
+            while(p != head_)
+            {
+                p->next_->prev_ = p->prev_;
+                p->prev_->next_ = p->next_;
+                node_ *pp = p;
+                delete pp;
+                p = p->next_;
+            }
+
+            head_->next_ = head_;
+            head_->prev_ = head_;
         }
 
         // 返回容器中存储的有效节点个数
@@ -286,22 +298,32 @@ namespace YOUR_NAME
             delete pos.node_ptr_;
             return true;
         }
- 
+  
         // 获得list第一个有效节点的迭代器
-        Iterator begin() const
+        Iterator begin() const  //const 说明函数返回的迭代器对象不能用于修改它所指的数据结构
         {
-            return Iterator(head_->next_);
+            Iterator it(head_->next_); //搞了一个名为it的迭代器，并赋初始值为head_->next_
+            return it;
         }
 
         // 获得list最后一个节点的下一个位置
         Iterator end() const
         {
-            return Iterator(head_);
+            Iterator it(head_);
+            return it;
         }
         // 查找data对应的迭代器
         Iterator find(const T &data) const
         {
-
+            Iterator it(head_->next_);
+            for(;it.node_ptr_ != this->head_; ++it)  //++it 相当于节点后移
+            {
+                if(it.node_ptr_->data_ == data)
+                {
+                    return it;
+                }
+            }
+            return nullptr; //能到这一步，说明没有与之匹配的迭代器，那就返回空喽
         }
         // 获得第一个有效节点元素值
         T front() const
