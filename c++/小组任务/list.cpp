@@ -154,7 +154,7 @@ namespace YOUR_NAME
             head_->prev_ = head_;
             head_->next_ = head_;
 
-            for (node_ *p = lt.head_->next_; p != lt.head_; p = p->next_) // 通过循环将lt中的每个节点用尾插法添加到新创建的list中
+            for (node_ *p = lt.head_->next_; p != lt.head_; p = p->next_) // 通过循环将lt中的每个节点用尾插法添加到新创建的list中，下面的拷贝赋值是另一种做法
             {
                 push_back(p->data_);
             }
@@ -164,15 +164,48 @@ namespace YOUR_NAME
         // 迭代器构造
         list(inputIterator begin, inputIterator end)
         {
+            head_ = new node_; //创建哨兵节点
+            head_->next_ = head_;
+            head_->prev_ = head_;
+            for(inputIterator it = begin; it!=end; ++it)
+            {
+                push_back(*it);
+            }
         }
         // 析构函数
         ~list()
         {
+            //释放每一个节点
+            node_ *p = head_->next_;
+            while(p!=head)
+            {
+                p->next_->prev_ = p->prev_;
+                p->prev_->next_ = p->next_;
+                node_ *pp = p;
+                delete pp;
+                p = p->next_;
+            }
+
+            head_->next_ = head_;
+            head_->prev_ = head_;
+
+            //最后把哨兵节点给释放
+            delete head_;
         }
 
         // 拷贝赋值
         list<T> &operator=(const list<T> &lt)
         {
+            if(this != lt) //要 &lt 吗？？？
+            {
+                clear(); //既然不相等，就先清空链表
+
+                for(auto it = lt.begin(); it != lt.end; ++it)
+                {
+                    push_back(*it);
+                }
+            }
+            return *this;
         }
         // 清空list中的数据（清空链表）
         void clear()
