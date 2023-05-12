@@ -286,7 +286,7 @@ namespace YOUR_NAME
             delete pos.node_ptr_;
             return true;
         }
-
+ 
         // 获得list第一个有效节点的迭代器
         Iterator begin() const
         {
@@ -301,7 +301,7 @@ namespace YOUR_NAME
         // 查找data对应的迭代器
         Iterator find(const T &data) const
         {
-            
+
         }
         // 获得第一个有效节点元素值
         T front() const
