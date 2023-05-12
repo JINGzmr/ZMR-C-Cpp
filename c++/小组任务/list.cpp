@@ -178,19 +178,25 @@ namespace YOUR_NAME
         void clear()
         {
         }
+
         // 返回容器中存储的有效节点个数
         size_t size() const
         {
             size_t size = 0;
-            for(node_* p = this->head_->next_;p != this->head_;p = p->next_)
+            for (node_ *p = this->head_->next_; p != this->head_; p = p->next_) // 好像要不要this都行?
             {
                 size++;
             }
+            return size;
         }
+
         // 判断是否为空
         bool empty() const
         {
+            // return size == 0;
+            return head_->next_ == head_;
         }
+
         // 尾插
         bool push_back(const T &data)
         {
@@ -216,40 +222,96 @@ namespace YOUR_NAME
         // 尾删
         bool pop_back()
         {
+            if (head_->prev_ != head_)
+            {
+                node_ *p = head_->prev_;
+                // p->prev_->next_ = head_;
+                // head_->prev_ = p->prev_;
+                p->prev_->next_ = p->next_;
+                p->next_->prev_ = p->prev_;
+                delete p;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         // 头删
         bool pop_front()
         {
+            if (head_->next_ != head_)
+            {
+                node_ *p = head_->next_;
+                p->prev_->next_ = p->next_;
+                p->next_->prev_ = p->prev_;
+                delete p;
+            }
+            else
+            {
+                return false;
+            }
         }
         // 默认新数据添加到pos迭代器的后面,根据back的方向决定插入在pos的前面还是后面
         bool insert(Iterator pos, const T &data, bool back = true)
         {
+            node_ *p = new node_(data);
+            if (back)
+            {
+                p->prev_ = pos.node_ptr_;
+                p->next_ = pos.node_ptr_->next_;
+                pos.node_ptr_->next_->prev_ = p;
+                pos.node_ptr_->next_ = p;
+            }
+            else
+            {
+                p->prev_ = pos.node_ptr_->prev_;
+                pos.node_ptr_->prev_->next_ = p;
+                p->next_ = pos.node_ptr_;
+                pos.node_ptr_->prev_ = p;
+            }
+
+            return true;
         }
         // 删除pos位置的元素
         bool erase(Iterator pos)
         {
+            if (pos.node_ptr_ == nullptr || pos.node_ptr_ == head_)
+            {
+                return false;
+            }
+
+            pos.node_ptr_->next_->prev_ = pos.node_ptr_->prev_;
+            pos.node_ptr_->prev_->next_ = pos.node_ptr_->next_;
+            delete pos.node_ptr_;
+            return true;
         }
 
         // 获得list第一个有效节点的迭代器
         Iterator begin() const
         {
+            return Iterator(head_->next_);
         }
 
         // 获得list最后一个节点的下一个位置
         Iterator end() const
         {
+            return Iterator(head_);
         }
         // 查找data对应的迭代器
         Iterator find(const T &data) const
         {
+            
         }
         // 获得第一个有效节点元素值
         T front() const
         {
+            return head_->next_->data_;
         }
         // 获得最后一个有效节点元素值
         T back() const
         {
+            return head_->prev_->data_;
         }
 
     private:
