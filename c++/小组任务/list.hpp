@@ -225,7 +225,7 @@ namespace ZMR
                 for (auto it = lt.begin(); it != lt.end(); ++it)
                 {
                     push_back(*it);
-                } 
+                }
             }
             return *this;
         }
