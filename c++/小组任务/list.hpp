@@ -106,17 +106,17 @@ namespace ZMR
         // 指向迭代器中被访问的成员指针
         T *operator->()
         {
-            return &(node_ptr_->data_); //因为返回值是一个T类型的指针，所以要用取地址符&将data_的地址传回去，接收者也会用指针类型的变量来接收该地址，使之存的是data_的地址
+            return &(node_ptr_->data_); // 因为返回值是一个T类型的指针，所以要用取地址符&将data_的地址传回去，接收者也会用指针类型的变量来接收该地址，使之存的是data_的地址
         }
 
         // 重载==
         bool operator==(const iterator_ &t)
         {
-            if(node_ptr_ == t.node_ptr_)
+            if (node_ptr_ == t.node_ptr_)
             {
                 return true;
             }
-            else 
+            else
             {
                 return false;
             }
@@ -124,11 +124,11 @@ namespace ZMR
         // 重载！=
         bool operator!=(const iterator_ &t)
         {
-            if(node_ptr_ == t.node_ptr_)//  这里也是用==
+            if (node_ptr_ == t.node_ptr_) //  这里也是用==
             {
                 return false;
             }
-            else 
+            else
             {
                 return true;
             }
@@ -168,20 +168,27 @@ namespace ZMR
             head_->prev_ = head_;
             head_->next_ = head_;
 
+            //法一：
             for (node_ *p = lt.head_->next_; p != lt.head_; p = p->next_) // 通过循环将lt中的每个节点用尾插法添加到新创建的list中，下面的拷贝赋值是另一种做法
             {
                 push_back(p->data_);
             }
+
+            //法二：
+            // for (auto it = lt.begin(); it != lt.end(); ++it)
+            // {
+            //     push_back(*it);
+            // }
         }
 
         template <class inputIterator>
         // 迭代器构造
         list(inputIterator begin, inputIterator end)
         {
-            head_ = new node_; //创建哨兵节点
+            head_ = new node_; // 创建哨兵节点
             head_->next_ = head_;
             head_->prev_ = head_;
-            for(inputIterator it = begin; it!=end; ++it)
+            for (inputIterator it = begin; it != end; ++it)
             {
                 push_back(*it);
             }
@@ -189,32 +196,33 @@ namespace ZMR
         // 析构函数
         ~list()
         {
-            //释放每一个节点
+            // 释放每一个节点
             node_ *p = head_->next_;
-            while(p!=head_)
+            while (p != head_)
             {
                 p->next_->prev_ = p->prev_;
                 p->prev_->next_ = p->next_;
-                node_ *pp = p;
-                delete pp;
-                p = p->next_;
+                node_ *pp = p->next_;
+                delete p;
+                p = pp;
             }
 
             head_->next_ = head_;
             head_->prev_ = head_;
 
-            //最后把哨兵节点给释放
+            // 最后把哨兵节点给释放
             delete head_;
         }
 
         // 拷贝赋值
         list<T> &operator=(const list<T> &lt)
         {
-            if(this != &lt) //要 &lt 吗？？？
+            if (this != &lt) // 要 &lt 吗？？？ --->必须要！！！  lt是一个普通的链表，而this是一个指针，所以要用取地址符&取出lt的地址，再和指针this里面存的地址作比较，如果相同，则说明调用该函数的A和原来的B是一样的，若不同，就要执行拷贝赋值操作
+            //因为是运算符重载，所以在用到 链表A=链表B 时（即需要将链表B赋值给链表A时）， A是调用这个重载函数的发起方，所以该函数里的this指针指向的就是链表A，而链表B则作为函数的参数，通过引用&变成链表lt，在函数中以lt的形式存在，并通过一系列操作，将lt的每个节点的值都赋给this所指的那个链表（也就是链表A）
             {
-                clear(); //既然不相等，就先清空链表
+                clear(); // 既然不相等，就先清空this所指向的链表，也就是链表A。但为什么clear函数里没有出现this？  --->只是一般默认head_前面的this不写, 其实this->head_ 和 head_ 是等价的
 
-                for(auto it = lt.begin(); it != lt.end(); ++it)
+                for (auto it = lt.begin(); it != lt.end(); ++it)
                 {
                     push_back(*it);
                 }
@@ -224,16 +232,29 @@ namespace ZMR
         // 清空list中的数据（清空链表）
         void clear()
         {
+            // 法一：
             node_ *p = head_->next_;
-            while(p != head_)
+            while (p != head_)
             {
                 p->next_->prev_ = p->prev_;
                 p->prev_->next_ = p->next_;
-                node_ *pp = p;
-                delete pp;
-                p = p->next_;
+                node_ *pp = p->next_; // node_ *pp = p;  --->这样删除节点会导致段错误！！！
+                delete p;             // delete pp;
+                p = pp;               // p = p->next_;
             }
 
+            // 法二（好）：
+            //  Iterator it(head_->next_);
+            //  while(it.node_ptr_ != head_)
+            //  {
+            //      it.node_ptr_->next_->prev_ = it.node_ptr_->prev_;
+            //      it.node_ptr_->prev_->next_ = it.node_ptr_->next_;
+            //      node_ *p = it.node_ptr_->next_;
+            //      delete it.node_ptr_;
+            //      it.node_ptr_ = p;
+            //  }
+
+            //公共部分：
             head_->next_ = head_;
             head_->prev_ = head_;
         }
@@ -242,18 +263,33 @@ namespace ZMR
         size_t size() const
         {
             size_t size = 0;
-            for (node_ *p = this->head_->next_; p != this->head_; p = p->next_) // 好像要不要this都行?
+
+            // 法一：
+            for (node_ *p = this->head_->next_; p != this->head_; p = p->next_) // 好像要不要this都行? --->对
             {
                 size++;
             }
+
+            // 法二（好）：
+            //  for(Iterator it = this->begin(); it!=this->end(); ++it)
+            //  {
+            //      size++;
+            //  }
+
             return size;
         }
 
         // 判断是否为空
         bool empty() const
         {
-            // return size == 0;
-            return head_->next_ == head_;
+            if (size() == 0) // 或：this->head_->next_ == head_
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         // 尾插
@@ -348,42 +384,61 @@ namespace ZMR
             delete pos.node_ptr_;
             return true;
         }
-  
+
         // 获得list第一个有效节点的迭代器
-        Iterator begin() const  //const 说明函数返回的迭代器对象不能用于修改它所指的数据结构
+        Iterator begin() const // const 说明函数返回的迭代器对象不能用于修改它所指的数据结构
         {
-            Iterator it(head_->next_); //搞了一个名为it的迭代器，并赋初始值为head_->next_
+            Iterator it(head_->next_); // 搞了一个名为it的迭代器，并赋初始值为head_->next_
             return it;
         }
 
         // 获得list最后一个节点的下一个位置
         Iterator end() const
         {
+            // 法一：
             Iterator it(head_);
             return it;
+
+            // 法二（好）：
+            //  Iterator it(head_->next_);
+            //  while(it.node_ptr_ != head_)
+            //  {
+            //      it++;
+            //  }
+            //  return it;
         }
         // 查找data对应的迭代器
         Iterator find(const T &data) const
         {
             Iterator it(head_->next_);
-            for(;it.node_ptr_ != this->head_; ++it)  //++it 相当于节点后移
+            for (; it.node_ptr_ != this->head_; ++it) //++it 相当于节点后移
             {
-                if(it.node_ptr_->data_ == data)
+                if (it.node_ptr_->data_ == data)
                 {
                     return it;
                 }
             }
-            return nullptr; //能到这一步，说明没有与之匹配的迭代器，那就返回空喽
+            return nullptr; // 能到这一步，说明没有与之匹配的迭代器，那就返回空喽
         }
         // 获得第一个有效节点元素值
         T front() const
         {
+            // 法一：
             return head_->next_->data_;
+
+            // 法二（好）：
+            //  Iterator it(head_->next_);
+            //  return it.node_ptr_->data_;
         }
         // 获得最后一个有效节点元素值
         T back() const
         {
+            // 法一：
             return head_->prev_->data_;
+
+            // 法二（好）：
+            //  Iterator it(head_->prev_);
+            //  return it.node_ptr_->data_;
         }
 
     private:
