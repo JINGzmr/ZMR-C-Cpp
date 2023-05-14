@@ -11,6 +11,9 @@
         "algorithm": "cpp",
         "memory": "cpp",
         "initializer_list": "cpp",
-        "numeric": "cpp"
+        "numeric": "cpp",
+        "forward_list": "cpp",
+        "list": "cpp",
+        "unordered_set": "cpp"
     }
 }
