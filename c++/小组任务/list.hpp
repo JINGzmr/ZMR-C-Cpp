@@ -1,6 +1,6 @@
 #include <iostream>
 // 使用你的名字替换YOUR_NAME
-namespace YOUR_NAME
+namespace ZMR
 {
     template <class T>
     /**
