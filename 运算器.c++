@@ -416,78 +416,116 @@
 // }
 
 
-#include <iostream>
+// #include <iostream>
 
-template <class T>
-struct node
-{
-    node<T> *prev_;
-    node<T> *next_;
-    T data_;
-    node(const T &data)
-        : data_(data), prev_(nullptr), next_(nullptr)
-    {
-    }
-    node()
-        : prev_(nullptr), next_(nullptr)
-    {
-    }
-    ~node()
-    {
-    }
-};
+// template <class T>
+// struct node
+// {
+//     node<T> *prev_;
+//     node<T> *next_;
+//     T data_;
+//     node(const T &data)
+//         : data_(data), prev_(nullptr), next_(nullptr)
+//     {
+//     }
+//     node()
+//         : prev_(nullptr), next_(nullptr)
+//     {
+//     }
+//     ~node()
+//     {
+//     }
+// };
 
-template <class T>
-class list
+// template <class T>
+// class list
+// {
+// public:
+//     typedef node<T> node_;
+//     node_ *head_;
+
+//     list()
+//         : head_(new node_<T>())
+//     {
+//         head_->prev_ = head_->next_ = head_;
+//     }
+
+//     ~list()
+//     {
+//         node_ *p = head_;
+//         while (p != nullptr)
+//         {
+//             node_ *q = p->next_;
+//             delete p;
+//             p = q;
+//         }
+//     }
+
+//     void push_back(const T &data)
+//     {
+//         node_ *p = new node_<T>(data);
+//         p->prev_ = head_->prev_;
+//         p->next_ = head_;
+//         head_->prev_->next_ = p;
+//         head_->prev_ = p;
+//     }
+
+//     void print()
+//     {
+//         node_ *p = head_->next_;
+//         while (p != head_)
+//         {
+//             std::cout << p->data_ << " ";
+//             p = p->next_;
+//         }
+//         std::cout << std::endl;
+//     }
+// };
+
+// int main()
+// {
+//     list<int> mylist;
+//     mylist.push_back(1);
+//     mylist.push_back(2);
+//     mylist.push_back(3);
+//     mylist.print();
+//     return 0;
+// } 
+
+
+#include<iostream>
+using namespace std;
+
+class goods
 {
+private:
+    int pen;
+    int pencil;
+
 public:
-    typedef node<T> node_;
-    node_ *head_;
+// 带参数的构造函数（用于变量的初始化）-->函数名要和类的名字一样，返回值
+    //传统方式初始化
+    // goods(int a, int b)
+    // {
+    //     pen = a;
+    //     pencil = b;
+    // }
 
-    list()
-        : head_(new node_<T>())
-    {
-        head_->prev_ = head_->next_ = head_;
-    }
+    //初始化列表方式初始化
+    goods(int a, int b):pen(a),pencil(b)
+    {}
 
-    ~list()
-    {
-        node_ *p = head_;
-        while (p != nullptr)
-        {
-            node_ *q = p->next_;
-            delete p;
-            p = q;
-        }
-    }
 
-    void push_back(const T &data)
+//成员函数  --->函数名不一定要和类的名字一样，且有返回值
+    void print_goods()
     {
-        node_ *p = new node_<T>(data);
-        p->prev_ = head_->prev_;
-        p->next_ = head_;
-        head_->prev_->next_ = p;
-        head_->prev_ = p;
-    }
-
-    void print()
-    {
-        node_ *p = head_->next_;
-        while (p != head_)
-        {
-            std::cout << p->data_ << " ";
-            p = p->next_;
-        }
-        std::cout << std::endl;
+        cout << "pen的价格是：" << pen << endl;
+        cout << "pencil的价格是："<< pencil << endl;
     }
 };
 
 int main()
 {
-    list<int> mylist;
-    mylist.push_back(1);
-    mylist.push_back(2);
-    mylist.push_back(3);
-    mylist.print();
-    return 0;
-} 
+    goods mygoods(12,20); //两种不同的初始化均用该行代码
+    mygoods.print_goods();
+}
