@@ -493,39 +493,91 @@
 // } 
 
 
-#include<iostream>
-using namespace std;
+// #include<iostream>
+// using namespace std;
 
-class goods
-{
-private:
-    int pen;
-    int pencil;
+// class goods
+// {
+// private:
+//     int pen;
+//     int pencil;
 
-public:
-// 带参数的构造函数（用于变量的初始化）-->函数名要和类的名字一样，返回值
-    //传统方式初始化
-    // goods(int a, int b)
-    // {
-    //     pen = a;
-    //     pencil = b;
-    // }
+// public:
+// // 带参数的构造函数（用于变量的初始化）-->函数名要和类的名字一样，返回值
+//     //传统方式初始化
+//     // goods(int a, int b)
+//     // {
+//     //     pen = a;
+//     //     pencil = b;
+//     // }
 
-    //初始化列表方式初始化
-    goods(int a, int b):pen(a),pencil(b)
-    {}
+//     //初始化列表方式初始化
+//     goods(int a, int b):pen(a),pencil(b)
+//     {}
 
 
-//成员函数  --->函数名不一定要和类的名字一样，且有返回值
-    void print_goods()
-    {
-        cout << "pen的价格是：" << pen << endl;
-        cout << "pencil的价格是："<< pencil << endl;
-    }
-};
+// //成员函数  --->函数名不一定要和类的名字一样，且有返回值
+//     void print_goods()
+//     {
+//         cout << "pen的价格是：" << pen << endl;
+//         cout << "pencil的价格是："<< pencil << endl;
+//     }
+// };
 
-int main()
-{
-    goods mygoods(12,20); //两种不同的初始化均用该行代码
-    mygoods.print_goods();
-}
+// int main()
+// {
+//     goods mygoods(12,20); //两种不同的初始化均用该行代码
+//     mygoods.print_goods();
+// }
+
+
+// #include<iostream>  
+// #include<string>
+// using namespace std;
+
+// class phone 
+// {
+// // private: //不能设置为私有，否者person类里的m_phone.m_phonename该语句报错，显示无法访问m_phonename
+// public:
+//     string m_phonename;
+
+// public:
+//     phone (string a):m_phonename(a)
+//     {
+//         cout << "phone 构造函数调用" << endl;
+//     }
+
+//     ~phone ()
+//     {
+//         cout << "phone 析构函数调用" << endl;
+//     }
+// };
+
+// class person
+// {
+// private:
+//     string m_name;  //普通的数据成员（person类的属性/变量）
+//     phone m_phone;  //phone类对象成员
+
+// public:
+//     person (string a, string b):m_name(a),m_phone(b)
+//     {
+//         cout << "person 构造函数调用" << endl;
+//     }
+
+//     ~person()
+//     {
+//         cout << "person 析构函数调用" << endl;
+//     }
+
+//     void print_()
+//     {
+//         cout << m_name << "的手机是：" << m_phone.m_phonename <<endl;
+//     }
+// };
+
+// int main()
+// {
+//     person p("张三","HUAWEI");
+//     p.print_();
+// }
