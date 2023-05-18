@@ -582,26 +582,42 @@
 //     p.print_();
 // }
 
+// #include<iostream>
+// using namespace std;
+
+// class MyClass {
+// private:
+//   static int count;
+// public:
+//   static void incrementCount() {
+//     count++;
+//   }
+//   static int getCount() {
+//     return count;
+//   }
+// };
+
+// int MyClass::count = 0;
+
+// int main() {
+//   MyClass::incrementCount();
+//   MyClass::incrementCount();
+//   cout << MyClass::getCount() << endl;
+//   return 0;
+// }
+
 #include<iostream>
 using namespace std;
 
-class MyClass {
-private:
-  static int count;
-public:
-  static void incrementCount() {
-    count++;
-  }
-  static int getCount() {
-    return count;
-  }
+class person
+{
+    int A;
+    static int B; // 有没有这句，结果都为4 ，因为静态成员变量不属于每个对象
 };
+int person::B = 0;
 
-int MyClass::count = 0;
-
-int main() {
-  MyClass::incrementCount();
-  MyClass::incrementCount();
-  cout << MyClass::getCount() << endl;
-  return 0;
-}
+int main()
+{
+    person p;
+    cout << sizeof(p) << endl; //4
+} 
