@@ -25,7 +25,7 @@
 
 // 	//属性(变量)
 // 	int r;
-	
+
 // 	//行为（一般是一个函数）
 // 	//获取圆的周长
 // 	double zc()
@@ -42,9 +42,8 @@
 // 	Circle c1;
 // 	//给圆对象的属性进行赋值
 // 	c1.r = 10;
-	
+
 // 	cout << "圆的周长为： " << c1.zc() << endl ;
-	
 
 // }
 
@@ -60,13 +59,13 @@
 //     {
 //         getline(cin,name);
 //         cin >> id;
-        
+
 //         cout << name << endl << id << endl;
 //     }
 // };
 
 // int main()
-// {     
+// {
 //     stu pp;
 //     pp.xw();
 // }
@@ -109,12 +108,11 @@
 // {
 //     Circle c;
 //     c.r=10;
-    
+
 //     cout << "周长为： "  << c.zuochang(c.r) << endl;
-    
+
 //     return 0;
 // }
-
 
 // #include<iostream>
 // using namespace std;
@@ -323,7 +321,6 @@
 //     return 0;
 // }
 
-
 // #include <iostream>
 // using namespace std;
 
@@ -411,10 +408,8 @@
 //     obj3.printValue();
 //     obj2.printValue();
 
-
 //     return 0;
 // }
-
 
 // #include <iostream>
 
@@ -490,8 +485,7 @@
 //     mylist.push_back(3);
 //     mylist.print();
 //     return 0;
-// } 
-
+// }
 
 // #include<iostream>
 // using namespace std;
@@ -515,7 +509,6 @@
 //     goods(int a, int b):pen(a),pencil(b)
 //     {}
 
-
 // //成员函数  --->函数名不一定要和类的名字一样，且有返回值
 //     void print_goods()
 //     {
@@ -530,12 +523,11 @@
 //     mygoods.print_goods();
 // }
 
-
-// #include<iostream>  
+// #include<iostream>
 // #include<string>
 // using namespace std;
 
-// class phone 
+// class phone
 // {
 // // private: //不能设置为私有，否者person类里的m_phone.m_phonename该语句报错，显示无法访问m_phonename
 // public:
@@ -606,18 +598,40 @@
 //   return 0;
 // }
 
-#include<iostream>
+#include <iostream>
 using namespace std;
 
-class person
+// class person
+// {
+//     int A;
+//     static int B; // 有没有这句，结果都为4 ，因为静态成员变量不属于每个对象
+// };
+// int person::B = 0;
+
+// int main()
+// {
+//     person p;
+//     cout << sizeof(p) << endl; //4
+// }
+
+class Point
 {
-    int A;
-    static int B; // 有没有这句，结果都为4 ，因为静态成员变量不属于每个对象
+public:
+    Point &move(int dx, int dy)
+    {
+        x += dx;
+        y += dy;
+        cout << x << " " << y << endl;
+        return *this;
+    }
+
+private:
+    int x = 0;
+    int y = 0;
 };
-int person::B = 0;
 
 int main()
 {
-    person p;
-    cout << sizeof(p) << endl; //4
-} 
+    Point p;
+    p.move(1, 2).move(3, 4).move(5, 6); // 链式调用
+}
