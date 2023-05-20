@@ -638,28 +638,28 @@
 
 #include <iostream>
 using namespace std;
-class person
-{
-public:
-	void func1() const // 常函数
-	{
-        ;
-	// ...
-	}
+// class person
+// {
+// public:
+// 	void func1() const // 常函数
+// 	{
+//         ;
+// 	// ...
+// 	}
 	
-	void func2() // 普通函数
-	{
-        ;
-	// ...
-	}
-};
+// 	void func2() // 普通函数
+// 	{
+//         ;
+// 	// ...
+// 	}
+// };
 
-int main()
-{
-	const person p; // 常对象
-	p.func1(); // 对
-	p.func2(); // 错
-}
+// int main()
+// {
+// 	const person p; // 常对象
+// 	p.func1(); // 对
+// 	p.func2(); // 错
+// }
 
 // class person
 // {
@@ -681,3 +681,39 @@ int main()
 //     p.func2(); // 可以调用
 //     return 0;
 // }
+
+class Building
+{
+	//相当于一个函数声明，表示gay这个函数是类Building的好朋友，可以谁便访问任何成员，包括private的
+	friend void gay(Building * building); // 前面加上`friend`，后面加上`;`
+public:
+	Building()
+	{
+		this->m_sittingroom = "客厅";
+		this->m_bedroom = "卧室";
+	}
+
+	string m_sittingroom;
+
+private:
+	string m_bedroom;
+};
+
+// 全局函数
+void gay(Building * building)
+{
+	cout << "gay正在访问：" << building->m_sittingroom << endl;
+	cout << "gay正在访问：" << building->m_bedroom << endl;
+}
+
+int main()
+{
+	Building p;
+	
+	//法一：
+	// Building *ptr = &p;  
+	// gay(ptr);
+	
+	//法二：
+	gay(&p);
+} 
