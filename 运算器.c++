@@ -598,8 +598,7 @@
 //   return 0;
 // }
 
-#include <iostream>
-using namespace std;
+
 
 // class person
 // {
@@ -614,24 +613,71 @@ using namespace std;
 //     cout << sizeof(p) << endl; //4
 // }
 
-class Point
+// class Point
+// {
+// public:
+//     Point &move(int dx, int dy)
+//     {
+//         x += dx;
+//         y += dy;
+//         cout << x << " " << y << endl;
+//         return *this;
+//     }
+
+// private:
+//     int x = 0;
+//     int y = 0;
+// };
+
+// int main()
+// {
+//     Point p;
+//     p.move(1, 2).move(3, 4).move(5, 6); // 链式调用
+// }
+
+
+#include <iostream>
+using namespace std;
+class person
 {
 public:
-    Point &move(int dx, int dy)
-    {
-        x += dx;
-        y += dy;
-        cout << x << " " << y << endl;
-        return *this;
-    }
-
-private:
-    int x = 0;
-    int y = 0;
+	void func1() const // 常函数
+	{
+        ;
+	// ...
+	}
+	
+	void func2() // 普通函数
+	{
+        ;
+	// ...
+	}
 };
 
 int main()
 {
-    Point p;
-    p.move(1, 2).move(3, 4).move(5, 6); // 链式调用
+	const person p; // 常对象
+	p.func1(); // 对
+	p.func2(); // 错
 }
+
+// class person
+// {
+// public:
+//     void func1() const // 常成员函数
+//     {
+//         // ...
+//     }
+//     void func2() const // 常成员函数
+//     {
+//         // ...
+//     }
+// };
+
+// int main()
+// {
+//     const person p; // 常对象
+//     p.func1(); // 可以调用
+//     p.func2(); // 可以调用
+//     return 0;
+// }
