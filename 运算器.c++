@@ -636,8 +636,8 @@
 // }
 
 
-#include <iostream>
-using namespace std;
+// #include <iostream>
+// using namespace std;
 // class person
 // {
 // public:
@@ -682,38 +682,69 @@ using namespace std;
 //     return 0;
 // }
 
-class Building
-{
-	//相当于一个函数声明，表示gay这个函数是类Building的好朋友，可以谁便访问任何成员，包括private的
-	friend void gay(Building * building); // 前面加上`friend`，后面加上`;`
-public:
-	Building()
-	{
-		this->m_sittingroom = "客厅";
-		this->m_bedroom = "卧室";
-	}
+// #include<iostream>
+// using namespace std;
 
-	string m_sittingroom;
 
-private:
-	string m_bedroom;
-};
+// class Building
+// {
+// 	//相当于一个函数声明，表示gay这个函数是类Building的好朋友，可以谁便访问任何成员，包括private的
+// 	friend void gay(Building * building); // 前面加上`friend`，后面加上`;`
+// public:
+// 	Building()
+// 	{
+// 		this->m_sittingroom = "客厅";
+// 		this->m_bedroom = "卧室";
+// 	}
 
-// 全局函数
-void gay(Building * building)
-{
-	cout << "gay正在访问：" << building->m_sittingroom << endl;
-	cout << "gay正在访问：" << building->m_bedroom << endl;
+// 	string m_sittingroom;
+
+// private:
+// 	string m_bedroom;
+// };
+
+// // 全局函数
+// void gay(Building * building)
+// {
+// 	cout << "gay正在访问：" << building->m_sittingroom << endl;
+// 	cout << "gay正在访问：" << building->m_bedroom << endl;
+// }
+
+// int main()
+// {
+// 	Building p;
+	
+// 	//法一：
+// 	// Building *ptr = &p;  
+// 	// gay(ptr);
+	
+// 	//法二：
+// 	gay(&p);
+// } 
+
+// #include<iostream>
+// using namespace std;
+
+// int main()
+// {
+// 	int a,b;
+// 	cin >> a >> b;
+// 	int c = a+b;
+// 	c+=3;
+// 	cout << c << endl;
+
+// }
+
+#include <iostream>
+using namespace std;
+
+int main() {
+  int arr[] = {1, 2, 3, 4, 5};
+  int n = sizeof(arr) / sizeof(arr[0]);
+  int sum = 0;
+  for (int i = 0; i < n; i++) {
+    sum += arr[i];
+  }
+  cout << "The sum of the array is: " << sum << endl;
+  return 0;
 }
-
-int main()
-{
-	Building p;
-	
-	//法一：
-	// Building *ptr = &p;  
-	// gay(ptr);
-	
-	//法二：
-	gay(&p);
-} 
