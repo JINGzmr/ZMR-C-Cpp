@@ -722,29 +722,28 @@
 // 	gay(&p);
 // } 
 
-// #include<iostream>
-// using namespace std;
-
-// int main()
-// {
-// 	int a,b;
-// 	cin >> a >> b;
-// 	int c = a+b;
-// 	c+=3;
-// 	cout << c << endl;
-
-// }
-
-#include <iostream>
+#include<iostream>
 using namespace std;
 
-int main() {
-  int arr[] = {1, 2, 3, 4, 5};
-  int n = sizeof(arr) / sizeof(arr[0]);
-  int sum = 0;
-  for (int i = 0; i < n; i++) {
-    sum += arr[i];
-  }
-  cout << "The sum of the array is: " << sum << endl;
-  return 0;
+int main(int argc, char* argv[])
+{
+	int a,b;
+	cin >> a >> b;
+	int c = a+b;
+	c+=3;
+	cout << c << endl;
+
 }
+// #include <iostream>
+// using namespace std;
+
+// int main(int argc, char* argv[]) {
+//   int arr[] = {1, 2, 3, 4, 5};
+//   int n = sizeof(arr) / sizeof(arr[0]);
+//   int sum = 0;
+//   for (int i = 0; i < n; i++) {
+//     sum += arr[i];
+//   }
+//   cout << "The sum of the array is: " << sum << endl;
+//   return 0;
+// }
