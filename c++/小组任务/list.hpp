@@ -112,7 +112,7 @@ namespace ZMR
         // 重载==
         bool operator==(const iterator_ &t)
         {
-            if (node_ptr_ == t.node_ptr_)
+            if (this->node_ptr_ == t.node_ptr_)
             {
                 return true;
             }
@@ -124,7 +124,7 @@ namespace ZMR
         // 重载！=
         bool operator!=(const iterator_ &t)
         {
-            if (node_ptr_ == t.node_ptr_) //  这里也是用==
+            if (this->node_ptr_ == t.node_ptr_) //  这里也是用==
             {
                 return false;
             }
