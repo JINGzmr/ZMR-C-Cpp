@@ -722,18 +722,18 @@
 // 	gay(&p);
 // } 
 
-#include<iostream>
-using namespace std;
+// #include<iostream>
+// using namespace std;
 
-int main(int argc, char* argv[])
-{
-	int a,b;
-	cin >> a >> b;
-	int c = a+b;
-	c+=3;
-	cout << c << endl;
+// int main(int argc, char* argv[])
+// {
+// 	int a,b;
+// 	cin >> a >> b;
+// 	int c = a+b;
+// 	c+=3;
+// 	cout << c << endl;
 
-}
+// }
 // #include <iostream>
 // using namespace std;
 
@@ -747,3 +747,50 @@ int main(int argc, char* argv[])
 //   cout << "The sum of the array is: " << sum << endl;
 //   return 0;
 // }
+
+
+#include<iostream>
+using namespace std;
+
+// class Base
+// {
+// public:
+// 	int a;
+
+// protected:
+// 	int b;
+
+// private:
+// 	int c;	// 虽然son访问不到，但也会继承到son中
+// };
+
+// class son : public Base
+// {
+// public:
+// 	int d;
+// };
+
+// int main()
+// {
+// 	cout << sizeof(son) << endl;  //16 = a+b+c+d  即4（int）*4（abcd）=16
+// }
+
+
+class Base
+{
+public:
+	int a = 100;
+};
+
+class son : public Base
+{
+public:
+	int a = 200;
+};
+
+int main()
+{
+	son s;
+	cout << s.a << endl;
+	cout << s.Base::a << endl;
+}
