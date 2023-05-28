@@ -598,8 +598,6 @@
 //   return 0;
 // }
 
-
-
 // class person
 // {
 //     int A;
@@ -635,7 +633,6 @@
 //     p.move(1, 2).move(3, 4).move(5, 6); // 链式调用
 // }
 
-
 // #include <iostream>
 // using namespace std;
 // class person
@@ -646,7 +643,7 @@
 //         ;
 // 	// ...
 // 	}
-	
+
 // 	void func2() // 普通函数
 // 	{
 //         ;
@@ -685,7 +682,6 @@
 // #include<iostream>
 // using namespace std;
 
-
 // class Building
 // {
 // 	//相当于一个函数声明，表示gay这个函数是类Building的好朋友，可以谁便访问任何成员，包括private的
@@ -713,14 +709,14 @@
 // int main()
 // {
 // 	Building p;
-	
+
 // 	//法一：
-// 	// Building *ptr = &p;  
+// 	// Building *ptr = &p;
 // 	// gay(ptr);
-	
+
 // 	//法二：
 // 	gay(&p);
-// } 
+// }
 
 // #include<iostream>
 // using namespace std;
@@ -748,7 +744,6 @@
 //   return 0;
 // }
 
-
 // #include<iostream>
 // using namespace std;
 
@@ -775,7 +770,6 @@
 // 	cout << sizeof(son) << endl;  //16 = a+b+c+d  即4（int）*4（abcd）=16
 // }
 
-
 // class Base
 // {
 // public:
@@ -794,7 +788,6 @@
 // 	cout << s.a << endl;
 // 	cout << s.Base::a << endl;
 // }
-
 
 // #include<iostream>
 // using namespace std;
@@ -815,9 +808,8 @@
 // // class neicuntiao
 // // {
 // // public:
-// // 	virtual void cuncu() = 0;	
+// // 	virtual void cuncu() = 0;
 // // };
-
 
 // class intel_cpu:public CPU
 // {
@@ -834,9 +826,7 @@
 // 	ic.jisuan();
 // }
 
-
-
-#include<iostream>
+#include <iostream>
 using namespace std;
 
 class AbstractCalculator
@@ -848,23 +838,23 @@ public:
 	int b;
 };
 
-//加法
-class AddCalculator:public AbstractCalculator
+// 加法
+class AddCalculator : public AbstractCalculator
 {
 public:
 	int getresult()
 	{
-		return a+b;
+		return a + b;
 	}
 };
 
-//乘法
-class SubCalculator:public AbstractCalculator
+// 乘法
+class SubCalculator : public AbstractCalculator
 {
 public:
 	int getresult()
 	{
-		return a*b;
+		return a * b;
 	}
 };
 
@@ -872,13 +862,13 @@ int main()
 {
 	// 法一：本地变量
 	AddCalculator add;
-	AbstractCalculator *ptr1 ;
+	AbstractCalculator *ptr1;
 	ptr1 = &add;
-	ptr1->a=1;
-	ptr1->b=2;
+	ptr1->a = 1;
+	ptr1->b = 2;
 	cout << ptr1->getresult() << endl;
 
-	//法二：new到堆区
+	// 法二：new到堆区
 	AbstractCalculator *ptr2 = new SubCalculator;
 	ptr2->a = 1;
 	ptr2->b = 2;
