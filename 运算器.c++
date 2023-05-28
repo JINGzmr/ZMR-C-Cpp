@@ -749,8 +749,8 @@
 // }
 
 
-#include<iostream>
-using namespace std;
+// #include<iostream>
+// using namespace std;
 
 // class Base
 // {
@@ -776,21 +776,112 @@ using namespace std;
 // }
 
 
-class Base
+// class Base
+// {
+// public:
+// 	int a = 100;
+// };
+
+// class son : public Base
+// {
+// public:
+// 	int a = 200;
+// };
+
+// int main()
+// {
+// 	son s;
+// 	cout << s.a << endl;
+// 	cout << s.Base::a << endl;
+// }
+
+
+// #include<iostream>
+// using namespace std;
+// #include<string>
+
+// class CPU
+// {
+// public:
+// 	virtual void jisuan() = 0;
+// };
+
+// // class xianka
+// // {
+// // public:
+// // 	virtual void xianshi() = 0;
+// // };
+
+// // class neicuntiao
+// // {
+// // public:
+// // 	virtual void cuncu() = 0;	
+// // };
+
+
+// class intel_cpu:public CPU
+// {
+// public:
+// 	void jisuan()
+// 	{
+// 		cout << "intel cpu 在工作" << endl;
+// 	}
+// };
+
+// int main()
+// {
+// 	intel_cpu ic;
+// 	ic.jisuan();
+// }
+
+
+
+#include<iostream>
+using namespace std;
+
+class AbstractCalculator
 {
 public:
-	int a = 100;
+	virtual int getresult() = 0;
+
+	int a;
+	int b;
 };
 
-class son : public Base
+//加法
+class AddCalculator:public AbstractCalculator
 {
 public:
-	int a = 200;
+	int getresult()
+	{
+		return a+b;
+	}
+};
+
+//乘法
+class SubCalculator:public AbstractCalculator
+{
+public:
+	int getresult()
+	{
+		return a*b;
+	}
 };
 
 int main()
 {
-	son s;
-	cout << s.a << endl;
-	cout << s.Base::a << endl;
+	// 法一：本地变量
+	AddCalculator add;
+	AbstractCalculator *ptr1 ;
+	ptr1 = &add;
+	ptr1->a=1;
+	ptr1->b=2;
+	cout << ptr1->getresult() << endl;
+
+	//法二：new到堆区
+	AbstractCalculator *ptr2 = new SubCalculator;
+	ptr2->a = 1;
+	ptr2->b = 2;
+	cout << ptr2->getresult() << endl;
+	delete ptr2;
 }
