@@ -789,10 +789,6 @@
 // 	cout << s.Base::a << endl;
 // }
 
-
-
-
-
 // #include <iostream>
 // using namespace std;
 
@@ -803,7 +799,6 @@
 // 	{
 // 		return 0;
 // 	}
-	
 
 // 	int a;
 // 	int b;
@@ -847,7 +842,6 @@
 // 	delete ptr2;
 // }
 
-
 // #include<iostream>
 // using namespace std;
 
@@ -864,7 +858,7 @@
 // 	virtual void pour() = 0;
 
 // 	//加入辅料
-// 	virtual void put() = 0; 
+// 	virtual void put() = 0;
 
 // 	//制作饮品
 // 	void makedrink()	//抽象类也可以定义其他东西（包括不是虚函数的其他成员函数）
@@ -898,9 +892,8 @@
 // 		cout << "咖啡-导入杯中" << endl;
 // 	}
 
-
 // 	//加入辅料
-// 	virtual void put()	
+// 	virtual void put()
 // 	{
 // 		cout << "咖啡-加入辅料" << endl;
 // 	}
@@ -928,15 +921,13 @@
 // 		cout << "茶-导入杯中" << endl;
 // 	}
 
-
 // 	//加入辅料
-// 	virtual void put()	
+// 	virtual void put()
 // 	{
 // 		cout << "茶-加入辅料" << endl;
 // 	}
 
 // };
-
 
 // int main()
 // {
@@ -952,12 +943,10 @@
 // 	delete ptr2;
 // }
 
-
-#include<iostream>
+#include <iostream>
 using namespace std;
-#include<string>
 
-//抽象类
+// 抽象类
 class CPU
 {
 public:
@@ -976,34 +965,58 @@ public:
 	virtual void storage() = 0;
 };
 
-//电脑组装
-class computer
+// 电脑组装
+class Computer
 {
 public:
-	//构造函数
-	computer(CPU *c, VideoCard *v, Memory *m)
+	// 构造函数
+	Computer(CPU *c, VideoCard *v, Memory *m)
 	{
 		cpu = c;
 		videocard = v;
 		memory = m;
 	}
 
-	//成员函数
+	// 成员函数
 	void work()
 	{
+		//让零件工作起来，调用接口
 		cpu->caclulate();
 		videocard->display();
 		memory->storage();
 	}
 
+	//析构函数，释放3个电脑零件
+	~Computer()
+	{
+		if(cpu!=nullptr)
+		{
+			delete cpu;
+			cpu = nullptr;
+		}
+
+		if(videocard!=nullptr)
+		{
+			delete videocard;
+			videocard = nullptr;
+		}
+
+		if(memory!=nullptr)
+		{
+			delete memory;
+			memory = nullptr;
+		}
+	}
+
 private:
+	//三个电脑零件
 	CPU *cpu;
 	VideoCard *videocard;
 	Memory *memory;
 };
 
-//intel
-class intel_cpu:public CPU
+// intel
+class intel_cpu : public CPU
 {
 public:
 	void caclulate()
@@ -1012,7 +1025,7 @@ public:
 	}
 };
 
-class intel_VideoCard:public VideoCard
+class intel_VideoCard : public VideoCard
 {
 public:
 	void display()
@@ -1021,18 +1034,17 @@ public:
 	}
 };
 
-class intel_Memory:public Memory
+class intel_Memory : public Memory
 {
 public:
-	void storagey()
+	void storage()
 	{
 		cout << "intel storage 在工作" << endl;
 	}
 };
 
-
-//lenovo
-class lenovo_cpu:public CPU
+// lenovo
+class lenovo_cpu : public CPU
 {
 public:
 	void caclulate()
@@ -1041,7 +1053,7 @@ public:
 	}
 };
 
-class lenovo_VideoCard:public VideoCard
+class lenovo_VideoCard : public VideoCard
 {
 public:
 	void display()
@@ -1050,10 +1062,10 @@ public:
 	}
 };
 
-class lenovo_Memory:public Memory
+class lenovo_Memory : public Memory
 {
 public:
-	void storagey()
+	void storage()
 	{
 		cout << "lenovo storage 在工作" << endl;
 	}
@@ -1061,5 +1073,26 @@ public:
 
 int main()
 {
-	
+	//第一台电脑组装（法一）
+	//这三个电脑零件在Computer的析构函数里释放（也可以在下面的computer_ptr1后面释放）
+	CPU *intel_cpu_ptr = new intel_cpu;
+	VideoCard *intel_VideoCard_ptr = new intel_VideoCard;
+	Memory *intel_Memory_ptr = new intel_Memory;
+
+	Computer *computer_ptr1 = new Computer(intel_cpu_ptr, intel_VideoCard_ptr, intel_Memory_ptr);
+	computer_ptr1->work();
+	delete  computer_ptr1;
+
+	cout << "-------------------" << endl;
+	//第二台电脑组装（法二）
+	Computer *computer_ptr2 = new Computer(new lenovo_cpu, new lenovo_VideoCard, new lenovo_Memory);
+	computer_ptr2->work();
+	delete  computer_ptr2;
+
+	cout << "-------------------" << endl;
+	//第三台电脑组装（法二）
+	Computer *computer_ptr3 = new Computer(new lenovo_cpu, new intel_VideoCard, new intel_Memory);
+	computer_ptr3->work();
+	delete  computer_ptr3;
+
 }
