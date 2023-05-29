@@ -789,42 +789,9 @@
 // 	cout << s.Base::a << endl;
 // }
 
-// #include<iostream>
-// using namespace std;
-// #include<string>
 
-// class CPU
-// {
-// public:
-// 	virtual void jisuan() = 0;
-// };
 
-// // class xianka
-// // {
-// // public:
-// // 	virtual void xianshi() = 0;
-// // };
 
-// // class neicuntiao
-// // {
-// // public:
-// // 	virtual void cuncu() = 0;
-// // };
-
-// class intel_cpu:public CPU
-// {
-// public:
-// 	void jisuan()
-// 	{
-// 		cout << "intel cpu 在工作" << endl;
-// 	}
-// };
-
-// int main()
-// {
-// 	intel_cpu ic;
-// 	ic.jisuan();
-// }
 
 // #include <iostream>
 // using namespace std;
@@ -881,106 +848,218 @@
 // }
 
 
+// #include<iostream>
+// using namespace std;
+
+// class drink
+// {
+// public:
+// 	//煮水
+// 	virtual void boil() = 0;
+
+// 	//冲泡
+// 	virtual void brew() = 0;
+
+// 	//导入杯中
+// 	virtual void pour() = 0;
+
+// 	//加入辅料
+// 	virtual void put() = 0; 
+
+// 	//制作饮品
+// 	void makedrink()	//抽象类也可以定义其他东西（包括不是虚函数的其他成员函数）
+// 	{
+// 		boil();
+// 		brew();
+// 		pour();
+// 		put();
+// 	}
+
+// };
+
+// class coffee:public drink
+// {
+// public:
+// 	//煮水
+// 	virtual void boil()
+// 	{
+// 		cout << "咖啡-煮水" << endl;
+// 	}
+
+// 	//冲泡
+// 	virtual void brew()
+// 	{
+// 		cout << "咖啡-冲泡" << endl;
+// 	}
+
+// 	//导入杯中
+// 	virtual void pour()
+// 	{
+// 		cout << "咖啡-导入杯中" << endl;
+// 	}
+
+
+// 	//加入辅料
+// 	virtual void put()	
+// 	{
+// 		cout << "咖啡-加入辅料" << endl;
+// 	}
+
+// };
+
+// class tea:public drink
+// {
+// public:
+// 	//煮水
+// 	virtual void boil()
+// 	{
+// 		cout << "茶-煮水" << endl;
+// 	}
+
+// 	//冲泡
+// 	virtual void brew()
+// 	{
+// 		cout << "茶-冲泡" << endl;
+// 	}
+
+// 	//导入杯中
+// 	virtual void pour()
+// 	{
+// 		cout << "茶-导入杯中" << endl;
+// 	}
+
+
+// 	//加入辅料
+// 	virtual void put()	
+// 	{
+// 		cout << "茶-加入辅料" << endl;
+// 	}
+
+// };
+
+
+// int main()
+// {
+// 	drink *ptr1 = new coffee;
+// 	ptr1->makedrink();
+// 	delete ptr1;
+
+// 	drink *ptr2 = new tea;
+// 	ptr2->boil();
+// 	ptr2->brew();
+// 	ptr2->pour();
+// 	ptr2->put();
+// 	delete ptr2;
+// }
+
+
 #include<iostream>
 using namespace std;
+#include<string>
 
-class drink
+//抽象类
+class CPU
 {
 public:
-	//煮水
-	virtual void boil() = 0;
-
-	//冲泡
-	virtual void brew() = 0;
-
-	//导入杯中
-	virtual void pour() = 0;
-
-	//加入辅料
-	virtual void put() = 0; 
-
-	//制作饮品
-	void makedrink()	//抽象类也可以定义其他东西（包括不是虚函数的其他成员函数）
-	{
-		boil();
-		brew();
-		pour();
-		put();
-	}
-
+	virtual void caclulate() = 0;
 };
 
-class coffee:public drink
+class VideoCard
 {
 public:
-	//煮水
-	virtual void boil()
-	{
-		cout << "咖啡-煮水" << endl;
-	}
-
-	//冲泡
-	virtual void brew()
-	{
-		cout << "咖啡-冲泡" << endl;
-	}
-
-	//导入杯中
-	virtual void pour()
-	{
-		cout << "咖啡-导入杯中" << endl;
-	}
-
-
-	//加入辅料
-	virtual void put()	
-	{
-		cout << "咖啡-加入辅料" << endl;
-	}
-
+	virtual void display() = 0;
 };
 
-class tea:public drink
+class Memory
 {
 public:
-	//煮水
-	virtual void boil()
-	{
-		cout << "茶-煮水" << endl;
-	}
-
-	//冲泡
-	virtual void brew()
-	{
-		cout << "茶-冲泡" << endl;
-	}
-
-	//导入杯中
-	virtual void pour()
-	{
-		cout << "茶-导入杯中" << endl;
-	}
-
-
-	//加入辅料
-	virtual void put()	
-	{
-		cout << "茶-加入辅料" << endl;
-	}
-
+	virtual void storage() = 0;
 };
 
+//电脑组装
+class computer
+{
+public:
+	//构造函数
+	computer(CPU *c, VideoCard *v, Memory *m)
+	{
+		cpu = c;
+		videocard = v;
+		memory = m;
+	}
+
+	//成员函数
+	void work()
+	{
+		cpu->caclulate();
+		videocard->display();
+		memory->storage();
+	}
+
+private:
+	CPU *cpu;
+	VideoCard *videocard;
+	Memory *memory;
+};
+
+//intel
+class intel_cpu:public CPU
+{
+public:
+	void caclulate()
+	{
+		cout << "intel cpu 在工作" << endl;
+	}
+};
+
+class intel_VideoCard:public VideoCard
+{
+public:
+	void display()
+	{
+		cout << "intel display 在工作" << endl;
+	}
+};
+
+class intel_Memory:public Memory
+{
+public:
+	void storagey()
+	{
+		cout << "intel storage 在工作" << endl;
+	}
+};
+
+
+//lenovo
+class lenovo_cpu:public CPU
+{
+public:
+	void caclulate()
+	{
+		cout << "lenovo cpu 在工作" << endl;
+	}
+};
+
+class lenovo_VideoCard:public VideoCard
+{
+public:
+	void display()
+	{
+		cout << "lenovo display 在工作" << endl;
+	}
+};
+
+class lenovo_Memory:public Memory
+{
+public:
+	void storagey()
+	{
+		cout << "lenovo storage 在工作" << endl;
+	}
+};
 
 int main()
 {
-	drink *ptr1 = new coffee;
-	ptr1->makedrink();
-	delete ptr1;
-
-	drink *ptr2 = new tea;
-	ptr2->boil();
-	ptr2->brew();
-	ptr2->pour();
-	ptr2->put();
-	delete ptr2;
+	
 }
