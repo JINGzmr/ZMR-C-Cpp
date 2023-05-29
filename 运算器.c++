@@ -826,52 +826,161 @@
 // 	ic.jisuan();
 // }
 
-#include <iostream>
+// #include <iostream>
+// using namespace std;
+
+// class AbstractCalculator
+// {
+// public:
+// 	virtual int getresult()
+// 	{
+// 		return 0;
+// 	}
+	
+
+// 	int a;
+// 	int b;
+// };
+
+// // 加法
+// class AddCalculator : public AbstractCalculator
+// {
+// public:
+// 	int getresult()
+// 	{
+// 		return a + b;
+// 	}
+// };
+
+// // 乘法
+// class SubCalculator : public AbstractCalculator
+// {
+// public:
+// 	int getresult()
+// 	{
+// 		return a * b;
+// 	}
+// };
+
+// int main()
+// {
+// 	// 法一：本地变量
+// 	AddCalculator add;
+// 	AbstractCalculator *ptr1;
+// 	ptr1 = &add;
+// 	ptr1->a = 1;
+// 	ptr1->b = 2;
+// 	cout << ptr1->getresult() << endl;
+
+// 	// 法二：new到堆区
+// 	AbstractCalculator *ptr2 = new SubCalculator;
+// 	ptr2->a = 1;
+// 	ptr2->b = 2;
+// 	cout << ptr2->getresult() << endl;
+// 	delete ptr2;
+// }
+
+
+#include<iostream>
 using namespace std;
 
-class AbstractCalculator
+class drink
 {
 public:
-	virtual int getresult() = 0;
+	//煮水
+	virtual void boil() = 0;
 
-	int a;
-	int b;
-};
+	//冲泡
+	virtual void brew() = 0;
 
-// 加法
-class AddCalculator : public AbstractCalculator
-{
-public:
-	int getresult()
+	//导入杯中
+	virtual void pour() = 0;
+
+	//加入辅料
+	virtual void put() = 0; 
+
+	//制作饮品
+	void makedrink()	//抽象类也可以定义其他东西（包括不是虚函数的其他成员函数）
 	{
-		return a + b;
+		boil();
+		brew();
+		pour();
+		put();
 	}
+
 };
 
-// 乘法
-class SubCalculator : public AbstractCalculator
+class coffee:public drink
 {
 public:
-	int getresult()
+	//煮水
+	virtual void boil()
 	{
-		return a * b;
+		cout << "咖啡-煮水" << endl;
 	}
+
+	//冲泡
+	virtual void brew()
+	{
+		cout << "咖啡-冲泡" << endl;
+	}
+
+	//导入杯中
+	virtual void pour()
+	{
+		cout << "咖啡-导入杯中" << endl;
+	}
+
+
+	//加入辅料
+	virtual void put()	
+	{
+		cout << "咖啡-加入辅料" << endl;
+	}
+
 };
+
+class tea:public drink
+{
+public:
+	//煮水
+	virtual void boil()
+	{
+		cout << "茶-煮水" << endl;
+	}
+
+	//冲泡
+	virtual void brew()
+	{
+		cout << "茶-冲泡" << endl;
+	}
+
+	//导入杯中
+	virtual void pour()
+	{
+		cout << "茶-导入杯中" << endl;
+	}
+
+
+	//加入辅料
+	virtual void put()	
+	{
+		cout << "茶-加入辅料" << endl;
+	}
+
+};
+
 
 int main()
 {
-	// 法一：本地变量
-	AddCalculator add;
-	AbstractCalculator *ptr1;
-	ptr1 = &add;
-	ptr1->a = 1;
-	ptr1->b = 2;
-	cout << ptr1->getresult() << endl;
+	drink *ptr1 = new coffee;
+	ptr1->makedrink();
+	delete ptr1;
 
-	// 法二：new到堆区
-	AbstractCalculator *ptr2 = new SubCalculator;
-	ptr2->a = 1;
-	ptr2->b = 2;
-	cout << ptr2->getresult() << endl;
+	drink *ptr2 = new tea;
+	ptr2->boil();
+	ptr2->brew();
+	ptr2->pour();
+	ptr2->put();
 	delete ptr2;
 }
