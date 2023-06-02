@@ -7,9 +7,9 @@
 #include <locale.h>
 #include <langinfo.h>
 #include <stdio.h>
-#include <stdint.h>
+#include <stdint.h>    
 #include <iostream>
-#include <stdlib.h>
+#include <stdlib.h> 
 
 using namespace std;
 
