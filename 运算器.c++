@@ -943,156 +943,158 @@
 // 	delete ptr2;
 // }
 
-#include <iostream>
-using namespace std;
+// #include <iostream>
+// using namespace std;
 
-// 抽象类
-class CPU
-{
-public:
-	virtual void caclulate() = 0;
-};
+// // 抽象类
+// class CPU
+// {
+// public:
+// 	virtual void caclulate() = 0;
+// };
 
-class VideoCard
-{
-public:
-	virtual void display() = 0;
-};
+// class VideoCard
+// {
+// public:
+// 	virtual void display() = 0;
+// };
 
-class Memory
-{
-public:
-	virtual void storage() = 0;
-};
+// class Memory
+// {
+// public:
+// 	virtual void storage() = 0;
+// };
 
-// 电脑组装
-class Computer
-{
-public:
-	// 构造函数
-	Computer(CPU *c, VideoCard *v, Memory *m)
-	{
-		cpu = c;
-		videocard = v;
-		memory = m;
-	}
+// // 电脑组装
+// class Computer
+// {
+// public:
+// 	// 构造函数
+// 	Computer(CPU *c, VideoCard *v, Memory *m)
+// 	{
+// 		cpu = c;
+// 		videocard = v;
+// 		memory = m;
+// 	}
 
-	// 成员函数
-	void work()
-	{
-		//让零件工作起来，调用接口
-		cpu->caclulate();
-		videocard->display();
-		memory->storage();
-	}
+// 	// 成员函数
+// 	void work()
+// 	{
+// 		//让零件工作起来，调用接口
+// 		cpu->caclulate();
+// 		videocard->display();
+// 		memory->storage();
+// 	}
 
-	//析构函数，释放3个电脑零件
-	~Computer()
-	{
-		if(cpu!=nullptr)
-		{
-			delete cpu;
-			cpu = nullptr;
-		}
+// 	//析构函数，释放3个电脑零件
+// 	~Computer()
+// 	{
+// 		if(cpu!=nullptr)
+// 		{
+// 			delete cpu;
+// 			cpu = nullptr;
+// 		}
 
-		if(videocard!=nullptr)
-		{
-			delete videocard;
-			videocard = nullptr;
-		}
+// 		if(videocard!=nullptr)
+// 		{
+// 			delete videocard;
+// 			videocard = nullptr;
+// 		}
 
-		if(memory!=nullptr)
-		{
-			delete memory;
-			memory = nullptr;
-		}
-	}
+// 		if(memory!=nullptr)
+// 		{
+// 			delete memory;
+// 			memory = nullptr;
+// 		}
+// 	}
 
-private:
-	//三个电脑零件
-	CPU *cpu;
-	VideoCard *videocard;
-	Memory *memory;
-};
+// private:
+// 	//三个电脑零件
+// 	CPU *cpu;
+// 	VideoCard *videocard;
+// 	Memory *memory;
+// };
 
-// intel
-class intel_cpu : public CPU
-{
-public:
-	void caclulate()
-	{
-		cout << "intel cpu 在工作" << endl;
-	}
-};
+// // intel
+// class intel_cpu : public CPU
+// {
+// public:
+// 	void caclulate()
+// 	{
+// 		cout << "intel cpu 在工作" << endl;
+// 	}
+// };
 
-class intel_VideoCard : public VideoCard
-{
-public:
-	void display()
-	{
-		cout << "intel display 在工作" << endl;
-	}
-};
+// class intel_VideoCard : public VideoCard
+// {
+// public:
+// 	void display()
+// 	{
+// 		cout << "intel display 在工作" << endl;
+// 	}
+// };
 
-class intel_Memory : public Memory
-{
-public:
-	void storage()
-	{
-		cout << "intel storage 在工作" << endl;
-	}
-};
+// class intel_Memory : public Memory
+// {
+// public:
+// 	void storage()
+// 	{
+// 		cout << "intel storage 在工作" << endl;
+// 	}
+// };
 
-// lenovo
-class lenovo_cpu : public CPU
-{
-public:
-	void caclulate()
-	{
-		cout << "lenovo cpu 在工作" << endl;
-	}
-};
+// // lenovo
+// class lenovo_cpu : public CPU
+// {
+// public:
+// 	void caclulate()
+// 	{
+// 		cout << "lenovo cpu 在工作" << endl;
+// 	}
+// };
 
-class lenovo_VideoCard : public VideoCard
-{
-public:
-	void display()
-	{
-		cout << "lenovo display 在工作" << endl;
-	}
-};
+// class lenovo_VideoCard : public VideoCard
+// {
+// public:
+// 	void display()
+// 	{
+// 		cout << "lenovo display 在工作" << endl;
+// 	}
+// };
 
-class lenovo_Memory : public Memory
-{
-public:
-	void storage()
-	{
-		cout << "lenovo storage 在工作" << endl;
-	}
-};
+// class lenovo_Memory : public Memory
+// {
+// public:
+// 	void storage()
+// 	{
+// 		cout << "lenovo storage 在工作" << endl;
+// 	}
+// };
 
-int main()
-{
-	//第一台电脑组装（法一）
-	//这三个电脑零件在Computer的析构函数里释放（也可以在下面的computer_ptr1后面释放）
-	CPU *intel_cpu_ptr = new intel_cpu;
-	VideoCard *intel_VideoCard_ptr = new intel_VideoCard;
-	Memory *intel_Memory_ptr = new intel_Memory;
+// int main()
+// {
+// 	//第一台电脑组装（法一）
+// 	//这三个电脑零件在Computer的析构函数里释放（也可以在下面的computer_ptr1后面释放）
+// 	CPU *intel_cpu_ptr = new intel_cpu;
+// 	VideoCard *intel_VideoCard_ptr = new intel_VideoCard;
+// 	Memory *intel_Memory_ptr = new intel_Memory;
 
-	Computer *computer_ptr1 = new Computer(intel_cpu_ptr, intel_VideoCard_ptr, intel_Memory_ptr);
-	computer_ptr1->work();
-	delete  computer_ptr1;
+// 	Computer *computer_ptr1 = new Computer(intel_cpu_ptr, intel_VideoCard_ptr, intel_Memory_ptr);
+// 	computer_ptr1->work();
+// 	delete  computer_ptr1;
 
-	cout << "-------------------" << endl;
-	//第二台电脑组装（法二）
-	Computer *computer_ptr2 = new Computer(new lenovo_cpu, new lenovo_VideoCard, new lenovo_Memory);
-	computer_ptr2->work();
-	delete  computer_ptr2;
+// 	cout << "-------------------" << endl;
+// 	//第二台电脑组装（法二）
+// 	Computer *computer_ptr2 = new Computer(new lenovo_cpu, new lenovo_VideoCard, new lenovo_Memory);
+// 	computer_ptr2->work();
+// 	delete  computer_ptr2;
 
-	cout << "-------------------" << endl;
-	//第三台电脑组装（法二）
-	Computer *computer_ptr3 = new Computer(new lenovo_cpu, new intel_VideoCard, new intel_Memory);
-	computer_ptr3->work();
-	delete  computer_ptr3;
+// 	cout << "-------------------" << endl;
+// 	//第三台电脑组装（法二）
+// 	Computer *computer_ptr3 = new Computer(new lenovo_cpu, new intel_VideoCard, new intel_Memory);
+// 	computer_ptr3->work();
+// 	delete  computer_ptr3;
 
-}
+// }
+
+
