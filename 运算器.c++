@@ -1110,10 +1110,9 @@ private:
 
 void func()
 {
-    // Base b;
-    // std::cout << b.a << endl;
+    Base b;
+    std::cout << b.a << endl;
 
-    std::cout << Base::a << endl;
 }
 
 int main()
