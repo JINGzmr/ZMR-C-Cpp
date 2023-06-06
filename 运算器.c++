@@ -1098,3 +1098,25 @@
 // }
 
 
+#include<iostream>
+using namespace std;
+
+class Base
+{
+friend void func();
+private:
+    int a = 6;
+};
+
+void func()
+{
+    // Base b;
+    // std::cout << b.a << endl;
+
+    std::cout << Base::a << endl;
+}
+
+int main()
+{
+    func();
+}
