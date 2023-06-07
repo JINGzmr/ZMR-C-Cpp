@@ -1119,25 +1119,27 @@
 //     func();
 // }
 
-#include <iostream>
-using namespace std;
+// #include <iostream>
+// using namespace std;
 
-template <typename T>
-void func(T &a, T &b)
-{
-    T temp = a;
-    a = b;
-    b = temp;
-};
+// template <typename T>
+// void func(T &a, T &b)
+// {
+//     T temp = a;
+//     a = b;
+//     b = temp;
+// };
 
-int main()
-{
-    int a = 10;
-    int b = 20;
+// int main()
+// {
+//     int a = 10;
+//     int b = 20;
 
-    func(a, b); //自动类型推导
-    cout << a << b << endl;
+//     func(a, b); // 自动类型推导
+//     cout << a << b << endl;
 
-    func<int>(a, b); //
-    cout << a << b << endl;
-}
+//     func<int>(a, b); // 显示指定类型
+//     cout << a << b << endl;
+// }
+
+
