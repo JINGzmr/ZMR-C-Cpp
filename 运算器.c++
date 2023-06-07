@@ -1097,25 +1097,47 @@
 
 // }
 
+// #include<iostream>
+// using namespace std;
 
-#include<iostream>
+// class Base
+// {
+// friend void func();
+// private:
+//     int a = 6;
+// };
+
+// void func()
+// {
+//     Base b;
+//     std::cout << b.a << endl;
+
+// }
+
+// int main()
+// {
+//     func();
+// }
+
+#include <iostream>
 using namespace std;
 
-class Base
+template <typename T>
+void func(T &a, T &b)
 {
-friend void func();
-private:
-    int a = 6;
+    T temp = a;
+    a = b;
+    b = temp;
 };
-
-void func()
-{
-    Base b;
-    std::cout << b.a << endl;
-
-}
 
 int main()
 {
-    func();
+    int a = 10;
+    int b = 20;
+
+    func(a, b); //自动类型推导
+    cout << a << b << endl;
+
+    func<int>(a, b); //
+    cout << a << b << endl;
 }
