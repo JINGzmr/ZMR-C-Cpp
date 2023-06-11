@@ -1142,46 +1142,73 @@
 //     cout << a << b << endl;
 // }
 
-#include <iostream>
-#include <cstring>
+// #include <iostream>
+// #include <cstring>
+// using namespace std;
+
+// template <class T>
+// void My_swap(T &a, T &b)
+// {
+//     T temp = a;
+//     a = b;
+//     b = temp;
+// }
+
+// // 升序
+// template <class T>
+// void My_sort(T arr[], int len)
+// {
+//     for (int i = 0; i < len - 1; i++)
+//     {
+//         for (int j = 0; j < len - 1 - i; j++)
+//         {
+//             if (arr[j] > arr[j + 1])
+//             {
+//                 My_swap(arr[j], arr[j + 1]);
+//             }
+//         }
+//     }
+// }
+
+// int main()
+// {
+//     //排序字符串
+//     char arr[] = "adbce";
+//     My_sort(arr, strlen(arr));
+//     puts(arr);
+
+//     //排序int数组
+//     int arr1[] = {7, 5, 1, 3, 9};
+//     My_sort(arr1, sizeof(arr1)/sizeof(int));
+//     for (int i = 0; i < sizeof(arr1)/sizeof(int); i++)
+//     {
+//         printf("%d", arr1[i]);
+//     }
+// }
+
+#include<iostream>
 using namespace std;
 
-template <class T>
-void My_swap(T &a, T &b)
+template<class T>
+class Base
 {
-    T temp = a;
-    a = b;
-    b = temp;
-}
-
-// 升序
-template <class T>
-void My_sort(T arr[], int len)
-{
-    for (int i = 0; i < len - 1; i++)
+public:
+    void func()
     {
-        for (int j = 0; j < len - 1 - i; j++)
-        {
-            if (arr[j] > arr[j + 1])
-            {
-                My_swap(arr[j], arr[j + 1]);
-            }
-        }
+        cout << top << endl;
     }
-}
+
+    Base(T a)
+    {
+        top = a;
+    }
+
+private:
+    T top;
+};
 
 int main()
 {
-    //排序字符串
-    char arr[] = "adbce";
-    My_sort(arr, strlen(arr));
-    puts(arr);
-
-    //排序int数组
-    int arr1[] = {7, 5, 1, 3, 9};
-    My_sort(arr1, sizeof(arr1)/sizeof(int));
-    for (int i = 0; i < sizeof(arr1)/sizeof(int); i++)
-    {
-        printf("%d", arr1[i]);
-    }
+    Base p = 10;
+    p.func();
 }
