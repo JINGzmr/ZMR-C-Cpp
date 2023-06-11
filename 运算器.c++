@@ -1198,7 +1198,7 @@ public:
         cout << top << endl;
     }
 
-    Base(T a)
+    Base(const T& a)
     {
         top = a;
     }
@@ -1209,6 +1209,6 @@ private:
 
 int main()
 {
-    Base p = 10;
+    Base<int> p(10);
     p.func();
 }
