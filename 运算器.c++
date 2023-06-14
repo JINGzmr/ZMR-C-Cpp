@@ -1186,29 +1186,29 @@
 //     }
 // }
 
-#include<iostream>
-using namespace std;
+// #include<iostream>
+// using namespace std;
+ 
+// template<class T>
+// class Base
+// {
+// public:
+//     void func()
+//     {
+//         cout << top << endl;
+//     }
 
-template<class T>
-class Base
-{
-public:
-    void func()
-    {
-        cout << top << endl;
-    }
+//     Base(const T& a)
+//     {
+//         top = a;
+//     }
 
-    Base(const T& a)
-    {
-        top = a;
-    }
+// private:
+//     T top;
+// };
 
-private:
-    T top;
-};
-
-int main()
-{
-    Base<int> p(10);
-    p.func();
-}
+// int main()
+// {
+//     Base<int> p(10);
+//     p.func();
+// }
