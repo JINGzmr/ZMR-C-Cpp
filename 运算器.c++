@@ -1212,3 +1212,13 @@
 //     Base<int> p(10);
 //     p.func();
 // }
+
+#include<iostream>
+using namespace std;
+
+
+
+int main()
+{
+
+}
