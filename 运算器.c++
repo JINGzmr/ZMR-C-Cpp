@@ -1216,21 +1216,22 @@
 
 
 
-#include<iostream>
-using namespace std;
+// #include<iostream>
+// using namespace std;
 
-class Base
-{
-public:
-    Base()
-    {
-        printf("this is fun()");
-    }
+// class Base
+// {
+// public:
+//     Base()
+//     {
+//         printf("this is fun()");
+//     }
 
-};
+// };
 
-int main()
-{
-    Base b;
+// int main()
+// {
+//     Base b;
     
-}
+// }
+
