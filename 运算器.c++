@@ -1235,6 +1235,83 @@
     
 // }
 
+#include <iostream>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <unistd.h>
+#include <string.h>
 
+using namespace std;
+
+int main() {
+    // 创建Socket
+    int server_socket = socket(AF_INET, SOCK_STREAM, 0); 
+    if (server_socket == -1) {
+        cout << "Error: Failed to create socket!" << endl;
+        return -1;
+    }
+
+    // 设置服务器地址和端口号
+    struct sockaddr_in server_addr;
+    memset(&server_addr, 0, sizeof(server_addr));
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_port = htons(8888);
+    server_addr.sin_addr.s_addr = INADDR_ANY;
+
+    // 绑定Socket到地址和端口号
+    int ret = bind(server_socket, (struct sockaddr*)&server_addr, sizeof(server_addr));
+    if (ret == -1) {
+        cout << "Error: Failed to bind socket to address and port!" << endl;
+        close(server_socket);
+        return -1;
+    }
+
+    // 监听Socket
+    ret = listen(server_socket, 5);
+    if (ret == -1) {
+        cout << "Error: Failed to listen on socket!" << endl;
+        close(server_socket);
+        return -1;
+    }
+
+    // 等待客户端连接
+    struct sockaddr_in client_addr;
+    socklen_t client_addr_len = sizeof(client_addr);
+    int client_socket = accept(server_socket, (struct sockaddr*)&client_addr, &client_addr_len);
+    if (client_socket == -1) {
+        cout << "Error: Failed to accept client connection!" << endl;
+        close(server_socket);
+        return -1;
+    }
+
+    // 接收客户端数据
+    char buffer[1024] = {0};
+    ret = recv(client_socket, buffer, sizeof(buffer), 0);
+    if (ret == -1) {
+        cout << "Error: Failed to receive data from client!" << endl;
+        close(client_socket);
+        close(server_socket);
+        return -1;
+    }
+
+    cout << "Received data from client: " << buffer << endl;
+
+    // 发送响应数据到客户端
+    const char* data = "Hello, client!";
+    ret = send(client_socket, data, strlen(data), 0);
+    if (ret == -1) {
+        cout << "Error: Failed to send response data to client!" << endl;
+        close(client_socket);
+        close(server_socket);
+        return -1;
+    }
+
+    // 关闭Socket连接
+    close(client_socket);
+    close(server_socket);
+
+    return 0;
+}
 
 
