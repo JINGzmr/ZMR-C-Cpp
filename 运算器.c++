@@ -1188,7 +1188,7 @@
 
 // #include<iostream>
 // using namespace std;
- 
+
 // template<class T>
 // class Base
 // {
@@ -1213,9 +1213,6 @@
 //     p.func();
 // }
 
-
-
-
 // #include<iostream>
 // using namespace std;
 
@@ -1232,7 +1229,7 @@
 // int main()
 // {
 //     Base b;
-    
+
 // }
 
 #include <iostream>
@@ -1244,10 +1241,17 @@
 
 using namespace std;
 
-int main() {
+int main()
+{
     // 创建Socket
-    int server_socket = socket(AF_INET, SOCK_STREAM, 0); 
-    if (server_socket == -1) {
+    // 第一个参数：AF_INET表示是ipv4，ipv6是AF_INET6；
+    // 第二个参数：传输层协议 这里是流式传输协议（一般tcp用）；
+    // 第三个参数：0表示采用流式传输协议中的tcp协议
+    // 返回值：失败返回-1
+    int server_socket = socket(AF_INET, SOCK_STREAM, 0);
+
+    if (server_socket == -1)
+    {
         cout << "Error: Failed to create socket!" << endl;
         return -1;
     }
@@ -1260,8 +1264,13 @@ int main() {
     server_addr.sin_addr.s_addr = INADDR_ANY;
 
     // 绑定Socket到地址和端口号
-    int ret = bind(server_socket, (struct sockaddr*)&server_addr, sizeof(server_addr));
-    if (ret == -1) {
+    // 第一个参数：用于监听的文件描述符，由socket（）返回值得到
+    // 第二个参数：结构体，存的是本地的ip及端口（一定是的大端的-->网络字节序）
+    // 第三个参数：结构体的大小 
+    // 返回值:失败返回-1
+    int ret = bind(server_socket, (struct sockaddr *)&server_addr, sizeof(server_addr));
+    if (ret == -1)
+    {
         cout << "Error: Failed to bind socket to address and port!" << endl;
         close(server_socket);
         return -1;
@@ -1269,7 +1278,8 @@ int main() {
 
     // 监听Socket
     ret = listen(server_socket, 5);
-    if (ret == -1) {
+    if (ret == -1)
+    {
         cout << "Error: Failed to listen on socket!" << endl;
         close(server_socket);
         return -1;
@@ -1278,8 +1288,9 @@ int main() {
     // 等待客户端连接
     struct sockaddr_in client_addr;
     socklen_t client_addr_len = sizeof(client_addr);
-    int client_socket = accept(server_socket, (struct sockaddr*)&client_addr, &client_addr_len);
-    if (client_socket == -1) {
+    int client_socket = accept(server_socket, (struct sockaddr *)&client_addr, &client_addr_len);
+    if (client_socket == -1)
+    {
         cout << "Error: Failed to accept client connection!" << endl;
         close(server_socket);
         return -1;
@@ -1288,7 +1299,8 @@ int main() {
     // 接收客户端数据
     char buffer[1024] = {0};
     ret = recv(client_socket, buffer, sizeof(buffer), 0);
-    if (ret == -1) {
+    if (ret == -1)
+    {
         cout << "Error: Failed to receive data from client!" << endl;
         close(client_socket);
         close(server_socket);
@@ -1298,9 +1310,10 @@ int main() {
     cout << "Received data from client: " << buffer << endl;
 
     // 发送响应数据到客户端
-    const char* data = "Hello, client!";
+    const char *data = "Hello, client!";
     ret = send(client_socket, data, strlen(data), 0);
-    if (ret == -1) {
+    if (ret == -1)
+    {
         cout << "Error: Failed to send response data to client!" << endl;
         close(client_socket);
         close(server_socket);
@@ -1313,5 +1326,3 @@ int main() {
 
     return 0;
 }
-
-
