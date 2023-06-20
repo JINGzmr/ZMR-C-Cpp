@@ -1279,6 +1279,7 @@ int main()
     // 监听Socket
     // 第一个参数：用于监听的文件描述符，由socket（）返回值得到，并由bind函数做了绑定
     // 第二个参数：一次性能够检测到客户端连接的数量，最大为128（该参数的大小 和 客户端与服务器之间最多可以建立多少个连接 没有关系）
+    // 返回值：失败返回-1  
     // listen（）内部维护了一个任务队列，最多可以存储128个请求
     ret = listen(server_socket, 5); 
     if (ret == -1)
@@ -1291,6 +1292,10 @@ int main()
     // 等待客户端连接
     struct sockaddr_in client_addr;
     socklen_t client_addr_len = sizeof(client_addr);
+    // 第一个参数：文件描述符
+    // 第二个参数：结构体（不用初始化，调用成功后，里面存的是 发起连接请求的 客户端的 ip及端口），可以理解为accept（）函数的传出参数
+    // 第三个参数：结构体大小
+    // 返回值：用于通信的文件描述符，失败返回-1  
     int client_socket = accept(server_socket, (struct sockaddr *)&client_addr, &client_addr_len);
     if (client_socket == -1)
     { 
@@ -1328,4 +1333,72 @@ int main()
     close(server_socket);
 
     return 0;
+}
+
+
+
+
+#include <iostream>
+#include <string>
+#include <cstring>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+
+using namespace std;
+
+const int PORT = 8888;
+const char* SERVER_IP = "127.0.0.1";
+
+int main() {
+    // 创建一个TCP连接对象
+    int client_socket = socket(AF_INET, SOCK_STREAM, 0);
+    if (client_socket < 0) {
+        perror("socket creation failed");
+        return EXIT_FAILURE;
+    }
+
+    // 客户端连接的IP和端口号
+    struct sockaddr_in server_address;
+    memset(&server_address, 0, sizeof(server_address));
+    server_address.sin_family = AF_INET;
+    server_address.sin_port = htons(PORT);
+    if (inet_pton(AF_INET, SERVER_IP, &server_address.sin_addr) <= 0) {
+        perror("invalid address");
+        return EXIT_FAILURE;
+    }
+
+    // 连接服务器
+    // 第一个参数：通信的套接字
+    // 第二个参数：结构体(要另外对里面的成员进行初始化，如上几行代码)，服务器绑定的是什么ip和端口，这里就初始化相同的数据
+    // 第三个参数：结构体的大小
+    // 返回值：失败返回-1
+    int connect_result = connect(client_socket, (struct sockaddr*)&server_address, sizeof(server_address));
+    if (connect_result == -1) {
+        perror("connection failed");
+        return EXIT_FAILURE;
+    }
+
+    // 发送数据
+    string message = "Hello, server!";
+    if (send(client_socket, message.c_str(), message.length(), 0) < 0) {
+        perror("send failed");
+        return EXIT_FAILURE;
+    }
+
+    // 接收数据
+    char buffer[1024] = {0};
+    int bytes_received = recv(client_socket, buffer, 1024, 0);
+    if (bytes_received < 0) {
+        perror("receive failed");
+        return EXIT_FAILURE;
+    }
+
+    // 处理接收到的数据
+    cout << "Received from server: " << buffer << endl;
+
+    // 关闭连接
+    close(client_socket);
+
+    return EXIT_SUCCESS;
 }
