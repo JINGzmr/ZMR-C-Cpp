@@ -1265,7 +1265,7 @@ int main()
 
     // 绑定Socket到地址和端口号
     // 第一个参数：用于监听的文件描述符，由socket（）返回值得到
-    // 第二个参数：结构体，存的是本地的ip及端口（一定是的大端的-->网络字节序）
+    // 第二个参数：结构体(要另外对里面的成员进行初始化，如上几行代码)，存的是本地的ip及端口（一定是大端的-->网络字节序）
     // 第三个参数：结构体的大小 
     // 返回值:失败返回-1
     int ret = bind(server_socket, (struct sockaddr *)&server_addr, sizeof(server_addr));
@@ -1277,7 +1277,10 @@ int main()
     }
 
     // 监听Socket
-    ret = listen(server_socket, 5);
+    // 第一个参数：用于监听的文件描述符，由socket（）返回值得到，并由bind函数做了绑定
+    // 第二个参数：一次性能够检测到客户端连接的数量，最大为128（该参数的大小 和 客户端与服务器之间最多可以建立多少个连接 没有关系）
+    // listen（）内部维护了一个任务队列，最多可以存储128个请求
+    ret = listen(server_socket, 5); 
     if (ret == -1)
     {
         cout << "Error: Failed to listen on socket!" << endl;
@@ -1290,7 +1293,7 @@ int main()
     socklen_t client_addr_len = sizeof(client_addr);
     int client_socket = accept(server_socket, (struct sockaddr *)&client_addr, &client_addr_len);
     if (client_socket == -1)
-    {
+    { 
         cout << "Error: Failed to accept client connection!" << endl;
         close(server_socket);
         return -1;
