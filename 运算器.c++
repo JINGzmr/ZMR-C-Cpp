@@ -1296,6 +1296,7 @@ int main()
     // 第二个参数：结构体（不用初始化，调用成功后，里面存的是 发起连接请求的 客户端的 ip及端口），可以理解为accept（）函数的传出参数
     // 第三个参数：结构体大小
     // 返回值：用于通信的文件描述符，失败返回-1  
+    // 阻塞，直到有客户端连接connect
     int client_socket = accept(server_socket, (struct sockaddr *)&client_addr, &client_addr_len);
     if (client_socket == -1)
     { 
@@ -1369,10 +1370,12 @@ int main() {
     }
 
     // 连接服务器
-    // 第一个参数：通信的套接字
+    // 第一个参数：用于通信的文件描述符
     // 第二个参数：结构体(要另外对里面的成员进行初始化，如上几行代码)，服务器绑定的是什么ip和端口，这里就初始化相同的数据
     // 第三个参数：结构体的大小
     // 返回值：失败返回-1
+    // 注：客户端不用bind（）对ip和端口进行绑定，因为客户端会随机绑定一个ip和端口，服务器中accept（）得到的ip和端口便是客户端随机绑定的
+    // （因为服务器不会主动连接客户端）
     int connect_result = connect(client_socket, (struct sockaddr*)&server_address, sizeof(server_address));
     if (connect_result == -1) {
         perror("connection failed");
