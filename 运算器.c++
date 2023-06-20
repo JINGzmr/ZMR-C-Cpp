@@ -1261,7 +1261,7 @@ int main()
     memset(&server_addr, 0, sizeof(server_addr));
     server_addr.sin_family = AF_INET;
     server_addr.sin_port = htons(8888);
-    server_addr.sin_addr.s_addr = INADDR_ANY;
+    server_addr.sin_addr.s_addr = INADDR_ANY; 
 
     // 绑定Socket到地址和端口号
     // 第一个参数：用于监听的文件描述符，由socket（）返回值得到
