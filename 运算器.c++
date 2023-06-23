@@ -1330,6 +1330,8 @@ int main()
     }
 
     // 关闭Socket连接
+    // 参数:要关闭的套接字对应的文件描述符
+    // 返回值：失败返回-1
     close(client_socket);
     close(server_socket);
 
@@ -1382,14 +1384,24 @@ int main() {
         return EXIT_FAILURE;
     }
 
-    // 发送数据
+    // 发送数据(write() or send())
+    // 第一个参数：用于通信的文件描述符
+    // 第二个参数：指针，指向一块内存，存的是要发送的数据
+    // 第三个参数：发送数据的大小
+    // 第四个参数：一般为0
+    // 返回值: >0 实际的发送的字节数,一般等于第三个参数;  =-1 发送失败
     string message = "Hello, server!";
     if (send(client_socket, message.c_str(), message.length(), 0) < 0) {
         perror("send failed");
         return EXIT_FAILURE;
     }
 
-    // 接收数据
+    // 接收数据（read() or recv()）
+    // 第一个参数：用于通信的文件描述符
+    // 第二个参数：指针，指向一块内存，用于存储接收的数据
+    // 第三个参数：内存的最大容量
+    // 第四个参数：一般为0
+    // 返回值：>0 实际接收的字节数； =0 对方断开连接；  =-1 接收数据失败
     char buffer[1024] = {0};
     int bytes_received = recv(client_socket, buffer, 1024, 0);
     if (bytes_received < 0) {
@@ -1401,6 +1413,8 @@ int main() {
     cout << "Received from server: " << buffer << endl;
 
     // 关闭连接
+    // 参数:要关闭的套接字对应的文件描述符
+    // 返回值：失败返回-1
     close(client_socket);
 
     return EXIT_SUCCESS;
