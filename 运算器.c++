@@ -1295,7 +1295,7 @@ int main()
     // 第一个参数：文件描述符
     // 第二个参数：结构体（不用初始化，调用成功后，里面存的是 发起连接请求的 客户端的 ip及端口），可以理解为accept（）函数的传出参数
     // 第三个参数：结构体大小
-    // 返回值：用于通信的文件描述符，失败返回-1  
+    // 返回值：成功 得到用于通信的文件描述符，失败返回-1  
     // 阻塞，直到有客户端连接connect
     int client_socket = accept(server_socket, (struct sockaddr *)&client_addr, &client_addr_len);
     if (client_socket == -1)
