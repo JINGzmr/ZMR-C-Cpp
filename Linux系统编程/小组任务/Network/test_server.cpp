@@ -201,17 +201,17 @@ int main() {
 
     while(1)
     {
-        int data_size;
+        int size_;
         int size;
         char buf[10240];
         
-        if(recv(client_socket,&data_size,sizeof(int),0)==-1){
+        if(recv(client_socket,&size_,sizeof(int),0)==-1){
             perror("recv failed");
             return EXIT_FAILURE;
         }
 
         memset(buf,0,sizeof(buf));
-        size = ntohl(data_size);
+        size = ntohl(size_);
         
         if(recv(client_socket,buf,size,0)==-1){
             perror("recv failed");
