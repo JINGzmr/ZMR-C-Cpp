@@ -201,25 +201,25 @@ int main() {
 
     while(1)
     {
-        char buffer[10240];
-        int datasize;
-
-        if(recv(client_socket,&datasize,sizeof(int),0)==-1){
-            perror("recv failed");
-            return EXIT_FAILURE;
-        }
-
-        int size = ntohl(datasize);
-
-        memset(buffer,0,sizeof(buffer));
+        int data_size;
+        int size;
+        char buf[10240];
         
-        if(recv(client_socket,buffer,size,0)==-1){
+        if(recv(client_socket,&data_size,sizeof(int),0)==-1){
             perror("recv failed");
             return EXIT_FAILURE;
         }
 
-        printf("%s\n",buffer);
-        std::string str(buffer);
+        memset(buf,0,sizeof(buf));
+        size = ntohl(data_size);
+        
+        if(recv(client_socket,buf,size,0)==-1){
+            perror("recv failed");
+            return EXIT_FAILURE;
+        }
+
+        printf("%s\n",buf);
+        std::string str(buf);
         test->commit(std::move(str));
     }
 
