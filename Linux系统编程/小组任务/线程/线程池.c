@@ -110,7 +110,6 @@ void *worker_thread(void *arg)
     pthread_exit(NULL);
 }
 
-
 // 初始化线程池
 void thread_pool_init(ThreadPool *pool)
 {
