@@ -292,7 +292,7 @@ int main() {
 
         printf("%s\n",str.c_str());
     }
-
+ 
     // 关闭套接字
     close(client_socket);
 }
