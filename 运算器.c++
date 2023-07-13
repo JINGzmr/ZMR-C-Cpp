@@ -1232,190 +1232,190 @@
 
 // }
 
-#include <iostream>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <unistd.h>
-#include <string.h>
+// #include <iostream>
+// #include <sys/types.h>
+// #include <sys/socket.h>
+// #include <netinet/in.h>
+// #include <unistd.h>
+// #include <string.h>
 
-using namespace std;
+// using namespace std;
 
-int main()
-{
-    // 创建Socket
-    // 第一个参数：AF_INET表示是ipv4，ipv6是AF_INET6；
-    // 第二个参数：传输层协议 这里是流式传输协议（一般tcp用）；
-    // 第三个参数：0表示采用流式传输协议中的tcp协议
-    // 返回值：失败返回-1
-    int server_socket = socket(AF_INET, SOCK_STREAM, 0);
+// int main()
+// {
+//     // 创建Socket
+//     // 第一个参数：AF_INET表示是ipv4，ipv6是AF_INET6；
+//     // 第二个参数：传输层协议 这里是流式传输协议（一般tcp用）；
+//     // 第三个参数：0表示采用流式传输协议中的tcp协议
+//     // 返回值：失败返回-1
+//     int server_socket = socket(AF_INET, SOCK_STREAM, 0);
 
-    if (server_socket == -1)
-    {
-        cout << "Error: Failed to create socket!" << endl;
-        return -1;
-    }
+//     if (server_socket == -1)
+//     {
+//         cout << "Error: Failed to create socket!" << endl;
+//         return -1;
+//     }
 
-    // 设置服务器地址和端口号
-    struct sockaddr_in server_addr;
-    memset(&server_addr, 0, sizeof(server_addr));
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_port = htons(8888);
-    server_addr.sin_addr.s_addr = INADDR_ANY; 
+//     // 设置服务器地址和端口号
+//     struct sockaddr_in server_addr;
+//     memset(&server_addr, 0, sizeof(server_addr));
+//     server_addr.sin_family = AF_INET;
+//     server_addr.sin_port = htons(8888);
+//     server_addr.sin_addr.s_addr = INADDR_ANY; 
 
-    // 绑定Socket到地址和端口号
-    // 第一个参数：用于监听的文件描述符，由socket（）返回值得到
-    // 第二个参数：结构体(要另外对里面的成员进行初始化，如上几行代码)，存的是本地的ip及端口（一定是大端的-->网络字节序）
-    // 第三个参数：结构体的大小 
-    // 返回值:失败返回-1
-    int ret = bind(server_socket, (struct sockaddr *)&server_addr, sizeof(server_addr));
-    if (ret == -1)
-    {
-        cout << "Error: Failed to bind socket to address and port!" << endl;
-        close(server_socket);
-        return -1;
-    }
+//     // 绑定Socket到地址和端口号
+//     // 第一个参数：用于监听的文件描述符，由socket（）返回值得到
+//     // 第二个参数：结构体(要另外对里面的成员进行初始化，如上几行代码)，存的是本地的ip及端口（一定是大端的-->网络字节序）
+//     // 第三个参数：结构体的大小 
+//     // 返回值:失败返回-1
+//     int ret = bind(server_socket, (struct sockaddr *)&server_addr, sizeof(server_addr));
+//     if (ret == -1)
+//     {
+//         cout << "Error: Failed to bind socket to address and port!" << endl;
+//         close(server_socket);
+//         return -1;
+//     }
 
-    // 监听Socket
-    // 第一个参数：用于监听的文件描述符，由socket（）返回值得到，并由bind函数做了绑定
-    // 第二个参数：一次性能够检测到客户端连接的数量，最大为128（该参数的大小 和 客户端与服务器之间最多可以建立多少个连接 没有关系）
-    // 返回值：失败返回-1  
-    // listen（）内部维护了一个任务队列，最多可以存储128个请求
-    ret = listen(server_socket, 5); 
-    if (ret == -1)
-    {
-        cout << "Error: Failed to listen on socket!" << endl;
-        close(server_socket);
-        return -1;
-    }
+//     // 监听Socket
+//     // 第一个参数：用于监听的文件描述符，由socket（）返回值得到，并由bind函数做了绑定
+//     // 第二个参数：一次性能够检测到客户端连接的数量，最大为128（该参数的大小 和 客户端与服务器之间最多可以建立多少个连接 没有关系）
+//     // 返回值：失败返回-1  
+//     // listen（）内部维护了一个任务队列，最多可以存储128个请求
+//     ret = listen(server_socket, 5); 
+//     if (ret == -1)
+//     {
+//         cout << "Error: Failed to listen on socket!" << endl;
+//         close(server_socket);
+//         return -1;
+//     }
 
-    // 等待客户端连接
-    struct sockaddr_in client_addr;
-    socklen_t client_addr_len = sizeof(client_addr);
-    // 第一个参数：文件描述符
-    // 第二个参数：结构体（不用初始化，调用成功后，里面存的是 发起连接请求的 客户端的 ip及端口），可以理解为accept（）函数的传出参数
-    // 第三个参数：结构体大小
-    // 返回值：成功 得到用于通信的文件描述符，失败返回-1  
-    // 阻塞，直到有客户端连接connect
-    int client_socket = accept(server_socket, (struct sockaddr *)&client_addr, &client_addr_len);
-    if (client_socket == -1)
-    { 
-        cout << "Error: Failed to accept client connection!" << endl;
-        close(server_socket);
-        return -1;
-    }
+//     // 等待客户端连接
+//     struct sockaddr_in client_addr;
+//     socklen_t client_addr_len = sizeof(client_addr);
+//     // 第一个参数：文件描述符
+//     // 第二个参数：结构体（不用初始化，调用成功后，里面存的是 发起连接请求的 客户端的 ip及端口），可以理解为accept（）函数的传出参数
+//     // 第三个参数：结构体大小
+//     // 返回值：成功 得到用于通信的文件描述符，失败返回-1  
+//     // 阻塞，直到有客户端连接connect
+//     int client_socket = accept(server_socket, (struct sockaddr *)&client_addr, &client_addr_len);
+//     if (client_socket == -1)
+//     { 
+//         cout << "Error: Failed to accept client connection!" << endl;
+//         close(server_socket);
+//         return -1;
+//     }
 
-    // 接收客户端数据
-    char buffer[1024] = {0};
-    ret = recv(client_socket, buffer, sizeof(buffer), 0);
-    if (ret == -1)
-    {
-        cout << "Error: Failed to receive data from client!" << endl;
-        close(client_socket);
-        close(server_socket);
-        return -1;
-    }
+//     // 接收客户端数据
+//     char buffer[1024] = {0};
+//     ret = recv(client_socket, buffer, sizeof(buffer), 0);
+//     if (ret == -1)
+//     {
+//         cout << "Error: Failed to receive data from client!" << endl;
+//         close(client_socket);
+//         close(server_socket);
+//         return -1;
+//     }
 
-    cout << "Received data from client: " << buffer << endl;
+//     cout << "Received data from client: " << buffer << endl;
 
-    // 发送响应数据到客户端
-    const char *data = "Hello, client!";
-    ret = send(client_socket, data, strlen(data), 0);
-    if (ret == -1)
-    {
-        cout << "Error: Failed to send response data to client!" << endl;
-        close(client_socket);
-        close(server_socket);
-        return -1;
-    }
+//     // 发送响应数据到客户端
+//     const char *data = "Hello, client!";
+//     ret = send(client_socket, data, strlen(data), 0);
+//     if (ret == -1)
+//     {
+//         cout << "Error: Failed to send response data to client!" << endl;
+//         close(client_socket);
+//         close(server_socket);
+//         return -1;
+//     }
 
-    // 关闭Socket连接
-    // 参数:要关闭的套接字对应的文件描述符
-    // 返回值：失败返回-1
-    close(client_socket);
-    close(server_socket);
+//     // 关闭Socket连接
+//     // 参数:要关闭的套接字对应的文件描述符
+//     // 返回值：失败返回-1
+//     close(client_socket);
+//     close(server_socket);
 
-    return 0;
-}
-
-
+//     return 0;
+// }
 
 
-#include <iostream>
-#include <string>
-#include <cstring>
-#include <sys/socket.h>
-#include <arpa/inet.h>
-#include <unistd.h>
 
-using namespace std;
 
-const int PORT = 8888;
-const char* SERVER_IP = "127.0.0.1";
+// #include <iostream>
+// #include <string>
+// #include <cstring>
+// #include <sys/socket.h>
+// #include <arpa/inet.h>
+// #include <unistd.h>
 
-int main() {
-    // 创建一个TCP连接对象
-    int client_socket = socket(AF_INET, SOCK_STREAM, 0);
-    if (client_socket < 0) {
-        perror("socket creation failed");
-        return EXIT_FAILURE;
-    }
+// using namespace std;
 
-    // 客户端连接的IP和端口号
-    struct sockaddr_in server_address;
-    memset(&server_address, 0, sizeof(server_address));
-    server_address.sin_family = AF_INET;
-    server_address.sin_port = htons(PORT);
-    if (inet_pton(AF_INET, SERVER_IP, &server_address.sin_addr) <= 0) {
-        perror("invalid address");
-        return EXIT_FAILURE;
-    }
+// const int PORT = 8888;
+// const char* SERVER_IP = "127.0.0.1";
 
-    // 连接服务器
-    // 第一个参数：用于通信的文件描述符
-    // 第二个参数：结构体(要另外对里面的成员进行初始化，如上几行代码)，服务器绑定的是什么ip和端口，这里就初始化相同的数据
-    // 第三个参数：结构体的大小
-    // 返回值：失败返回-1
-    // 注：客户端不用bind（）对ip和端口进行绑定，因为客户端会随机绑定一个ip和端口，服务器中accept（）得到的ip和端口便是客户端随机绑定的
-    // （因为服务器不会主动连接客户端）
-    int connect_result = connect(client_socket, (struct sockaddr*)&server_address, sizeof(server_address));
-    if (connect_result == -1) {
-        perror("connection failed");
-        return EXIT_FAILURE;
-    }
+// int main() {
+//     // 创建一个TCP连接对象
+//     int client_socket = socket(AF_INET, SOCK_STREAM, 0);
+//     if (client_socket < 0) {
+//         perror("socket creation failed");
+//         return EXIT_FAILURE;
+//     }
 
-    // 发送数据(write() or send())
-    // 第一个参数：用于通信的文件描述符
-    // 第二个参数：指针，指向一块内存，存的是要发送的数据
-    // 第三个参数：发送数据的大小
-    // 第四个参数：一般为0
-    // 返回值: >0 实际的发送的字节数,一般等于第三个参数;  =-1 发送失败
-    string message = "Hello, server!";
-    if (send(client_socket, message.c_str(), message.length(), 0) < 0) {
-        perror("send failed");
-        return EXIT_FAILURE;
-    }
+//     // 客户端连接的IP和端口号
+//     struct sockaddr_in server_address;
+//     memset(&server_address, 0, sizeof(server_address));
+//     server_address.sin_family = AF_INET;
+//     server_address.sin_port = htons(PORT);
+//     if (inet_pton(AF_INET, SERVER_IP, &server_address.sin_addr) <= 0) {
+//         perror("invalid address");
+//         return EXIT_FAILURE;
+//     }
 
-    // 接收数据（read() or recv()）
-    // 第一个参数：用于通信的文件描述符
-    // 第二个参数：指针，指向一块内存，用于存储接收的数据
-    // 第三个参数：内存的最大容量
-    // 第四个参数：一般为0
-    // 返回值：>0 实际接收的字节数； =0 对方断开连接；  =-1 接收数据失败
-    char buffer[1024] = {0};
-    int bytes_received = recv(client_socket, buffer, 1024, 0);
-    if (bytes_received < 0) {
-        perror("receive failed");
-        return EXIT_FAILURE;
-    }
+//     // 连接服务器
+//     // 第一个参数：用于通信的文件描述符
+//     // 第二个参数：结构体(要另外对里面的成员进行初始化，如上几行代码)，服务器绑定的是什么ip和端口，这里就初始化相同的数据
+//     // 第三个参数：结构体的大小
+//     // 返回值：失败返回-1
+//     // 注：客户端不用bind（）对ip和端口进行绑定，因为客户端会随机绑定一个ip和端口，服务器中accept（）得到的ip和端口便是客户端随机绑定的
+//     // （因为服务器不会主动连接客户端）
+//     int connect_result = connect(client_socket, (struct sockaddr*)&server_address, sizeof(server_address));
+//     if (connect_result == -1) {
+//         perror("connection failed");
+//         return EXIT_FAILURE;
+//     }
 
-    // 处理接收到的数据
-    cout << "Received from server: " << buffer << endl;
+//     // 发送数据(write() or send())
+//     // 第一个参数：用于通信的文件描述符
+//     // 第二个参数：指针，指向一块内存，存的是要发送的数据
+//     // 第三个参数：发送数据的大小
+//     // 第四个参数：一般为0
+//     // 返回值: >0 实际的发送的字节数,一般等于第三个参数;  =-1 发送失败
+//     string message = "Hello, server!";
+//     if (send(client_socket, message.c_str(), message.length(), 0) < 0) {
+//         perror("send failed");
+//         return EXIT_FAILURE;
+//     }
 
-    // 关闭连接
-    // 参数:要关闭的套接字对应的文件描述符
-    // 返回值：失败返回-1
-    close(client_socket);
+//     // 接收数据（read() or recv()）
+//     // 第一个参数：用于通信的文件描述符
+//     // 第二个参数：指针，指向一块内存，用于存储接收的数据
+//     // 第三个参数：内存的最大容量
+//     // 第四个参数：一般为0
+//     // 返回值：>0 实际接收的字节数； =0 对方断开连接；  =-1 接收数据失败
+//     char buffer[1024] = {0};
+//     int bytes_received = recv(client_socket, buffer, 1024, 0);
+//     if (bytes_received < 0) {
+//         perror("receive failed");
+//         return EXIT_FAILURE;
+//     }
 
-    return EXIT_SUCCESS;
-}
+//     // 处理接收到的数据
+//     cout << "Received from server: " << buffer << endl;
+
+//     // 关闭连接
+//     // 参数:要关闭的套接字对应的文件描述符
+//     // 返回值：失败返回-1
+//     close(client_socket);
+
+//     return EXIT_SUCCESS;
+// }
