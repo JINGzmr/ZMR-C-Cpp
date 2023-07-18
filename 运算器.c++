@@ -1339,8 +1339,6 @@ int main()
 }
 
 
-
-   
 #include <iostream>
 #include <string>
 #include <cstring>
@@ -1370,7 +1368,7 @@ int main() {
         perror("invalid address");
         return EXIT_FAILURE;
     }
-
+ 
     // 连接服务器
     // 第一个参数：用于通信的文件描述符
     // 第二个参数：结构体(要另外对里面的成员进行初始化，如上几行代码)，服务器绑定的是什么ip和端口，这里就初始化相同的数据
