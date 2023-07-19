@@ -151,7 +151,7 @@ int main()
                         {
                             if(c.first != fd)// 不发给自己
                             {
-                                write(c.first, ('['+name+']'+":"+msg).c_str(),msg.size()+name.size()+4);
+                                write(c.first, ('['+name+']'+": "+msg).c_str(),msg.size()+name.size()+4);
                             }
 
                         }
@@ -160,4 +160,8 @@ int main()
             }
         }
     }
+
+    // 关闭epoll实例
+    close(epid);
+    close(sockfd);
 }
