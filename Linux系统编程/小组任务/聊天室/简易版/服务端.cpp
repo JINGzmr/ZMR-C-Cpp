@@ -4,6 +4,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include <netinet/in.h>
+#include <arpa/inet.h>
 #include <errno.h>
 
 const int MAX_CONN = 1024; // 最大连接数
@@ -57,7 +58,7 @@ int main()
     // 将监听的socket加入epoll
     struct epoll_event ev;
     ev.events = EPOLLIN;
-    ev.data.fd = socket;
+    ev.data.fd = sockfd;
 
     ret = epoll_ctl(epid, EPOLL_CTL_ADD, sockfd, &ev);
     if (ret < 0)
@@ -85,12 +86,26 @@ int main()
             {
                 struct sockaddr_in client_addr;
                 socklen_t client_addr_len = sizeof(client_addr);
-                int client_socket = accept(sockfd, (sturct sockaddr *)&client_addr, &client_addr_len);
-                if(client_socket < 0)
+                int client_sockfd = accept(sockfd, (struct sockaddr *)&client_addr, &client_addr_len);
+                if(client_sockfd < 0)
                 {
                     perror("accept error");
                     continue;
                 }
+
+                //将客户端的socket加入epoll
+                struct epoll_event ev_client;
+                ev_client.events = EPOLLIN;// 检测客户端有没有消息过来
+                ev_client.data.fd = client_sockfd;
+
+                ret = epoll_ctl(epid, EPOLL_CTL_ADD, client_sockfd, &ev_client);
+                if(ret<0)
+                {
+                    perror("client epoll_ctl error");
+                    break;
+                }
+                std::cout << inet_ntoa(client_addr.sin_addr.s_addr) << "正在连接..." << std::endl;
+
             }
         }
     }
