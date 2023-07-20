@@ -115,7 +115,7 @@ int main()
                 client.sockfd = client_sockfd;
                 client.name = "";
 
-                clients[client_sockfd] = client;
+                clients[client_sockfd] = client; // 将客户端结构体对象client（值）与其套接字文件描述符client_sockfd（键）相关联
             }
             else // 如果客户端有消息
             {
