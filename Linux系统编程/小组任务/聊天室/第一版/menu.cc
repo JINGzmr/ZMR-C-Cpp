@@ -3,11 +3,11 @@
 // 在不同的模块下对用户输入的各种数据进行json序列化和IO的SendMsg
 // 并且接收RecvMsg来自服务端发送回来的数据，进行反序列化，打印在页面上
 #include "data.h"
+#include "define.h"
+#include "head.h"
 
 #include <iostream>
-#include <regex>
-#include <string>
-#include <nlohmann/json.hpp>
+
 
 using namespace std;
 
@@ -44,7 +44,7 @@ void login(void)
     std::cin >> user.username;
     std::cout << "请输入密码: ";
     std::cin >> user.password;
-    user.flag = 1;// 表示是要登录
+    user.flag = LOGIN; // 表示是要登录
 
     nlohmann::json userJson = {
         {"username", user.username},
@@ -52,6 +52,11 @@ void login(void)
         {"flag", user.flag},
     };
 
-    std::string user_json_string = userJson.dump();
+    std::string userJson_string = userJson.dump();
 
+    if (send(client_socket, userJson_string.c_str(), userJson_string.size(), 0) == -1) {
+        std::cerr << "Send failed" << std::endl;
+    } else {
+        std::cout << "Data sent to the server" << std::endl;
+    }
 }
