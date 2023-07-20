@@ -9,6 +9,7 @@
 
 #include <map>
 
+#define PORT 9999
 const int MAX_CONN = 1024; // 最大连接数
 
 // 保存客户端的信息
@@ -40,7 +41,7 @@ int main()
     struct sockaddr_in addr;
     addr.sin_family = AF_INET;
     addr.sin_addr.s_addr = htonl(INADDR_ANY);
-    addr.sin_port = htons(9999);
+    addr.sin_port = htons(PORT);
 
     int ret = bind(sockfd, (struct sockaddr *)&addr, sizeof(addr));
     if (sockfd < 0)
@@ -165,7 +166,7 @@ int main()
         }
     }
 
-    // 关闭epoll实例
+    // 关闭epoll实例及套接字
     close(epid);
     close(sockfd);
 }
