@@ -117,11 +117,12 @@ int main()
 
                 clients[client_sockfd] = client; // 将客户端结构体对象client（值）与其套接字文件描述符client_sockfd（键）相关联
             }
+            
             else // 如果客户端有消息
             {
                 // 那就把这个消息保存起来
                 char buffer[1024];
-                int n = read(fd, buffer, 1024);
+                int n = read(fd, buffer, 1024); // 从fd中读取数据，并将数据存储到buffer缓冲区中，返回值n为成功读取的字节数
                 if (n < 0)
                 {
                     perror("read error");
@@ -133,23 +134,26 @@ int main()
                     epoll_ctl(epid, EPOLL_CTL_DEL, fd, 0); // 从epoll里面删除，不需要再检测了
                     clients.erase(fd);                     // 同时把他从map里面删除
                 }
+
                 else // 接收到客户端的消息，但不确定是 登录时的用户名 这个消息，还是客户端发来的消息
+                    //如果该客户端的用户名为空，则将接收到的消息设置为该客户端的用户名；
+                    //否则，将接收到的消息作为聊天消息发送给其他客户端。
                 {
-                    std::string msg(buffer, n);
+                    std::string msg(buffer, n); // (buffer, n)是构造函数的参数，它告诉构造函数从buffer缓冲区中复制n个字符 到字符串对象msg中
                     
-                    // 如果该客户端的name为空，说明该消息是这个客户端的用户名
+                    // 如果该客户端的name为空，表示该客户端的用户名还没有设置，所以接收到的消息应该是用户名
                     if(clients[fd].name == "")
                     {
                         clients[fd].name = msg;
                     }
                     else // 否则是聊天消息
                     {
-                        std::string name = clients[fd].name;
+                        std::string name = clients[fd].name; // 为了方便将发送者的用户名添加到聊天消息中
 
                         // 把消息发给其他客户端
-                        for(auto&c :clients)
+                        for(auto&c :clients) //auto& c是一个引用，用于遍历clients中的每个键值对
                         {
-                            if(c.first != fd)// 不发给自己
+                            if(c.first != fd)// 检查循环中当前键值对的键是否等于fd,即不发给自己
                             {
                                 write(c.first, ('['+name+']'+": "+msg).c_str(),msg.size()+name.size()+4);
                             }
