@@ -5,17 +5,19 @@
 
 #include <iostream>
 #include <string>
+#include <nlohmann/json.hpp>
 #include <sys/epoll.h>
 #include <sys/socket.h>
 #include <sys/types.h>
-#include <unistd.h>
+#include <unistd.h> //send,recv
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <errno.h>
 #include <regex>
-#include <json.hpp>
 
-
+#include <cstring>     //memset
+#include <arpa/inet.h> //htonl
+// #include <jsoncpp/json/json.h>
 
 
 #endif

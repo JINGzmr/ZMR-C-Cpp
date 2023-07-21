@@ -10,7 +10,8 @@ struct User
     std::string username;
     std::string password;
     // int uid = 0;
-    int flag = 0;
+    int flag = 0;//标记选项
+    bool yn; //标记从服务器返回的状态（成功yes，失败no）
     // int fd = 0;
 };
 

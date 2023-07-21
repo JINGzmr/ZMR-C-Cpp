@@ -1,5 +1,8 @@
 {
     "files.associations": {
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "*.tcc": "cpp",
+        "memory": "cpp",
+        "functional": "cpp"
     }
 }
