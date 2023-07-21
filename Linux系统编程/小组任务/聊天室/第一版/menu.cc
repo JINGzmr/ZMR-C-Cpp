@@ -9,10 +9,9 @@
 
 #include <iostream>
 using json = nlohmann::json;
-
 using namespace std;
 
-void menu(int client_socket,int epld)
+void menu(int client_socket, int epld)
 {
     cout << "——————————————————————————————————————————————————" << endl;
     cout << "------------------欢迎进入聊天室！-------------------" << endl;
@@ -27,18 +26,18 @@ void menu(int client_socket,int epld)
     switch (num)
     {
     case 1:
-        login_client(client_socket,epld); // 传一个客户端的socket进来
+        login_client(client_socket, epld); // 传一个客户端的socket进来
         break;
     case 2:
-        register_client(client_socket,epld);
+        register_client(client_socket, epld);
         break;
     case 3:
-        signout_client(client_socket,epld);
+        signout_client(client_socket, epld);
         break;
     }
 }
 
-void login_client(int client_socket,int epld)
+void login_client(int client_socket, int epld)
 {
     User user;
     std::cout << "请输入用户名: ";
@@ -57,30 +56,27 @@ void login_client(int client_socket,int epld)
     SendMsg::SendMsg_client(client_socket, sendJson_client_string);
 
     // 接收来自服务器的数据，及json反序列化
-    // std::string recvJson_client_string;
-    // RecvMsg::RecvMsg_client(client_socket, recvJson_client_string, epld);
-    
-    std::string recvJson_client_string = R"({"yn": 30})";
+    std::string recvJson_client_string;
+    RecvMsg::RecvMsg_client(client_socket, recvJson_client_string, epld);
 
     json parsed_data = json::parse(recvJson_client_string);
-    User un_user; //反序列化得到的结构体
-    un_user.yn = parsed_data["yn"]; //只有登录成功与否的状态
-    
-    //判断是否登入成功
-    if(un_user.yn == 0){
+    User un_user;                   // 反序列化得到的结构体
+    un_user.yn = parsed_data["yn"]; // 只有登录成功与否的状态
+
+    // 判断是否登入成功
+    if (un_user.yn == 0)
+    {
         std::cout << "登入成功！" << std::endl;
         //********一个进入下一页面的入口********
     }
-    else{
+    else
+    {
         std::cout << "登入失败！" << std::endl;
         //*********再次回到登入界面重新输入*************
     }
-
-
-
 }
 
-void register_client(int client_socket,int epld)
+void register_client(int client_socket, int epld)
 {
     User user;
     std::cout << "请输入用户名: ";
@@ -89,7 +85,7 @@ void register_client(int client_socket,int epld)
     std::cin >> user.password;
     user.flag = REGISTER; // 表示是要注册
 
-    // json序列化，及向服务器发送数据
+    // 序列化，发送数据
     nlohmann::json sendJson_client = {
         {"username", user.username},
         {"password", user.password},
@@ -98,33 +94,35 @@ void register_client(int client_socket,int epld)
     std::string sendJson_client_string = sendJson_client.dump();
     SendMsg::SendMsg_client(client_socket, sendJson_client_string);
 
-    // 接收来自服务器的数据，及json反序列化
+    // 接收数据，反序列化
     std::string recvJson_client_string;
     RecvMsg::RecvMsg_client(client_socket, recvJson_client_string, epld);
-    
+
     json parsed_data = json::parse(recvJson_client_string);
-    User un_user; //反序列化得到的结构体
-    un_user.yn = parsed_data["yn"].get<int>(); //只有注册成功与否的状态
-    
-    //判断是否注册成功
-    if(un_user.yn == 0){
+    User un_user;
+    un_user.yn = parsed_data["yn"];
+
+    // 判断是否注册成功
+    if (un_user.yn == 0)
+    {
         std::cout << "注册成功！" << std::endl;
         //********一个进入下一页面的入口********
     }
-    else{
+    else
+    {
         std::cout << "注册失败！" << std::endl;
         //*********再次回到登入界面重新注册*************
     }
 }
 
-void signout_client(int client_socket,int epld)
+void signout_client(int client_socket, int epld)
 {
     User user;
     std::cout << "请输入用户名: ";
     std::cin >> user.username;
     user.flag = SIGNOUT; // 表示是要注销
 
-    // json序列化，及向服务器发送数据（不用把结构体的所有成员都序列化）
+    // 序列化，发送数据（不用把结构体的所有成员都序列化）
     nlohmann::json sendJson_client = {
         {"username", user.username},
         {"flag", user.flag},
@@ -132,45 +130,23 @@ void signout_client(int client_socket,int epld)
     std::string sendJson_client_string = sendJson_client.dump();
     SendMsg::SendMsg_client(client_socket, sendJson_client_string);
 
-    // 接收来自服务器的数据，及json反序列化
+    // 接收数据，反序列化
     std::string recvJson_client_string;
     RecvMsg::RecvMsg_client(client_socket, recvJson_client_string, epld);
-    
+
     json parsed_data = json::parse(recvJson_client_string);
-    User un_user; //反序列化得到的结构体
-    un_user.yn = parsed_data["yn"]; //只有登录成功与否的状态
-    
-    //判断是否注销成功
-    if(un_user.yn == 0){
+    User un_user;
+    un_user.yn = parsed_data["yn"];
+
+    // 判断是否注销成功
+    if (un_user.yn == 0)
+    {
         std::cout << "注销成功！" << std::endl;
         //*******回到登入界面，看用户是否注册登入*********
     }
-    else{
+    else
+    {
         std::cout << "注销失败！" << std::endl;
         //*********再次回到登入界面重新注销*************
     }
-}
-
-#include <iostream>
-#include "nlohmann/json.hpp"
-
-int main() {
-    std::string jsonStr = R"(
-        {
-            "name": "John Doe",
-            "age": 30,
-            "isStudent": true
-        }
-    )";
-
-    nlohmann::json jsonObj = nlohmann::json::parse(jsonStr);
-
-    // 现在 jsonObj 包含了解析后的 JSON 数据
-    std::string name = jsonObj["name"];
-    int age = jsonObj["age"];
-    bool isStudent = jsonObj["isStudent"];
-
-    std::cout << "Name: " << name << ", Age: " << age << ", Is Student: " << isStudent << std::endl;
-
-    return 0;
 }
