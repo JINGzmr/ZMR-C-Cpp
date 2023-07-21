@@ -1,4 +1,6 @@
 // 各种结构体
+#ifndef DATA_H
+#define DATA_H
 
 #include <iostream>
 using namespace std;
@@ -11,3 +13,7 @@ struct User
     int flag = 0;
     // int fd = 0;
 };
+
+
+
+#endif

@@ -5,6 +5,7 @@
 #include "data.h"
 #include "define.h"
 #include "head.h"
+#include "IO.h"
 
 #include <iostream>
 
@@ -46,17 +47,16 @@ void login(void)
     std::cin >> user.password;
     user.flag = LOGIN; // 表示是要登录
 
+    // json序列化，及向服务器发送数据
     nlohmann::json userJson = {
         {"username", user.username},
         {"password", user.password},
         {"flag", user.flag},
     };
-
     std::string userJson_string = userJson.dump();
+    SendMsg::SendMsg_fun(client_socket, userJson_string); // client_socket还没搞
 
-    if (send(client_socket, userJson_string.c_str(), userJson_string.size(), 0) == -1) {
-        std::cerr << "Send failed" << std::endl;
-    } else {
-        std::cout << "Data sent to the server" << std::endl;
-    }
+    // 接收来自服务器的数据，及json反序列化
+    
+    
 }
