@@ -61,10 +61,10 @@ void login_client(int client_socket, int epld)
 
     json parsed_data = json::parse(recvJson_client_string);
     User un_user;                   // 反序列化得到的结构体
-    un_user.yn = parsed_data["yn"]; // 只有登录成功与否的状态
+    un_user.status = parsed_data["status"]; // 只有登录成功与否的状态
 
     // 判断是否登入成功
-    if (un_user.yn == 0)
+    if (un_user.status == 0)
     {
         std::cout << "登入成功！" << std::endl;
         //********一个进入下一页面的入口********
@@ -100,10 +100,10 @@ void register_client(int client_socket, int epld)
 
     json parsed_data = json::parse(recvJson_client_string);
     User un_user;
-    un_user.yn = parsed_data["yn"];
+    un_user.status = parsed_data["status"];
 
     // 判断是否注册成功
-    if (un_user.yn == 0)
+    if (un_user.status == 0)
     {
         std::cout << "注册成功！" << std::endl;
         //********一个进入下一页面的入口********
@@ -136,10 +136,10 @@ void signout_client(int client_socket, int epld)
 
     json parsed_data = json::parse(recvJson_client_string);
     User un_user;
-    un_user.yn = parsed_data["yn"];
+    un_user.status = parsed_data["status"];
 
     // 判断是否注销成功
-    if (un_user.yn == 0)
+    if (un_user.status == 0)
     {
         std::cout << "注销成功！" << std::endl;
         //*******回到登入界面，看用户是否注册登入*********

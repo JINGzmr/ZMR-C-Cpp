@@ -11,7 +11,7 @@ struct User
     std::string password;
     // int uid = 0;
     int flag = 0;//标记选项
-    bool yn; //标记从服务器返回的状态（成功yes，失败no）
+    int status; //标记从服务器返回的状态（成功SUCCESS，失败FAIL）
     // int fd = 0;
 };
 
