@@ -7,20 +7,13 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include <netinet/in.h>
+#include <netinet/tcp.h>
 #include <arpa/inet.h>
 #include <errno.h>
-
-#include <map>
+#include <fcntl.h>
 
 #define PORT 9999
 const int MAX_CONN = 1024; // 最大连接数
-
-// // 保存客户端的信息
-// struct Client
-// {
-//     int sockfd;
-//     std::string name; // 名字
-// };
 
 int main()
 {
@@ -76,9 +69,6 @@ int main()
         return -1;
     }
 
-    // 保存客户端信息
-    // std::map<int, Client> clients;
-    
     // 循环监听
     while (1)
     {
@@ -110,6 +100,39 @@ int main()
                 ev_client.events = EPOLLIN; // 检测客户端有没有消息过来
                 ev_client.data.fd = client_sockfd;
 
+                // 设置非阻塞
+                int flag;
+                flag = fcntl(client_sockfd, F_GETFL);
+                flag |= O_NONBLOCK;
+                fcntl(client_sockfd, F_SETFL, flag); // 设置非阻塞
+
+                // 心跳检测（开启保活，1分钟内探测不到，断开连接）
+                int keep_alive = 1;
+                int keep_idle = 3;
+                int keep_interval = 1;
+                int keep_count = 30;
+                if (setsockopt(client_sockfd, SOL_SOCKET, SO_KEEPALIVE, &keep_alive, sizeof(keep_alive)))
+                {
+                    perror("Error setsockopt(SO_KEEPALIVE) failed");
+                    exit(1);
+                }
+                if (setsockopt(client_sockfd, IPPROTO_TCP, TCP_KEEPIDLE, &keep_idle, sizeof(keep_idle)))
+                {
+                    perror("Error setsockopt(TCP_KEEPIDLE) failed");
+                    exit(1);
+                }
+                if (setsockopt(client_sockfd, SOL_TCP, TCP_KEEPINTVL, (void *)&keep_interval, sizeof(keep_interval)))
+                {
+                    perror("Error setsockopt(TCP_KEEPINTVL) failed");
+                    exit(1);
+                }
+                if (setsockopt(client_sockfd, SOL_TCP, TCP_KEEPCNT, (void *)&keep_count, sizeof(keep_count)))
+                {
+                    perror("Error setsockopt(TCP_KEEPCNT) failed");
+                    exit(1);
+                }
+                
+                // 将该客户端加入epoll树
                 ret = epoll_ctl(epld, EPOLL_CTL_ADD, client_sockfd, &ev_client);
                 if (ret < 0)
                 {
@@ -117,58 +140,14 @@ int main()
                     break;
                 }
                 std::cout << client_addr.sin_addr.s_addr << "正在连接..." << std::endl;
-
-                // 保存该客户端的信息
-                Client client;
-                client.sockfd = client_sockfd;
-                client.name = "";
-
-                clients[client_sockfd] = client; // 将客户端结构体对象client（值）与其套接字文件描述符client_sockfd（键）相关联
             }
-            
+
             else // 如果客户端有消息
             {
-                // 那就把这个消息保存起来
-                char buffer[1024];
-                int n = read(fd, buffer, 1024); // 从fd中读取数据，并将数据存储到buffer缓冲区中，返回值n为成功读取的字节数
-                if (n < 0)
-                {
-                    perror("read error");
-                    break;
-                }
-                else if (n == 0) // 客户断开连接
-                {
-                    close(fd);                             // 先关闭该客户端
-                    epoll_ctl(epld, EPOLL_CTL_DEL, fd, 0); // 从epoll里面删除，不需要再检测了
-                    clients.erase(fd);                     // 同时把他从map里面删除
-                }
-
-                else // 接收到客户端的消息，但不确定是 登录时的用户名 这个消息，还是客户端发来的消息
-                    //如果该客户端的用户名为空，则将接收到的消息设置为该客户端的用户名；
-                    //否则，将接收到的消息作为聊天消息发送给其他客户端。
-                {
-                    std::string msg(buffer, n); // (buffer, n)是构造函数的参数，它告诉构造函数从buffer缓冲区中复制n个字符 到字符串对象msg中
-                    
-                    // 如果该客户端的name为空，表示该客户端的用户名还没有设置，所以接收到的消息应该是用户名
-                    if(clients[fd].name == "")
-                    {
-                        clients[fd].name = msg;
-                    }
-                    else // 否则是聊天消息
-                    {
-                        std::string name = clients[fd].name; // 为了方便将发送者的用户名添加到聊天消息中
-
-                        // 把消息发给其他客户端
-                        for(auto&c :clients) //auto& c是一个引用，用于遍历clients中的每个键值对
-                        {
-                            if(c.first != fd)// 检查循环中当前键值对的键是否等于fd,即不发给自己
-                            {
-                                write(c.first, ('['+name+']'+": "+msg).c_str(),msg.size()+name.size()+4);
-                            }
-
-                        }
-                    }
-                }
+                Task task;
+                task.function = work;
+                task.arg = &fd;
+                threadpool.addTask(task);
             }
         }
     }
@@ -176,4 +155,8 @@ int main()
     // 关闭epoll实例及套接字
     close(epld);
     close(sockfd);
+}
+
+void work(void *arg)
+{
 }
