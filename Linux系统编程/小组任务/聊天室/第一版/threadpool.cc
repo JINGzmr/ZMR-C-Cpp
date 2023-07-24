@@ -118,7 +118,7 @@ void *ThreadPool::worker(void *arg)
         // 判断任务队列是否为空, 如果为空 工作线程阻塞
         while (pool->m_TaskQ->taskNumber() == 0 && pool->shutdown == 0)
         {
-            cout << "thread  waiting..." << endl;
+            cout << "thread waiting..." << endl;
             // 阻塞线程
             pthread_cond_wait(&pool->notempty, &pool->mutexpool);
         }
@@ -142,6 +142,9 @@ void *ThreadPool::worker(void *arg)
 
         // 任务处理结束
         cout << "thread end working...";
+
+        //返回该线程到线程池
+        
     }
 
     return nullptr;

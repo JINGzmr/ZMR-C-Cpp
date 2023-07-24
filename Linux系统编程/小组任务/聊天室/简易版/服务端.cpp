@@ -22,8 +22,8 @@ struct Client
 int main()
 {
     // 创建epoll实例
-    int epid = epoll_create(10);
-    if (epid < 0)
+    int epld = epoll_create(10);
+    if (epld < 0)
     {
         perror("epoll_create error");
         return -1;
@@ -63,7 +63,7 @@ int main()
     ev.events = EPOLLIN;
     ev.data.fd = sockfd;
 
-    ret = epoll_ctl(epid, EPOLL_CTL_ADD, sockfd, &ev);
+    ret = epoll_ctl(epld, EPOLL_CTL_ADD, sockfd, &ev);
     if (ret < 0)
     {
         perror("epoll_ctl error");
@@ -76,7 +76,7 @@ int main()
     while (1)
     {
         struct epoll_event evs[MAX_CONN];
-        int n = epoll_wait(epid, evs, MAX_CONN, -1);
+        int n = epoll_wait(epld, evs, MAX_CONN, -1);
         if (n < 0)
         {
             perror("epoll_wait error");
@@ -103,7 +103,7 @@ int main()
                 ev_client.events = EPOLLIN; // 检测客户端有没有消息过来
                 ev_client.data.fd = client_sockfd;
 
-                ret = epoll_ctl(epid, EPOLL_CTL_ADD, client_sockfd, &ev_client);
+                ret = epoll_ctl(epld, EPOLL_CTL_ADD, client_sockfd, &ev_client);
                 if (ret < 0)
                 {
                     perror("client epoll_ctl error");
@@ -132,7 +132,7 @@ int main()
                 else if (n == 0) // 客户断开连接
                 {
                     close(fd);                             // 先关闭该客户端
-                    epoll_ctl(epid, EPOLL_CTL_DEL, fd, 0); // 从epoll里面删除，不需要再检测了
+                    epoll_ctl(epld, EPOLL_CTL_DEL, fd, 0); // 从epoll里面删除，不需要再检测了
                     clients.erase(fd);                     // 同时把他从map里面删除
                 }
 
@@ -167,6 +167,6 @@ int main()
     }
 
     // 关闭epoll实例及套接字
-    close(epid);
+    close(epld);
     close(sockfd);
 }
