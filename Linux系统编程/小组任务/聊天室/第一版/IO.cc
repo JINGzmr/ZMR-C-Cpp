@@ -55,7 +55,7 @@ void RecvMsg::RecvMsg_client(int client_socket, std::string &str)
     {
         std::cout << "Connection closed by peer." << std::endl;
         close(client_socket);                             // 先关闭该客户端
-        epoll_ctl(epld, EPOLL_CTL_DEL, client_socket, 0); // 从epoll里面删除，不需要再检测了
+        // epoll_ctl(epld, EPOLL_CTL_DEL, client_socket, 0); // 从epoll里面删除，不需要再检测了
         // clients.earse(client_socket); // 同时把他从map里面删除
     }
 
