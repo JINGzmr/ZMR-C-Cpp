@@ -27,7 +27,7 @@ void SendMsg::SendMsg_client(int client_socket, const std::string &str)
 }
 
 // 客户端接收序列化的数据
-void RecvMsg::RecvMsg_client(int client_socket, std::string &str, int epld)
+void RecvMsg::RecvMsg_client(int client_socket, std::string &str)
 {
     int DataSize = 0; // 从服务端发送过来的包的大小
     char buffer[BUFFER_SIZE];
@@ -42,7 +42,7 @@ void RecvMsg::RecvMsg_client(int client_socket, std::string &str, int epld)
     {
         std::cout << "Connection closed by peer." << std::endl;
         close(client_socket);                             // 先关闭该客户端
-        epoll_ctl(epld, EPOLL_CTL_DEL, client_socket, 0); // 从epoll里面删除，不需要再检测了
+        // epoll_ctl(epld, EPOLL_CTL_DEL, client_socket, 0); // 从epoll里面删除，不需要再检测了
         // clients.earse(client_socket); // 同时把他从map里面删除
     }
 

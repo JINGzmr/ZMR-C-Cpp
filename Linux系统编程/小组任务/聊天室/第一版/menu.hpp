@@ -6,12 +6,13 @@
 #include "define.h"
 #include "head.h"
 #include "IO.h"
+#include "personalmenu.hpp"
 
 #include <iostream>
 using json = nlohmann::json;
 using namespace std;
 
-void menu(int client_socket, int epld)
+void menu(int client_socket)
 {
     cout << "——————————————————————————————————————————————————" << endl;
     cout << "------------------欢迎进入聊天室！-------------------" << endl;
@@ -21,23 +22,29 @@ void menu(int client_socket, int epld)
     cout << "---------------------3.注销------------------------" << endl;
     cout << "——————————————————————————————————————————————————" << endl;
 
-    int num;
-    cin >> num;
-    switch (num)
-    {
-    case 1:
-        login_client(client_socket, epld); // 传一个客户端的socket进来
-        break;
-    case 2:
-        register_client(client_socket, epld);
-        break;
-    case 3:
-        signout_client(client_socket, epld);
-        break;
+    while(1){
+        int num;
+        cin >> num;
+
+        switch (num)
+        {
+        case 1:
+            login_client(client_socket); // 传一个客户端的socket进来
+            break;
+        case 2:
+            register_client(client_socket);
+            break;
+        case 3:
+            signout_client(client_socket);
+            break;
+        default:
+            cout << "无效的数字，请重新输入！" << endl;
+            break;
+        }
     }
 }
 
-void login_client(int client_socket, int epld)
+void login_client(int client_socket)
 {
     User user;
     std::cout << "请输入用户名: ";
@@ -57,7 +64,7 @@ void login_client(int client_socket, int epld)
 
     // 接收来自服务器的数据，及json反序列化
     std::string recvJson_client_string;
-    RecvMsg::RecvMsg_client(client_socket, recvJson_client_string, epld);
+    RecvMsg::RecvMsg_client(client_socket, recvJson_client_string);
 
     json parsed_data = json::parse(recvJson_client_string);
     User un_user;                   // 反序列化得到的结构体
@@ -68,15 +75,16 @@ void login_client(int client_socket, int epld)
     {
         std::cout << "登入成功！" << std::endl;
         //********一个进入下一页面的入口********
+        messagemenu();
     }
     else
     {
         std::cout << "登入失败！" << std::endl;
-        //*********再次回到登入界面重新输入*************
+        //*********再次回到登入界面重新输入***********
     }
 }
 
-void register_client(int client_socket, int epld)
+void register_client(int client_socket)
 {
     User user;
     std::cout << "请输入用户名: ";
@@ -96,7 +104,7 @@ void register_client(int client_socket, int epld)
 
     // 接收数据，反序列化
     std::string recvJson_client_string;
-    RecvMsg::RecvMsg_client(client_socket, recvJson_client_string, epld);
+    RecvMsg::RecvMsg_client(client_socket, recvJson_client_string);
 
     json parsed_data = json::parse(recvJson_client_string);
     User un_user;
@@ -106,7 +114,7 @@ void register_client(int client_socket, int epld)
     if (un_user.status == 0)
     {
         std::cout << "注册成功！" << std::endl;
-        //********一个进入下一页面的入口********
+        //*******回到登入界面进行登录*********
     }
     else
     {
@@ -115,7 +123,7 @@ void register_client(int client_socket, int epld)
     }
 }
 
-void signout_client(int client_socket, int epld)
+void signout_client(int client_socket)
 {
     User user;
     std::cout << "请输入用户名: ";
@@ -132,7 +140,7 @@ void signout_client(int client_socket, int epld)
 
     // 接收数据，反序列化
     std::string recvJson_client_string;
-    RecvMsg::RecvMsg_client(client_socket, recvJson_client_string, epld);
+    RecvMsg::RecvMsg_client(client_socket, recvJson_client_string);
 
     json parsed_data = json::parse(recvJson_client_string);
     User un_user;
@@ -150,3 +158,4 @@ void signout_client(int client_socket, int epld)
         //*********再次回到登入界面重新注销*************
     }
 }
+

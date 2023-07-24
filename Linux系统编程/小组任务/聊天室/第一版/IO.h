@@ -16,7 +16,7 @@ public:
 class RecvMsg
 {
 public:
-    static void RecvMsg_client(int client_socket, std::string &str,int epld);
+    static void RecvMsg_client(int client_socket, std::string &str);
 };
 
 #endif
