@@ -186,20 +186,22 @@ void work(void *arg)
     recvmsg.RecvMsg_client(fd, recvJson_buf);
     json parsed_data = json::parse(recvJson_buf);
     User un_user;
+    un_user.username = parsed_data["username"];
+    un_user.password = parsed_data["password"];
     un_user.flag = parsed_data["flag"];
 
     // 根据接收到的消息判断用户在登录界面的操作
     if (un_user.flag == LOGIN) // 登录
     {
-        login_server(fd);
+        login_server(fd,un_user);
     }
     else if (un_user.flag == REGISTER) // 注册
     {
-        register_server(fd);
+        register_server(fd,un_user);
     }
     else if (un_user.flag == SIGNOUT) // 注销
     {
-        signout_server(fd);
+        signout_server(fd,un_user);
     }
 
     // 当所有任务都处理完了（或出问题）之后，再挂树
