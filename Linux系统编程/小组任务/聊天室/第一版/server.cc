@@ -1,5 +1,9 @@
 // 对客户端发来的各种json进行处理，并将事件加到工作队列，从线程池中取出工作线程进行相应的处理
 #include "threadpool.h"
+#include "IO.h"
+#include "data.h"
+#include "define.h"
+#include "login.hpp"
 
 #include <iostream>
 #include <string>
@@ -12,6 +16,7 @@
 #include <errno.h>
 #include <fcntl.h>
 
+using json = nlohmann::json;
 #define PORT 9999
 const int MAX_CONN = 1024; // 最大连接数
 
@@ -131,7 +136,7 @@ int main()
                     perror("Error setsockopt(TCP_KEEPCNT) failed");
                     exit(1);
                 }
-                
+
                 // 将该客户端加入epoll树
                 ret = epoll_ctl(epld, EPOLL_CTL_ADD, client_sockfd, &ev_client);
                 if (ret < 0)
@@ -144,9 +149,17 @@ int main()
 
             else // 如果客户端有消息
             {
+                // 从树上去除该套接字
+                struct epoll_event temp;
+                temp.data.fd = fd;
+                temp.events = EPOLLIN;
+                epoll_ctl(epld, EPOLL_CTL_DEL, fd, &temp);
+
+                // 进入子线程，接下来的任务由子线程完成
+                int arg[] = {fd, epld}; // 把fd和efd装到arg数组里，再作为参数传到work函数里，arg[0]=fd,arg[1]=epld
                 Task task;
                 task.function = work;
-                task.arg = &fd;
+                task.arg = arg;
                 threadpool.addTask(task);
             }
         }
@@ -159,5 +172,37 @@ int main()
 
 void work(void *arg)
 {
-    
+    // 挂树的准备工作
+    struct epoll_event temp;
+    int *arr = (int *)arg;
+    int fd = arr[0];
+    int epld = arr[1];
+    temp.data.fd = fd;
+    temp.events = EPOLLIN; // 以上代码为后面 挂树 时有用，也是该函数传入参数的唯一作用
+
+    // 服务端开的子线程负责接收客户端的消息
+    string recvJson_buf;
+    RecvMsg recvmsg;
+    recvmsg.RecvMsg_client(fd, recvJson_buf);
+    json parsed_data = json::parse(recvJson_buf);
+    User un_user;
+    un_user.flag = parsed_data["flag"];
+
+    // 根据接收到的消息判断用户在登录界面的操作
+    if (un_user.flag == LOGIN) // 登录
+    {
+        login_server(fd);
+    }
+    else if (un_user.flag == REGISTER) // 注册
+    {
+        register_server(fd);
+    }
+    else if (un_user.flag == SIGNOUT) // 注销
+    {
+        signout_server(fd);
+    }
+
+    // 当所有任务都处理完了（或出问题）之后，再挂树
+    epoll_ctl(epld, EPOLL_CTL_ADD, fd, &temp);
+    return;
 }

@@ -47,10 +47,10 @@ void menu(int client_socket)
 void login_client(int client_socket)
 {
     User user;
-    std::cout << "请输入用户名: ";
-    std::cin >> user.username;
-    std::cout << "请输入密码: ";
-    std::cin >> user.password;
+    cout << "请输入用户名: ";
+    cin >> user.username;
+    cout << "请输入密码: ";
+    cin >> user.password;
     user.flag = LOGIN; // 表示是要登录
 
     // json序列化，及向服务器发送数据
@@ -59,12 +59,14 @@ void login_client(int client_socket)
         {"password", user.password},
         {"flag", user.flag},
     };
-    std::string sendJson_client_string = sendJson_client.dump();
-    SendMsg::SendMsg_client(client_socket, sendJson_client_string);
+    string sendJson_client_string = sendJson_client.dump();
+    SendMsg sendmsg;
+    sendmsg.SendMsg_client(client_socket, sendJson_client_string);
 
     // 接收来自服务器的数据，及json反序列化
-    std::string recvJson_client_string;
-    RecvMsg::RecvMsg_client(client_socket, recvJson_client_string);
+    string recvJson_client_string;
+    RecvMsg recvmsg;
+    recvmsg.RecvMsg_client(client_socket, recvJson_client_string);
 
     json parsed_data = json::parse(recvJson_client_string);
     User un_user;                   // 反序列化得到的结构体
@@ -73,13 +75,13 @@ void login_client(int client_socket)
     // 判断是否登入成功
     if (un_user.status == 0)
     {
-        std::cout << "登入成功！" << std::endl;
+        cout << "登入成功！" << endl;
         //********一个进入下一页面的入口********
         messagemenu();
     }
     else
     {
-        std::cout << "登入失败！" << std::endl;
+        cout << "登入失败！" << endl;
         //*********再次回到登入界面重新输入***********
     }
 }
@@ -87,10 +89,10 @@ void login_client(int client_socket)
 void register_client(int client_socket)
 {
     User user;
-    std::cout << "请输入用户名: ";
-    std::cin >> user.username;
-    std::cout << "请输入密码: ";
-    std::cin >> user.password;
+    cout << "请输入用户名: ";
+    cin >> user.username;
+    cout << "请输入密码: ";
+    cin >> user.password;
     user.flag = REGISTER; // 表示是要注册
 
     // 序列化，发送数据
@@ -99,12 +101,14 @@ void register_client(int client_socket)
         {"password", user.password},
         {"flag", user.flag},
     };
-    std::string sendJson_client_string = sendJson_client.dump();
-    SendMsg::SendMsg_client(client_socket, sendJson_client_string);
+    string sendJson_client_string = sendJson_client.dump();
+    SendMsg sendmsg;
+    sendmsg.SendMsg_client(client_socket, sendJson_client_string);
 
     // 接收数据，反序列化
-    std::string recvJson_client_string;
-    RecvMsg::RecvMsg_client(client_socket, recvJson_client_string);
+    string recvJson_client_string;
+    RecvMsg recvmsg;
+    recvmsg.RecvMsg_client(client_socket, recvJson_client_string);
 
     json parsed_data = json::parse(recvJson_client_string);
     User un_user;
@@ -113,12 +117,12 @@ void register_client(int client_socket)
     // 判断是否注册成功
     if (un_user.status == 0)
     {
-        std::cout << "注册成功！" << std::endl;
+        cout << "注册成功！" << endl;
         //*******回到登入界面进行登录*********
     }
     else
     {
-        std::cout << "注册失败！" << std::endl;
+        cout << "注册失败！" << endl;
         //*********再次回到登入界面重新注册*************
     }
 }
@@ -126,8 +130,8 @@ void register_client(int client_socket)
 void signout_client(int client_socket)
 {
     User user;
-    std::cout << "请输入用户名: ";
-    std::cin >> user.username;
+    cout << "请输入用户名: ";
+    cin >> user.username;
     user.flag = SIGNOUT; // 表示是要注销
 
     // 序列化，发送数据（不用把结构体的所有成员都序列化）
@@ -135,12 +139,14 @@ void signout_client(int client_socket)
         {"username", user.username},
         {"flag", user.flag},
     };
-    std::string sendJson_client_string = sendJson_client.dump();
-    SendMsg::SendMsg_client(client_socket, sendJson_client_string);
+    string sendJson_client_string = sendJson_client.dump();
+    SendMsg sendmsg;
+    sendmsg.SendMsg_client(client_socket, sendJson_client_string);
 
     // 接收数据，反序列化
-    std::string recvJson_client_string;
-    RecvMsg::RecvMsg_client(client_socket, recvJson_client_string);
+    string recvJson_client_string;
+    RecvMsg recvmsg;
+    recvmsg.RecvMsg_client(client_socket, recvJson_client_string);
 
     json parsed_data = json::parse(recvJson_client_string);
     User un_user;
@@ -149,12 +155,12 @@ void signout_client(int client_socket)
     // 判断是否注销成功
     if (un_user.status == 0)
     {
-        std::cout << "注销成功！" << std::endl;
+        cout << "注销成功！" << endl;
         //*******回到登入界面，看用户是否注册登入*********
     }
     else
     {
-        std::cout << "注销失败！" << std::endl;
+        cout << "注销失败！" << endl;
         //*********再次回到登入界面重新注销*************
     }
 }

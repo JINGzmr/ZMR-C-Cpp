@@ -10,13 +10,13 @@ using namespace std;
 class SendMsg
 {
 public:
-    static void SendMsg_client(int client_socket, const std::string &str);
+    void SendMsg_client(int client_socket, const std::string &str);
 };
 
 class RecvMsg
 {
 public:
-    static void RecvMsg_client(int client_socket, std::string &str);
+    void RecvMsg_client(int client_socket, std::string &str);
 };
 
 #endif
