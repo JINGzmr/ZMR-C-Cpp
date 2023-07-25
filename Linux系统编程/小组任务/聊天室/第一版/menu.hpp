@@ -12,6 +12,12 @@
 using json = nlohmann::json;
 using namespace std;
 
+// menu调用了下面的函数，因这几个函数是在同一个文件里的，所以得把声明写在menu的前面
+// 否者会显示调用失败
+void login_client(int client_socket);
+void register_client(int client_socket);
+void signout_client(int client_socket);
+
 void menu(int client_socket)
 {
     cout << "——————————————————————————————————————————————————" << endl;
@@ -41,6 +47,7 @@ void menu(int client_socket)
             cout << "无效的数字，请重新输入！" << endl;
             break;
         }
+        printf("666\n");
     }
 }
 

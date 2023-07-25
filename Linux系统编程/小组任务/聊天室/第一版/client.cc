@@ -42,7 +42,7 @@ int main()
         perror("connection failed");
         return EXIT_FAILURE;
     }
-
+    std::cout <<connect_result<<std::endl;
     std::cout << "欢迎来到私人聊天室" << std::endl;
 
     // 进入登录界面

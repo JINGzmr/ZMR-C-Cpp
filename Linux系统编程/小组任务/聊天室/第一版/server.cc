@@ -20,6 +20,8 @@ using json = nlohmann::json;
 #define PORT 9999
 const int MAX_CONN = 1024; // 最大连接数
 
+void work(void *arg);
+
 int main()
 {
     // 创建线程池(24个线程)
@@ -33,6 +35,7 @@ int main()
         return -1;
     }
 
+std::cout <<  "1" << std::endl;
     // 绑定本地ip和端口
     struct sockaddr_in addr;
     addr.sin_family = AF_INET;
@@ -45,7 +48,7 @@ int main()
         perror("bind error");
         return -1;
     }
-
+std::cout <<  "2" << std::endl;
     // 监听客户端连接
     ret = listen(sockfd, 1024);
     if (ret < 0)
@@ -61,33 +64,34 @@ int main()
         perror("epoll_create error");
         return -1;
     }
-
+std::cout <<  "3" << std::endl;
     // 将监听的socket加入epoll
     struct epoll_event ev;
     ev.events = EPOLLIN;
     ev.data.fd = sockfd;
-
     ret = epoll_ctl(epld, EPOLL_CTL_ADD, sockfd, &ev);
     if (ret < 0)
     {
         perror("epoll_ctl error");
         return -1;
     }
+std::cout <<  "4" << std::endl;
 
     // 循环监听
     while (1)
     {
         struct epoll_event evs[MAX_CONN];
         int n = epoll_wait(epld, evs, MAX_CONN, -1);
-        if (n < 0)
+        if (n < 0) 
         {
             perror("epoll_wait error");
             break;
         }
-
+std::cout <<  "5" << std::endl;
         for (int i = 0; i < n; i++)
         {
             int fd = evs[i].data.fd;
+            
             // 如果是监听的fd收到消息，那么则表示有客户端进行连接了
             if (fd == sockfd)
             {
@@ -99,43 +103,43 @@ int main()
                     perror("accept error");
                     continue;
                 }
-
+std::cout <<  client_sockfd << std::endl;
                 // 将客户端的socket加入epoll
                 struct epoll_event ev_client;
                 ev_client.events = EPOLLIN; // 检测客户端有没有消息过来
                 ev_client.data.fd = client_sockfd;
 
-                // 设置非阻塞
+                // // 设置非阻塞
                 int flag;
                 flag = fcntl(client_sockfd, F_GETFL);
                 flag |= O_NONBLOCK;
                 fcntl(client_sockfd, F_SETFL, flag); // 设置非阻塞
 
-                // 心跳检测（开启保活，1分钟内探测不到，断开连接）
-                int keep_alive = 1;
-                int keep_idle = 3;
-                int keep_interval = 1;
-                int keep_count = 30;
-                if (setsockopt(client_sockfd, SOL_SOCKET, SO_KEEPALIVE, &keep_alive, sizeof(keep_alive)))
-                {
-                    perror("Error setsockopt(SO_KEEPALIVE) failed");
-                    exit(1);
-                }
-                if (setsockopt(client_sockfd, IPPROTO_TCP, TCP_KEEPIDLE, &keep_idle, sizeof(keep_idle)))
-                {
-                    perror("Error setsockopt(TCP_KEEPIDLE) failed");
-                    exit(1);
-                }
-                if (setsockopt(client_sockfd, SOL_TCP, TCP_KEEPINTVL, (void *)&keep_interval, sizeof(keep_interval)))
-                {
-                    perror("Error setsockopt(TCP_KEEPINTVL) failed");
-                    exit(1);
-                }
-                if (setsockopt(client_sockfd, SOL_TCP, TCP_KEEPCNT, (void *)&keep_count, sizeof(keep_count)))
-                {
-                    perror("Error setsockopt(TCP_KEEPCNT) failed");
-                    exit(1);
-                }
+                // // 心跳检测（开启保活，1分钟内探测不到，断开连接）
+                // int keep_alive = 1;
+                // int keep_idle = 3;
+                // int keep_interval = 1;
+                // int keep_count = 30;
+                // if (setsockopt(client_sockfd, SOL_SOCKET, SO_KEEPALIVE, &keep_alive, sizeof(keep_alive)))
+                // {
+                //     perror("Error setsockopt(SO_KEEPALIVE) failed");
+                //     exit(1);
+                // }
+                // if (setsockopt(client_sockfd, IPPROTO_TCP, TCP_KEEPIDLE, &keep_idle, sizeof(keep_idle)))
+                // {
+                //     perror("Error setsockopt(TCP_KEEPIDLE) failed");
+                //     exit(1);
+                // }
+                // if (setsockopt(client_sockfd, SOL_TCP, TCP_KEEPINTVL, (void *)&keep_interval, sizeof(keep_interval)))
+                // {
+                //     perror("Error setsockopt(TCP_KEEPINTVL) failed");
+                //     exit(1);
+                // }
+                // if (setsockopt(client_sockfd, SOL_TCP, TCP_KEEPCNT, (void *)&keep_count, sizeof(keep_count)))
+                // {
+                //     perror("Error setsockopt(TCP_KEEPCNT) failed");
+                //     exit(1);
+                // }
 
                 // 将该客户端加入epoll树
                 ret = epoll_ctl(epld, EPOLL_CTL_ADD, client_sockfd, &ev_client);
