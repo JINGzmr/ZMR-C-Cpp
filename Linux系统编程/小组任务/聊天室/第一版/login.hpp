@@ -9,7 +9,8 @@ using namespace std;
 void login_server(int fd,struct User user)
 {
     printf("登录\n");
-    printf("%s %s",user.username,user.password);
+    // printf("%s %s",user.username,user.password);
+    cout << user.username << '\n' << user.password << endl;
 
     // json序列化，及向服务器发送数据
     user.status = SUCCESS;

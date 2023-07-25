@@ -11,7 +11,7 @@
 #include <errno.h>
 #include <pthread.h>
 
-#define PORT 9999
+#define PORT 8080
 #define ServerAddr "127.0.0.1"
 
 int main()
