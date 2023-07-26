@@ -26,6 +26,19 @@ void SendMsg::SendMsg_client(int client_socket, const std::string &str)
     }
 }
 
+// 服务端发送数据处理的结果（成功/失败）
+void SendMsg::SendMsg_int(int client_socket, int state)
+{
+    if (send(client_socket, &state, sizeof(int), 0) == -1)
+    {
+        std::cout << "state send failed" << std::endl;
+    }
+    else
+    {
+        std::cout << "state sent success" << std::endl;
+    }
+}
+
 // 客户端接收序列化的数据
 void RecvMsg::RecvMsg_client(int client_socket, std::string &str)
 {
@@ -60,4 +73,22 @@ void RecvMsg::RecvMsg_client(int client_socket, std::string &str)
     }
 
     str = string(buffer, recv_bytes);//将字符数组buffer中的recv_bytes个字符复制到字符串str中
+}
+
+
+// 客户端接收数据处理的结果（成功/失败）
+int RecvMsg::RecvMsg_int(int client_socket)
+{
+    int state;
+    ssize_t recv_bytes = recv(client_socket, &state, sizeof(int), 0);
+    if (recv_bytes == -1)
+    {
+        std::cout << "recv state failed" << std::endl;
+    }
+    else if (recv_bytes == 0) // 客户端断开连接
+    {
+        std::cout << "Connection closed by peer." << std::endl;
+        close(client_socket);                     
+    }
+    return state;
 }

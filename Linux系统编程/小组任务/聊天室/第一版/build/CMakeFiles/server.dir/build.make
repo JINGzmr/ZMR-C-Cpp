@@ -124,6 +124,7 @@ server: CMakeFiles/server.dir/server.cc.o
 server: CMakeFiles/server.dir/threadpool.cc.o
 server: CMakeFiles/server.dir/IO.cc.o
 server: CMakeFiles/server.dir/build.make
+server: /usr/lib/x86_64-linux-gnu/libhiredis.so
 server: CMakeFiles/server.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/zhangminrui/桌面/练习代码/Linux系统编程/小组任务/聊天室/第一版/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable server"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/server.dir/link.txt --verbose=$(VERBOSE)

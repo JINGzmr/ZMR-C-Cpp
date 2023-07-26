@@ -791,6 +791,13 @@ CMakeFiles/server.dir/server.cc.o: ../server.cc \
   ../data.h \
   ../define.h \
   ../login.hpp \
+  ../redis.hpp \
+  /usr/include/hiredis/hiredis.h \
+  /usr/include/hiredis/read.h \
+  /usr/include/x86_64-linux-gnu/sys/time.h \
+  /usr/include/hiredis/sds.h \
+  /usr/include/hiredis/alloc.h \
+  /usr/include/c++/11/stdlib.h \
   /usr/include/netinet/tcp.h \
   /usr/include/fcntl.h \
   /usr/include/x86_64-linux-gnu/bits/fcntl.h \
@@ -1202,6 +1209,12 @@ CMakeFiles/server.dir/threadpool.cc.o: ../threadpool.cc \
 
 /usr/include/fcntl.h:
 
+/usr/include/c++/11/stdlib.h:
+
+/usr/include/hiredis/sds.h:
+
+../redis.hpp:
+
 ../login.hpp:
 
 ../data.h:
@@ -1304,6 +1317,8 @@ CMakeFiles/server.dir/threadpool.cc.o: ../threadpool.cc \
 
 /usr/include/libintl.h:
 
+/usr/include/hiredis/alloc.h:
+
 /usr/include/x86_64-linux-gnu/c++/11/bits/messages_members.h:
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/time_members.h:
@@ -1325,6 +1340,10 @@ CMakeFiles/server.dir/threadpool.cc.o: ../threadpool.cc \
 /usr/include/nlohmann/detail/input/json_sax.hpp:
 
 /usr/include/nlohmann/detail/meta/call_std/end.hpp:
+
+/usr/include/x86_64-linux-gnu/sys/time.h:
+
+/usr/include/hiredis/read.h:
 
 /usr/include/nlohmann/detail/meta/call_std/begin.hpp:
 
@@ -1403,6 +1422,8 @@ CMakeFiles/server.dir/threadpool.cc.o: ../threadpool.cc \
 /usr/include/x86_64-linux-gnu/c++/11/bits/c++allocator.h:
 
 /usr/include/c++/11/bits/locale_classes.h:
+
+/usr/include/hiredis/hiredis.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/__fpos64_t.h:
 

@@ -197,11 +197,11 @@ void work(void *arg)
     // 根据接收到的消息判断用户在登录界面的操作
     if (un_user.flag == LOGIN) // 登录
     {
-        login_server(fd,un_user);
+        login_server(fd,un_user,recvJson_buf);
     }
     else if (un_user.flag == REGISTER) // 注册
     {
-        register_server(fd,un_user);
+        register_server(fd,un_user,recvJson_buf);
     }
     else if (un_user.flag == SIGNOUT) // 注销
     {

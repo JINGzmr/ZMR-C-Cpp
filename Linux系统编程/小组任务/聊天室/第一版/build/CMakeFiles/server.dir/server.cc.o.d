@@ -326,6 +326,10 @@ CMakeFiles/server.dir/server.cc.o: \
  /home/zhangminrui/桌面/练习代码/Linux系统编程/小组任务/聊天室/第一版/data.h \
  /home/zhangminrui/桌面/练习代码/Linux系统编程/小组任务/聊天室/第一版/define.h \
  /home/zhangminrui/桌面/练习代码/Linux系统编程/小组任务/聊天室/第一版/login.hpp \
+ /home/zhangminrui/桌面/练习代码/Linux系统编程/小组任务/聊天室/第一版/redis.hpp \
+ /usr/include/hiredis/hiredis.h /usr/include/hiredis/read.h \
+ /usr/include/x86_64-linux-gnu/sys/time.h /usr/include/hiredis/sds.h \
+ /usr/include/hiredis/alloc.h /usr/include/c++/11/stdlib.h \
  /usr/include/netinet/tcp.h /usr/include/fcntl.h \
  /usr/include/x86_64-linux-gnu/bits/fcntl.h \
  /usr/include/x86_64-linux-gnu/bits/fcntl-linux.h \

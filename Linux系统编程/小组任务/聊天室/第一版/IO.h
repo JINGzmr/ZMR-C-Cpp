@@ -11,12 +11,14 @@ class SendMsg
 {
 public:
     void SendMsg_client(int client_socket, const std::string &str);
+    void SendMsg_int(int client_socket, int state);
 };
 
 class RecvMsg
 {
 public:
     void RecvMsg_client(int client_socket, std::string &str);
+    int RecvMsg_int(int client_socket);
 };
 
 #endif

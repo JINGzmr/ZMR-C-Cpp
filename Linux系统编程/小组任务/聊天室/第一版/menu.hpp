@@ -113,24 +113,26 @@ void register_client(int client_socket)
     sendmsg.SendMsg_client(client_socket, sendJson_client_string);
 
     // 接收数据，反序列化
-    string recvJson_client_string;
+    int state_;
     RecvMsg recvmsg;
-    recvmsg.RecvMsg_client(client_socket, recvJson_client_string);
-
-    json parsed_data = json::parse(recvJson_client_string);
-    User un_user;
-    un_user.status = parsed_data["status"];
+    state_ = recvmsg.RecvMsg_int(client_socket);
 
     // 判断是否注册成功
-    if (un_user.status == SUCCESS)
+    if (state_ == SUCCESS)
     {
         cout << "注册成功！" << endl;
         //*******回到登入界面进行登录*********
+        return;
     }
-    else
+    else if(state_ == USERNAMEEXIST)
+    {
+        cout << "该用户名已存在，请登录 或 更改用户名后重新注册" << endl;
+        //*********再次回到登入界面重新注册*************
+        return;
+    }
+    else if(state_ == FAIL)
     {
         cout << "注册失败！" << endl;
-        //*********再次回到登入界面重新注册*************
     }
 }
 
