@@ -9,10 +9,9 @@ struct User
 {
     std::string username;
     std::string password;
-    // int uid = 0;
-    int flag = 0;//标记选项
+    int flag;//标记选项
     int status; //标记从服务器返回的状态（成功SUCCESS，失败FAIL）
-    // int fd = 0;
+    int online; // 是否在线（在线ONLINE，不在OFFLINE）
 };
 
 

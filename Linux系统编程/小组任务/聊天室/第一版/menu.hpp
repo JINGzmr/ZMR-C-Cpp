@@ -80,7 +80,7 @@ void login_client(int client_socket)
     un_user.status = parsed_data["status"]; // 只有登录成功与否的状态
 
     // 判断是否登入成功
-    if (un_user.status == 0)
+    if (un_user.status == SUCCESS)
     {
         cout << "登入成功！" << endl;
         //********一个进入下一页面的入口********
@@ -122,7 +122,7 @@ void register_client(int client_socket)
     un_user.status = parsed_data["status"];
 
     // 判断是否注册成功
-    if (un_user.status == 0)
+    if (un_user.status == SUCCESS)
     {
         cout << "注册成功！" << endl;
         //*******回到登入界面进行登录*********
@@ -160,7 +160,7 @@ void signout_client(int client_socket)
     un_user.status = parsed_data["status"];
 
     // 判断是否注销成功
-    if (un_user.status == 0)
+    if (un_user.status == SUCCESS)
     {
         cout << "注销成功！" << endl;
         //*******回到登入界面，看用户是否注册登入*********
