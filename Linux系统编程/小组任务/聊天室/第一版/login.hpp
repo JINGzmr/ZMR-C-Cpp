@@ -2,9 +2,12 @@
 #include "data.h"
 #include "define.h"
 #include "redis.hpp"
+#include "IO.h"
 
 #include <iostream>
+using json = nlohmann::json;
 using namespace std;
+
 
 // 登录
 void login_server(int fd, struct User user, string buf)
@@ -15,14 +18,47 @@ void login_server(int fd, struct User user, string buf)
     printf("用户名：%s\n密码：%s", user.username.c_str(), user.password.c_str());
     // cout << user.username << '\n' << user.password << endl;
 
-    // json序列化，及向服务器发送数据
-    user.status = SUCCESS;
-    nlohmann::json sendJson_server = {
-        {"status", user.status},
-    };
-    string sendJson_server_string = sendJson_server.dump();
-    SendMsg sendmsg;
-    sendmsg.SendMsg_client(fd, sendJson_server_string);
+    Redis redis;
+    redis.connect();
+
+    if (redis.hashexists("userinfo", user.username) != 1)// 账号不存在
+    {
+        cout << "该用户名不存在，请注册 或 重新输入" << endl;
+        SendMsg sendmsg;
+        sendmsg.SendMsg_int(fd, USERNAMEUNEXIST);
+    }
+    else// 账号存在
+    {
+        string userjson_string;
+        userjson_string = redis.gethash("userinfo", user.username);
+        json parsed_data = json::parse(userjson_string);
+        if(user.password != parsed_data["password"])
+        {
+            cout << "密码错误" << endl;
+            SendMsg sendmsg;
+            sendmsg.SendMsg_int(fd, FAIL);
+        } 
+        else if(parsed_data["online"] == ONLINE)
+        {
+            cout << "用户已登录" << endl;
+            SendMsg sendmsg;
+            sendmsg.SendMsg_int(fd, ONLINE);
+        }
+        else
+        {
+            cout << "登录成功" << endl;
+            SendMsg sendmsg;
+            sendmsg.SendMsg_int(fd, SUCCESS);
+
+            // 改变用户的在线状态（将原来的string只改变在线状态后，完整地发送给数据库）
+            // int state_ = parsed_data["online"];
+            // state_ = ONLINE;
+            parsed_data["online"] = ONLINE;
+            userjson_string = parsed_data.dump();
+            redis.hsetValue("userinfo",user.username, userjson_string);
+        }
+    }
+
 
     return;
 }
@@ -36,13 +72,13 @@ void register_server(int fd, struct User user, string buf)
     Redis redis;
     redis.connect();
 
-    if (redis.hashexists("userinfo", user.username) == 1)
+    if (redis.hashexists("userinfo", user.username) == 1)//用户名已被使用
     {
         cout << "该用户名已存在，请登录 或 更改用户名后重新注册" << endl;
         SendMsg sendmsg;
         sendmsg.SendMsg_int(fd, USERNAMEEXIST);
     }
-    else
+    else// 新的用户名，可以被使用
     {
         int n = redis.hsetValue("userinfo", user.username, buf);
         if (n == REDIS_REPLY_ERROR)

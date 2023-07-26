@@ -1,3 +1,6 @@
+#ifndef MENU_HPP
+#define MENU_HPP
+
 // 菜单界面，对接的是客户端
 // 几个函数，客户端在不同的菜单栏选择不同的选项，进入不同的模块
 // 在不同的模块下对用户输入的各种数据进行json序列化和IO的SendMsg
@@ -28,7 +31,8 @@ void menu(int client_socket)
     cout << "---------------------3.注销------------------------" << endl;
     cout << "——————————————————————————————————————————————————" << endl;
 
-    while(1){
+    while (1)
+    {
         int num;
         cin >> num;
 
@@ -70,27 +74,37 @@ void login_client(int client_socket)
     SendMsg sendmsg;
     sendmsg.SendMsg_client(client_socket, sendJson_client_string);
 
-    // 接收来自服务器的数据，及json反序列化
-    string recvJson_client_string;
-    RecvMsg recvmsg;
-    recvmsg.RecvMsg_client(client_socket, recvJson_client_string);
-
-    json parsed_data = json::parse(recvJson_client_string);
-    User un_user;                   // 反序列化得到的结构体
-    un_user.status = parsed_data["status"]; // 只有登录成功与否的状态
+    // 接收数据
+        int state_;
+        RecvMsg recvmsg;
+        state_ = recvmsg.RecvMsg_int(client_socket);
 
     // 判断是否登入成功
-    if (un_user.status == SUCCESS)
+    if (state_ == SUCCESS)
     {
         cout << "登入成功！" << endl;
         //********一个进入下一页面的入口********
         messagemenu();
     }
-    else
+    else if(state_ == FAIL)
     {
-        cout << "登入失败！" << endl;
+        cout << "密码错误！" << endl;
         //*********再次回到登入界面重新输入***********
+        return;
     }
+    else if(state_ == ONLINE)
+    {
+        cout << "你已在别处登录！" << endl;
+        //*********再次回到登入界面重新输入***********
+        return;
+    }
+    else if(state_ == USERNAMEUNEXIST)
+    {
+        cout << "该用户名不存在，请注册 或 重新输入" << endl;
+        //*********再次回到登入界面重新输入***********
+        return;
+    }
+    return;
 }
 
 void register_client(int client_socket)
@@ -112,7 +126,7 @@ void register_client(int client_socket)
     SendMsg sendmsg;
     sendmsg.SendMsg_client(client_socket, sendJson_client_string);
 
-    // 接收数据，反序列化
+    // 接收数据
     int state_;
     RecvMsg recvmsg;
     state_ = recvmsg.RecvMsg_int(client_socket);
@@ -124,16 +138,18 @@ void register_client(int client_socket)
         //*******回到登入界面进行登录*********
         return;
     }
-    else if(state_ == USERNAMEEXIST)
+    else if (state_ == USERNAMEEXIST)
     {
         cout << "该用户名已存在，请登录 或 更改用户名后重新注册" << endl;
         //*********再次回到登入界面重新注册*************
         return;
     }
-    else if(state_ == FAIL)
+    else if (state_ == FAIL)
     {
-        cout << "注册失败！" << endl;
+        cout << "注册失败！" << endl;\
+        return;
     }
+    return;
 }
 
 void signout_client(int client_socket)
@@ -174,3 +190,4 @@ void signout_client(int client_socket)
     }
 }
 
+#endif

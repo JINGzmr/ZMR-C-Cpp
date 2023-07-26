@@ -33,7 +33,6 @@ public:
     string gethash(const string &key, const string &field);                     // 获取对应的hash_value
     int hashdel(const string &key, const string &field);                        // 从哈希表删除指定的元素
 
-
 private:
     string m_addr;        // IP地址
     int m_port;           // 端口号
@@ -159,6 +158,5 @@ int Redis::hashdel(const string &key, const string &field) // 从哈希表删除
     freeReplyObject(pm_rr);
     return p;
 }
-
 
 #endif
