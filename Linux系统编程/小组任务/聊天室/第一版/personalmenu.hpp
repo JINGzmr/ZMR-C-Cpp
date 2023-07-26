@@ -25,11 +25,10 @@ void messagemenu()
     cout << "|                      16.返回上一页                 |" << endl;
     cout << "————————————————————————————————————————————————————" << endl;
 
-
-    int num;
-    cin >> num;
-
     while(1){
+        int num;
+        cin >> num;
+
         switch (num)
         {
         case 1:
