@@ -187,7 +187,7 @@ void work(void *arg)
     // 服务端开的子线程负责接收客户端的消息
     string recvJson_buf;
     RecvMsg recvmsg;
-    recvmsg.RecvMsg_client(fd, recvJson_buf);
+    recvmsg.RecvMsg_client(fd, recvJson_buf);//***********第二次回到登录界面进行选择时，按下回车键，服务器会出现段错误，且停在这行过不去
     json parsed_data = json::parse(recvJson_buf);
     User un_user;
     un_user.username = parsed_data["username"];

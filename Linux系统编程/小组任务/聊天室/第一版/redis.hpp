@@ -150,7 +150,7 @@ string Redis::gethash(const string &key, const string &field) // 获取对应的
     freeReplyObject(pm_rr);
     return p;
 }
-int Redis::hashdel(const string &key, const string &field) // 从哈希表删除指定的元素
+int Redis::hashdel(const string &key, const string &field) // 从哈希表删除指定的元素，成功返回3
 {
     string cmd = "hdel  " + key + "  " + field;
     pm_rr = (redisReply *)redisCommand(pm_rct, cmd.c_str());

@@ -51,7 +51,6 @@ void menu(int client_socket)
             cout << "无效的数字，请重新输入！" << endl;
             break;
         }
-        printf("666\n");
     }
 }
 
@@ -157,36 +156,42 @@ void signout_client(int client_socket)
     User user;
     cout << "请输入用户名: ";
     cin >> user.username;
+    cout << "请输入密码: ";
+    cin >> user.password;
     user.flag = SIGNOUT; // 表示是要注销
 
     // 序列化，发送数据（不用把结构体的所有成员都序列化）
     nlohmann::json sendJson_client = {
         {"username", user.username},
+        {"password", user.password},
         {"flag", user.flag},
     };
     string sendJson_client_string = sendJson_client.dump();
     SendMsg sendmsg;
     sendmsg.SendMsg_client(client_socket, sendJson_client_string);
 
-    // 接收数据，反序列化
-    string recvJson_client_string;
+    // 接收数据
+    int state_;
     RecvMsg recvmsg;
-    recvmsg.RecvMsg_client(client_socket, recvJson_client_string);
-
-    json parsed_data = json::parse(recvJson_client_string);
-    User un_user;
-    un_user.status = parsed_data["status"];
+    state_ = recvmsg.RecvMsg_int(client_socket);
 
     // 判断是否注销成功
-    if (un_user.status == SUCCESS)
+    if (state_ == SUCCESS)
     {
         cout << "注销成功！" << endl;
         //*******回到登入界面，看用户是否注册登入*********
+        return;
     }
-    else
+    else if(state_ == USERNAMEUNEXIST)
     {
-        cout << "注销失败！" << endl;
+        cout << "该用户名不存在，请注册 或 重新输入" << endl;
         //*********再次回到登入界面重新注销*************
+    }
+    else 
+    {
+        cout << "注销失败！---请检查密码输入是否正确" << endl;
+        //*********再次回到登入界面重新注销*************
+        return;
     }
 }
 
