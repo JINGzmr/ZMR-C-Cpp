@@ -3,6 +3,7 @@
 #include "define.h"
 #include "redis.hpp"
 #include "IO.h"
+#include "personalprocess.hpp"
 
 #include <iostream>
 using json = nlohmann::json;
@@ -55,6 +56,9 @@ void login_server(int fd, struct User user, string buf)
             parsed_data["online"] = ONLINE;
             userjson_string = parsed_data.dump();
             redis.hsetValue("userinfo", user.username, userjson_string);
+
+            // 进入服务器处理每个 个人界面 所选择的的编号对应的函数发送的数据请求 的模块
+            personal_process(fd,user);
         }
     }
 
@@ -115,7 +119,7 @@ void signout_server(int fd, struct User user)
         string userjson_string;
         userjson_string = redis.gethash("userinfo", user.username);
         json parsed_data = json::parse(userjson_string);
-        if (user.password == parsed_data["password"] && redis.hashdel("userinfo", user.username) == 3) //密码正确且账号从哈希表中成功移除
+        if (user.password == parsed_data["password"] && redis.hashdel("userinfo", user.username) == 3) // 密码正确且账号从哈希表中成功移除
         {
             cout << "注销成功" << endl;
             SendMsg sendmsg;
@@ -128,4 +132,7 @@ void signout_server(int fd, struct User user)
             sendmsg.SendMsg_int(fd, FAIL);
         }
     }
+    return;
 }
+
+

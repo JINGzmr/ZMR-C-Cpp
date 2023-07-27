@@ -27,6 +27,7 @@ add_executable(server
     define.h 
     login.hpp
     redis.hpp
+    personalprocess.hpp
 )
 
 # 添加链接库

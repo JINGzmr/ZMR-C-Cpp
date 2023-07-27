@@ -798,6 +798,7 @@ CMakeFiles/server.dir/server.cc.o: ../server.cc \
   /usr/include/hiredis/sds.h \
   /usr/include/hiredis/alloc.h \
   /usr/include/c++/11/stdlib.h \
+  ../personalprocess.hpp \
   /usr/include/netinet/tcp.h \
   /usr/include/fcntl.h \
   /usr/include/x86_64-linux-gnu/bits/fcntl.h \
@@ -1700,6 +1701,8 @@ CMakeFiles/server.dir/threadpool.cc.o: ../threadpool.cc \
 /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h:
+
+../personalprocess.hpp:
 
 /usr/include/c++/11/bits/stl_iterator_base_types.h:
 

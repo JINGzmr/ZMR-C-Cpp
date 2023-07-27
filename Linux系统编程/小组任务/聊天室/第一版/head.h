@@ -19,5 +19,7 @@
 #include <arpa/inet.h> //htonl
 // #include <jsoncpp/json/json.h>
 
+using namespace std;
+using json = nlohmann::json;
 
 #endif

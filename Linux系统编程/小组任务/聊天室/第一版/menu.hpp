@@ -83,7 +83,7 @@ void login_client(int client_socket)
     {
         cout << "登入成功！" << endl;
         //********一个进入下一页面的入口********
-        messagemenu();
+        messagemenu(client_socket,user.username);
     }
     else if(state_ == FAIL)
     {
@@ -145,7 +145,7 @@ void register_client(int client_socket)
     }
     else if (state_ == FAIL)
     {
-        cout << "注册失败！" << endl;\
+        cout << "注册失败！" << endl;
         return;
     }
     return;
