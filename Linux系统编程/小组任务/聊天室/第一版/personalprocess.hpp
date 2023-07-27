@@ -15,8 +15,8 @@ void personal_process(int client_socket, struct User user)
         int state_;
         RecvMsg recvmsg;
         state_ = recvmsg.RecvMsg_int(client_socket);
-        printf("\n\n%d\n\n",state_); //输出为0
-        printf("777");
+        //有问题：如果套接字设置为非阻塞的话，只要有出现recv的地方，就算没有数据可以读取，他也会不断的读数据，不断的读取失败。。。。。。
+        // 然后服务器的终端会一直出现 recv读取失败 的错误提示
 
         if (state_ == LOGOUT)
         {
@@ -39,5 +39,4 @@ void logout_server(int client_socket, struct User user)
     parsed_data["online"] = OFFLINE;
     userjson_string = parsed_data.dump();
     redis.hsetValue("userinfo", user.username, userjson_string);
-    printf("666");
 }
