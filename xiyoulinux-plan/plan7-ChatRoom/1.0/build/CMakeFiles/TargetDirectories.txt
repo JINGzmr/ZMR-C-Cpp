@@ -1,0 +1,4 @@
+/home/zhangminrui/桌面/练习代码/Linux系统编程/小组任务/聊天室/第一版/build/CMakeFiles/client.dir
+/home/zhangminrui/桌面/练习代码/Linux系统编程/小组任务/聊天室/第一版/build/CMakeFiles/server.dir
+/home/zhangminrui/桌面/练习代码/Linux系统编程/小组任务/聊天室/第一版/build/CMakeFiles/edit_cache.dir
+/home/zhangminrui/桌面/练习代码/Linux系统编程/小组任务/聊天室/第一版/build/CMakeFiles/rebuild_cache.dir
