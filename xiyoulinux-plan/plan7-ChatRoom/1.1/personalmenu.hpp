@@ -10,9 +10,10 @@ using namespace std;
 
 void addfriend_client(int client_socket);
 
-void logout_client(int client_socket , string username);
+void logout_client(int client_socket, string username);
+void addfriend_client(int client_socket, string username);
 
-void messagemenu(int client_socket, string username)
+void personalmenuUI(void)
 {
     cout << "————————————————————————————————————————————————————" << endl;
     cout << "|---------------------  聊天室  --------------------|" << endl;
@@ -35,6 +36,11 @@ void messagemenu(int client_socket, string username)
     cout << "|---------------------------------------------------|" << endl;
     cout << "|                      16.退出登录                   |" << endl;
     cout << "————————————————————————————————————————————————————" << endl;
+}
+
+void messagemenu(int client_socket, string id)
+{
+    personalmenuUI();
 
     int num = 1;
     do
@@ -43,9 +49,10 @@ void messagemenu(int client_socket, string username)
 
         switch (num)
         {
-        // case 4:
-        //     addfriend_client(client_socket);
-        //     break;
+        case 4:
+            addfriend_client(client_socket, id);
+            personalmenuUI();
+            break;
         // case 5:
         //     friendapply_client(client_socket);
         //     break;
@@ -80,21 +87,22 @@ void messagemenu(int client_socket, string username)
 
             break;
         case 16:
-            logout_client(client_socket, username);
+            logout_client(client_socket, id);
             break;
         default:
             cout << "无效的数字，请重新输入！" << endl;
+            personalmenuUI();
         }
     } while (num != 16); // 16表示退出登录，即退出循环，返回上一级
 
     return;
 }
 
-void logout_client(int client_socket,string username)
+void logout_client(int client_socket, string id)
 {
     nlohmann::json sendJson_client = {
         {"flag", LOGOUT},
-        {"username",username},
+        {"id", id},
     };
     string sendJson_client_string = sendJson_client.dump();
     SendMsg sendmsg;
@@ -102,7 +110,42 @@ void logout_client(int client_socket,string username)
     cout << "退出成功！" << endl;
 }
 
-void addfriend_client(int client_socket)
+void addfriend_client(int client_socket, string id)
 {
+    Friend friend_;
+    cout << "请输入你要添加的朋友ID：";
+    cin >> friend_.oppoid;
+    friend_.id = id;
+    friend_.flag = ADDFRIEND;
 
+    nlohmann::json sendJson_client = {
+        {"id", friend_.id},
+        {"oppoid", friend_.oppoid},
+        {"flag", friend_.flag},
+    };
+
+    string sendJson_client_string = sendJson_client.dump();
+    SendMsg sendmsg;
+    sendmsg.SendMsg_client(client_socket, sendJson_client_string);
+
+    // 接收数据
+    int state_;
+    RecvMsg recvmsg;
+    state_ = recvmsg.RecvMsg_int(client_socket);
+
+    // 判断是否登入成功
+    if (state_ == SUCCESS)
+    {
+        cout << "已发送好友申请！" << endl;
+    }
+    else if (state_ == FAIL)
+    {
+        cout << "你们已经是好友！" << endl;
+    }
+    else if (state_ == USERNAMEUNEXIST)
+    {
+        cout << "该id不存在，请重新输入" << endl;
+    }
+
+    return;
 }

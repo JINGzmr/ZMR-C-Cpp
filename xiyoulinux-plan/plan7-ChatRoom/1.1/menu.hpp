@@ -57,15 +57,15 @@ void menu(int client_socket)
 void login_client(int client_socket)
 {
     User user;
-    cout << "请输入用户名: ";
-    cin >> user.username;
+    cout << "请输入id: ";
+    cin >> user.id;
     cout << "请输入密码: ";
     cin >> user.password;
     user.flag = LOGIN; // 表示是要登录
 
     // json序列化，及向服务器发送数据
     nlohmann::json sendJson_client = {
-        {"username", user.username},
+        {"id", user.id},
         {"password", user.password},
         {"flag", user.flag},
     };
@@ -83,7 +83,7 @@ void login_client(int client_socket)
     {
         cout << "登入成功！" << endl;
         //********一个进入下一页面的入口********
-        messagemenu(client_socket, user.username);
+        messagemenu(client_socket, user.id);
         system("clear"); // 刷新终端页面
     }
     else if (state_ == FAIL)
@@ -100,7 +100,7 @@ void login_client(int client_socket)
     }
     else if (state_ == USERNAMEUNEXIST)
     {
-        cout << "该用户名不存在，请注册 或 重新输入" << endl;
+        cout << "该id不存在，请注册 或 重新输入" << endl;
         //*********再次回到登入界面重新输入***********
         return;
     }
@@ -134,7 +134,9 @@ void register_client(int client_socket)
     // 判断是否注册成功
     if (state_ == SUCCESS)
     {
-        cout << "注册成功！" << endl;
+        string id;
+        recvmsg.RecvMsg_client(client_socket, id);
+        cout << "注册成功！ 你的账号为：" << id << endl;
         //*******回到登入界面进行登录*********
         return;
     }
@@ -155,15 +157,15 @@ void register_client(int client_socket)
 void signout_client(int client_socket)
 {
     User user;
-    cout << "请输入用户名: ";
-    cin >> user.username;
+    cout << "请输入id: ";
+    cin >> user.id;
     cout << "请输入密码: ";
     cin >> user.password;
     user.flag = SIGNOUT; // 表示是要注销
 
     // 序列化，发送数据（不用把结构体的所有成员都序列化）
     nlohmann::json sendJson_client = {
-        {"username", user.username},
+        {"id", user.id},
         {"password", user.password},
         {"flag", user.flag},
     };

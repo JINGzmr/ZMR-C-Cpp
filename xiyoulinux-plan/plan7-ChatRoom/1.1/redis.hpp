@@ -14,8 +14,8 @@ using namespace std;
 // info的键：对应的是存所有用户的UID
 // peopleinfo的键：对应的是哈希表，字段存的是用户的UID，值存序列化好的用户个人信息
 
-// 我直接把用户名作为UID，用户名就是独一无二的键
-// 因此哈希表中：用户信息userinfo作为键，字段时用户名，值是序列化好的用户个人信息
+// 因此哈希表中：用户信息userinfo作为键，字段是id，值是序列化好的用户个人信息
+// 普通表中：username用来存放用户名
 
 class Redis
 {
@@ -32,6 +32,11 @@ public:
     int hashexists(const string &key, const string &field);                     // 查看是否存在，存在返回1，不存在返回0
     string gethash(const string &key, const string &field);                     // 获取对应的hash_value
     int hashdel(const string &key, const string &field);                        // 从哈希表删除指定的元素
+
+    int saddvalue(const string &key, const string &value);                      //插入到集合
+    int sismember(const string &key, const string &value);                      //查看数据是否存在
+    int sremvalue(const string &key, const string &value);                      //将数据从set中移出
+
 
 private:
     string m_addr;        // IP地址
@@ -153,6 +158,34 @@ string Redis::gethash(const string &key, const string &field) // 获取对应的
 int Redis::hashdel(const string &key, const string &field) // 从哈希表删除指定的元素，成功返回3
 {
     string cmd = "hdel  " + key + "  " + field;
+    pm_rr = (redisReply *)redisCommand(pm_rct, cmd.c_str());
+    int p = pm_rr->type;
+    freeReplyObject(pm_rr);
+    return p;
+}
+
+
+
+/*----------------------------------------*/
+int Redis::saddvalue(const string &key, const string &value) //插入到集合
+{
+    string cmd = "sadd  " + key + "  " + value;
+    pm_rr = (redisReply *)redisCommand(pm_rct, cmd.c_str());
+    int p = pm_rr->type;
+    freeReplyObject(pm_rr);
+    return p;
+}
+int Redis::sismember(const string &key, const string &value) //查看数据是否存在
+{
+    string cmd = "sismember  " + key + "  " + value;
+    pm_rr = (redisReply *)redisCommand(pm_rct, cmd.c_str());
+    int p = pm_rr->integer;
+    freeReplyObject(pm_rr);
+    return p;
+}
+int Redis::sremvalue(const string &key, const string &value) //将数据从set中移出
+{
+    string cmd = "srem  " + key + "  " + value;
     pm_rr = (redisReply *)redisCommand(pm_rct, cmd.c_str());
     int p = pm_rr->type;
     freeReplyObject(pm_rr);

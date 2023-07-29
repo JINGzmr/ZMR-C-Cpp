@@ -1,4 +1,4 @@
-# Install script for directory: /home/zhangminrui/桌面/练习代码/Linux系统编程/小组任务/聊天室/第一版（一任务一线程）
+# Install script for directory: /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.1
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/zhangminrui/桌面/练习代码/Linux系统编程/小组任务/聊天室/第一版（一任务一线程）/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.1/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

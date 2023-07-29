@@ -1,7 +1,7 @@
 CMakeFiles/server.dir/threadpool.cc.o: \
- /home/zhangminrui/桌面/练习代码/Linux系统编程/小组任务/聊天室/第一版（一任务一线程）/threadpool.cc \
+ /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.1/threadpool.cc \
  /usr/include/stdc-predef.h \
- /home/zhangminrui/桌面/练习代码/Linux系统编程/小组任务/聊天室/第一版（一任务一线程）/head.h \
+ /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.1/head.h \
  /usr/include/c++/11/iostream \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \
@@ -320,5 +320,5 @@ CMakeFiles/server.dir/threadpool.cc.o: \
  /usr/include/c++/11/bits/regex.h /usr/include/c++/11/bits/regex.tcc \
  /usr/include/c++/11/bits/regex_executor.h \
  /usr/include/c++/11/bits/regex_executor.tcc \
- /home/zhangminrui/桌面/练习代码/Linux系统编程/小组任务/聊天室/第一版（一任务一线程）/threadpool.h \
+ /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.1/threadpool.h \
  /usr/include/c++/11/queue /usr/include/c++/11/bits/stl_queue.h

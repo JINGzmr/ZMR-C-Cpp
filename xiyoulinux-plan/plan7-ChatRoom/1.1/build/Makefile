@@ -57,10 +57,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/zhangminrui/桌面/练习代码/Linux系统编程/小组任务/聊天室/第一版（一任务一线程）
+CMAKE_SOURCE_DIR = /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.1
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/zhangminrui/桌面/练习代码/Linux系统编程/小组任务/聊天室/第一版（一任务一线程）/build
+CMAKE_BINARY_DIR = /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.1/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/zhangminrui/桌面/练习代码/Linux系统编程/小组任务/聊天室/第一版（一任务一线程）/build/CMakeFiles /home/zhangminrui/桌面/练习代码/Linux系统编程/小组任务/聊天室/第一版（一任务一线程）/build//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.1/build/CMakeFiles /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.1/build//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/zhangminrui/桌面/练习代码/Linux系统编程/小组任务/聊天室/第一版（一任务一线程）/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.1/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target

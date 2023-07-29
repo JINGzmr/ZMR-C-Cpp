@@ -13,27 +13,27 @@ void login_server(int fd, string buf)
 {
     json parsed_data = json::parse(buf);
     struct User user;
-    user.username = parsed_data["username"];
+    user.id = parsed_data["id"];
     user.password = parsed_data["password"];
-    printf("--- %s 用户将要登录 ---\n", user.username.c_str());
+    printf("--- %s 用户将要登录 ---\n", user.id.c_str());
 
     // 下面两种都行，但第一种的话要加上.c_str()
-    printf("用户名：%s\n密码：%s\n", user.username.c_str(), user.password.c_str());
+    printf("id：%s\n密码：%s\n", user.id.c_str(), user.password.c_str());
     // cout << user.username << '\n' << user.password << endl;
 
     Redis redis;
     redis.connect();
 
-    if (redis.hashexists("userinfo", user.username) != 1) // 账号不存在
+    if (redis.hashexists("userinfo", user.id) != 1) // 账号不存在
     {
-        cout << "该用户名不存在，请注册 或 重新输入" << endl;
+        cout << "该id不存在，请注册 或 重新输入" << endl;
         SendMsg sendmsg;
         sendmsg.SendMsg_int(fd, USERNAMEUNEXIST);
     }
     else // 账号存在
     {
         string userjson_string;
-        userjson_string = redis.gethash("userinfo", user.username);
+        userjson_string = redis.gethash("userinfo", user.id);
         parsed_data = json::parse(userjson_string);
         if (user.password != parsed_data["password"])
         {
@@ -58,7 +58,7 @@ void login_server(int fd, string buf)
             // state_ = ONLINE;
             parsed_data["online"] = ONLINE;
             userjson_string = parsed_data.dump();
-            redis.hsetValue("userinfo", user.username, userjson_string);
+            redis.hsetValue("userinfo", user.id, userjson_string);
 
             //------------登录成功后，是客户端进入下一步，服务端只需要根据客户端发来的请求 调用相应的函数 来处理即可-------------
             // 现在这个登录的任务服务器处理完毕了，也就可以返回上一级了
@@ -82,7 +82,7 @@ void register_server(int fd, string buf)
     Redis redis;
     redis.connect();
 
-    if (redis.hashexists("userinfo", user.username) == 1) // 用户名已被使用
+    if (redis.sismember("username", user.username) == 1) // 用户名已被使用
     {
         cout << "该用户名已存在，请登录 或 更改用户名后重新注册" << endl;
         SendMsg sendmsg;
@@ -90,8 +90,12 @@ void register_server(int fd, string buf)
     }
     else // 新的用户名，可以被使用
     {
-        int n = redis.hsetValue("userinfo", user.username, buf);
-        if (n == REDIS_REPLY_ERROR)
+        time_t timestamp;
+        time(&timestamp);
+        string id = to_string(timestamp);
+        int n = redis.hsetValue("userinfo", id, buf);
+        int m = redis.saddvalue("username", user.username);
+        if (n == REDIS_REPLY_ERROR || m == REDIS_REPLY_ERROR)
         {
             cout << "注册失败" << endl;
             SendMsg sendmsg;
@@ -102,6 +106,7 @@ void register_server(int fd, string buf)
             cout << "注册成功" << endl;
             SendMsg sendmsg;
             sendmsg.SendMsg_int(fd, SUCCESS);
+            sendmsg.SendMsg_client(fd, id);
         }
     }
     return;
@@ -112,15 +117,15 @@ void signout_server(int fd, string buf)
 {
     json parsed_data = json::parse(buf);
     struct User user;
-    user.username = parsed_data["username"];
+    user.id = parsed_data["id"];
     user.password = parsed_data["password"];
-    printf("--- %s 用户将要注销 ---\n", user.username.c_str());
-    printf("用户名：%s\n密码：%s\n", user.username.c_str(), user.password.c_str());
+    printf("--- %s 用户将要注销 ---\n", user.id.c_str());
+    printf("id：%s\n密码：%s\n", user.id.c_str(), user.password.c_str());
 
     Redis redis;
     redis.connect();
 
-    if (redis.hashexists("userinfo", user.username) != 1) // 账号不存在
+    if (redis.hashexists("userinfo", user.id) != 1) // 账号不存在
     {
         cout << "该用户名不存在，请注册 或 重新输入" << endl;
         SendMsg sendmsg;
@@ -129,9 +134,9 @@ void signout_server(int fd, string buf)
     else // 账号存在
     {
         string userjson_string;
-        userjson_string = redis.gethash("userinfo", user.username);
+        userjson_string = redis.gethash("userinfo", user.id);
         parsed_data = json::parse(userjson_string);
-        if (user.password == parsed_data["password"] && redis.hashdel("userinfo", user.username) == 3) // 密码正确且账号从哈希表中成功移除
+        if (user.password == parsed_data["password"] && redis.hashdel("userinfo", user.id) == 3) // 密码正确且账号从哈希表中成功移除
         {
             cout << "注销成功" << endl;
             SendMsg sendmsg;

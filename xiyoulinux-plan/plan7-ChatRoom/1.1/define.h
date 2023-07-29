@@ -16,7 +16,7 @@ const int BUFFER_SIZE = 10240; // 缓冲区的大小（用于存储recv来的序
 #define ADDFRIEND 4        // 添加好友
 #define FRIENDAPPLY 5      // 查看好友申请
 #define CHATFRIEND 6       // 选择好友私聊
-#define HISTORYCHAT 7     // 查看历史聊天记录
+#define HISTORYCHAT 7      // 查看历史聊天记录
 #define ONLINEFRIEND 8     // 在线好友
 #define ADDBLACK 9         // 加入黑名单（屏蔽好友）
 #define DELFRIEND 10       // 删除好友

@@ -1,8 +1,8 @@
 CMakeFiles/client.dir/client.cc.o: \
- /home/zhangminrui/桌面/练习代码/Linux系统编程/小组任务/聊天室/第一版（一任务一线程）/client.cc \
+ /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.1/client.cc \
  /usr/include/stdc-predef.h \
- /home/zhangminrui/桌面/练习代码/Linux系统编程/小组任务/聊天室/第一版（一任务一线程）/menu.hpp \
- /home/zhangminrui/桌面/练习代码/Linux系统编程/小组任务/聊天室/第一版（一任务一线程）/data.h \
+ /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.1/menu.hpp \
+ /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.1/data.h \
  /usr/include/c++/11/iostream \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \
@@ -149,8 +149,8 @@ CMakeFiles/client.dir/client.cc.o: \
  /usr/include/c++/11/bits/basic_ios.tcc \
  /usr/include/c++/11/bits/ostream.tcc /usr/include/c++/11/istream \
  /usr/include/c++/11/bits/istream.tcc \
- /home/zhangminrui/桌面/练习代码/Linux系统编程/小组任务/聊天室/第一版（一任务一线程）/define.h \
- /home/zhangminrui/桌面/练习代码/Linux系统编程/小组任务/聊天室/第一版（一任务一线程）/head.h \
+ /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.1/define.h \
+ /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.1/head.h \
  /usr/include/nlohmann/json.hpp /usr/include/c++/11/algorithm \
  /usr/include/c++/11/utility /usr/include/c++/11/bits/stl_relops.h \
  /usr/include/c++/11/bits/stl_algo.h \
@@ -323,5 +323,5 @@ CMakeFiles/client.dir/client.cc.o: \
  /usr/include/c++/11/bits/regex.h /usr/include/c++/11/bits/regex.tcc \
  /usr/include/c++/11/bits/regex_executor.h \
  /usr/include/c++/11/bits/regex_executor.tcc \
- /home/zhangminrui/桌面/练习代码/Linux系统编程/小组任务/聊天室/第一版（一任务一线程）/IO.h \
- /home/zhangminrui/桌面/练习代码/Linux系统编程/小组任务/聊天室/第一版（一任务一线程）/personalmenu.hpp
+ /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.1/IO.h \
+ /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.1/personalmenu.hpp
