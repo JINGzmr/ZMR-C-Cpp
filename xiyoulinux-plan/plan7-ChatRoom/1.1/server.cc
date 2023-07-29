@@ -155,7 +155,7 @@ int main()
                 // 从树上去除该套接字
                 struct epoll_event temp;
                 temp.data.fd = fd;
-                temp.events = EPOLLIN|| EPOLLET;
+                temp.events = EPOLLIN || EPOLLET;
                 epoll_ctl(epld, EPOLL_CTL_DEL, fd, &temp);
 
                 // 把进入子线程，接下来的任务由子线程完成
@@ -190,8 +190,8 @@ void work(void *arg)
     RecvMsg recvmsg;
     recvmsg.RecvMsg_client(fd, recvJson_buf); //***********(用第一版IO.cc时)第二次回到登录界面进行选择时，按下回车键，服务器会出现段错误，且停在这行过不去
     json parsed_data = json::parse(recvJson_buf);
-    //不同结构体只要都有flag这个成员，那他们序列化产生的json字符串里的falg都能通过这行代码解析出来
-    // 即：根据 键 来解析出对应的 值
+    // 不同结构体只要都有flag这个成员，那他们序列化产生的json字符串里的falg都能通过这行代码解析出来
+    //  即：根据 键 来解析出对应的 值
     int flag_ = parsed_data["flag"];
 
     // 根据接收到的消息判断用户在登录界面的操作
@@ -201,7 +201,7 @@ void work(void *arg)
     }
     else if (flag_ == REGISTER) // 注册
     {
-        register_server(fd,recvJson_buf);
+        register_server(fd, recvJson_buf);
     }
     else if (flag_ == SIGNOUT) // 注销
     {
@@ -211,7 +211,6 @@ void work(void *arg)
     {
         logout_server(recvJson_buf);
     }
-    
 
     // 当前任务都处理完了（或出问题）之后，再挂树
     epoll_ctl(epld, EPOLL_CTL_ADD, fd, &temp);
