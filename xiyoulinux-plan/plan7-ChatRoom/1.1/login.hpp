@@ -136,7 +136,7 @@ void signout_server(int fd, string buf)
         string userjson_string;
         userjson_string = redis.gethash("userinfo", user.id);
         parsed_data = json::parse(userjson_string);
-        if (user.password == parsed_data["password"] && redis.hashdel("userinfo", user.id) == 3) // 密码正确且账号从哈希表中成功移除
+        if (user.password == parsed_data["password"] && redis.hashdel("userinfo", user.id) == 3 && redis.sremvalue("username",parsed_data["username"]) == 3) // 密码正确且id从哈希表中成功移除、姓名从昵称表里移除
         {
             cout << "注销成功" << endl;
             SendMsg sendmsg;
