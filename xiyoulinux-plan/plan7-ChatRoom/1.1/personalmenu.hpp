@@ -113,10 +113,18 @@ void logout_client(int client_socket, string id)
 void addfriend_client(int client_socket, string id)
 {
     Friend friend_;
-    cout << "请输入你要添加的朋友ID：";
-    cin >> friend_.oppoid;
-    friend_.id = id;
-    friend_.flag = ADDFRIEND;
+    do
+    {
+        cout << "请输入你要添加的朋友ID：";
+        cin >> friend_.oppoid;
+        friend_.id = id;
+        friend_.flag = ADDFRIEND;
+
+        if (friend_.id == friend_.oppoid)
+        {
+            cout << "不可添加自己！请重新输入！" << endl;
+        }
+    } while (friend_.id != friend_.oppoid);
 
     nlohmann::json sendJson_client = {
         {"id", friend_.id},

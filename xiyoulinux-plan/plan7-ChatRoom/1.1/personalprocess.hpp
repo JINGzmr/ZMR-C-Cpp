@@ -44,13 +44,14 @@ void addfriend_server(int fd, string buf)
     Redis redis;
     redis.connect();
 
+    //
     if (redis.hashexists("userinfo", friend_.id) != 1) // 账号不存在
     {
-        cout << "该用户名不存在，请重新输入" << endl;
+        cout << "该id不存在，请重新输入" << endl;
         SendMsg sendmsg;
         sendmsg.SendMsg_int(fd, USERNAMEUNEXIST);
     }
-    // else if()
+    else if()
 }
 
 
