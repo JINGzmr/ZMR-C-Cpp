@@ -3,6 +3,7 @@
 
 const int BUFFER_SIZE = 10240; // 缓冲区的大小（用于存储recv来的序列化好的string）
 
+#define HADFRIEND -6       // 已添加为好友
 #define USERNAMEUNEXIST -5 // 用户名不存在
 #define USERNAMEEXIST -4   // 用户名已存在
 #define OFFLINE -3         // 不在线

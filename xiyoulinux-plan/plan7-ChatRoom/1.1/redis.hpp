@@ -15,7 +15,8 @@ using namespace std;
 // peopleinfo的键：对应的是哈希表，字段存的是用户的UID，值存序列化好的用户个人信息
 
 // 因此哈希表中：用户信息userinfo作为键，字段是id，值是序列化好的用户个人信息
-// 普通表中：username用来存放用户名
+// 普通表中：username用来存放用户名,onlinelist:在线用户列表
+
 
 class Redis
 {

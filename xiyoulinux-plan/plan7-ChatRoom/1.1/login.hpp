@@ -59,6 +59,7 @@ void login_server(int fd, string buf)
             parsed_data["online"] = ONLINE;
             userjson_string = parsed_data.dump();
             redis.hsetValue("userinfo", user.id, userjson_string);
+            redis.saddvalue("onlinelist", user.id); // 在线列表
 
             //------------登录成功后，是客户端进入下一步，服务端只需要根据客户端发来的请求 调用相应的函数 来处理即可-------------
             // 现在这个登录的任务服务器处理完毕了，也就可以返回上一级了
@@ -90,12 +91,22 @@ void register_server(int fd, string buf)
     }
     else // 新的用户名，可以被使用
     {
+        // 随机生成id
         time_t timestamp;
         time(&timestamp);
         string id = to_string(timestamp);
+
+        // 初始化好友列表
+        vector<string> emptyvector;
+        nlohmann::json tojson = {
+            {"friends", emptyvector},
+        };
+        string str = tojson.dump();
+
         int n = redis.hsetValue("userinfo", id, buf);
         int m = redis.saddvalue("username", user.username);
-        if (n == REDIS_REPLY_ERROR || m == REDIS_REPLY_ERROR)
+        int o = redis.hsetValue("friendlist", id, str);
+        if (n == REDIS_REPLY_ERROR || m == REDIS_REPLY_ERROR || o == REDIS_REPLY_ERROR)
         {
             cout << "注册失败" << endl;
             SendMsg sendmsg;
@@ -136,7 +147,7 @@ void signout_server(int fd, string buf)
         string userjson_string;
         userjson_string = redis.gethash("userinfo", user.id);
         parsed_data = json::parse(userjson_string);
-        if (user.password == parsed_data["password"] && redis.hashdel("userinfo", user.id) == 3 && redis.sremvalue("username",parsed_data["username"]) == 3) // 密码正确且id从哈希表中成功移除、姓名从昵称表里移除
+        if (user.password == parsed_data["password"] && redis.hashdel("userinfo", user.id) == 3 && redis.sremvalue("username", parsed_data["username"]) == 3) // 密码正确且id从哈希表中成功移除、姓名从昵称表里移除
         {
             cout << "注销成功" << endl;
             SendMsg sendmsg;

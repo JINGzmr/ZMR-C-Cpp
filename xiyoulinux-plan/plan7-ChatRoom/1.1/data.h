@@ -2,10 +2,12 @@
 #ifndef DATA_H
 #define DATA_H
 
+#include <vector> 
+
 #include <iostream>
 using namespace std;
 
-// 注册登录
+// 注册登录（哈希存，键：userinfo，字段：用户id，值：User的json字符串）
 struct User
 {
     int flag;        // 标记选项
@@ -26,6 +28,12 @@ struct Friend
     string oppoid;       // 对方id
     int status;      // 标记从服务器返回的状态（成功SUCCESS，失败FAIL）
     int online;      // 是否在线（在线ONLINE，不在OFFLINE）
+};
+
+//  好友列表(哈希存，键：friendlist，字段：用户id，值：FriendList的json字符串)
+struct FriendList
+{
+    vector<string> friends; // 存放好友的容器(重复的string会被忽略)
 };
 
 #endif

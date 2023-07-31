@@ -124,7 +124,7 @@ void addfriend_client(int client_socket, string id)
         {
             cout << "不可添加自己！请重新输入！" << endl;
         }
-    } while (friend_.id != friend_.oppoid);
+    } while (friend_.id == friend_.oppoid);
 
     nlohmann::json sendJson_client = {
         {"id", friend_.id},
@@ -146,7 +146,7 @@ void addfriend_client(int client_socket, string id)
     {
         cout << "已发送好友申请！" << endl;
     }
-    else if (state_ == FAIL)
+    else if (state_ == HADFRIEND)
     {
         cout << "你们已经是好友！" << endl;
     }
