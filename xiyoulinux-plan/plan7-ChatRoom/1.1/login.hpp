@@ -96,17 +96,20 @@ void register_server(int fd, string buf)
         time(&timestamp);
         string id = to_string(timestamp);
 
-        // 初始化好友列表
-        vector<string> emptyvector;
-        nlohmann::json tojson = {
-            {"friends", emptyvector},
-        };
-        string str = tojson.dump();
+        // // 初始化好友列表
+        // vector<string> emptyvector;
+        // nlohmann::json tojson = {
+        //     {"friends", emptyvector},
+        // };
+        // string str = tojson.dump();
+        // int o = redis.hsetValue("friendlist", id, str);
 
+        // string key = id + "friends";
+        // int o = redis.saddvalue(key, id);
         int n = redis.hsetValue("userinfo", id, buf);
         int m = redis.saddvalue("username", user.username);
-        int o = redis.hsetValue("friendlist", id, str);
-        if (n == REDIS_REPLY_ERROR || m == REDIS_REPLY_ERROR || o == REDIS_REPLY_ERROR)
+
+        if (n == REDIS_REPLY_ERROR || m == REDIS_REPLY_ERROR)
         {
             cout << "注册失败" << endl;
             SendMsg sendmsg;

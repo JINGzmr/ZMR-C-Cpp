@@ -30,10 +30,10 @@ struct Friend
     int online;      // 是否在线（在线ONLINE，不在OFFLINE）
 };
 
-//  好友列表(哈希存，键：friendlist，字段：用户id，值：FriendList的json字符串)
-struct FriendList
-{
-    vector<string> friends; // 存放好友的容器(重复的string会被忽略)
-};
+// //  好友列表(哈希存，键：friendlist，字段：用户id，值：FriendList的json字符串)
+// struct FriendList
+// {
+//     vector<string> friends; // 存放好友的容器(重复的string会被忽略)
+// };
 
 #endif

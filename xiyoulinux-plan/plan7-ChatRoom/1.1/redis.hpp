@@ -15,7 +15,11 @@ using namespace std;
 // peopleinfo的键：对应的是哈希表，字段存的是用户的UID，值存序列化好的用户个人信息
 
 // 因此哈希表中：用户信息userinfo作为键，字段是id，值是序列化好的用户个人信息
+// 好友列表friendlist为键，字段id，值vector容器存的好友列表--->没必要
+
+
 // 普通表中：username用来存放用户名,onlinelist:在线用户列表
+// id+friends:id对应用户的好友
 
 
 class Redis
@@ -176,7 +180,7 @@ int Redis::saddvalue(const string &key, const string &value) //插入到集合
     freeReplyObject(pm_rr);
     return p;
 }
-int Redis::sismember(const string &key, const string &value) //查看数据是否存在
+int Redis::sismember(const string &key, const string &value) //查看数据是否存在 ,存在返回1
 {
     string cmd = "sismember  " + key + "  " + value;
     pm_rr = (redisReply *)redisCommand(pm_rct, cmd.c_str());

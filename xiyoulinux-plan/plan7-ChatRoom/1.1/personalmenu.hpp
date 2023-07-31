@@ -12,6 +12,8 @@ void addfriend_client(int client_socket);
 
 void logout_client(int client_socket, string username);
 void addfriend_client(int client_socket, string username);
+void onlinefriend_client(int client_socket, string id);
+
 
 void personalmenuUI(void)
 {
@@ -21,7 +23,7 @@ void personalmenuUI(void)
     cout << "|                      4.添加好友                   |" << endl;
     cout << "|                      5.查看好友申请                |" << endl;
     cout << "|                      6.选择好友私聊                |" << endl;
-    cout << "|                      7.查看历史聊天记录             |" << endl;
+    cout << "|                      7.查看历史聊天记录            |" << endl;
     cout << "|                      8.在线好友                   |" << endl;
     cout << "|                      9.屏蔽好友                   |" << endl;
     cout << "|                      10.删除好友                  |" << endl;
@@ -62,9 +64,9 @@ void messagemenu(int client_socket, string id)
         // case 7:
         //     historychat_client(client_socket);
         //     break;
-        // case 8:
-        //     onlinfiend_client(client_socket);
-        //     break;
+        case 8:
+            onlinefriend_client(client_socket,id);
+            break;
         // case 9:
         //     addblack_client(client_socket);
         //     break;
@@ -98,6 +100,7 @@ void messagemenu(int client_socket, string id)
     return;
 }
 
+// 退出登录
 void logout_client(int client_socket, string id)
 {
     nlohmann::json sendJson_client = {
@@ -110,6 +113,7 @@ void logout_client(int client_socket, string id)
     cout << "退出成功！" << endl;
 }
 
+// 加好友
 void addfriend_client(int client_socket, string id)
 {
     Friend friend_;
@@ -126,12 +130,12 @@ void addfriend_client(int client_socket, string id)
         }
     } while (friend_.id == friend_.oppoid);
 
+    // 发送数据
     nlohmann::json sendJson_client = {
         {"id", friend_.id},
         {"oppoid", friend_.oppoid},
         {"flag", friend_.flag},
     };
-
     string sendJson_client_string = sendJson_client.dump();
     SendMsg sendmsg;
     sendmsg.SendMsg_client(client_socket, sendJson_client_string);
@@ -156,4 +160,20 @@ void addfriend_client(int client_socket, string id)
     }
 
     return;
+}
+
+// 在线好友
+void onlinefriend_client(int client_socket, string id)
+{
+    // 发送数据
+    nlohmann::json sendJson_client = {
+        {"flag", ONLINEFRIEND},
+    };
+    string sendJson_client_string = sendJson_client.dump();
+    SendMsg sendmsg;
+    sendmsg.SendMsg_client(client_socket, sendJson_client_string);
+
+    // 接收数据
+    
+
 }
