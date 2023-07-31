@@ -64,10 +64,11 @@ void addfriend_server(int fd, string buf)
     // auto it = find(friendlist.friends.begin(), friendlist.friends.end(), friend_.oppoid);
 
     // 构造好友列表
-    string key = friend_.id + "frienids"; //id+friends作为键，值就是id用户的好友们
+    string key = friend_.id + ":frienids"; //id+friends作为键，值就是id用户的好友们
+    string key_ = friend_.oppoid + ":friends_apply"; // 对方的好友申请表
 
     // 加好友
-    if (redis.hashexists("userinfo", friend_.id) != 1) // 账号不存在
+    if (redis.hashexists("userinfo", friend_.oppoid) != 1) // 账号不存在
     {
         cout << "该id不存在，请重新输入" << endl;
         SendMsg sendmsg;
@@ -83,13 +84,20 @@ void addfriend_server(int fd, string buf)
     else if (redis.sismember("onlinelist", friend_.oppoid) == 1) // 在线列表里有对方
     {
         cout << "对方在线" << endl;
-        redis.saddvalue(key, friend_.oppoid);// 这里先视为对方在线，发请求对方默认同意
+        
+        // 放到对方的好友申请表中
+        redis.saddvalue(key_,friend_.id);
+
         SendMsg sendmsg;
         sendmsg.SendMsg_int(fd, SUCCESS);
     }
     else // 对方不在线：加入数据库，等用户上线时提醒
     {
-        cout << "对方不在线" << endl; //*******问不在线要怎么办
+        cout << "对方不在线" << endl; //*******问不在线要怎么办*************
+
+        // 放到对方的好友申请表中
+        redis.saddvalue(key_,friend_.id);
+
         SendMsg sendmsg;
         sendmsg.SendMsg_int(fd, SUCCESS);
     }

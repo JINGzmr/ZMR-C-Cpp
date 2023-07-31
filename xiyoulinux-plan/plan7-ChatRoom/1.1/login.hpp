@@ -104,8 +104,6 @@ void register_server(int fd, string buf)
         // string str = tojson.dump();
         // int o = redis.hsetValue("friendlist", id, str);
 
-        // string key = id + "friends";
-        // int o = redis.saddvalue(key, id);
         int n = redis.hsetValue("userinfo", id, buf);
         int m = redis.saddvalue("username", user.username);
 
