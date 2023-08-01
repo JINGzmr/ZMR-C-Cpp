@@ -108,11 +108,11 @@ int main()
                 ev_client.events = EPOLLIN || EPOLLET; // 检测客户端有没有消息过来,且启用ET模式
                 ev_client.data.fd = client_sockfd;
 
-                // // 设置非阻塞*************--->非阻塞的话，后面只要有出现recv的地方，就算没有数据可以读取，他也会不断的读数据，不断的读取失败。。。。。。
-                // int flag;
-                // flag = fcntl(client_sockfd, F_GETFL);
-                // flag |= O_NONBLOCK;
-                // fcntl(client_sockfd, F_SETFL, flag); // 设置非阻塞
+                // 设置非阻塞*************--->非阻塞的话，后面只要有出现recv的地方，就算没有数据可以读取，他也会不断的读数据，不断的读取失败。。。。。。
+                int flag;
+                flag = fcntl(client_sockfd, F_GETFL);
+                flag |= O_NONBLOCK;
+                fcntl(client_sockfd, F_SETFL, flag); // 设置非阻塞
 
                 // 心跳检测（开启保活，1分钟内探测不到，断开连接）
                 int keep_alive = 1;

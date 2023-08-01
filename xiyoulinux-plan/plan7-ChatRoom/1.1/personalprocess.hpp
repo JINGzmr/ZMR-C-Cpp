@@ -103,7 +103,7 @@ void addfriend_server(int fd, string buf)
     }
 }
 
-// 好友申请
+// 好友申请----->在函数里用到了recv，如果是非阻塞的话，recv会显示接受失败，然后就和那个客户端断开了连接
 void friendapply_server(int fd, string buf)
 {
     json parsed_data = json::parse(buf);
