@@ -104,7 +104,7 @@ void addfriend_server(int fd, string buf)
 }
 
 // 好友申请
-void friendapply_client(int fd, string buf)
+void friendapply_server(int fd, string buf)
 {
     json parsed_data = json::parse(buf);
     struct Friend friend_;
@@ -159,6 +159,54 @@ void friendapply_client(int fd, string buf)
             cout << "已拒绝" << endl;
             redis.sremvalue(key, applyfriend_id); // 从申请列表中移除
         }
+        freeReplyObject(arry[i]);
+    }
+}
+
+
+// 在线好友
+void onlinefriend_server(int fd, string buf)
+{
+    json parsed_data = json::parse(buf);
+    struct Friend friend_;
+    friend_.id = parsed_data["id"];
+    printf("--- %s 用户查看在线好友列表 ---\n", friend_.id.c_str());
+
+    Redis redis;
+    redis.connect();
+
+    string key = friend_.id + ":friends";
+    string userjson_string;
+    int len = redis.scard(key);
+    SendMsg sendmsg;
+    sendmsg.SendMsg_int(fd, len);
+    cout << "一共有 " << len << " 个好友" << endl;
+    if (len == 0)
+    {
+        return;
+    }
+
+    redisReply **arry = redis.smembers(key);
+    // 向客户端挨个发送好友在线信息
+    for (int i = 0; i < len; i++)
+    {
+        // 得到好友id
+        int state = 0;
+        string friend_id = arry[i]->str;
+        if(redis.sismember("onlinelist", friend_id) == 1)
+        {
+            state = 1;
+        }
+
+        // 根据id发送好友昵称
+        nlohmann::json json_ = {
+            {"username", redis.gethash("id_name", friend_id)},
+            {"online",state},
+        };
+        string json_string = json_.dump();
+        SendMsg sendmsg;
+        sendmsg.SendMsg_client(fd, json_string);
+
         freeReplyObject(arry[i]);
     }
 }

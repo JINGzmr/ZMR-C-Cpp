@@ -217,7 +217,11 @@ void work(void *arg)
     }
     else if(flag_ == FRIENDAPPLY)
     {
-        friendapply_client(fd,recvJson_buf);
+        friendapply_server(fd,recvJson_buf);
+    }
+    else if(flag_ == ONLINEFRIEND)
+    {
+        onlinefriend_server(fd,recvJson_buf);
     }
 
     // 当前任务都处理完了（或出问题）之后，再挂树

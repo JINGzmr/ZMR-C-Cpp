@@ -27,8 +27,7 @@ void personalmenuUI(void)
     cout << "|                      8.在线好友                   |" << endl;
     cout << "|                      9.屏蔽好友                   |" << endl;
     cout << "|                      10.删除好友                  |" << endl;
-    cout << "|                      11.查看好友                  |" << endl;
-    cout << "|                      12.查看屏蔽好友               |" << endl;
+    cout << "|                      11.查看屏蔽好友               |" << endl;
     cout << "|--------------------------------------------------|" << endl;
     cout << "|                      11.群聊                      |" << endl;
     cout << "|                      12.拉入黑名单                 |" << endl;
@@ -64,9 +63,9 @@ void messagemenu(int client_socket, string id)
         // case 7:
         //     historychat_client(client_socket);
         //     break;
-        // case 8:
-        //     onlinefriend_client(client_socket,id);
-        //     break;
+        case 8:
+            onlinefriend_client(client_socket, id);
+            break;
         // case 9:
         //     addblack_client(client_socket);
         //     break;
@@ -211,17 +210,49 @@ void friendapply_client(int client_socket, string id)
     }
 }
 
-// // 在线好友
-// void onlinefriend_client(int client_socket, string id)
-// {
-//     // 发送数据
-//     nlohmann::json sendJson_client = {
-//         {"flag", ONLINEFRIEND},
-//     };
-//     string sendJson_client_string = sendJson_client.dump();
-//     SendMsg sendmsg;
-//     sendmsg.SendMsg_client(client_socket, sendJson_client_string);
+// 在线好友
+void onlinefriend_client(int client_socket, string id)
+{
+    // 发送数据
+    nlohmann::json sendJson_client = {
+        {"id", id},
+        {"flag", ONLINEFRIEND},
+    };
+    string sendJson_client_string = sendJson_client.dump();
+    SendMsg sendmsg;
+    sendmsg.SendMsg_client(client_socket, sendJson_client_string);
 
-//     // 接收数据
+    // 接收在线好友个数
+    int n = 0;
+    RecvMsg recvmsg;
+    n = recvmsg.RecvMsg_int(client_socket);
+    cout << "（ 一共有 " << n << " 个好友 ）" << endl;
+    if (n == 0)
+    {
+        return;
+    }
 
-// }
+    cout << "————————————以下为你的好友列表————————————" << endl;
+    // 展示好友列表（并显示在线状态）
+    for (int i = 0; i < n; i++)
+    {
+        // 接收好友昵称
+        string recvJson_buf;
+        RecvMsg recvmsg;
+        recvmsg.RecvMsg_client(client_socket, recvJson_buf);
+        json parsed_data = json::parse(recvJson_buf);
+        string username = parsed_data["username"];
+        int state = parsed_data["online"];
+
+        cout << username ;
+        if (state == 1)
+        {
+            cout << " （在线）" << endl;
+        }
+        else
+        {
+            cout << '\n';
+        }
+    }
+    cout << "——————————————————————————————————————————" << endl;
+}
