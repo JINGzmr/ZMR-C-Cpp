@@ -26,7 +26,7 @@ using namespace std;
 // username用来存放用户名,onlinelist：在线用户列表
 // id+:friends：id对应用户的好友
 // id+:friendsapply：id对应用户的好友申请
-// id+:black：id对应的拉黑用户
+// id+:bfriends：id对应的拉黑用户
 
 class Redis
 {

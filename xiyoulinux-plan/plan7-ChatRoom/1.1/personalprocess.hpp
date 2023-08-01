@@ -160,14 +160,14 @@ void friendapplyedit_server(int fd, string buf)
     redis.connect();
 
     string key = friend_.id + ":friends_apply";
-    
-    if(redis.sismember("username", name) != 1)
+
+    if (redis.sismember("username", name) != 1)
     {
         cout << "查无此人" << endl;
 
         SendMsg sendmsg;
         sendmsg.SendMsg_int(fd, USERNAMEUNEXIST);
-        return ;
+        return;
     }
 
     // 得到发送请求的用户id
@@ -260,13 +260,14 @@ void addblack_server(int fd, string buf)
     Redis redis;
     redis.connect();
 
+    string key = friend_.id + ":bfriends";
     string key = friend_.id + ":friends";
 
-    if (redis.hashexists("userinfo", friend_.oppoid) != 1) // 账号不存在
+    if (redis.sismember(key, friend_.oppoid) != 1) // 对方不是你的好友
     {
-        cout << "该id不存在，请重新输入" << endl;
+        cout << "对方不是你好友" << endl;
         SendMsg sendmsg;
-        sendmsg.SendMsg_int(fd, USERNAMEUNEXIST);
+        sendmsg.SendMsg_int(fd, FAIL);
     }
     else if (redis.sismember(key, friend_.oppoid) == 1) // 已拉黑对方
     {
@@ -311,8 +312,15 @@ void delfriend_server(int fd, string buf)
     }
 }
 
-// 查看屏蔽好友
+// 查看屏蔽好友列表
 void blackfriendlist_server(int fd, string buf)
 {
+    
 }
+// 编辑屏蔽好友
+void blackfriendedit_server(int fd, string buf)
+{
+
+}
+
 #endif

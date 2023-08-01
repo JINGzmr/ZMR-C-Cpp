@@ -23,7 +23,9 @@ const int BUFFER_SIZE = 10240; // 缓冲区的大小（用于存储recv来的序
 #define ONLINEFRIEND 8     // 在线好友
 #define ADDBLACK 9         // 加入黑名单（屏蔽好友）
 #define DELFRIEND 10       // 删除好友
-#define BLACKFRIENDLIST 11 // 查看屏蔽好友列表
+#define BLACKFRIENDLIST 111 // 查看屏蔽好友列表
+#define BLACKFRIENDEDIT 112 // 编辑屏蔽好友
+
 
 #define LOGOUT 16 // 退出登录
 
