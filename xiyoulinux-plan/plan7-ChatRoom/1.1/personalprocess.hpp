@@ -64,7 +64,7 @@ void addfriend_server(int fd, string buf)
     // auto it = find(friendlist.friends.begin(), friendlist.friends.end(), friend_.oppoid);
 
     // 构造好友列表
-    string key = friend_.id + ":friends";           // id+friends作为键，值就是id用户的好友们
+    string key = friend_.id + ":friends";            // id+friends作为键，值就是id用户的好友们
     string key_ = friend_.oppoid + ":friends_apply"; // 对方的好友申请表
 
     // 加好友
@@ -144,8 +144,8 @@ void friendapply_server(int fd, string buf)
         int state_;
         RecvMsg recvmsg;
         state_ = recvmsg.RecvMsg_int(fd);
-        printf("%d\n",state_);
-        printf("%s\n",applyfriend_id.c_str());
+        printf("%d\n", state_);
+        printf("%s\n", applyfriend_id.c_str());
         if (state_ == 1)
         {
             cout << "已同意" << endl;
@@ -155,14 +155,14 @@ void friendapply_server(int fd, string buf)
             redis.saddvalue(key1, applyfriend_id); // 对方成为自己好友
             redis.saddvalue(key2, friend_.id);     // 自己成为对方好友
         }
-        else{
+        else
+        {
             cout << "已拒绝" << endl;
             redis.sremvalue(key, applyfriend_id); // 从申请列表中移除
         }
         freeReplyObject(arry[i]);
     }
 }
-
 
 // 在线好友
 void onlinefriend_server(int fd, string buf)
@@ -193,7 +193,7 @@ void onlinefriend_server(int fd, string buf)
         // 得到好友id
         int state = 0;
         string friend_id = arry[i]->str;
-        if(redis.sismember("onlinelist", friend_id) == 1)
+        if (redis.sismember("onlinelist", friend_id) == 1)
         {
             state = 1;
         }
@@ -201,13 +201,42 @@ void onlinefriend_server(int fd, string buf)
         // 根据id发送好友昵称
         nlohmann::json json_ = {
             {"username", redis.gethash("id_name", friend_id)},
-            {"online",state},
+            {"online", state},
         };
         string json_string = json_.dump();
         SendMsg sendmsg;
         sendmsg.SendMsg_client(fd, json_string);
 
         freeReplyObject(arry[i]);
+    }
+}
+
+// 删除好友
+void delfriend_server(int fd, string buf)
+{
+    json parsed_data = json::parse(buf);
+    struct Friend friend_;
+    friend_.id = parsed_data["id"];
+    friend_.oppoid = parsed_data["oppoid"];
+    printf("--- %s 用户将要删除好友 ---\n", friend_.id.c_str());
+
+    Redis redis;
+    redis.connect();
+
+    string key = friend_.id + ":friends";
+    string key_ = friend_.oppoid + ":friends";
+    //*************还要删除聊天记录和黑名单****************
+    if (redis.sismember(key, friend_.oppoid) == 1 && redis.sremvalue(key, friend_.oppoid) ==3 && redis.sremvalue(key_, friend_.id) ==3)
+    {
+        cout << "删除成功" << endl;
+        SendMsg sendmsg;
+        sendmsg.SendMsg_int(fd, SUCCESS);
+    }
+    else
+    {
+        cout << "删除失败" << endl;
+        SendMsg sendmsg;
+        sendmsg.SendMsg_int(fd, FAIL);
     }
 }
 

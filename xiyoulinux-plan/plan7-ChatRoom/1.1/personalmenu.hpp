@@ -14,6 +14,7 @@ void logout_client(int client_socket, string username);
 void addfriend_client(int client_socket, string username);
 void friendapply_client(int client_socket, string id);
 void onlinefriend_client(int client_socket, string id);
+void delfriend_client(int client_socket, string id);
 
 void personalmenuUI(void)
 {
@@ -69,13 +70,10 @@ void messagemenu(int client_socket, string id)
         // case 9:
         //     addblack_client(client_socket);
         //     break;
-        // case 10:
-        //     delfriend_client(client_socket);
-        //     break;
+        case 10:
+            delfriend_client(client_socket, id);
+            break;
         // case 11:
-        //     friendlist_client(client_socket);
-        //     break;
-        // case 12:
         //     blackfriendlist_client(client_socket);
         //     break;
         case 13:
@@ -244,7 +242,7 @@ void onlinefriend_client(int client_socket, string id)
         string username = parsed_data["username"];
         int state = parsed_data["online"];
 
-        cout << username ;
+        cout << username;
         if (state == 1)
         {
             cout << " （在线）" << endl;
@@ -255,4 +253,47 @@ void onlinefriend_client(int client_socket, string id)
         }
     }
     cout << "——————————————————————————————————————————" << endl;
+}
+
+// 删除好友
+void delfriend_client(int client_socket, string id)
+{
+    Friend friend_;
+    do
+    {
+        cout << "请输入你要删除的朋友ID：";
+        cin >> friend_.oppoid;
+        friend_.id = id;
+        friend_.flag = DELFRIEND;
+
+        if (friend_.id == friend_.oppoid)
+        {
+            cout << "不可删除自己！请重新输入！" << endl;
+        }
+    } while (friend_.id == friend_.oppoid);
+
+    // 发送数据
+    nlohmann::json sendJson_client = {
+        {"id", friend_.id},
+        {"oppoid", friend_.oppoid},
+        {"flag", friend_.flag},
+    };
+    string sendJson_client_string = sendJson_client.dump();
+    SendMsg sendmsg;
+    sendmsg.SendMsg_client(client_socket, sendJson_client_string);
+
+    // 接收数据
+    int state_;
+    RecvMsg recvmsg;
+    state_ = recvmsg.RecvMsg_int(client_socket);
+
+    // 判断是否登入成功
+    if (state_ == SUCCESS)
+    {
+        cout << "删除成功！" << endl;
+    }
+    else if (state_ == FAIL)
+    {
+        cout << "删除失败！" << endl;
+    }
 }

@@ -223,6 +223,10 @@ void work(void *arg)
     {
         onlinefriend_server(fd,recvJson_buf);
     }
+    else if(flag_ == DELFRIEND)
+    {
+        delfriend_server(fd,recvJson_buf);
+    }
 
     // 当前任务都处理完了（或出问题）之后，再挂树
     epoll_ctl(epld, EPOLL_CTL_ADD, fd, &temp);

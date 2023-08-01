@@ -191,7 +191,7 @@ int Redis::sismember(const string &key, const string &value) // 查看数据是�
     freeReplyObject(pm_rr);
     return p;
 }
-int Redis::sremvalue(const string &key, const string &value) // 将数据从set中移出
+int Redis::sremvalue(const string &key, const string &value) // 将数据从set中移出 ,成功返回3
 {
     string cmd = "srem  " + key + "  " + value;
     pm_rr = (redisReply *)redisCommand(pm_rct, cmd.c_str());
