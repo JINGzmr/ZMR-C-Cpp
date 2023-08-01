@@ -12,8 +12,8 @@ void addfriend_client(int client_socket);
 
 void logout_client(int client_socket, string username);
 void addfriend_client(int client_socket, string username);
+void friendapply_client(int client_socket, string id);
 void onlinefriend_client(int client_socket, string id);
-
 
 void personalmenuUI(void)
 {
@@ -55,18 +55,18 @@ void messagemenu(int client_socket, string id)
             addfriend_client(client_socket, id);
             personalmenuUI();
             break;
-        // case 5:
-        //     friendapply_client(client_socket);
-        //     break;
+        case 5:
+            friendapply_client(client_socket, id);
+            break;
         // case 6:
         //     chatfriend_client(client_socket);
         //     break;
         // case 7:
         //     historychat_client(client_socket);
         //     break;
-        case 8:
-            onlinefriend_client(client_socket,id);
-            break;
+        // case 8:
+        //     onlinefriend_client(client_socket,id);
+        //     break;
         // case 9:
         //     addblack_client(client_socket);
         //     break;
@@ -162,18 +162,66 @@ void addfriend_client(int client_socket, string id)
     return;
 }
 
-// 在线好友
-void onlinefriend_client(int client_socket, string id)
+// 好友申请
+void friendapply_client(int client_socket, string id)
 {
     // 发送数据
     nlohmann::json sendJson_client = {
-        {"flag", ONLINEFRIEND},
+        {"id", id},
+        {"flag", FRIENDAPPLY},
     };
     string sendJson_client_string = sendJson_client.dump();
     SendMsg sendmsg;
     sendmsg.SendMsg_client(client_socket, sendJson_client_string);
 
-    // 接收数据
-    
+    // 接收好友申请的个数
+    int n = 0;
+    RecvMsg recvmsg;
+    n = recvmsg.RecvMsg_int(client_socket);
+    cout << "一共有 " << n << " 条好友请求" << endl;
+    if (n == 0)
+    {
+        return;
+    }
 
+    // 依次展示好友请求
+    for (int i = 0; i < n; i++)
+    {
+        // 接收好友昵称
+        string recvJson_buf;
+        RecvMsg recvmsg;
+        recvmsg.RecvMsg_client(client_socket, recvJson_buf);
+        json parsed_data = json::parse(recvJson_buf);
+        string username = parsed_data["username"];
+
+        // 是否同意
+        cout << username << " 请求添加为好友 ( yes--1 / no--0 )" << endl;
+        int state;
+        cin >> state;
+        SendMsg sendmsg;
+        sendmsg.SendMsg_int(client_socket, state);
+        if (state == 1)
+        {
+            cout << "你们已成为好友！" << endl;
+        }
+        else
+        {
+            cout << "你已拒绝对方申请！" << endl;
+        }
+    }
 }
+
+// // 在线好友
+// void onlinefriend_client(int client_socket, string id)
+// {
+//     // 发送数据
+//     nlohmann::json sendJson_client = {
+//         {"flag", ONLINEFRIEND},
+//     };
+//     string sendJson_client_string = sendJson_client.dump();
+//     SendMsg sendmsg;
+//     sendmsg.SendMsg_client(client_socket, sendJson_client_string);
+
+//     // 接收数据
+
+// }

@@ -109,10 +109,10 @@ int main()
                 ev_client.data.fd = client_sockfd;
 
                 // // 设置非阻塞*************--->非阻塞的话，后面只要有出现recv的地方，就算没有数据可以读取，他也会不断的读数据，不断的读取失败。。。。。。
-                int flag;
-                flag = fcntl(client_sockfd, F_GETFL);
-                flag |= O_NONBLOCK;
-                fcntl(client_sockfd, F_SETFL, flag); // 设置非阻塞
+                // int flag;
+                // flag = fcntl(client_sockfd, F_GETFL);
+                // flag |= O_NONBLOCK;
+                // fcntl(client_sockfd, F_SETFL, flag); // 设置非阻塞
 
                 // 心跳检测（开启保活，1分钟内探测不到，断开连接）
                 int keep_alive = 1;
@@ -214,6 +214,10 @@ void work(void *arg)
     else if(flag_ == ADDFRIEND)
     {
         addfriend_server(fd, recvJson_buf);
+    }
+    else if(flag_ == FRIENDAPPLY)
+    {
+        friendapply_client(fd,recvJson_buf);
     }
 
     // 当前任务都处理完了（或出问题）之后，再挂树

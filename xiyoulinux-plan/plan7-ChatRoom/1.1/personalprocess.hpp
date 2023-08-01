@@ -64,7 +64,7 @@ void addfriend_server(int fd, string buf)
     // auto it = find(friendlist.friends.begin(), friendlist.friends.end(), friend_.oppoid);
 
     // 构造好友列表
-    string key = friend_.id + ":frienids"; //id+friends作为键，值就是id用户的好友们
+    string key = friend_.id + ":friends";           // id+friends作为键，值就是id用户的好友们
     string key_ = friend_.oppoid + ":friends_apply"; // 对方的好友申请表
 
     // 加好友
@@ -75,7 +75,7 @@ void addfriend_server(int fd, string buf)
         sendmsg.SendMsg_int(fd, USERNAMEUNEXIST);
     }
     // else if (it != friendlist.friends.end())
-    else if(redis.sismember(key, friend_.oppoid) == 1) // 好友列表里已有对方
+    else if (redis.sismember(key, friend_.oppoid) == 1) // 好友列表里已有对方
     {
         cout << "你们已经是好友" << endl;
         SendMsg sendmsg;
@@ -84,9 +84,9 @@ void addfriend_server(int fd, string buf)
     else if (redis.sismember("onlinelist", friend_.oppoid) == 1) // 在线列表里有对方
     {
         cout << "对方在线" << endl;
-        
+
         // 放到对方的好友申请表中
-        redis.saddvalue(key_,friend_.id);
+        redis.saddvalue(key_, friend_.id);
 
         SendMsg sendmsg;
         sendmsg.SendMsg_int(fd, SUCCESS);
@@ -96,13 +96,71 @@ void addfriend_server(int fd, string buf)
         cout << "对方不在线" << endl; //*******问不在线要怎么办*************
 
         // 放到对方的好友申请表中
-        redis.saddvalue(key_,friend_.id);
+        redis.saddvalue(key_, friend_.id);
 
         SendMsg sendmsg;
         sendmsg.SendMsg_int(fd, SUCCESS);
     }
 }
 
-// 在线好友
+// 好友申请
+void friendapply_client(int fd, string buf)
+{
+    json parsed_data = json::parse(buf);
+    struct Friend friend_;
+    friend_.id = parsed_data["id"];
+    printf("--- %s 用户查看好友申请 ---\n", friend_.id.c_str());
+
+    Redis redis;
+    redis.connect();
+
+    string key = friend_.id + ":friends_apply";
+    string userjson_string;
+    int len = redis.scard(key);
+    SendMsg sendmsg;
+    sendmsg.SendMsg_int(fd, len);
+    cout << "一共有 " << len << " 条好友请求" << endl;
+    if (len == 0)
+    {
+        return;
+    }
+
+    redisReply **arry = redis.smembers(key);
+    // 展示好友请求列表
+    for (int i = 0; i < len; i++)
+    {
+        // 得到发送请求的用户id
+        string applyfriend_id = arry[i]->str;
+
+        // 根据id发送好友昵称
+        nlohmann::json json_ = {
+            {"username", redis.gethash("id_name", applyfriend_id)}, // 拿着id去找username
+        };
+        string json_string = json_.dump();
+        SendMsg sendmsg;
+        sendmsg.SendMsg_client(fd, json_string);
+
+        // 接收客户端的判断
+        int state_;
+        RecvMsg recvmsg;
+        state_ = recvmsg.RecvMsg_int(fd);
+        printf("%d\n",state_);
+        printf("%s\n",applyfriend_id.c_str());
+        if (state_ == 1)
+        {
+            cout << "已同意" << endl;
+            redis.sremvalue(key, applyfriend_id); // 从申请列表中移除
+            string key1 = friend_.id + ":friends";
+            string key2 = applyfriend_id + ":friends";
+            redis.saddvalue(key1, applyfriend_id); // 对方成为自己好友
+            redis.saddvalue(key2, friend_.id);     // 自己成为对方好友
+        }
+        else{
+            cout << "已拒绝" << endl;
+            redis.sremvalue(key, applyfriend_id); // 从申请列表中移除
+        }
+        freeReplyObject(arry[i]);
+    }
+}
 
 #endif

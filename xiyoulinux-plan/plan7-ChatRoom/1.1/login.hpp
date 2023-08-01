@@ -41,7 +41,7 @@ void login_server(int fd, string buf)
             SendMsg sendmsg;
             sendmsg.SendMsg_int(fd, FAIL);
         }
-        else if (parsed_data["online"] == ONLINE)
+        else if (redis.sismember("onlinelist", user.id) == 1)
         {
             cout << "用户已登录" << endl;
             SendMsg sendmsg;
@@ -106,8 +106,9 @@ void register_server(int fd, string buf)
 
         int n = redis.hsetValue("userinfo", id, buf);
         int m = redis.saddvalue("username", user.username);
+        int o = redis.hsetValue("id_name", id, user.username);
 
-        if (n == REDIS_REPLY_ERROR || m == REDIS_REPLY_ERROR)
+        if (n == REDIS_REPLY_ERROR || m == REDIS_REPLY_ERROR || o == REDIS_REPLY_ERROR)
         {
             cout << "注册失败" << endl;
             SendMsg sendmsg;
