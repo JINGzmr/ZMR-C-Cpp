@@ -104,12 +104,13 @@ void addfriend_server(int fd, string buf)
 }
 
 // 好友申请----->在函数里用到了recv，如果是非阻塞的话，recv会显示接受失败，然后就和那个客户端断开了连接
-void friendapply_server(int fd, string buf)
+// 查看申请列表
+void friendapplylist_server(int fd, string buf)
 {
     json parsed_data = json::parse(buf);
     struct Friend friend_;
     friend_.id = parsed_data["id"];
-    printf("--- %s 用户查看好友申请 ---\n", friend_.id.c_str());
+    printf("--- %s 用户查看好友申请列表 ---\n", friend_.id.c_str());
 
     Redis redis;
     redis.connect();
@@ -140,27 +141,63 @@ void friendapply_server(int fd, string buf)
         SendMsg sendmsg;
         sendmsg.SendMsg_client(fd, json_string);
 
-        // 接收客户端的判断
-        int state_;
-        RecvMsg recvmsg;
-        state_ = recvmsg.RecvMsg_int(fd);
-        printf("%d\n", state_);
-        printf("%s\n", applyfriend_id.c_str());
-        if (state_ == 1)
-        {
-            cout << "已同意" << endl;
-            redis.sremvalue(key, applyfriend_id); // 从申请列表中移除
-            string key1 = friend_.id + ":friends";
-            string key2 = applyfriend_id + ":friends";
-            redis.saddvalue(key1, applyfriend_id); // 对方成为自己好友
-            redis.saddvalue(key2, friend_.id);     // 自己成为对方好友
-        }
-        else
-        {
-            cout << "已拒绝" << endl;
-            redis.sremvalue(key, applyfriend_id); // 从申请列表中移除
-        }
         freeReplyObject(arry[i]);
+    }
+}
+// 编辑好友申请
+void friendapplyedit_server(int fd, string buf)
+{
+    json parsed_data = json::parse(buf);
+    struct Friend friend_;
+    friend_.id = parsed_data["id"];
+    string name = parsed_data["name"];
+    int state = parsed_data["state"];
+    printf("--- %s 用户编辑申请 ---\n", friend_.id.c_str());
+    cout << name << endl;
+    cout << state << endl;
+
+    Redis redis;
+    redis.connect();
+
+    string key = friend_.id + ":friends_apply";
+    
+    if(redis.sismember("username", name) != 1)
+    {
+        cout << "查无此人" << endl;
+
+        SendMsg sendmsg;
+        sendmsg.SendMsg_int(fd, USERNAMEUNEXIST);
+        return ;
+    }
+
+    // 得到发送请求的用户id
+    string applyfriend_id = redis.gethash("name_id", name); // 由昵称找id
+
+    if (redis.sismember(key, applyfriend_id) != 1)
+    {
+        cout << "不存在此好友申请！" << endl;
+        SendMsg sendmsg;
+        sendmsg.SendMsg_int(fd, FAIL);
+    }
+    else if (state == 1)
+    {
+        cout << "已同意" << endl;
+        redis.sremvalue(key, applyfriend_id); // 从申请列表中移除
+        string key1 = friend_.id + ":friends";
+        string key2 = applyfriend_id + ":friends";
+        redis.saddvalue(key1, applyfriend_id); // 对方成为自己好友
+        redis.saddvalue(key2, friend_.id);     // 自己成为对方好友
+
+        SendMsg sendmsg;
+        sendmsg.SendMsg_int(fd, SUCCESS);
+    }
+    else
+    {
+        cout << "已拒绝" << endl;
+        redis.sremvalue(key, applyfriend_id); // 从申请列表中移除
+
+        SendMsg sendmsg;
+        sendmsg.SendMsg_int(fd, SUCCESS);
     }
 }
 
@@ -211,6 +248,40 @@ void onlinefriend_server(int fd, string buf)
     }
 }
 
+// 屏蔽好友
+void addblack_server(int fd, string buf)
+{
+    json parsed_data = json::parse(buf);
+    struct Friend friend_;
+    friend_.id = parsed_data["id"];
+    friend_.oppoid = parsed_data["oppoid"];
+    printf("--- %s 用户将要屏蔽好友 ---\n", friend_.id.c_str());
+
+    Redis redis;
+    redis.connect();
+
+    string key = friend_.id + ":friends";
+
+    if (redis.hashexists("userinfo", friend_.oppoid) != 1) // 账号不存在
+    {
+        cout << "该id不存在，请重新输入" << endl;
+        SendMsg sendmsg;
+        sendmsg.SendMsg_int(fd, USERNAMEUNEXIST);
+    }
+    else if (redis.sismember(key, friend_.oppoid) == 1) // 已拉黑对方
+    {
+        cout << "已拉黑对方" << endl;
+        SendMsg sendmsg;
+        sendmsg.SendMsg_int(fd, HADBLACK);
+    }
+    else
+    {
+        redis.saddvalue(key, friend_.oppoid);
+        SendMsg sendmsg;
+        sendmsg.SendMsg_int(fd, SUCCESS);
+    }
+}
+
 // 删除好友
 void delfriend_server(int fd, string buf)
 {
@@ -226,7 +297,7 @@ void delfriend_server(int fd, string buf)
     string key = friend_.id + ":friends";
     string key_ = friend_.oppoid + ":friends";
     //*************还要删除聊天记录和黑名单****************
-    if (redis.sismember(key, friend_.oppoid) == 1 && redis.sremvalue(key, friend_.oppoid) ==3 && redis.sremvalue(key_, friend_.id) ==3)
+    if (redis.sismember(key, friend_.oppoid) == 1 && redis.sremvalue(key, friend_.oppoid) == 3 && redis.sremvalue(key_, friend_.id) == 3)
     {
         cout << "删除成功" << endl;
         SendMsg sendmsg;
@@ -240,4 +311,8 @@ void delfriend_server(int fd, string buf)
     }
 }
 
+// 查看屏蔽好友
+void blackfriendlist_server(int fd, string buf)
+{
+}
 #endif

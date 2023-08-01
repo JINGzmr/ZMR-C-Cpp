@@ -1,4 +1,4 @@
-// 各种结构体
+// 各种结构体及容器
 #ifndef DATA_H
 #define DATA_H
 
@@ -6,6 +6,9 @@
 
 #include <iostream>
 using namespace std;
+
+// 全局容器
+vector<string> friendapply_Vector; // 存放好友申请列表于本地
 
 // 注册登录（哈希存，键：userinfo，字段：用户id，值：User的json字符串）
 struct User

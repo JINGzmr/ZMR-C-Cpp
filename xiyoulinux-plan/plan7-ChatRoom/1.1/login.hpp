@@ -107,8 +107,10 @@ void register_server(int fd, string buf)
         int n = redis.hsetValue("userinfo", id, buf);
         int m = redis.saddvalue("username", user.username);
         int o = redis.hsetValue("id_name", id, user.username);
+        int p = redis.hsetValue("name_id", user.username, id);
 
-        if (n == REDIS_REPLY_ERROR || m == REDIS_REPLY_ERROR || o == REDIS_REPLY_ERROR)
+
+        if (n == REDIS_REPLY_ERROR || m == REDIS_REPLY_ERROR || o == REDIS_REPLY_ERROR || p == REDIS_REPLY_ERROR)
         {
             cout << "注册失败" << endl;
             SendMsg sendmsg;
@@ -149,7 +151,7 @@ void signout_server(int fd, string buf)
         string userjson_string;
         userjson_string = redis.gethash("userinfo", user.id);
         parsed_data = json::parse(userjson_string);
-        if (user.password == parsed_data["password"] && redis.hashdel("userinfo", user.id) == 3 && redis.sremvalue("username", parsed_data["username"]) == 3) // 密码正确且id从哈希表中成功移除、姓名从昵称表里移除
+        if (user.password == parsed_data["password"] && redis.hashdel("userinfo", user.id) == 3 && redis.sremvalue("username", parsed_data["username"]) == 3 && redis.sremvalue("id_name",user.id) == 3 && redis.sremvalue("name_id",parsed_data["username"])) // 密码正确且id从哈希表中成功移除、姓名从昵称表里移除
         {
             cout << "注销成功" << endl;
             SendMsg sendmsg;

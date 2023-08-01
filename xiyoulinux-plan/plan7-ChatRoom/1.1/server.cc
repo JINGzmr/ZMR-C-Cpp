@@ -211,21 +211,33 @@ void work(void *arg)
     {
         logout_server(recvJson_buf);
     }
-    else if(flag_ == ADDFRIEND)
+    else if (flag_ == ADDFRIEND)
     {
         addfriend_server(fd, recvJson_buf);
     }
-    else if(flag_ == FRIENDAPPLY)
+    else if (flag_ == FRIENDAPPLYLIST)
     {
-        friendapply_server(fd,recvJson_buf);
+        friendapplylist_server(fd, recvJson_buf);
     }
-    else if(flag_ == ONLINEFRIEND)
+    else if (flag_ == FRIENDAPPLYEDIT)
     {
-        onlinefriend_server(fd,recvJson_buf);
+        friendapplyedit_server(fd, recvJson_buf);
     }
-    else if(flag_ == DELFRIEND)
+    else if (flag_ == ONLINEFRIEND)
     {
-        delfriend_server(fd,recvJson_buf);
+        onlinefriend_server(fd, recvJson_buf);
+    }
+    else if (flag_ == ADDBLACK)
+    {
+        addblack_server(fd, recvJson_buf);
+    }
+    else if (flag_ == DELFRIEND)
+    {
+        delfriend_server(fd, recvJson_buf);
+    }
+    else if (flag_ == BLACKFRIENDLIST)
+    {
+        blackfriendlist_server(fd, recvJson_buf);
     }
 
     // 当前任务都处理完了（或出问题）之后，再挂树

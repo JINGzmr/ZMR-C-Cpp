@@ -10,12 +10,17 @@
 #include <arpa/inet.h>
 #include <errno.h>
 #include <pthread.h>
+#include <csignal>
 
 #define PORT 8080
 #define ServerAddr "127.0.0.1"
 
 int main()
 {
+    // 忽略SIGINT和SIGTSTP信号
+    signal(SIGINT, SIG_IGN);  // 忽略Ctrl+C
+    // signal(SIGTSTP, SIG_IGN); // 忽略Ctrl+Z
+
     // 创建连接对象
     int client_socket = socket(AF_INET, SOCK_STREAM, 0);
     if (client_socket == -1)
@@ -42,7 +47,7 @@ int main()
         perror("connection failed");
         return EXIT_FAILURE;
     }
-    std::cout <<connect_result<<std::endl;
+    std::cout << connect_result << std::endl;
     std::cout << "欢迎来到私人聊天室" << std::endl;
 
     // 进入登录界面

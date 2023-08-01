@@ -3,6 +3,7 @@
 
 const int BUFFER_SIZE = 10240; // 缓冲区的大小（用于存储recv来的序列化好的string）
 
+#define HADBLACK -7        // 已拉黑对方
 #define HADFRIEND -6       // 已添加为好友
 #define USERNAMEUNEXIST -5 // 用户名不存在
 #define USERNAMEEXIST -4   // 用户名已存在
@@ -15,7 +16,8 @@ const int BUFFER_SIZE = 10240; // 缓冲区的大小（用于存储recv来的序
 #define SIGNOUT 3          // 注销请求
 
 #define ADDFRIEND 4        // 添加好友
-#define FRIENDAPPLY 5      // 查看好友申请
+#define FRIENDAPPLYLIST 51 // 查看好友申请列表
+#define FRIENDAPPLYEDIT 52 // 编辑好友申请
 #define CHATFRIEND 6       // 选择好友私聊
 #define HISTORYCHAT 7      // 查看历史聊天记录
 #define ONLINEFRIEND 8     // 在线好友

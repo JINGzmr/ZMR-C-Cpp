@@ -20,11 +20,13 @@ using namespace std;
 // 因此哈希表中：用户信息userinfo作为键，字段是id，值是序列化好的用户个人信息
 // 好友列表 friendlist为键，字段id，值vector容器存的好友列表--->没必要
 // id与昵称对应 id_name为键，字段id，值：昵称
+// 昵称与id对应 name_id为键，字段昵称，值：id
 
 // 普通表中：
 // username用来存放用户名,onlinelist：在线用户列表
 // id+:friends：id对应用户的好友
 // id+:friendsapply：id对应用户的好友申请
+// id+:black：id对应的拉黑用户
 
 class Redis
 {
