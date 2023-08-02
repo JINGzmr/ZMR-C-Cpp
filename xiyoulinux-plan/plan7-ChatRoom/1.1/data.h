@@ -2,14 +2,14 @@
 #ifndef DATA_H
 #define DATA_H
 
-#include <vector> 
+#include <vector>
 
 #include <iostream>
 using namespace std;
 
 // 全局容器
 vector<string> friendapply_Vector; // 存放好友申请列表于本地
-vector<string> bfriends_Vector; // 存放屏蔽好友于本地
+vector<string> bfriends_Vector;    // 存放屏蔽好友于本地
 
 // 注册登录（哈希存，键：userinfo，字段：用户id，值：User的json字符串）
 struct User
@@ -29,7 +29,7 @@ struct Friend
     string username; // 用户名
     string id;       // id
     string opponame; // 对方用户名
-    string oppoid;       // 对方id
+    string oppoid;   // 对方id
     int status;      // 标记从服务器返回的状态（成功SUCCESS，失败FAIL）
     int online;      // 是否在线（在线ONLINE，不在OFFLINE）
 };
@@ -39,5 +39,13 @@ struct Friend
 // {
 //     vector<string> friends; // 存放好友的容器(重复的string会被忽略)
 // };
+
+// 聊天消息
+struct Chatinfo
+{
+    string name;
+    string msg;
+    string time;
+};
 
 #endif

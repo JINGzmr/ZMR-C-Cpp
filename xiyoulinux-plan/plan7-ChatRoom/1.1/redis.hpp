@@ -22,11 +22,15 @@ using namespace std;
 // id与昵称对应 id_name为键，字段id，值：昵称
 // 昵称与id对应 name_id为键，字段昵称，值：id
 
+
 // 普通表中：
 // username用来存放用户名,onlinelist：在线用户列表
 // id+:friends：id对应用户的好友
 // id+:friendsapply：id对应用户的好友申请
 // id+:bfriends：id对应的拉黑用户
+
+// list表中：
+// 历史消息：小的id+大的id+historychat为键，消息的结构体为值
 
 class Redis
 {
@@ -50,14 +54,19 @@ public:
     int scard(const string &key);                          // set中元素的个数
     redisReply **smembers(const string &key);              // 取出成员
 
+    int lpush(const string &key, const string &value);
+    int llen(const string &key);
+    redisReply **lrange(const string &key);                     //返回所有消息
+    redisReply **lrange(const string &key, string a, string b); //返回指定的消息记录
+    int ltrim(const string &key);                               //删除链表中的所有元素
+
+
 private:
     string m_addr;        // IP地址
     int m_port;           // 端口号
     string m_pwd;         // 密码
     redisContext *pm_rct; // redis结构体--->在connect函数里被赋值
     redisReply *pm_rr;    // 返回结构体
-
-    int handleReply(void *value = NULL, redisReply ***array = NULL); // 处理返回的结果
 };
 
 Redis::Redis()
@@ -217,4 +226,44 @@ redisReply **Redis::smembers(const string &key) //  取出成员
     return pm_rr->element;
 }
 
+/*----------------------------------------*/
+int Redis::lpush(const string &key, const string &value)
+{
+    string cmd = "lpush  " + key + " " + value;
+    pm_rr = (redisReply *)redisCommand(pm_rct, cmd.c_str());
+    int p = pm_rr->type;
+    freeReplyObject(pm_rr);
+    return p;
+}
+int Redis::llen(const string &key)
+{
+    string cmd = "llen  " + key;
+    pm_rr = (redisReply *)redisCommand(pm_rct, cmd.c_str());
+    int p = pm_rr->integer;
+    freeReplyObject(pm_rr);
+    return p;
+}
+
+redisReply **Redis::lrange(const string &key) //返回所有消息
+{
+    string cmd = "lrange  " + key + "  0" + "  -1";
+    pm_rr = (redisReply *)redisCommand(pm_rct, cmd.c_str());
+    return pm_rr->element;
+}
+
+redisReply **Redis::lrange(const string &key, string a, string b) //返回指定的消息记录
+{
+    string cmd = "lrange  " + key + "  " + a + "  " + b;
+    pm_rr = (redisReply *)redisCommand(pm_rct, cmd.c_str());
+    return pm_rr->element;
+}
+
+int Redis::ltrim(const string &key) //删除链表中的所有元素
+{
+    string cmd = "ltrim  " + key + " 1 " + " 0 ";
+    pm_rr = (redisReply *)redisCommand(pm_rct, cmd.c_str());
+    int p = pm_rr->type;
+    freeReplyObject(pm_rr);
+    return p;
+}
 #endif

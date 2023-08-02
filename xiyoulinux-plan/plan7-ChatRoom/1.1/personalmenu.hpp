@@ -17,28 +17,29 @@ void addblack_client(int client_socket, string id);
 void delfriend_client(int client_socket, string id);
 void blackfriendlist_client(int client_socket, string id);
 void blackfriendedit_client(int client_socket, string id);
+void historychat_client(int client_socket, string id);
 
 void personalmenuUI(void)
 {
     cout << "————————————————————————————————————————————————————" << endl;
-    cout << "|---------------------  聊天室  --------------------|" << endl;
-    cout << "|——————————————————————————————————————————————————|" << endl;
-    cout << "|                      4.添加好友                   |" << endl;
-    cout << "|         51.查看好友申请列表   52.编辑好友申请        |" << endl;
-    cout << "|                      6.选择好友私聊                |" << endl;
-    cout << "|                      7.查看历史聊天记录            |" << endl;
-    cout << "|                      8.好友信息                   |" << endl;
-    cout << "|                      9.屏蔽好友                   |" << endl;
-    cout << "|                      10.删除好友                  |" << endl;
-    cout << "|         111.查看屏蔽好友列表   112.编辑屏蔽好友      |" << endl;
-    cout << "|--------------------------------------------------|" << endl;
-    cout << "|                      11.群聊                      |" << endl;
-    cout << "|                      12.拉入黑名单                 |" << endl;
-    cout << "|                      13.拉出黑名单                 |" << endl;
-    cout << "|                      14.发送文件                   |" << endl;
-    cout << "|                      15.接受文件                   |" << endl;
-    cout << "|---------------------------------------------------|" << endl;
-    cout << "|                      16.退出登录                   |" << endl;
+    cout << "---------------------  聊天室  --------------------" << endl;
+    cout << "——————————————————————————————————————————————————" << endl;
+    cout << "                      4.添加好友                   " << endl;
+    cout << "         51.查看好友申请列表   52.编辑好友申请         " << endl;
+    cout << "                      6.选择好友私聊                " << endl;
+    cout << "                      7.查看历史聊天记录            " << endl;
+    cout << "                      8.好友信息                   " << endl;
+    cout << "                      9.屏蔽好友                   " << endl;
+    cout << "                      10.删除好友                  " << endl;
+    cout << "         111.查看屏蔽好友列表   112.编辑屏蔽好友       " << endl;
+    cout << "--------------------------------------------------" << endl;
+    cout << "                      11.群聊                      " << endl;
+    cout << "                      12.拉入黑名单                 " << endl;
+    cout << "                      13.拉出黑名单                 " << endl;
+    cout << "                      14.发送文件                   " << endl;
+    cout << "                      15.接受文件                   " << endl;
+    cout << "---------------------------------------------------" << endl;
+    cout << "                      16.退出登录                   " << endl;
     cout << "————————————————————————————————————————————————————" << endl;
 }
 
@@ -67,9 +68,9 @@ void messagemenu(int client_socket, string id)
         // case 6:
         //     chatfriend_client(client_socket);
         //     break;
-        // case 7:
-        //     historychat_client(client_socket);
-        //     break;
+        case 7:
+            historychat_client(client_socket, id);
+            break;
         case 8:
             friendinfo_client(client_socket, id);
             break;
@@ -495,3 +496,50 @@ void blackfriendedit_client(int client_socket, string id)
     }
 }
 
+// 好友聊天历史记录
+void historychat_client(int client_socket, string id)
+{
+    string opponame;
+    cout << "输入要查看历史消息的好友昵称：" << endl;
+    cin >> opponame;
+
+    // 发送数据
+    nlohmann::json sendJson_client = {
+        {"id", id},
+        {"opponame", opponame},
+        {"flag", HISTORYCHAT},
+    };
+    string sendJson_client_string = sendJson_client.dump();
+    SendMsg sendmsg;
+    sendmsg.SendMsg_client(client_socket, sendJson_client_string);
+
+    // 接收历史消息个数
+    int n = 0;
+    RecvMsg recvmsg;
+    n = recvmsg.RecvMsg_int(client_socket);
+    cout << "（ 一共有 " << n << " 条历史消息 ）" << endl;
+    if (n == 0)
+    {
+        return;
+    }
+
+    cout << "———————————————以下为历史消息——————————————————" << endl;
+    for (int i = 0; i < n; i++)
+    {
+        string recvJson_buf;
+        RecvMsg recvmsg;
+        recvmsg.RecvMsg_client(client_socket, recvJson_buf);
+        json parsed_data = json::parse(recvJson_buf);
+        string msg = parsed_data["msg"]; // msg还是json字符串类型的
+
+        // 打印
+        parsed_data = json::parse(msg);
+        struct Chatinfo chatinfo;
+        chatinfo.name = parsed_data["name"];
+        chatinfo.msg = parsed_data["msg"];
+        chatinfo.time = parsed_data["time"];
+
+        cout << chatinfo.name << ": " << chatinfo.msg << endl;
+    }
+    cout << "———————————————以上为历史消息——————————————————" << endl;
+}

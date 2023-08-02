@@ -238,7 +238,7 @@ void friendinfo_server(int fd, string buf)
         // 根据id发送好友昵称
         nlohmann::json json_ = {
             {"username", redis.gethash("id_name", friend_id)},
-            {"id",friend_id},
+            {"id", friend_id},
             {"online", state},
         };
         string json_string = json_.dump();
@@ -301,7 +301,7 @@ void delfriend_server(int fd, string buf)
     string key_ = friend_.oppoid + ":friends";
     string bkey = friend_.id + ":bfriends";
     //*************还要删除聊天记录****************
-    if (redis.sismember(key, friend_.oppoid) == 1 && redis.sremvalue(key, friend_.oppoid) == 3 && redis.sremvalue(key_, friend_.id) == 3 && redis.sremvalue(bkey,friend_.oppoid))
+    if (redis.sismember(key, friend_.oppoid) == 1 && redis.sremvalue(key, friend_.oppoid) == 3 && redis.sremvalue(key_, friend_.id) == 3 && redis.sremvalue(bkey, friend_.oppoid))
     {
         cout << "删除成功" << endl;
         SendMsg sendmsg;
@@ -395,6 +395,51 @@ void blackfriendedit_server(int fd, string buf)
 
         SendMsg sendmsg;
         sendmsg.SendMsg_int(fd, SUCCESS);
+    }
+}
+
+// 好友聊天历史记录
+void historychat_server(int fd, string buf)
+{
+    json parsed_data = json::parse(buf);
+    struct Friend friend_;
+    friend_.id = parsed_data["id"];
+    friend_.opponame = parsed_data["opponame"];
+    printf("--- %s 用户查看与 %s 的聊天记录 ---\n", friend_.id.c_str(), friend_.opponame.c_str());
+
+    Redis redis;
+    redis.connect();
+
+    friend_.oppoid = redis.gethash("name_id",friend_.opponame);
+    string key;
+    if(friend_.id < friend_.oppoid)
+    {
+        key = friend_.id + friend_.oppoid + ":historychat";
+    }
+    else 
+    {
+        friend_.oppoid + friend_.id + ":historychat";
+    }
+    string userjson_string;
+    int len = redis.llen(key);
+    SendMsg sendmsg;
+    sendmsg.SendMsg_int(fd, len);
+    cout << "一共有 " << len << " 条历史消息" << endl;
+    if (len == 0)
+    {
+        return;
+    }
+
+    redisReply **arry = redis.lrange(key);
+    for (int i = len -1; i >=0; i--)
+    {
+        // 得到历史消息json的字符串
+        string msg = arry[i]->str;
+
+        SendMsg sendmsg;
+        sendmsg.SendMsg_client(fd, msg);
+
+        freeReplyObject(arry[i]);
     }
 }
 
