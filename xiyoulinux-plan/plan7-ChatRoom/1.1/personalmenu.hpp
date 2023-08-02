@@ -12,7 +12,7 @@ void logout_client(int client_socket, string username);
 void addfriend_client(int client_socket, string username);
 void friendapplylist_client(int client_socket, string id);
 void friendapplyedit_client(int client_socket, string id);
-void onlinefriend_client(int client_socket, string id);
+void friendinfo_client(int client_socket, string id);
 void addblack_client(int client_socket, string id);
 void delfriend_client(int client_socket, string id);
 void blackfriendlist_client(int client_socket, string id);
@@ -27,7 +27,7 @@ void personalmenuUI(void)
     cout << "|         51.查看好友申请列表   52.编辑好友申请        |" << endl;
     cout << "|                      6.选择好友私聊                |" << endl;
     cout << "|                      7.查看历史聊天记录            |" << endl;
-    cout << "|                      8.在线好友                   |" << endl;
+    cout << "|                      8.好友信息                   |" << endl;
     cout << "|                      9.屏蔽好友                   |" << endl;
     cout << "|                      10.删除好友                  |" << endl;
     cout << "|         111.查看屏蔽好友列表   112.编辑屏蔽好友      |" << endl;
@@ -71,7 +71,7 @@ void messagemenu(int client_socket, string id)
         //     historychat_client(client_socket);
         //     break;
         case 8:
-            onlinefriend_client(client_socket, id);
+            friendinfo_client(client_socket, id);
             break;
         case 9:
             addblack_client(client_socket, id);
@@ -257,21 +257,21 @@ void friendapplyedit_client(int client_socket, string id)
     }
     else if (state_ == FAIL)
     {
-        cout << "不存在此好友申请！请重新输入" << endl;
+        cout << "不存在此好友申请！" << endl;
     }
     else if (state_ == USERNAMEUNEXIST)
     {
-        cout << "查无此人! 请重新输入" << endl;
+        cout << "查无此人! " << endl;
     }
 }
 
-// 在线好友
-void onlinefriend_client(int client_socket, string id)
+// 好友信息
+void friendinfo_client(int client_socket, string id)
 {
     // 发送数据
     nlohmann::json sendJson_client = {
         {"id", id},
-        {"flag", ONLINEFRIEND},
+        {"flag", FRIENDINFO},
     };
     string sendJson_client_string = sendJson_client.dump();
     SendMsg sendmsg;
@@ -297,9 +297,10 @@ void onlinefriend_client(int client_socket, string id)
         recvmsg.RecvMsg_client(client_socket, recvJson_buf);
         json parsed_data = json::parse(recvJson_buf);
         string username = parsed_data["username"];
+        string id = parsed_data["id"];
         int state = parsed_data["online"];
 
-        cout << username;
+        cout << username << "  " << id;
         if (state == 1)
         {
             cout << " （在线）" << endl;
@@ -351,7 +352,7 @@ void addblack_client(int client_socket, string id)
     }
     else if (state_ == FAIL)
     {
-        cout << "对方不是你的好友，请重新输入" << endl;
+        cout << "对方不是你的好友！" << endl;
     }
     else if (state_ == HADBLACK)
     {
@@ -439,7 +440,7 @@ void blackfriendlist_client(int client_socket, string id)
         string username = parsed_data["username"];
 
         // 放入本地vector里
-        friendapply_Vector.push_back(username);
+        bfriends_Vector.push_back(username);
 
         // 打印出好友请求列表
         cout << username << endl;
@@ -449,6 +450,48 @@ void blackfriendlist_client(int client_socket, string id)
 // 编辑屏蔽好友
 void blackfriendedit_client(int client_socket, string id)
 {
+    string name;
+    int state;
+    cout << "输入要移除黑名单的好友昵称" << endl;
+    cin >> name;
 
+    // 发送数据
+    nlohmann::json sendJson_client = {
+        {"id", id},
+        {"flag", BLACKFRIENDEDIT},
+        {"name", name},
+    };
+    string sendJson_client_string = sendJson_client.dump();
+    SendMsg sendmsg;
+    sendmsg.SendMsg_client(client_socket, sendJson_client_string);
+
+    // 接收数据
+    int state_;
+    RecvMsg recvmsg;
+    state_ = recvmsg.RecvMsg_int(client_socket);
+
+    // 判断是否操作成功
+    if (state_ == SUCCESS)
+    {
+        cout << "操作成功！" << endl;
+
+        // 从容器中去除已编辑过的成员
+        for (auto it = bfriends_Vector.begin(); it != friendapply_Vector.end(); ++it)
+        {
+            if (*it == name)
+            {
+                bfriends_Vector.erase(it);
+                break;
+            }
+        }
+    }
+    else if (state_ == FAIL)
+    {
+        cout << "不存在此拉黑好友！" << endl;
+    }
+    else if (state_ == USERNAMEUNEXIST)
+    {
+        cout << "查无此人! " << endl;
+    }
 }
 

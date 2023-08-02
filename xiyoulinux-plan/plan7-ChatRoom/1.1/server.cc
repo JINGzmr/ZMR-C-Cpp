@@ -223,9 +223,9 @@ void work(void *arg)
     {
         friendapplyedit_server(fd, recvJson_buf);
     }
-    else if (flag_ == ONLINEFRIEND)
+    else if (flag_ == FRIENDINFO)
     {
-        onlinefriend_server(fd, recvJson_buf);
+        friendinfo_server(fd, recvJson_buf);
     }
     else if (flag_ == ADDBLACK)
     {

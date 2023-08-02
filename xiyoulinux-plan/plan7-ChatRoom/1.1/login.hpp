@@ -151,6 +151,8 @@ void signout_server(int fd, string buf)
         string userjson_string;
         userjson_string = redis.gethash("userinfo", user.id);
         parsed_data = json::parse(userjson_string);
+        // ************还要把该用户从所有人的好友名单、拉黑名单、群聊名单里删去**********
+        // *********或者，当用户要看这些名单时，可以做一个判断，如果这个id存在，则打印出来，不存在，则不打印，但数据库来还存在就是了************
         if (user.password == parsed_data["password"] && redis.hashdel("userinfo", user.id) == 3 && redis.sremvalue("username", parsed_data["username"]) == 3 && redis.sremvalue("id_name",user.id) == 3 && redis.sremvalue("name_id",parsed_data["username"])) // 密码正确且id从哈希表中成功移除、姓名从昵称表里移除
         {
             cout << "注销成功" << endl;
