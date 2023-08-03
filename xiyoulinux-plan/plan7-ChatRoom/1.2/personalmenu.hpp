@@ -3,13 +3,14 @@
 #include "head.h"
 #include "IO.h"
 #include "menu.hpp"
+#include "threadwork.hpp"
 
 #include <iostream>
 using json = nlohmann::json;
 using namespace std;
 
 void logout_client(int client_socket, string username);
-void addfriend_client(int client_socket, string username);
+void addfriend_client(int client_socket, string username, Queue<string> &RecvQue);
 void friendapplylist_client(int client_socket, string id);
 void friendapplyedit_client(int client_socket, string id);
 void friendinfo_client(int client_socket, string id);
@@ -43,7 +44,7 @@ void personalmenuUI(void)
     cout << "————————————————————————————————————————————————————" << endl;
 }
 
-void messagemenu(int client_socket, string id)
+void messagemenu(int client_socket, string id, Queue<string> &RecvQue)
 {
     personalmenuUI();
 
@@ -55,7 +56,7 @@ void messagemenu(int client_socket, string id)
         switch (num)
         {
         case 4:
-            addfriend_client(client_socket, id);
+            addfriend_client(client_socket, id, RecvQue);
             personalmenuUI();
             break;
         case 51:
@@ -123,7 +124,7 @@ void logout_client(int client_socket, string id)
 }
 
 // 加好友
-void addfriend_client(int client_socket, string id)
+void addfriend_client(int client_socket, string id, Queue<string> &RecvQue)
 {
     Friend friend_;
     do
@@ -149,23 +150,23 @@ void addfriend_client(int client_socket, string id)
     SendMsg sendmsg;
     sendmsg.SendMsg_client(client_socket, sendJson_client_string);
 
-    // 接收数据
-    int state_;
-    RecvMsg recvmsg;
-    state_ = recvmsg.RecvMsg_int(client_socket);
+    // 从消息队列里取消息
+    string buf = RecvQue.remove();
+    json parsed_data = json::parse(buf);
+    int state_ = parsed_data["state"];
 
-    // 判断是否登入成功
-    if (state_ == SUCCESS)
-    {
-        cout << "已发送好友申请！" << endl;
-    }
-    else if (state_ == HADFRIEND)
+    // 判断是否发送成功
+    if (state_ == HADFRIEND)
     {
         cout << "你们已经是好友！" << endl;
     }
     else if (state_ == USERNAMEUNEXIST)
     {
         cout << "该id不存在，请重新输入" << endl;
+    }
+    else if(state_ == SUCCESS)
+    {
+        cout << "已发送好友申请！" << endl;
     }
 
     return;

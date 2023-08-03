@@ -13,7 +13,7 @@ using json = nlohmann::json;
 using namespace std;
 
 // 退出登录
-void logout_server(string buf)
+void logout_server(int fd, string buf)
 {
     json parsed_data = json::parse(buf);
     string id = parsed_data["id"];
@@ -31,6 +31,16 @@ void logout_server(string buf)
     userjson_string = parsed_data.dump();
     redis.hsetValue("userinfo", id, userjson_string);
     redis.sremvalue("onlinelist", id); // 把用户从在线列表中移除
+    redis.hashdel("usersocket", id); // 把用户的套接字移除
+
+    // 发送状态和信息类型
+    nlohmann::json json_ = {
+        {"type", 0},
+        {"flag", LOGOUT},
+    };
+    string json_string = json_.dump();
+    SendMsg sendmsg;
+    sendmsg.SendMsg_client(fd, json_string);
 
     cout << "退出登录成功" << endl;
 }
@@ -50,40 +60,68 @@ void addfriend_server(int fd, string buf)
     // 构造好友列表
     string key = friend_.id + ":friends";            // id+friends作为键，值就是id用户的好友们
     string key_ = friend_.oppoid + ":friends_apply"; // 对方的好友申请表
+    string unkey = friend_.oppoid + ":unreadnotice"; // 未读通知
 
     // 加好友
     if (redis.hashexists("userinfo", friend_.oppoid) != 1) // 账号不存在
     {
         cout << "该id不存在，请重新输入" << endl;
-        SendMsg sendmsg;
-        sendmsg.SendMsg_int(fd, USERNAMEUNEXIST);
+        friend_.state = USERNAMEUNEXIST;
+        friend_.type = NORMAL;
     }
     else if (redis.sismember(key, friend_.oppoid) == 1) // 好友列表里已有对方
     {
         cout << "你们已经是好友" << endl;
-        SendMsg sendmsg;
-        sendmsg.SendMsg_int(fd, HADFRIEND);
+        friend_.state = HADFRIEND;
+        friend_.type = NORMAL;
     }
     else if (redis.sismember("onlinelist", friend_.oppoid) == 1) // 在线列表里有对方
     {
         cout << "对方在线" << endl;
+        friend_.msg = redis.gethash("id_name", friend_.id) + "向你发送了一条好友申请";
+        friend_.state = SUCCESS;
+        friend_.type = NOTICE;
 
         // 放到对方的好友申请表中
         redis.saddvalue(key_, friend_.id);
-
-        SendMsg sendmsg;
-        sendmsg.SendMsg_int(fd, SUCCESS);
     }
     else // 对方不在线：加入数据库，等用户上线时提醒
     {
-        cout << "对方不在线" << endl; //*******问不在线要怎么办*************
+        cout << "对方不在线" << endl;
+        friend_.msg = redis.gethash("id_name", friend_.id) + "向你发送了一条好友申请";
+        friend_.state = SUCCESS;
+        friend_.type = NORMAL; // 对方不在线，不能及时通知，因此设为普通事件，让用户知道已经发送了好友申请
+
+        // 加入到对方的未读通知消息队列里
+        redis.saddvalue(unkey, friend_.msg);
 
         // 放到对方的好友申请表中
         redis.saddvalue(key_, friend_.id);
-
-        SendMsg sendmsg;
-        sendmsg.SendMsg_int(fd, SUCCESS);
     }
+
+    // 发送状态和信息类型
+    nlohmann::json json_ = {
+        {"type", friend_.type},
+        {"state", friend_.state},
+        {"msg", friend_.msg},
+        {"flag", 0},
+    };
+    string json_string = json_.dump();
+    SendMsg sendmsg;
+    if (friend_.type == NORMAL)
+    {
+        sendmsg.SendMsg_client(fd, json_string);
+    }
+    else if (friend_.type == NOTICE)//如果是通知消息，那就把这条消息发给对方（所以下面要根据对方的id获得对方的socket）
+    {
+        sendmsg.SendMsg_client(stoi(redis.gethash("usersocket",friend_.oppoid)), json_string);
+        
+        // 改成正常的类型后给本用户的客户端发回去，不然客户端接不到事件的处理进度
+        json_["type"]= NORMAL;
+        json_string = json_.dump();
+        sendmsg.SendMsg_client(fd, json_string);
+    }
+    cout << "here" << endl;
 }
 
 // 好友申请----->在函数里用到了recv，如果是非阻塞的话，recv会显示接受失败，然后就和那个客户端断开了连接
@@ -393,13 +431,13 @@ void historychat_server(int fd, string buf)
     Redis redis;
     redis.connect();
 
-    friend_.oppoid = redis.gethash("name_id",friend_.opponame);
+    friend_.oppoid = redis.gethash("name_id", friend_.opponame);
     string key;
-    if(friend_.id < friend_.oppoid)
+    if (friend_.id < friend_.oppoid)
     {
         key = friend_.id + friend_.oppoid + ":historychat";
     }
-    else 
+    else
     {
         friend_.oppoid + friend_.id + ":historychat";
     }
@@ -414,7 +452,7 @@ void historychat_server(int fd, string buf)
     }
 
     redisReply **arry = redis.lrange(key);
-    for (int i = len -1; i >=0; i--)
+    for (int i = len - 1; i >= 0; i--)
     {
         // 得到历史消息json的字符串
         string msg = arry[i]->str;

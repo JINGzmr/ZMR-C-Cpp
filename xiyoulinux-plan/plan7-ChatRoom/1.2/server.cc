@@ -209,7 +209,7 @@ void work(void *arg)
     }
     else if (flag_ == LOGOUT) // 退出登录
     {
-        logout_server(recvJson_buf);
+        logout_server(fd, recvJson_buf);
     }
     else if (flag_ == ADDFRIEND)
     {

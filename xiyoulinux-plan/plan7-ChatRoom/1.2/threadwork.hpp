@@ -20,7 +20,7 @@ void recvfunc(int fd, string id, Queue<string> *RecvQue)
     while (1)
     {
         // 接收服务器返回的数据
-        string recvJson_buf;
+        string recvJson_buf = "";
         RecvMsg recvmsg;
         while (recvJson_buf.empty()) // 不为空时，表面本次接收到了消息，退出循环
         {
@@ -31,6 +31,10 @@ void recvfunc(int fd, string id, Queue<string> *RecvQue)
         json parsed_data = json::parse(recvJson_buf);
         int type = parsed_data["type"];
         int flag = parsed_data["flag"];
+
+        if (flag == LOGOUT)
+            return;
+
         if (type == NOTICE)
         {
             if (flag == PRIVATE)
@@ -52,7 +56,7 @@ void recvfunc(int fd, string id, Queue<string> *RecvQue)
             {
                 string groupid = parsed_data["groupid"];     // 群id
                 string groupname = parsed_data["groupname"]; // 群名
-                string name = parsed_data["name"]; // 发送消息的人的名字
+                string name = parsed_data["name"];           // 发送消息的人的名字
 
                 if (groupid != chatid) // 对方不在聊天窗口，chatid是当用户进入聊天窗口时更改
                 {
@@ -64,9 +68,10 @@ void recvfunc(int fd, string id, Queue<string> *RecvQue)
                     cout << name << ": " << msg << endl;
                 }
             }
-            else // 包括好友申请等
+            else
             {
-                cout << "                            有一条新消息：" << endl;
+                string msg = parsed_data["msg"];
+                cout << "                               " << msg << endl;
             }
         }
         else if (type == NORMAL)
@@ -78,4 +83,3 @@ void recvfunc(int fd, string id, Queue<string> *RecvQue)
 }
 
 #endif
-

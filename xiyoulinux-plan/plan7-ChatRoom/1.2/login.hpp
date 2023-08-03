@@ -59,7 +59,8 @@ void login_server(int fd, string buf)
             parsed_data["online"] = ONLINE;
             userjson_string = parsed_data.dump();
             redis.hsetValue("userinfo", user.id, userjson_string);
-            redis.saddvalue("onlinelist", user.id); // 在线列表
+            redis.saddvalue("onlinelist", user.id);                   // 在线列表
+            redis.hsetValue("usersocket", user.id, to_string(fd)); // 存套接字（用to_string将int类型转换成string类型）-->客户端与服务器连接时才会产生套接字，所以只记录在线用户的套接字（则也只是为了能实时通知）
 
             //------------登录成功后，是客户端进入下一步，服务端只需要根据客户端发来的请求 调用相应的函数 来处理即可-------------
             // 现在这个登录的任务服务器处理完毕了，也就可以返回上一级了
@@ -109,7 +110,6 @@ void register_server(int fd, string buf)
         int o = redis.hsetValue("id_name", id, user.username);
         int p = redis.hsetValue("name_id", user.username, id);
 
-
         if (n == REDIS_REPLY_ERROR || m == REDIS_REPLY_ERROR || o == REDIS_REPLY_ERROR || p == REDIS_REPLY_ERROR)
         {
             cout << "注册失败" << endl;
@@ -153,7 +153,7 @@ void signout_server(int fd, string buf)
         parsed_data = json::parse(userjson_string);
         // ************还要把该用户从所有人的好友名单、拉黑名单、群聊名单里删去**********
         // *********或者，当用户要看这些名单时，可以做一个判断，如果这个id存在，则打印出来，不存在，则不打印，但数据库来还存在就是了************
-        if (user.password == parsed_data["password"] && redis.hashdel("userinfo", user.id) == 3 && redis.sremvalue("username", parsed_data["username"]) == 3 && redis.sremvalue("id_name",user.id) == 3 && redis.sremvalue("name_id",parsed_data["username"])) // 密码正确且id从哈希表中成功移除、姓名从昵称表里移除
+        if (user.password == parsed_data["password"] && redis.hashdel("userinfo", user.id) == 3 && redis.sremvalue("username", parsed_data["username"]) == 3 && redis.hashdel("id_name", user.id) == 3 && redis.hashdel("name_id", parsed_data["username"]) == 3 ) // 密码正确且id从哈希表中成功移除、姓名从昵称表里移除
         {
             cout << "注销成功" << endl;
             SendMsg sendmsg;

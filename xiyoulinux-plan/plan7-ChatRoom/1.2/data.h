@@ -26,12 +26,14 @@ struct User
 // 加好友
 struct Friend
 {
+    int type;        // 标记事件类型（正常NORMAL，通知NOTICE）
     int flag;        // 标记选项
     string username; // 用户名
     string id;       // id
     string opponame; // 对方用户名
     string oppoid;   // 对方id
-    int status;      // 标记从服务器返回的状态（成功SUCCESS，失败FAIL）
+    string msg;      // 通知消息
+    int state;       // 标记从服务器返回的状态（成功SUCCESS，失败FAIL）
     int online;      // 是否在线（在线ONLINE，不在OFFLINE）
 };
 
@@ -48,6 +50,5 @@ struct Chatinfo
     string msg;
     string time;
 };
-
 
 #endif
