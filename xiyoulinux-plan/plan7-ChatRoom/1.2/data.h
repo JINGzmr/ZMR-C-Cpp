@@ -8,8 +8,8 @@
 using namespace std;
 
 // 全局容器
-vector<string> friendapply_Vector; // 存放好友申请列表于本地
-vector<string> bfriends_Vector;    // 存放屏蔽好友于本地
+// vector<string> friendapply_Vector; // 存放好友申请列表于本地
+// vector<string> bfriends_Vector;    // 存放屏蔽好友于本地
 string chatid = "";
 
 // 注册登录（哈希存，键：userinfo，字段：用户id，值：User的json字符串）

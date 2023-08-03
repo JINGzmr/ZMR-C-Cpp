@@ -35,7 +35,11 @@ void menu(int client_socket)
         cout << "---------------------3.注销------------------------" << endl;
         cout << "——————————————————————————————————————————————————" << endl;
 
-        int num;
+        // 清空缓冲区
+        std::cin.clear();
+        std::cin.sync();
+
+        int num = 0;
         cin >> num;
 
         switch (num)
@@ -85,11 +89,11 @@ void login_client(int client_socket)
     {
         cout << "登入成功！" << endl;
         Queue<string> RecvQue;
-        thread RecvThread = thread(recvfunc, client_socket, user.id, &RecvQue);// 工作线程启动
+        thread RecvThread = thread(recvfunc, client_socket, user.id, &RecvQue); // 工作线程启动
         //********一个进入下一页面的入口********
         messagemenu(client_socket, user.id, RecvQue);
         RecvThread.join(); // 回收线程
-        system("clear"); // 刷新终端页面
+        system("clear");   // 刷新终端页面
     }
     else if (state_ == FAIL)
     {

@@ -31,7 +31,7 @@ void logout_server(int fd, string buf)
     userjson_string = parsed_data.dump();
     redis.hsetValue("userinfo", id, userjson_string);
     redis.sremvalue("onlinelist", id); // 把用户从在线列表中移除
-    redis.hashdel("usersocket", id); // 把用户的套接字移除
+    redis.hashdel("usersocket", id);   // 把用户的套接字移除
 
     // 发送状态和信息类型
     nlohmann::json json_ = {
@@ -112,12 +112,12 @@ void addfriend_server(int fd, string buf)
     {
         sendmsg.SendMsg_client(fd, json_string);
     }
-    else if (friend_.type == NOTICE)//如果是通知消息，那就把这条消息发给对方（所以下面要根据对方的id获得对方的socket）
+    else if (friend_.type == NOTICE) // 如果是通知消息，那就把这条消息发给对方（所以下面要根据对方的id获得对方的socket）
     {
-        sendmsg.SendMsg_client(stoi(redis.gethash("usersocket",friend_.oppoid)), json_string);
-        
+        sendmsg.SendMsg_client(stoi(redis.gethash("usersocket", friend_.oppoid)), json_string);
+
         // 改成正常的类型后给本用户的客户端发回去，不然客户端接不到事件的处理进度
-        json_["type"]= NORMAL;
+        json_["type"] = NORMAL;
         json_string = json_.dump();
         sendmsg.SendMsg_client(fd, json_string);
     }
@@ -139,31 +139,31 @@ void friendapplylist_server(int fd, string buf)
     string key = friend_.id + ":friends_apply";
     string userjson_string;
     int len = redis.scard(key);
-    SendMsg sendmsg;
-    sendmsg.SendMsg_int(fd, len);
-    cout << "一共有 " << len << " 条好友请求" << endl;
-    if (len == 0)
-    {
-        return;
-    }
 
     redisReply **arry = redis.smembers(key);
+    vector<string> friendapply_Vector; // 放好友请求的容器
+
     // 展示好友请求列表
     for (int i = 0; i < len; i++)
     {
         // 得到发送请求的用户id
         string applyfriend_id = arry[i]->str;
+        string name = redis.gethash("id_name", applyfriend_id); // 拿着id去找username
 
-        // 根据id发送好友昵称
-        nlohmann::json json_ = {
-            {"username", redis.gethash("id_name", applyfriend_id)}, // 拿着id去找username
-        };
-        string json_string = json_.dump();
-        SendMsg sendmsg;
-        sendmsg.SendMsg_client(fd, json_string);
+        friendapply_Vector.push_back(name);
 
         freeReplyObject(arry[i]);
     }
+
+    // 发送状态和信息类型
+    nlohmann::json json_ = {
+        {"type", NORMAL},
+        {"flag", 0},
+        {"vector", friendapply_Vector},
+    };
+    string json_string = json_.dump();
+    SendMsg sendmsg;
+    sendmsg.SendMsg_client(fd, json_string);
 }
 // 编辑好友申请
 void friendapplyedit_server(int fd, string buf)
@@ -186,40 +186,51 @@ void friendapplyedit_server(int fd, string buf)
     {
         cout << "查无此人" << endl;
 
-        SendMsg sendmsg;
-        sendmsg.SendMsg_int(fd, USERNAMEUNEXIST);
-        return;
-    }
-
-    // 得到发送请求的用户id
-    string applyfriend_id = redis.gethash("name_id", name); // 由昵称找id
-
-    if (redis.sismember(key, applyfriend_id) != 1)
-    {
-        cout << "不存在此好友申请！" << endl;
-        SendMsg sendmsg;
-        sendmsg.SendMsg_int(fd, FAIL);
-    }
-    else if (state == 1)
-    {
-        cout << "已同意" << endl;
-        redis.sremvalue(key, applyfriend_id); // 从申请列表中移除
-        string key1 = friend_.id + ":friends";
-        string key2 = applyfriend_id + ":friends";
-        redis.saddvalue(key1, applyfriend_id); // 对方成为自己好友
-        redis.saddvalue(key2, friend_.id);     // 自己成为对方好友
-
-        SendMsg sendmsg;
-        sendmsg.SendMsg_int(fd, SUCCESS);
+        friend_.state = USERNAMEUNEXIST;
+        friend_.type = NORMAL;
     }
     else
     {
-        cout << "已拒绝" << endl;
-        redis.sremvalue(key, applyfriend_id); // 从申请列表中移除
+        // 得到发送请求的用户id
+        string applyfriend_id = redis.gethash("name_id", name); // 由昵称找id
 
-        SendMsg sendmsg;
-        sendmsg.SendMsg_int(fd, SUCCESS);
+        if (redis.sismember(key, applyfriend_id) != 1)
+        {
+            cout << "不存在此好友申请！" << endl;
+            friend_.state = FAIL;
+            friend_.type = NORMAL;
+        }
+        else if (state == 1)
+        {
+            cout << "已同意" << endl;
+            redis.sremvalue(key, applyfriend_id); // 从申请列表中移除
+            string key1 = friend_.id + ":friends";
+            string key2 = applyfriend_id + ":friends";
+            redis.saddvalue(key1, applyfriend_id); // 对方成为自己好友
+            redis.saddvalue(key2, friend_.id);     // 自己成为对方好友
+
+            friend_.state = SUCCESS;
+            friend_.type = NORMAL;
+        }
+        else
+        {
+            cout << "已拒绝" << endl;
+            redis.sremvalue(key, applyfriend_id); // 从申请列表中移除
+
+            friend_.state = SUCCESS;
+            friend_.type = NORMAL;
+        }
     }
+
+    // 发送状态和信息类型
+    nlohmann::json json_ = {
+        {"type", friend_.type},
+        {"flag", 0},
+        {"state", friend_.state},
+    };
+    string json_string = json_.dump();
+    SendMsg sendmsg;
+    sendmsg.SendMsg_client(fd, json_string);
 }
 
 // 好友信息
@@ -236,38 +247,37 @@ void friendinfo_server(int fd, string buf)
     string key = friend_.id + ":friends";
     string userjson_string;
     int len = redis.scard(key);
-    SendMsg sendmsg;
-    sendmsg.SendMsg_int(fd, len);
-    cout << "一共有 " << len << " 个好友" << endl;
-    if (len == 0)
-    {
-        return;
-    }
 
     redisReply **arry = redis.smembers(key);
-    // 向客户端挨个发送好友在线信息
+    vector<string> friendsname_Vector; // 放好友姓名的容器
+    vector<string> friendsid_Vector; // 放好友id的容器
+    vector<int> friendsonline_Vector; // 放好友是否在线的容器（1在线，0不在）
+
+    // 展示好友请求列表
     for (int i = 0; i < len; i++)
     {
-        // 得到好友id
-        int state = 0;
+        // 得到发送请求的用户id
         string friend_id = arry[i]->str;
-        if (redis.sismember("onlinelist", friend_id) == 1)
-        {
-            state = 1;
-        }
+        string name = redis.gethash("id_name",friend_id); // 拿着id去找username
 
-        // 根据id发送好友昵称
-        nlohmann::json json_ = {
-            {"username", redis.gethash("id_name", friend_id)},
-            {"id", friend_id},
-            {"online", state},
-        };
-        string json_string = json_.dump();
-        SendMsg sendmsg;
-        sendmsg.SendMsg_client(fd, json_string);
+        friendsname_Vector.push_back(name);
+        friendsid_Vector.push_back(friend_id);
+        friendsonline_Vector.push_back(redis.sismember("onlinelist", friend_id)==1);
 
         freeReplyObject(arry[i]);
     }
+
+    // 发送状态和信息类型
+    nlohmann::json json_ = {
+        {"type", NORMAL},
+        {"flag", 0},
+        {"namevector", friendsname_Vector},
+        {"idvector", friendsid_Vector},
+        {"onlinevector", friendsonline_Vector},
+    };
+    string json_string = json_.dump();
+    SendMsg sendmsg;
+    sendmsg.SendMsg_client(fd, json_string);
 }
 
 // 屏蔽好友
