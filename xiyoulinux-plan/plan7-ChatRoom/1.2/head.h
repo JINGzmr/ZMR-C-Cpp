@@ -15,6 +15,7 @@
 #include <errno.h>
 #include <regex>
 #include <cstdlib> //system("clear");
+#include <thread> 
 
 #include <cstring>     //memset
 #include <arpa/inet.h> //htonl

@@ -1,8 +1,8 @@
 CMakeFiles/server.dir/IO.cc.o: \
- /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.1/IO.cc \
+ /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.2/IO.cc \
  /usr/include/stdc-predef.h \
- /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.1/IO.h \
- /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.1/head.h \
+ /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.2/IO.h \
+ /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.2/head.h \
  /usr/include/c++/11/iostream \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \
@@ -320,5 +320,7 @@ CMakeFiles/server.dir/IO.cc.o: \
  /usr/include/c++/11/bits/regex_compiler.tcc \
  /usr/include/c++/11/bits/regex.h /usr/include/c++/11/bits/regex.tcc \
  /usr/include/c++/11/bits/regex_executor.h \
- /usr/include/c++/11/bits/regex_executor.tcc \
- /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.1/define.h
+ /usr/include/c++/11/bits/regex_executor.tcc /usr/include/c++/11/thread \
+ /usr/include/c++/11/bits/std_thread.h \
+ /usr/include/c++/11/bits/this_thread_sleep.h \
+ /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.2/define.h

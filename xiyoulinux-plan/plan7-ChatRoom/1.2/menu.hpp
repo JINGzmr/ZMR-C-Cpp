@@ -10,6 +10,8 @@
 #include "head.h"
 #include "IO.h"
 #include "personalmenu.hpp"
+#include "threadwork.hpp"
+#include "queue.hpp"
 
 #include <iostream>
 using json = nlohmann::json;
@@ -82,6 +84,8 @@ void login_client(int client_socket)
     if (state_ == SUCCESS)
     {
         cout << "登入成功！" << endl;
+        Queue<string> RecvQue;
+        thread RecvThread = thread(recvfunc, client_socket, user.id, &RecvQue);
         //********一个进入下一页面的入口********
         messagemenu(client_socket, user.id);
         system("clear"); // 刷新终端页面

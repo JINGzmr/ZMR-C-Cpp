@@ -14,6 +14,8 @@ add_executable(client
     IO.h 
     personalmenu.hpp 
     IO.cc
+    threadwork.hpp
+    queue.hpp
 )
 
 # 添加可执行文件 "server" 并指定源文件

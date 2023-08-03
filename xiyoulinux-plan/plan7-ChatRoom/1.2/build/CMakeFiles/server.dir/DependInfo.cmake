@@ -8,9 +8,9 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.1/IO.cc" "CMakeFiles/server.dir/IO.cc.o" "gcc" "CMakeFiles/server.dir/IO.cc.o.d"
-  "/home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.1/server.cc" "CMakeFiles/server.dir/server.cc.o" "gcc" "CMakeFiles/server.dir/server.cc.o.d"
-  "/home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.1/threadpool.cc" "CMakeFiles/server.dir/threadpool.cc.o" "gcc" "CMakeFiles/server.dir/threadpool.cc.o.d"
+  "/home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.2/IO.cc" "CMakeFiles/server.dir/IO.cc.o" "gcc" "CMakeFiles/server.dir/IO.cc.o.d"
+  "/home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.2/server.cc" "CMakeFiles/server.dir/server.cc.o" "gcc" "CMakeFiles/server.dir/server.cc.o.d"
+  "/home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.2/threadpool.cc" "CMakeFiles/server.dir/threadpool.cc.o" "gcc" "CMakeFiles/server.dir/threadpool.cc.o.d"
   )
 
 # Targets to which this target links.

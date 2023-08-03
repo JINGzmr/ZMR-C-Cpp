@@ -28,4 +28,9 @@ const int BUFFER_SIZE = 10240; // 缓冲区的大小（用于存储recv来的序
 
 #define LOGOUT 16 // 退出登录
 
+#define NORMAL 100  // 普通事件
+#define NOTICE 200  // 通知事件
+#define PRIVATE 210 // 私聊
+#define GROUP 220   // 群聊
+
 #endif

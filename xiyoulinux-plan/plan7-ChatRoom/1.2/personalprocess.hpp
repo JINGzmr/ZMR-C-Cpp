@@ -47,22 +47,6 @@ void addfriend_server(int fd, string buf)
     Redis redis;
     redis.connect();
 
-    // // 从数据库里取出好友列表
-    // string userjson_string;
-    // userjson_string = redis.gethash("friendlist", friend_.id);
-    // parsed_data = json::parse(userjson_string);
-
-    // // JSON 反序列化,并添加到 friendlist.friends 中
-    // struct FriendList friendlist;
-    // const auto &friendsJson = parsed_data["friends"];
-    // for (const auto &friendName : friendsJson)
-    // {
-    //     friendlist.friends.push_back(friendName);
-    // }
-
-    // // 使用 find 在容器中查找目标 id
-    // auto it = find(friendlist.friends.begin(), friendlist.friends.end(), friend_.oppoid);
-
     // 构造好友列表
     string key = friend_.id + ":friends";            // id+friends作为键，值就是id用户的好友们
     string key_ = friend_.oppoid + ":friends_apply"; // 对方的好友申请表
@@ -74,7 +58,6 @@ void addfriend_server(int fd, string buf)
         SendMsg sendmsg;
         sendmsg.SendMsg_int(fd, USERNAMEUNEXIST);
     }
-    // else if (it != friendlist.friends.end())
     else if (redis.sismember(key, friend_.oppoid) == 1) // 好友列表里已有对方
     {
         cout << "你们已经是好友" << endl;

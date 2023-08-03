@@ -1,8 +1,8 @@
 CMakeFiles/client.dir/client.cc.o: \
- /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.1/client.cc \
+ /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.2/client.cc \
  /usr/include/stdc-predef.h \
- /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.1/menu.hpp \
- /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.1/data.h \
+ /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.2/menu.hpp \
+ /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.2/data.h \
  /usr/include/c++/11/vector /usr/include/c++/11/bits/stl_algobase.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \
@@ -152,8 +152,8 @@ CMakeFiles/client.dir/client.cc.o: \
  /usr/include/c++/11/bits/basic_ios.tcc \
  /usr/include/c++/11/bits/ostream.tcc /usr/include/c++/11/istream \
  /usr/include/c++/11/bits/istream.tcc \
- /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.1/define.h \
- /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.1/head.h \
+ /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.2/define.h \
+ /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.2/head.h \
  /usr/include/nlohmann/json.hpp /usr/include/c++/11/algorithm \
  /usr/include/c++/11/utility /usr/include/c++/11/bits/stl_relops.h \
  /usr/include/c++/11/bits/stl_algo.h \
@@ -321,10 +321,17 @@ CMakeFiles/client.dir/client.cc.o: \
  /usr/include/c++/11/bits/regex_compiler.tcc \
  /usr/include/c++/11/bits/regex.h /usr/include/c++/11/bits/regex.tcc \
  /usr/include/c++/11/bits/regex_executor.h \
- /usr/include/c++/11/bits/regex_executor.tcc \
- /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.1/IO.h \
- /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.1/personalmenu.hpp \
- /usr/include/c++/11/csignal /usr/include/signal.h \
+ /usr/include/c++/11/bits/regex_executor.tcc /usr/include/c++/11/thread \
+ /usr/include/c++/11/bits/std_thread.h \
+ /usr/include/c++/11/bits/this_thread_sleep.h \
+ /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.2/IO.h \
+ /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.2/personalmenu.hpp \
+ /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.2/threadwork.hpp \
+ /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.2/queue.hpp \
+ /usr/include/c++/11/mutex /usr/include/c++/11/bits/std_mutex.h \
+ /usr/include/c++/11/bits/unique_lock.h /usr/include/c++/11/queue \
+ /usr/include/c++/11/bits/stl_queue.h /usr/include/c++/11/csignal \
+ /usr/include/signal.h \
  /usr/include/x86_64-linux-gnu/bits/signum-generic.h \
  /usr/include/x86_64-linux-gnu/bits/signum-arch.h \
  /usr/include/x86_64-linux-gnu/bits/types/sig_atomic_t.h \
