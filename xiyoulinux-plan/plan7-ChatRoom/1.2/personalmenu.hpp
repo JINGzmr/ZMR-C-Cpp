@@ -18,7 +18,7 @@ void addblack_client(int client_socket, string id, Queue<string> &RecvQue);
 void delfriend_client(int client_socket, string id, Queue<string> &RecvQue);
 void blackfriendlist_client(int client_socket, string id, Queue<string> &RecvQue);
 void blackfriendedit_client(int client_socket, string id, Queue<string> &RecvQue);
-string historychat_client(int client_socket, string id, Queue<string> &RecvQue);
+string historychat_client(int client_socket, string id, Queue<string> &RecvQue, int fl);
 void chatfriend_client(int client_socket, string id, Queue<string> &RecvQue);
 
 void personalmenuUI(void)
@@ -42,11 +42,14 @@ void personalmenuUI(void)
     cout << "                      15.接受文件                   " << endl;
     cout << "---------------------------------------------------" << endl;
     cout << "                      16.退出登录                   " << endl;
+    cout << "---------------------------------------------------" << endl;
+    cout << "                      666.刷新页面                  " << endl;
     cout << "————————————————————————————————————————————————————" << endl;
 }
 
 void messagemenu(int client_socket, string id, Queue<string> &RecvQue)
 {
+    system("clear");
     personalmenuUI();
 
     int num = 1;
@@ -61,38 +64,51 @@ void messagemenu(int client_socket, string id, Queue<string> &RecvQue)
         switch (num)
         {
         case 4:
+            system("clear");
             addfriend_client(client_socket, id, RecvQue);
             personalmenuUI();
             break;
         case 51:
+            system("clear");
             friendapplylist_client(client_socket, id, RecvQue);
+            personalmenuUI();
             break;
         case 52:
             friendapplyedit_client(client_socket, id, RecvQue);
             personalmenuUI();
             break;
         case 6:
+            system("clear");
             chatfriend_client(client_socket, id, RecvQue);
+            personalmenuUI();
             break;
         case 7:
-            historychat_client(client_socket, id, RecvQue);
+            system("clear");
+            historychat_client(client_socket, id, RecvQue, 1);
+            personalmenuUI();
             break;
         case 8:
+            system("clear");
             friendinfo_client(client_socket, id, RecvQue);
             break;
         case 9:
+            system("clear");
             addblack_client(client_socket, id, RecvQue);
             personalmenuUI();
             break;
         case 10:
+            system("clear");
             delfriend_client(client_socket, id, RecvQue);
             personalmenuUI();
             break;
         case 111:
+            system("clear");
             blackfriendlist_client(client_socket, id, RecvQue);
+            personalmenuUI();
             break;
         case 112:
             blackfriendedit_client(client_socket, id, RecvQue);
+            personalmenuUI();
             break;
         // case 13:
 
@@ -106,6 +122,9 @@ void messagemenu(int client_socket, string id, Queue<string> &RecvQue)
         case 16:
             logout_client(client_socket, id);
             break;
+        case 666: // 不能准确识别出666，而是走了6的选项
+            system("clear");
+            personalmenuUI();
         default:
             cout << "无效的数字，请重新输入！" << endl;
             personalmenuUI();
@@ -292,6 +311,9 @@ void friendinfo_client(int client_socket, string id, Queue<string> &RecvQue)
 // 屏蔽好友
 void addblack_client(int client_socket, string id, Queue<string> &RecvQue)
 {
+    // 先打印出好友信息
+    friendinfo_client(client_socket, id, RecvQue);
+
     Friend friend_;
     do
     {
@@ -339,6 +361,9 @@ void addblack_client(int client_socket, string id, Queue<string> &RecvQue)
 // 删除好友
 void delfriend_client(int client_socket, string id, Queue<string> &RecvQue)
 {
+    // 先打印出好友信息
+    friendinfo_client(client_socket, id, RecvQue);
+
     Friend friend_;
     do
     {
@@ -448,7 +473,7 @@ void blackfriendedit_client(int client_socket, string id, Queue<string> &RecvQue
 }
 
 // 好友聊天历史记录
-string historychat_client(int client_socket, string id, Queue<string> &RecvQue)
+string historychat_client(int client_socket, string id, Queue<string> &RecvQue, int fl)
 {
     // 先打印出好友信息
     friendinfo_client(client_socket, id, RecvQue);
@@ -472,47 +497,88 @@ string historychat_client(int client_socket, string id, Queue<string> &RecvQue)
     json parsed_data = json::parse(buf);
     vector<string> historychat_Vector = parsed_data["vector"];
     int state_ = parsed_data["state"];
+    string str;
 
-    if(state_ == FAIL)
+    if (state_ == FAIL)
     {
-        cout << "对方不是你的好友！"  << endl;
-        return "fail";
+        cout << "对方不是你的好友！" << endl;
+        str = "fail";
     }
-    else if( state_ == USERNAMEUNEXIST)
+    else if (state_ == USERNAMEUNEXIST)
     {
-        cout << "账号不存在！"  << endl;
-        return "fail";
+        cout << "账号不存在！" << endl;
+        str = "fail";
     }
     else if (historychat_Vector.empty())
     {
         cout << "———————————————暂无历史消息——————————————" << endl;
-        return opponame;
+        str = opponame;
     }
-    // 循环打印输出
-    cout << "————————————————————————————————————————————————" << endl;
-    for (int i = 0; i < historychat_Vector.size(); i++)
+    else
     {
-        json parsed_data = json::parse(historychat_Vector[i]); // 容器里的元素还是json类型的
-        struct Chatinfo chatinfo;
-        chatinfo.name = parsed_data["name"];
-        chatinfo.msg = parsed_data["msg"];
-        // chatinfo.time = parsed_data["time"]; // 消息发送的时间最后来
+        // 循环打印输出
+        cout << "————————————————————————————————————————————————" << endl;
+        for (int i = historychat_Vector.size() - 1; i >= 0; i--)
+        {
+            json parsed_data = json::parse(historychat_Vector[i]); // 容器里的元素还是json类型的
+            struct Chatinfo chatinfo;
+            chatinfo.name = parsed_data["name"];
+            chatinfo.msg = parsed_data["msg"];
+            // chatinfo.time = parsed_data["time"]; // 消息发送的时间最后来
 
-        cout << chatinfo.name << ": " << chatinfo.msg << endl;
+            cout << chatinfo.name << ": " << chatinfo.msg << endl;
+        }
+        cout << "————————————————以上为历史消息———————————————————" << endl;
+        str = opponame;
     }
-    cout << "————————————————以上为历史消息———————————————————" << endl;
 
-    return opponame;// 返回所选择的好友昵称
+    if (fl == 1)
+    {
+        cout << "按'q'返回上一级" << endl;
+        string a;
+        while (cin >> a && a != "q")
+            str = "";
+    }
+
+    return str; // 返回所选择的好友昵称
 }
 
 // 与好友聊天
 void chatfriend_client(int client_socket, string id, Queue<string> &RecvQue)
 {
     // 先打印出历史消息（包括选择好友）
-    string opponame = historychat_client(client_socket, id, RecvQue);
-    if(opponame == "fail")// 说明该用户不存在
+    string opponame = historychat_client(client_socket, id, RecvQue, 0);
+    if (opponame == "fail") // 说明该用户不存在
     {
-        return ;
+        return;
     }
-    // cout << opponame << endl;
+
+    chatname = opponame;
+
+    string msg;
+    cout << "(开始聊天吧，'quit'退出)" << endl;
+    while (cin >> msg && msg != "quit") // 输入为quit时退出聊天
+    {
+        // 发送数据
+        nlohmann::json sendJson_client = {
+            {"id", id},
+            {"opponame", opponame},
+            {"flag", CHATFRIEND},
+            {"msg", msg},
+        };
+        string sendJson_client_string = sendJson_client.dump();
+        SendMsg sendmsg;
+        sendmsg.SendMsg_client(client_socket, sendJson_client_string);
+
+        // 从消息队列里取消息
+        string buf = RecvQue.remove();
+        json parsed_data = json::parse(buf);
+        int state_ = parsed_data["state"];
+        if (state_ == FAIL)
+        {
+            cout << "消息发送失败,请检查是否屏蔽对方 或 已被对方屏蔽" << endl;
+            cout << "输入quit退出聊天" << endl;
+        }
+    }
+    chatname = "";
 }

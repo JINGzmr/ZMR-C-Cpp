@@ -474,7 +474,7 @@ void historychat_server(int fd, string buf)
     string key_ = friend_.id + ":friends";
     vector<string> historychat_Vector; // 放聊天记录的容器
 
-    if(redis.sismember("username",friend_.opponame)!=1)
+    if (redis.sismember("username", friend_.opponame) != 1)
     {
         cout << "账号不存在" << endl;
         friend_.state = USERNAMEUNEXIST;
@@ -521,6 +521,93 @@ void historychat_server(int fd, string buf)
     string json_string = json_.dump();
     SendMsg sendmsg;
     sendmsg.SendMsg_client(fd, json_string);
+}
+
+void chatfriend_server(int fd, string buf)
+{
+    json parsed_data = json::parse(buf);
+    struct Friend friend_;
+    friend_.id = parsed_data["id"];
+    friend_.opponame = parsed_data["opponame"];
+    friend_.msg = parsed_data["msg"];
+    printf("--- %s 用户向 %s 发送聊天消息 ---\n", friend_.id.c_str(), friend_.opponame.c_str());
+    cout << friend_.msg << endl;
+
+    Redis redis;
+    redis.connect();
+    nlohmann::json json_;
+
+    friend_.oppoid = redis.gethash("name_id", friend_.opponame);
+
+    // 看是否拉黑对方和被对方拉黑
+    string bkey = friend_.id + ":bfriends";
+    string oppobkey = friend_.oppoid + ":bfriends"; 
+    if (redis.sismember(bkey, friend_.oppoid) == 1 || redis.sismember(oppobkey, friend_.id) == 1) // 被拉黑
+    {
+        friend_.type = NORMAL;
+        friend_.state = FAIL;
+    }
+    else
+    {
+        string key;
+        string unkey = friend_.oppoid + ":unreadnotice"; // 未读通知
+
+        if (friend_.id < friend_.oppoid)
+        {
+            key = friend_.id + friend_.oppoid + ":historychat";
+        }
+        else
+        {
+            key = friend_.oppoid + friend_.id + ":historychat";
+        }
+
+        // 将名字和聊天内容json成字符串msg，存入list中
+        json_ = {
+            {"name", redis.gethash("id_name", friend_.id)},
+            {"msg", friend_.msg},
+        };
+        string msg = json_.dump();
+        redis.lpush(key, msg);
+
+        // 对方是否在线
+        if (redis.sismember("onlinelist", friend_.oppoid) == 1) // 在线
+        {
+            cout << "对方在线" << endl;
+            friend_.type = NOTICE;
+        }
+        else // 不在线：加入数据库，等用户上线时提醒
+        {
+            cout << "对方不在线" << endl;
+            redis.saddvalue(unkey, redis.gethash("id_name", friend_.id) + "发来新消息"); // 加入到对方的未读通知消息队列里
+            friend_.type = NORMAL;
+        }
+    }
+
+    // 发送状态和信息类型
+    json_ = {
+        {"type", friend_.type},
+        {"flag", PRIVATE},
+        {"state", friend_.state},
+        {"msg", friend_.msg},
+        {"id", friend_.id},
+        {"name", redis.gethash("id_name", friend_.id)},
+    };
+    string json_string = json_.dump();
+    SendMsg sendmsg;
+    if (friend_.type == NOTICE)
+    {
+        sendmsg.SendMsg_client(stoi(redis.gethash("usersocket", friend_.oppoid)), json_string);
+
+        json_["type"] = NORMAL;
+        json_string = json_.dump();
+        sendmsg.SendMsg_client(fd, json_string);
+    }
+    else
+    {
+        sendmsg.SendMsg_client(fd, json_string);
+    }
+
+    cout << "here" << endl;
 }
 
 #endif

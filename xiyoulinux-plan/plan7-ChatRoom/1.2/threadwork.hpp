@@ -39,12 +39,11 @@ void recvfunc(int fd, string id, Queue<string> *RecvQue)
         {
             if (flag == PRIVATE)
             {
-                string id = parsed_data["id"];     // 对方id
-                string name = parsed_data["name"]; // 对方的名字
-
-                if (id != chatid) // 对方不在聊天窗口，chatid是当用户进入聊天窗口时更改
+                // string id = parsed_data["id"];     // 发送信息方的id
+                string name = parsed_data["name"]; // 发送信息方的名字
+                if (name != chatname) // 对方不在聊天窗口，chatid是当用户进入聊天窗口时更改
                 {
-                    cout << "                            " << name << "发来新消息：" << endl;
+                    cout << "                            " << name << "发来新消息" << endl;
                 }
                 else // 对方在聊天窗口，则直接打印
                 {
@@ -54,11 +53,11 @@ void recvfunc(int fd, string id, Queue<string> *RecvQue)
             }
             else if (flag == GROUP)
             {
-                string groupid = parsed_data["groupid"];     // 群id
+                // string groupid = parsed_data["groupid"];     // 群id
                 string groupname = parsed_data["groupname"]; // 群名
                 string name = parsed_data["name"];           // 发送消息的人的名字
 
-                if (groupid != chatid) // 对方不在聊天窗口，chatid是当用户进入聊天窗口时更改
+                if (groupname != chatname) // 对方不在聊天窗口，chatid是当用户进入聊天窗口时更改
                 {
                     cout << "                            " << groupname << "发来新消息：" << endl;
                 }

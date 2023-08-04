@@ -7,7 +7,8 @@
 #include <iostream>
 using namespace std;
 
-string chatid = "";
+// string chatid = "";
+string chatname = "";
 
 // 注册登录（哈希存，键：userinfo，字段：用户id，值：User的json字符串）
 struct User
