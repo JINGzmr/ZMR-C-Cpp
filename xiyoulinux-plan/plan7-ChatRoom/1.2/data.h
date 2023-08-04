@@ -7,9 +7,6 @@
 #include <iostream>
 using namespace std;
 
-// 全局容器
-// vector<string> friendapply_Vector; // 存放好友申请列表于本地
-// vector<string> bfriends_Vector;    // 存放屏蔽好友于本地
 string chatid = "";
 
 // 注册登录（哈希存，键：userinfo，字段：用户id，值：User的json字符串）
@@ -37,18 +34,12 @@ struct Friend
     int online;      // 是否在线（在线ONLINE，不在OFFLINE）
 };
 
-// //  好友列表(哈希存，键：friendlist，字段：用户id，值：FriendList的json字符串)
-// struct FriendList
-// {
-//     vector<string> friends; // 存放好友的容器(重复的string会被忽略)
-// };
-
 // 聊天消息
 struct Chatinfo
 {
     string name;
     string msg;
-    string time;
+    // string time;
 };
 
 #endif

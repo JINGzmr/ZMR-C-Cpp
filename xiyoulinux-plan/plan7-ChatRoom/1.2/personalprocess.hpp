@@ -137,7 +137,6 @@ void friendapplylist_server(int fd, string buf)
     redis.connect();
 
     string key = friend_.id + ":friends_apply";
-    string userjson_string;
     int len = redis.scard(key);
 
     redisReply **arry = redis.smembers(key);
@@ -245,7 +244,6 @@ void friendinfo_server(int fd, string buf)
     redis.connect();
 
     string key = friend_.id + ":friends";
-    string userjson_string;
     int len = redis.scard(key);
 
     redisReply **arry = redis.smembers(key);
@@ -376,7 +374,6 @@ void blackfriendlist_server(int fd, string buf)
     redis.connect();
 
     string key = friend_.id + ":bfriends";
-    string userjson_string;
     int len = redis.scard(key);
 
     redisReply **arry = redis.smembers(key);
@@ -389,7 +386,7 @@ void blackfriendlist_server(int fd, string buf)
         string bfriend_id = arry[i]->str;
         if (redis.hashexists("userinfo", bfriend_id) != 1) // id不存在，说明该用户已经注销了
             continue;
-            
+
         string name = redis.gethash("id_name", bfriend_id); // 拿着id去找username
 
         bfriends_Vector.push_back(name);
@@ -473,37 +470,57 @@ void historychat_server(int fd, string buf)
     Redis redis;
     redis.connect();
 
-    friend_.oppoid = redis.gethash("name_id", friend_.opponame);
     string key;
-    if (friend_.id < friend_.oppoid)
+    string key_ = friend_.id + ":friends";
+    vector<string> historychat_Vector; // 放聊天记录的容器
+
+    if(redis.sismember("username",friend_.opponame)!=1)
     {
-        key = friend_.id + friend_.oppoid + ":historychat";
+        cout << "账号不存在" << endl;
+        friend_.state = USERNAMEUNEXIST;
+    }
+    else if (redis.sismember(key_, redis.gethash("name_id", friend_.opponame)) != 1) // 对方不是你的好友
+    {
+        cout << "对方不是你好友" << endl;
+        friend_.state = FAIL;
     }
     else
     {
-        friend_.oppoid + friend_.id + ":historychat";
+        friend_.oppoid = redis.gethash("name_id", friend_.opponame); // 用户注销完会从该哈希表中去除，所以用name找到的id也是独一无二的
+        if (friend_.id < friend_.oppoid)
+        {
+            key = friend_.id + friend_.oppoid + ":historychat";
+        }
+        else
+        {
+            key = friend_.oppoid + friend_.id + ":historychat";
+        }
+
+        int len = redis.llen(key);
+        redisReply **arry = redis.lrange(key);
+
+        // 展示好友请求列表
+        for (int i = 0; i < len; i++)
+        {
+            // 得到历史消息json的字符串
+            string msg = arry[i]->str;
+
+            historychat_Vector.push_back(msg);
+
+            freeReplyObject(arry[i]);
+        }
+        friend_.state = SUCCESS;
     }
-    string userjson_string;
-    int len = redis.llen(key);
+    // 发送状态和信息类型
+    nlohmann::json json_ = {
+        {"type", NORMAL},
+        {"flag", 0},
+        {"vector", historychat_Vector},
+        {"state", friend_.state},
+    };
+    string json_string = json_.dump();
     SendMsg sendmsg;
-    sendmsg.SendMsg_int(fd, len);
-    cout << "一共有 " << len << " 条历史消息" << endl;
-    if (len == 0)
-    {
-        return;
-    }
-
-    redisReply **arry = redis.lrange(key);
-    for (int i = len - 1; i >= 0; i--)
-    {
-        // 得到历史消息json的字符串
-        string msg = arry[i]->str;
-
-        SendMsg sendmsg;
-        sendmsg.SendMsg_client(fd, msg);
-
-        freeReplyObject(arry[i]);
-    }
+    sendmsg.SendMsg_client(fd, json_string);
 }
 
 #endif
