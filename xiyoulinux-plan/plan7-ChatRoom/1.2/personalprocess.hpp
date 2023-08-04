@@ -250,19 +250,22 @@ void friendinfo_server(int fd, string buf)
 
     redisReply **arry = redis.smembers(key);
     vector<string> friendsname_Vector; // 放好友姓名的容器
-    vector<string> friendsid_Vector; // 放好友id的容器
-    vector<int> friendsonline_Vector; // 放好友是否在线的容器（1在线，0不在）
+    vector<string> friendsid_Vector;   // 放好友id的容器
+    vector<int> friendsonline_Vector;  // 放好友是否在线的容器（1在线，0不在）
 
     // 展示好友请求列表
     for (int i = 0; i < len; i++)
     {
-        // 得到发送请求的用户id
+        // 得到用户id
         string friend_id = arry[i]->str;
-        string name = redis.gethash("id_name",friend_id); // 拿着id去找username
+        if (redis.hashexists("userinfo", friend_id) != 1) // id不存在，说明该用户已经注销了
+            continue;
+
+        string name = redis.gethash("id_name", friend_id); // 拿着id去找username
 
         friendsname_Vector.push_back(name);
         friendsid_Vector.push_back(friend_id);
-        friendsonline_Vector.push_back(redis.sismember("onlinelist", friend_id)==1);
+        friendsonline_Vector.push_back(redis.sismember("onlinelist", friend_id) == 1);
 
         freeReplyObject(arry[i]);
     }
@@ -298,22 +301,29 @@ void addblack_server(int fd, string buf)
     if (redis.sismember(key_, friend_.oppoid) != 1) // 对方不是你的好友
     {
         cout << "对方不是你好友" << endl;
-        SendMsg sendmsg;
-        sendmsg.SendMsg_int(fd, FAIL);
+        friend_.state = FAIL;
     }
     else if (redis.sismember(key, friend_.oppoid) == 1) // 已拉黑对方
     {
         cout << "已拉黑对方" << endl;
-        SendMsg sendmsg;
-        sendmsg.SendMsg_int(fd, HADBLACK);
+        friend_.state = HADBLACK;
     }
     else
     {
         cout << "拉黑成功" << endl;
         redis.saddvalue(key, friend_.oppoid);
-        SendMsg sendmsg;
-        sendmsg.SendMsg_int(fd, SUCCESS);
+        friend_.state = SUCCESS;
     }
+
+    // 发送状态和信息类型
+    nlohmann::json json_ = {
+        {"type", NORMAL},
+        {"flag", 0},
+        {"state", friend_.state},
+    };
+    string json_string = json_.dump();
+    SendMsg sendmsg;
+    sendmsg.SendMsg_client(fd, json_string);
 }
 
 // 删除好友
@@ -335,15 +345,23 @@ void delfriend_server(int fd, string buf)
     if (redis.sismember(key, friend_.oppoid) == 1 && redis.sremvalue(key, friend_.oppoid) == 3 && redis.sremvalue(key_, friend_.id) == 3 && redis.sremvalue(bkey, friend_.oppoid))
     {
         cout << "删除成功" << endl;
-        SendMsg sendmsg;
-        sendmsg.SendMsg_int(fd, SUCCESS);
+        friend_.state = SUCCESS;
     }
     else
     {
         cout << "删除失败" << endl;
-        SendMsg sendmsg;
-        sendmsg.SendMsg_int(fd, FAIL);
+        friend_.state = FAIL;
     }
+
+    // 发送状态和信息类型
+    nlohmann::json json_ = {
+        {"type", NORMAL},
+        {"flag", 0},
+        {"state", friend_.state},
+    };
+    string json_string = json_.dump();
+    SendMsg sendmsg;
+    sendmsg.SendMsg_client(fd, json_string);
 }
 
 // 查看屏蔽好友列表
@@ -360,31 +378,34 @@ void blackfriendlist_server(int fd, string buf)
     string key = friend_.id + ":bfriends";
     string userjson_string;
     int len = redis.scard(key);
-    SendMsg sendmsg;
-    sendmsg.SendMsg_int(fd, len);
-    cout << "一共有 " << len << " 个被拉黑的好友" << endl;
-    if (len == 0)
-    {
-        return;
-    }
 
     redisReply **arry = redis.smembers(key);
+    vector<string> bfriends_Vector; // 放黑名单的容器
+
     // 展示好友请求列表
     for (int i = 0; i < len; i++)
     {
-        // 得到被拉黑用户的id
+        // 得到发送请求的用户id
         string bfriend_id = arry[i]->str;
+        if (redis.hashexists("userinfo", bfriend_id) != 1) // id不存在，说明该用户已经注销了
+            continue;
+            
+        string name = redis.gethash("id_name", bfriend_id); // 拿着id去找username
 
-        // 根据id发送好友昵称
-        nlohmann::json json_ = {
-            {"username", redis.gethash("id_name", bfriend_id)}, // 拿着id去找username
-        };
-        string json_string = json_.dump();
-        SendMsg sendmsg;
-        sendmsg.SendMsg_client(fd, json_string);
+        bfriends_Vector.push_back(name);
 
         freeReplyObject(arry[i]);
     }
+
+    // 发送状态和信息类型
+    nlohmann::json json_ = {
+        {"type", NORMAL},
+        {"flag", 0},
+        {"vector", bfriends_Vector},
+    };
+    string json_string = json_.dump();
+    SendMsg sendmsg;
+    sendmsg.SendMsg_client(fd, json_string);
 }
 // 编辑屏蔽好友
 void blackfriendedit_server(int fd, string buf)
@@ -405,28 +426,39 @@ void blackfriendedit_server(int fd, string buf)
     {
         cout << "查无此人" << endl;
 
-        SendMsg sendmsg;
-        sendmsg.SendMsg_int(fd, USERNAMEUNEXIST);
-        return;
-    }
-
-    // 得到发送请求的用户id
-    string bfriend_id = redis.gethash("name_id", name); // 由昵称找id
-
-    if (redis.sismember(key, bfriend_id) != 1)
-    {
-        cout << "不存在此拉黑好友！" << endl;
-        SendMsg sendmsg;
-        sendmsg.SendMsg_int(fd, FAIL);
+        friend_.state = USERNAMEUNEXIST;
+        friend_.type = NORMAL;
     }
     else
     {
-        cout << "已从拉黑名单中去除" << endl;
-        redis.sremvalue(key, bfriend_id); // 从屏蔽列表中移除
+        // 得到发送请求的用户id
+        string bfriend_id = redis.gethash("name_id", name); // 由昵称找id
 
-        SendMsg sendmsg;
-        sendmsg.SendMsg_int(fd, SUCCESS);
+        if (redis.sismember(key, bfriend_id) != 1)
+        {
+            cout << "不存在此拉黑好友！" << endl;
+            friend_.state = FAIL;
+            friend_.type = NORMAL;
+        }
+        else
+        {
+            cout << "已从拉黑名单中去除" << endl;
+            redis.sremvalue(key, bfriend_id); // 从屏蔽列表中移除
+
+            friend_.state = SUCCESS;
+            friend_.type = NORMAL;
+        }
     }
+
+    // 发送状态和信息类型
+    nlohmann::json json_ = {
+        {"type", friend_.type},
+        {"flag", 0},
+        {"state", friend_.state},
+    };
+    string json_string = json_.dump();
+    SendMsg sendmsg;
+    sendmsg.SendMsg_client(fd, json_string);
 }
 
 // 好友聊天历史记录

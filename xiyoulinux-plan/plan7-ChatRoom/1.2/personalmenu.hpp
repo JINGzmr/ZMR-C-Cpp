@@ -54,7 +54,7 @@ void messagemenu(int client_socket, string id, Queue<string> &RecvQue)
         // 清空缓冲区
         std::cin.clear();
         std::cin.sync();
-        
+
         cin >> num;
 
         switch (num)
@@ -315,10 +315,10 @@ void addblack_client(int client_socket, string id, Queue<string> &RecvQue)
     SendMsg sendmsg;
     sendmsg.SendMsg_client(client_socket, sendJson_client_string);
 
-    // 接收数据
-    int state_;
-    RecvMsg recvmsg;
-    state_ = recvmsg.RecvMsg_int(client_socket);
+    // 从消息队列里取消息
+    string buf = RecvQue.remove();
+    json parsed_data = json::parse(buf);
+    int state_ = parsed_data["state"];
 
     // 判断是否拉黑成功
     if (state_ == SUCCESS)
@@ -362,10 +362,10 @@ void delfriend_client(int client_socket, string id, Queue<string> &RecvQue)
     SendMsg sendmsg;
     sendmsg.SendMsg_client(client_socket, sendJson_client_string);
 
-    // 接收数据
-    int state_;
-    RecvMsg recvmsg;
-    state_ = recvmsg.RecvMsg_int(client_socket);
+    // 从消息队列里取消息
+    string buf = RecvQue.remove();
+    json parsed_data = json::parse(buf);
+    int state_ = parsed_data["state"];
 
     // 判断是否登入成功
     if (state_ == SUCCESS)
@@ -390,35 +390,21 @@ void blackfriendlist_client(int client_socket, string id, Queue<string> &RecvQue
     SendMsg sendmsg;
     sendmsg.SendMsg_client(client_socket, sendJson_client_string);
 
-    // 接收屏蔽好友个数
-    int n = 0;
-    RecvMsg recvmsg;
-    n = recvmsg.RecvMsg_int(client_socket);
-    cout << "（ 一共有 " << n << " 个被拉黑的好友 ）" << endl;
-    if (n == 0)
+    // 从消息队列里取消息
+    string buf = RecvQue.remove();
+    json parsed_data = json::parse(buf);
+    vector<string> bfriends_Vector = parsed_data["vector"];
+
+    if (bfriends_Vector.empty())
     {
+        cout << "暂无拉黑好友！" << endl;
         return;
     }
-
-    // 清空容器
-    // bfriends_Vector.clear();
-
+    // 循环打印输出
     cout << "————————————以下为拉黑好友列表————————————" << endl;
-    // 展示好友请求
-    for (int i = 0; i < n; i++)
+    for (const std::string &str : bfriends_Vector)
     {
-        // 接收好友昵称
-        string recvJson_buf;
-        RecvMsg recvmsg;
-        recvmsg.RecvMsg_client(client_socket, recvJson_buf);
-        json parsed_data = json::parse(recvJson_buf);
-        string username = parsed_data["username"];
-
-        // 放入本地vector里
-        // bfriends_Vector.push_back(username);
-
-        // 打印出好友请求列表
-        cout << username << endl;
+        std::cout << str << std::endl;
     }
     cout << "——————————————————————————————————————————" << endl;
 }
@@ -440,25 +426,15 @@ void blackfriendedit_client(int client_socket, string id, Queue<string> &RecvQue
     SendMsg sendmsg;
     sendmsg.SendMsg_client(client_socket, sendJson_client_string);
 
-    // 接收数据
-    int state_;
-    RecvMsg recvmsg;
-    state_ = recvmsg.RecvMsg_int(client_socket);
+    // 从消息队列里取消息
+    string buf = RecvQue.remove();
+    json parsed_data = json::parse(buf);
+    int state_ = parsed_data["state"];
 
     // 判断是否操作成功
     if (state_ == SUCCESS)
     {
         cout << "操作成功！" << endl;
-
-        // // 从容器中去除已编辑过的成员
-        // for (auto it = bfriends_Vector.begin(); it != friendapply_Vector.end(); ++it)
-        // {
-        //     if (*it == name)
-        //     {
-        //         bfriends_Vector.erase(it);
-        //         break;
-        //     }
-        // }
     }
     else if (state_ == FAIL)
     {
