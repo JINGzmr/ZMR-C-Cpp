@@ -27,6 +27,7 @@ const int BUFFER_SIZE = 10240; // 缓冲区的大小（用于存储recv来的序
 #define BLACKFRIENDEDIT 112 // 编辑屏蔽好友
 
 #define LOGOUT 16 // 退出登录
+#define SHOUNOTICE 50 //展示未读消息
 
 #define NORMAL 100  // 普通事件
 #define NOTICE 200  // 通知事件

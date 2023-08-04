@@ -12,6 +12,45 @@
 using json = nlohmann::json;
 using namespace std;
 
+// 展示未通知消息
+void showunreadnotice_server(int fd, string buf)
+{
+    json parsed_data = json::parse(buf);
+    struct Friend friend_;
+    friend_.id = parsed_data["id"];
+    printf("--- %s 用户显示离线未读消息 ---\n", friend_.id.c_str());
+
+    Redis redis;
+    redis.connect();
+
+    string key = friend_.id + ":unreadnotice";
+    int len = redis.scard(key);
+
+    redisReply **arry = redis.smembers(key);
+    vector<string> unreadnotice_Vector; // 放未读消息的容器
+
+    // 把数据从数据库转移到容器里
+    for (int i = 0; i < len; i++)
+    {
+        // 得到未读消息
+        string unreadnotice = arry[i]->str;
+        unreadnotice_Vector.push_back(unreadnotice);
+
+        freeReplyObject(arry[i]);
+        redis.sremvalue(key,unreadnotice);
+    }
+
+    // 发送状态和信息类型
+    nlohmann::json json_ = {
+        {"type", NORMAL},
+        {"flag", 0},
+        {"vector", unreadnotice_Vector},
+    };
+    string json_string = json_.dump();
+    SendMsg sendmsg;
+    sendmsg.SendMsg_client(fd, json_string);
+}
+
 // 退出登录
 void logout_server(int fd, string buf)
 {
@@ -142,7 +181,7 @@ void friendapplylist_server(int fd, string buf)
     redisReply **arry = redis.smembers(key);
     vector<string> friendapply_Vector; // 放好友请求的容器
 
-    // 展示好友请求列表
+    // 把数据从数据库转移到容器里
     for (int i = 0; i < len; i++)
     {
         // 得到发送请求的用户id
@@ -251,7 +290,7 @@ void friendinfo_server(int fd, string buf)
     vector<string> friendsid_Vector;   // 放好友id的容器
     vector<int> friendsonline_Vector;  // 放好友是否在线的容器（1在线，0不在）
 
-    // 展示好友请求列表
+    // 把数据从数据库转移到容器里
     for (int i = 0; i < len; i++)
     {
         // 得到用户id
@@ -379,7 +418,7 @@ void blackfriendlist_server(int fd, string buf)
     redisReply **arry = redis.smembers(key);
     vector<string> bfriends_Vector; // 放黑名单的容器
 
-    // 展示好友请求列表
+    // 把数据从数据库转移到容器里
     for (int i = 0; i < len; i++)
     {
         // 得到发送请求的用户id
@@ -499,7 +538,7 @@ void historychat_server(int fd, string buf)
         int len = redis.llen(key);
         redisReply **arry = redis.lrange(key);
 
-        // 展示好友请求列表
+        // 把数据从数据库转移到容器里
         for (int i = 0; i < len; i++)
         {
             // 得到历史消息json的字符串

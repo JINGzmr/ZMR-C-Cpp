@@ -207,6 +207,10 @@ void work(void *arg)
     {
         signout_server(fd, recvJson_buf);
     }
+    else if (flag_ == SHOUNOTICE) // 展示离线消息
+    {
+        showunreadnotice_server(fd, recvJson_buf);
+    }
     else if (flag_ == LOGOUT) // 退出登录
     {
         logout_server(fd, recvJson_buf);
@@ -247,7 +251,7 @@ void work(void *arg)
     {
         historychat_server(fd, recvJson_buf);
     }
-    else if(flag_ == CHATFRIEND)
+    else if (flag_ == CHATFRIEND)
     {
         chatfriend_server(fd, recvJson_buf);
     }
