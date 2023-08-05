@@ -46,13 +46,23 @@ struct Chatinfo
 // 群聊
 struct Group
 {
-    int type;         // 标记事件类型
-    int flag;         // 标记选项
-    string groupid;   // 群id
-    string groupname; // 群名
-    string owner;     // 群主
-    string admin;     // 群管理
-    int state;        // 标记状态
+    int type;               // 标记事件类型
+    int flag;               // 标记选项
+    string groupid;         // 群id
+    string groupname;       // 群名
+    string ownerid;         // 群主id
+    vector<string> adminid; // 群管理们的id
+    vector<string> nums;    // 群成员们的id（包括群主和管理员）
+    int state;              // 标记状态
 };
+
+// 根据时间分配id的函数
+string produce_id(void)
+{
+    time_t timestamp;
+    time(&timestamp);
+    string id = to_string(timestamp);
+    return id;
+}
 
 #endif

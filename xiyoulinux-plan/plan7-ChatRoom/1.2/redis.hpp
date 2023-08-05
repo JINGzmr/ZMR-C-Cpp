@@ -30,7 +30,7 @@ using namespace std;
 // id+:friendsapply：id对应用户的好友申请
 // id+:bfriends：id对应的拉黑用户
 // id+:unreadnotice：id对应用户的未读通知
-// 
+// groupname 存放群聊的名称
 
 // list表中：
 // 历史消息：小的id+大的id+historychat为键，消息的结构体为值

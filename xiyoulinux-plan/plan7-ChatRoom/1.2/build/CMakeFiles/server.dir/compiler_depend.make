@@ -805,6 +805,7 @@ CMakeFiles/server.dir/server.cc.o: ../server.cc \
   /usr/include/hiredis/alloc.h \
   /usr/include/c++/11/stdlib.h \
   ../personalprocess.hpp \
+  ../groupprocess.hpp \
   /usr/include/netinet/tcp.h \
   /usr/include/fcntl.h \
   /usr/include/x86_64-linux-gnu/bits/fcntl.h \
@@ -1218,6 +1219,8 @@ CMakeFiles/server.dir/threadpool.cc.o: ../threadpool.cc \
 /usr/include/x86_64-linux-gnu/bits/fcntl.h:
 
 /usr/include/fcntl.h:
+
+../groupprocess.hpp:
 
 /usr/include/c++/11/stdlib.h:
 

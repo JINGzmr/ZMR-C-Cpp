@@ -93,17 +93,7 @@ void register_server(int fd, string buf)
     else // 新的用户名，可以被使用
     {
         // 随机生成id
-        time_t timestamp;
-        time(&timestamp);
-        string id = to_string(timestamp);
-
-        // // 初始化好友列表
-        // vector<string> emptyvector;
-        // nlohmann::json tojson = {
-        //     {"friends", emptyvector},
-        // };
-        // string str = tojson.dump();
-        // int o = redis.hsetValue("friendlist", id, str);
+        string id = produce_id();
 
         int n = redis.hsetValue("userinfo", id, buf);
         int m = redis.saddvalue("username", user.username);
