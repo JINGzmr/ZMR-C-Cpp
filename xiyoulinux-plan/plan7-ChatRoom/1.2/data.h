@@ -21,7 +21,7 @@ struct User
     int online;      // 是否在线（在线ONLINE，不在OFFLINE）
 };
 
-// 加好友
+// 好友
 struct Friend
 {
     int type;        // 标记事件类型（正常NORMAL，通知NOTICE）
@@ -41,6 +41,18 @@ struct Chatinfo
     string name;
     string msg;
     // string time;
+};
+
+// 群聊
+struct Group
+{
+    int type;         // 标记事件类型
+    int flag;         // 标记选项
+    string groupid;   // 群id
+    string groupname; // 群名
+    string owner;     // 群主
+    string admin;     // 群管理
+    int state;        // 标记状态
 };
 
 #endif

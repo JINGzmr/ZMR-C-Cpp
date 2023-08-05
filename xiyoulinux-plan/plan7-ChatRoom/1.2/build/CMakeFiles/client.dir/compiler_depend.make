@@ -803,6 +803,7 @@ CMakeFiles/client.dir/client.cc.o: ../client.cc \
   /usr/include/c++/11/queue \
   /usr/include/c++/11/bits/stl_queue.h \
   /usr/include/c++/11/condition_variable \
+  ../groupmenu.hpp \
   /usr/include/c++/11/csignal \
   /usr/include/signal.h \
   /usr/include/x86_64-linux-gnu/bits/signum-generic.h \
@@ -1477,6 +1478,8 @@ CMakeFiles/client.dir/client.cc.o: ../client.cc \
 /usr/include/wctype.h:
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/ctype_base.h:
+
+../groupmenu.hpp:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_sched_param.h:
 

@@ -333,6 +333,7 @@ CMakeFiles/server.dir/server.cc.o: \
  /usr/include/x86_64-linux-gnu/sys/time.h /usr/include/hiredis/sds.h \
  /usr/include/hiredis/alloc.h /usr/include/c++/11/stdlib.h \
  /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.2/personalprocess.hpp \
+ /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.2/groupprocess.hpp \
  /usr/include/netinet/tcp.h /usr/include/fcntl.h \
  /usr/include/x86_64-linux-gnu/bits/fcntl.h \
  /usr/include/x86_64-linux-gnu/bits/fcntl-linux.h \

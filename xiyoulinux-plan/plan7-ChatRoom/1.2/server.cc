@@ -5,6 +5,7 @@
 #include "define.h"
 #include "login.hpp"
 #include "personalprocess.hpp"
+#include "groupprocess.hpp"
 
 #include <iostream>
 #include <string>
@@ -254,6 +255,10 @@ void work(void *arg)
     else if (flag_ == CHATFRIEND)
     {
         chatfriend_server(fd, recvJson_buf);
+    }
+    else if(flag_ == CREATGROUP)
+    {
+        creatgroup_server(fd, recvJson_buf);
     }
 
     // 当前任务都处理完了（或出问题）之后，再挂树
