@@ -664,10 +664,11 @@ void group_client(int client_socket, string id, Queue<string> &RecvQue)
             addgroup_client(client_socket, id, RecvQue);
             groupmenuUI();
             break;
-        // case 19:
-        //     friendapplyedit_client(client_socket, id, RecvQue);
-        //     groupmenuUI();
-        //     break;
+        case 19:
+            checkgroup_client(client_socket, id, RecvQue,1);
+            system("clear");
+            groupmenuUI();
+            break;
         // case 20:
         //     system("clear");
         //     chatfriend_client(client_socket, id, RecvQue);
@@ -700,13 +701,6 @@ void group_client(int client_socket, string id, Queue<string> &RecvQue)
         //     blackfriendlist_client(client_socket, id, RecvQue);
         //     groupmenuUI();
         //     break;
-        // case 26:
-        //     blackfriendedit_client(client_socket, id, RecvQue);
-        //     groupmenuUI();
-        //     break;
-        // case 27:
-        //     logout_client(client_socket, id);
-        //     break;
         case 16:
             system("clear");
             groupmenuUI();
@@ -714,7 +708,7 @@ void group_client(int client_socket, string id, Queue<string> &RecvQue)
             cout << "无效的数字，请重新输入！" << endl;
             groupmenuUI();
         }
-    } while (num_ != 27); // 退出循环，返回上一级
+    } while (num_ != 25); // 退出循环，返回上一级
 
     return;
 }

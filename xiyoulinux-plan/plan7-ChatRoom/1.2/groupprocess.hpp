@@ -83,11 +83,9 @@ void addgroup_server(int fd, string buf)
     string key = group.groupid + ":admin";
     int len = redis.scard(key);
     redisReply **arry = redis.smembers(key);
-    vector<string> admins_Vector;  // 放群主及管理员的的容器
-    vector<string> online_Vector;  // 在线的管理员名单
-    // vector<string> offline_Vector; // 离线管理员名单
-    int online_len = 0;            // 名单长度
-    // int offline_len = 0;
+    vector<string> admins_Vector; // 放群主及管理员的的容器
+    vector<string> online_Vector; // 在线的管理员名单
+    int online_len = 0;           // 名单长度
 
     // 加群
     if (redis.hashexists("groupid_name", group.groupid) != 1) // 群id不存在
@@ -115,7 +113,7 @@ void addgroup_server(int fd, string buf)
                 cout << admin_id << "在线" << endl;
                 online_Vector.push_back(admin_id);
                 online_len++;
-                group.msg = redis.gethash("id_name", group.userid) + "向" + redis.gethash("groupid_name", group.groupid) + "发送了一条加群申请";
+                group.msg = redis.gethash("id_name", group.userid) + "向“" + redis.gethash("groupid_name", group.groupid) + "”发送了一条加群申请";
                 group.state = SUCCESS;
                 group.type = NOTICE;
 
@@ -125,9 +123,7 @@ void addgroup_server(int fd, string buf)
             else // 对方不在线：加入数据库，等管理员上线时提醒，如果被其他管理员同意了，进入申请进群列表里无法看到(同意时要把这个从申请表中移除)
             {
                 cout << admin_id << "不在线" << endl;
-                // offline_Vector.push_back(admin_id);
-                // offline_len++;
-                group.msg = redis.gethash("id_name", group.userid) + "向" + redis.gethash("groupid_name", group.groupid) + "发送了一条加群申请";
+                group.msg = redis.gethash("id_name", group.userid) + "向“" + redis.gethash("groupid_name", group.groupid) + "”发送了一条加群申请";
                 group.state = SUCCESS;
                 group.type = NORMAL;
 
@@ -155,7 +151,7 @@ void addgroup_server(int fd, string buf)
     {
         sendmsg.SendMsg_client(fd, json_string);
     }
-    else if (group.type == NOTICE) // 如果是通知消息，那就把这条消息发给管理员（所以下面要根据管理员的id获得对方的socket）
+    else if (group.type == NOTICE) // 如果是通知消息，那就把这条消息发给管理员（下面根据管理员的id获得socket）
     {
         for (int i = 0; i < online_len; i++)
         {
@@ -168,6 +164,66 @@ void addgroup_server(int fd, string buf)
         sendmsg.SendMsg_client(fd, json_string);
     }
     cout << "here" << endl;
+}
+
+// 查看已加入的群组
+void checkgroup_server(int fd, string buf)
+{
+    json parsed_data = json::parse(buf);
+    struct Group group;
+    group.userid = parsed_data["userid"];
+    printf("--- %s 用户查看已加入的群组 ---\n", group.userid.c_str());
+
+    Redis redis;
+    redis.connect();
+
+    string key = group.userid + ":group";
+    int len = redis.scard(key);
+
+    redisReply **arry = redis.smembers(key);
+    vector<string> groupname_Vector;  // 放群名的容器
+    vector<string> groupid_Vector;    // 放群id的容器
+    vector<int> groupposition_Vector; // 放该用户在目标群职位的容器
+
+    // 把数据从数据库转移到容器里
+    for (int i = 0; i < len; i++)
+    {
+        // 得到群id
+        string groupid = arry[i]->str;
+        if (redis.hashexists("groupid_name", groupid) != 1) // 群id不存在，说明该群已经解散了，但在该用户加入的群的数据库里仍存着（不好删）
+            continue;
+
+        string name = redis.gethash("groupid_name", groupid); // 拿着id去找name
+
+        groupname_Vector.push_back(name);
+        groupid_Vector.push_back(groupid);
+        if (redis.sismember(group.userid + ":mycreatgroup", groupid) == 1)
+        {
+            groupposition_Vector.push_back(2);
+        }
+        else if (redis.sismember(group.userid + ":myadmingroup", groupid) == 1)
+        {
+            groupposition_Vector.push_back(1);
+        }
+        else
+        {
+            groupposition_Vector.push_back(0);
+        }
+
+        freeReplyObject(arry[i]);
+    }
+
+    // 发送状态和信息类型
+    nlohmann::json json_ = {
+        {"type", NORMAL},
+        {"flag", 0},
+        {"groupnamevector", groupname_Vector},
+        {"groupidvector", groupid_Vector},
+        {"grouppositionvector",groupposition_Vector},
+    };
+    string json_string = json_.dump();
+    SendMsg sendmsg;
+    sendmsg.SendMsg_client(fd, json_string);
 }
 
 #endif

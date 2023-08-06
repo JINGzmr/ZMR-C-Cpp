@@ -32,21 +32,19 @@ const int BUFFER_SIZE = 10240; // 缓冲区的大小（用于存储recv来的序
 #define CHECKGROUP 19       // 查看已加入的群组
 #define OUTGROUP 20         // 退出已加入的群组
 #define CHECKGROUPNUM 21    // 查看群组成员列表
-#define CHECKMYCREAT 22     // 查看我创建的群组
-#define CHECKMYADMIN 23     // 查看我管理的群组
-#define GROUPCHAT 25        // 选择群组聊天
-#define HISTORYGROUPCHAT 26 // 查看群组聊天记录
+#define GROUPCHAT 22        // 选择群组聊天
+#define HISTORYGROUPCHAT 24 // 查看群组聊天记录
 
-#define ADDADMIN 28       // 添加管理员
-#define DELADMIN 29       // 删除管理员
-#define CHECKAPPLYLIST 30 // 查看申请列表
-#define AGREEAPPLY 31     // 同意加群申请
-#define DELGROUPNUM 32    // 删除群成员
-#define DELGROUP 33       // 解散群组
+#define ADDADMIN 26       // 添加管理员
+#define DELADMIN 27       // 删除管理员
+#define CHECKAPPLYLIST 28 // 查看申请列表
+#define AGREEAPPLY 29     // 同意加群申请
+#define DELGROUPNUM 30    // 删除群成员
+#define DELGROUP 31       // 解散群组
 
 #define LOGOUT 15     // 退出登录
 #define REFRESH 16    // 刷新页面
-#define BACK 27       // 返回上一级
+#define BACK 25       // 返回上一级
 #define SHOUNOTICE 50 // 展示未读消息
 
 #define NORMAL 100  // 普通事件
