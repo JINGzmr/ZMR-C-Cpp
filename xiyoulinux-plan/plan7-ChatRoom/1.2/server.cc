@@ -256,9 +256,13 @@ void work(void *arg)
     {
         chatfriend_server(fd, recvJson_buf);
     }
-    else if(flag_ == CREATGROUP)
+    else if (flag_ == CREATGROUP)
     {
         creatgroup_server(fd, recvJson_buf);
+    }
+    else if (flag_ == ADDGROUP)
+    {
+        addgroup_server(fd, recvJson_buf);
     }
 
     // 当前任务都处理完了（或出问题）之后，再挂树

@@ -3,6 +3,7 @@
 
 const int BUFFER_SIZE = 10240; // 缓冲区的大小（用于存储recv来的序列化好的string）
 
+#define HADINGROUP -8      // 已加入群聊
 #define HADBLACK -7        // 已拉黑对方
 #define HADFRIEND -6       // 已添加为好友
 #define USERNAMEUNEXIST -5 // 用户名不存在

@@ -18,16 +18,16 @@ void groupmenuUI(void)
     cout << "——————————————————————————————————————————————————" << endl;
     cout << "----------------------  群聊  ---------------------" << endl;
     cout << "——————————————————————————————————————————————————" << endl;
-    cout << "                      17.创建群组                  " << endl;//set:groupname,groupname/hash:groupname_id,name,id/hash:groupid_name,id,name
+    cout << "                      17.创建群组                  " << endl; // set:groupname,groupname/hash:groupname_id,name,id/hash:groupid_name,id,name
     cout << "                      18.加入群组                   " << endl;
-    cout << "                      19.查看已加入的群组            " << endl;//set:uid+group,groupid
+    cout << "                      19.查看已加入的群组            " << endl; // set:uid+group,groupid
     cout << "                      20.退出已加入的群组            " << endl;
-    cout << "                      21.查看群组成员列表            " << endl;//set:groupid+num,uid/groupid+owner,uid/groupid+admin,uid(分三块打印不同的人)
-    cout << "                      22.查看我创建的群组            " << endl;//set:uid+mycreatgroup,groupid
-    cout << "                      23.查看我管理的群组            " << endl;//set:uid+myadmingroup,groupid
+    cout << "                      21.查看群组成员列表            " << endl; // set:groupid+num,uid/groupid+admin,uid(分两块打印不同的人，管理员包括群主，且群主在第一个)
+    cout << "                      22.查看我创建的群组            " << endl; // set:uid+mycreatgroup,groupid
+    cout << "                      23.查看我管理的群组            " << endl; // set:uid+myadmingroup,groupid
     cout << "                      24.管理群组（群主、管理员）     " << endl;
     cout << "                      25.选择群组聊天               " << endl;
-    cout << "                      26.查看群组聊天记录            " << endl;//list:groupid,消息的结构体
+    cout << "                      26.查看群组聊天记录            " << endl; // list:groupid,消息的结构体
     cout << "--------------------------------------------------" << endl;
     cout << "                      27.返回上一级                 " << endl;
     cout << "---------------------------------------------------" << endl;
@@ -40,9 +40,9 @@ void manegegroupUI(void)
     cout << "——————————————————————————————————————————————————" << endl;
     cout << "---------------------  管理群组  -------------------" << endl;
     cout << "——————————————————————————————————————————————————" << endl;
-    cout << "                      28.添加管理员（群主）          " << endl;//set:groupid+admin,uid
-    cout << "                      29.删除管理员（群主）          " << endl;//set:groupid+admin,uid
-    cout << "                      30.查看申请列表               " << endl;//set:groupid+apply,uid
+    cout << "                      28.添加管理员（群主）          " << endl; // set:groupid+admin,uid
+    cout << "                      29.删除管理员（群主）          " << endl; // set:groupid+admin,uid
+    cout << "                      30.查看申请列表               " << endl;  // set:groupid+apply,uid
     cout << "                      31.同意加群申请               " << endl;
     cout << "                      32.删除群成员                 " << endl;
     cout << "                      33.解散该群（群主）            " << endl;
@@ -92,6 +92,48 @@ void creatgroup_client(int client_socket, string id, Queue<string> &RecvQue)
         cout << "创建失败！" << endl;
         return;
     }
+}
+
+// 加入群组
+void addgroup_client(int client_socket, string id, Queue<string> &RecvQue)
+{
+    Group group;
+    
+    cout << "请输入你要加入的群组ID：";
+    cin >> group.groupid;
+    group.userid = id;
+    group.flag = ADDGROUP;
+
+    // 发送数据
+    nlohmann::json sendJson_client = {
+        {"groupid", group.groupid},
+        {"userid", group.userid},
+        {"flag", group.flag},
+    };
+    string sendJson_client_string = sendJson_client.dump();
+    SendMsg sendmsg;
+    sendmsg.SendMsg_client(client_socket, sendJson_client_string);
+
+    // 从消息队列里取消息
+    string buf = RecvQue.remove();
+    json parsed_data = json::parse(buf);
+    int state_ = parsed_data["state"];
+
+    // 判断是否发送成功
+    if (state_ == HADINGROUP)
+    {
+        cout << "你已加入该群！" << endl;
+    }
+    else if (state_ == USERNAMEUNEXIST)
+    {
+        cout << "该群id不存在！" << endl;
+    }
+    else if (state_ == SUCCESS)
+    {
+        cout << "已发送加群申请！" << endl;
+    }
+
+    return;
 }
 
 #endif

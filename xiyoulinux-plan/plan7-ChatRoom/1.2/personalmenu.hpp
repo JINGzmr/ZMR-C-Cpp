@@ -659,11 +659,11 @@ void group_client(int client_socket, string id, Queue<string> &RecvQue)
             creatgroup_client(client_socket, id, RecvQue);
             groupmenuUI();
             break;
-        // case 18:
-        //     system("clear");
-        //     friendapplylist_client(client_socket, id, RecvQue);
-        //     groupmenuUI();
-        //     break;
+        case 18:
+            system("clear");
+            addgroup_client(client_socket, id, RecvQue);
+            groupmenuUI();
+            break;
         // case 19:
         //     friendapplyedit_client(client_socket, id, RecvQue);
         //     groupmenuUI();
