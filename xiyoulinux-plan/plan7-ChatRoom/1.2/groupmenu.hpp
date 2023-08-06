@@ -18,14 +18,14 @@ void groupmenuUI(void)
     cout << "——————————————————————————————————————————————————" << endl;
     cout << "----------------------  群聊  ---------------------" << endl;
     cout << "——————————————————————————————————————————————————" << endl;
-    cout << "                      17.创建群组                  " << endl; 
+    cout << "                      17.创建群组                  " << endl;
     cout << "                      18.加入群组                   " << endl;
-    cout << "                      19.查看已加入的群组            " << endl; 
+    cout << "                      19.查看已加入的群组            " << endl;
     cout << "                      20.退出已加入的群组            " << endl;
-    cout << "                      21.查看群组成员列表            " << endl; 
+    cout << "                      21.查看群组成员列表            " << endl;
     cout << "                      22.管理群组（群主、管理员）     " << endl;
     cout << "                      23.选择群组聊天               " << endl;
-    cout << "                      24.查看群组聊天记录            " << endl; 
+    cout << "                      24.查看群组聊天记录            " << endl;
     cout << "--------------------------------------------------" << endl;
     cout << "                      25.返回上一级                 " << endl;
     cout << "---------------------------------------------------" << endl;
@@ -38,9 +38,9 @@ void manegegroupUI(void)
     cout << "——————————————————————————————————————————————————" << endl;
     cout << "---------------------  管理群组  -------------------" << endl;
     cout << "——————————————————————————————————————————————————" << endl;
-    cout << "                      26.添加管理员（群主）          " << endl; 
-    cout << "                      27.删除管理员（群主）          " << endl; 
-    cout << "                      28.查看申请列表               " << endl;  
+    cout << "                      26.添加管理员（群主）          " << endl;
+    cout << "                      27.删除管理员（群主）          " << endl;
+    cout << "                      28.查看申请列表               " << endl;
     cout << "                      29.同意加群申请               " << endl;
     cout << "                      30.删除群成员                 " << endl;
     cout << "                      31.解散该群（群主）            " << endl;
@@ -163,7 +163,7 @@ void checkgroup_client(int client_socket, string id, Queue<string> &RecvQue, int
         cout << "————————————以下为已加入的群组列表————————————" << endl;
         for (int i = 0; i < groupname_Vector.size(); i++)
         {
-            cout << groupname_Vector[i] << "  " << groupid_Vector[i] ;
+            cout << groupname_Vector[i] << "  " << groupid_Vector[i];
             if (groupposition_Vector[i] == 2)
             {
                 cout << "（群主）" << endl;
@@ -226,6 +226,77 @@ void outgroup_client(int client_socket, string id, Queue<string> &RecvQue)
     else if (state_ == FAIL)
     {
         cout << "退出失败！" << endl;
+    }
+}
+
+// 查看群组成员列表
+void checkgroupnum_client(int client_socket, string id, Queue<string> &RecvQue, int fl)
+{
+    // 先打印出群聊信息
+    checkgroup_client(client_socket, id, RecvQue, 0);
+
+    Group group;
+    cout << "请输入你要查看的群id：";
+    cin >> group.groupid;
+    group.userid = id;
+    group.flag = CHECKGROUP;
+
+    // 发送数据
+    nlohmann::json sendJson_client = {
+        {"userid", group.userid},
+        {"flag", group.flag},
+    };
+    string sendJson_client_string = sendJson_client.dump();
+    SendMsg sendmsg;
+    sendmsg.SendMsg_client(client_socket, sendJson_client_string);
+
+    // 从消息队列里取消息
+    string buf = RecvQue.remove();
+    json parsed_data = json::parse(buf);
+    vector<string> groupnumname_Vector = parsed_data["groupnumnamevector"];
+    vector<string> groupnumid_Vector = parsed_data["groupnumidvector"];
+    vector<int> groupnumposition_Vector = parsed_data["groupnumpositionvector"];
+    int state_ = parsed_data["state"];
+
+    // 判断是否成功
+    if (state_ == USERNAMEUNEXIST)
+    {
+        cout << "该群id不存在！" << endl;
+    }
+    else if (state_ == FAIL)
+    {
+        cout << "你未加入该群，无法查看！" << endl;
+    }
+    else
+    {
+        // 循环打印输出
+        cout << "————————————以下为已群组成员列表————————————" << endl;
+        for (int i = 0; i < groupnumname_Vector.size(); i++)
+        {
+            cout << groupnumname_Vector[i] << "  " << groupnumid_Vector[i];
+            if (groupnumposition_Vector[i] == 2)
+            {
+                cout << "（群主）" << endl;
+            }
+            else if (groupnumposition_Vector[i] == 1)
+            {
+                cout << "（管理员）" << endl;
+            }
+            else
+            {
+                cout << '\n';
+            }
+        }
+        cout << "——————————————————————————————————————————" << endl;
+    }
+    if (fl == 1)
+    {
+        cout << "按'q'返回上一级" << endl;
+        string a;
+        while (cin >> a && a != "q")
+        {
+        }
+        return;
     }
 }
 

@@ -675,11 +675,11 @@ void group_client(int client_socket, string id, Queue<string> &RecvQue)
             outgroup_client(client_socket, id, RecvQue);
             groupmenuUI();
             break;
-        // case 21:
-        //     system("clear");
-        //     historychat_client(client_socket, id, RecvQue, 1);
-        //     groupmenuUI();
-        //     break;
+        case 21:
+            system("clear");
+            checkgroupnum_client(client_socket, id, RecvQue, 1);
+            groupmenuUI();
+            break;
         // case 22:
         //     system("clear");
         //     friendinfo_client(client_socket, id, RecvQue, 1);
