@@ -665,16 +665,16 @@ void group_client(int client_socket, string id, Queue<string> &RecvQue)
             groupmenuUI();
             break;
         case 19:
-            checkgroup_client(client_socket, id, RecvQue,1);
+            system("clear");
+            checkgroup_client(client_socket, id, RecvQue, 1);
             system("clear");
             groupmenuUI();
             break;
-        // case 20:
-        //     system("clear");
-        //     chatfriend_client(client_socket, id, RecvQue);
-        //     system("clear");
-        //     groupmenuUI();
-        //     break;
+        case 20:
+            system("clear");
+            outgroup_client(client_socket, id, RecvQue);
+            groupmenuUI();
+            break;
         // case 21:
         //     system("clear");
         //     historychat_client(client_socket, id, RecvQue, 1);

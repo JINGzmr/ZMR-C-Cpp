@@ -194,11 +194,11 @@ void checkgroup_client(int client_socket, string id, Queue<string> &RecvQue, int
 // 退出已加入的群组
 void outgroup_client(int client_socket, string id, Queue<string> &RecvQue)
 {
-    // 先打印出好友信息
+    // 先打印出群聊信息
     checkgroup_client(client_socket, id, RecvQue, 0);
 
     Group group;
-    cout << "请输入你要删除的群id：（警告：若你为该群的群主，则直接解散该群！）";
+    cout << "请输入你要退出的群id：（警告：若你为该群的群主，则直接解散该群！）";
     cin >> group.groupid;
     group.userid = id;
     group.flag = OUTGROUP;

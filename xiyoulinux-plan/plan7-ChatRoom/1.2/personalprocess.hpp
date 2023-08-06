@@ -378,6 +378,7 @@ void delfriend_server(int fd, string buf)
     string key = friend_.id + ":friends";
     string key_ = friend_.oppoid + ":friends";
     string bkey = friend_.id + ":bfriends";
+    
     //*************还要删除聊天记录****************
     if (redis.sismember(key, friend_.oppoid) == 1 && redis.sremvalue(key, friend_.oppoid) == 3 && redis.sremvalue(key_, friend_.id) == 3 && redis.sremvalue(bkey, friend_.oppoid))
     {
@@ -562,6 +563,7 @@ void historychat_server(int fd, string buf)
     sendmsg.SendMsg_client(fd, json_string);
 }
 
+// 与好友聊天
 void chatfriend_server(int fd, string buf)
 {
     json parsed_data = json::parse(buf);

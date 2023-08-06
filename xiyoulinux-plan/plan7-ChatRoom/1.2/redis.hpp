@@ -17,11 +17,13 @@ using namespace std;
 // info的键：对应的是存所有用户的UID
 // peopleinfo的键：对应的是哈希表，字段存的是用户的UID，值存序列化好的用户个人信息
 
-// 因此哈希表中：用户信息userinfo作为键，字段是id，值是序列化好的用户个人信息
-// 好友列表 friendlist为键，字段id，值vector容器存的好友列表--->没必要
+
+// 哈希表中：
+// 用户信息userinfo作为键，字段是id，值是序列化好的用户个人信息
 // id与昵称对应 id_name为键，字段id，值：昵称
 // 昵称与id对应 name_id为键，字段昵称，值：id
 // id与套接字对应 usersocket为键，字段为id，值：socket
+
 // id与群名对应 groupname_id,name,id
 // 群名与id对应 groupid_name,id,name
 
@@ -32,14 +34,15 @@ using namespace std;
 // id+:friendsapply：id对应用户的好友申请
 // id+:bfriends：id对应的拉黑用户
 // id+:unreadnotice：id对应用户的未读通知
+
 // groupname 存放群聊的名称
 // id+:group,groupid：id对应用户加入的群聊
 // groupid+:num,id：群成员
 // groupid+:admin,id：群管理（包括群主）
-// groupid+:groupapply,id：群聊申请表
+// groupid+:groupapply,id：群聊申请表--->服务器在准备取该申请表前，先检查该群id在不在
 // id+:mycreatgroup,groupid：id对应用户创建的群聊
 // id+:myadmingroup,groupid：id对应用户管理的群聊(不包括群主)
-// 
+
 
 // list表中：
 // 历史消息：小的id+大的id+historychat为键，消息的结构体为值

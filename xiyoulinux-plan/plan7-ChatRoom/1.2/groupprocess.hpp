@@ -219,7 +219,59 @@ void checkgroup_server(int fd, string buf)
         {"flag", 0},
         {"groupnamevector", groupname_Vector},
         {"groupidvector", groupid_Vector},
-        {"grouppositionvector",groupposition_Vector},
+        {"grouppositionvector", groupposition_Vector},
+    };
+    string json_string = json_.dump();
+    SendMsg sendmsg;
+    sendmsg.SendMsg_client(fd, json_string);
+}
+
+// 退出已加入的群组（就不通知管理员了）
+void outgroup_server(int fd, string buf)
+{
+    json parsed_data = json::parse(buf);
+    struct Group group;
+    group.groupid = parsed_data["groupid"];
+    group.userid = parsed_data["userid"];
+    printf("--- %s 用户将要退出 %s 群 ---\n", group.userid.c_str(), group.groupid.c_str());
+
+    Redis redis;
+    redis.connect();
+
+    if (redis.hashexists("groupid_name", group.groupid) == 1 && redis.sismember(group.userid + ":group", group.groupid) == 1) // 存在该群且已加入
+    {
+        if (redis.sismember(group.userid + ":mycreatgroup", group.groupid) == 1) // 自己是群组，则解散该群
+        {
+            group.groupname = redis.gethash("groupid_name", group.groupid);
+            int m = redis.sremvalue("groupname", group.groupname);  // 所有的群聊名称
+            int n = redis.hashdel("groupname_id", group.groupname); // 群名找群id
+            int o = redis.hashdel("groupid_name", group.groupid);   // 群id找群名
+        }
+        else
+        {
+            int p = redis.sremvalue(group.userid + ":group", group.groupid);    // id对应用户所加的群聊
+            int q = redis.sremvalue(group.groupid + ":num", group.userid);      // 群成员名单
+            if (redis.sismember(group.userid + ":myadmingroup", group.groupid)) // 自己是管理员
+            {
+                int r = redis.sremvalue(group.groupid + ":admin", group.userid);        // 群管理员
+                int t = redis.sremvalue(group.userid + ":myadmingroup", group.groupid); // id对应用户管理的群聊（包括当群主的群聊）
+            }
+        }
+        cout << "退出成功" << endl;
+        group.state = SUCCESS;
+    }
+    //*************还要删除群聊记录****************
+    else
+    {
+        cout << "退出失败" << endl;
+        group.state = FAIL;
+    }
+
+    // 发送状态和信息类型
+    nlohmann::json json_ = {
+        {"type", NORMAL},
+        {"flag", 0},
+        {"state", group.state},
     };
     string json_string = json_.dump();
     SendMsg sendmsg;
