@@ -42,7 +42,7 @@ void manegegroupUI(void)
     cout << "——————————————————————————————————————————————————" << endl;
     cout << "                      28.添加管理员（群主）          " << endl; // set:groupid+admin,uid
     cout << "                      29.删除管理员（群主）          " << endl; // set:groupid+admin,uid
-    cout << "                      30.查看申请列表               " << endl;  // set:groupid+apply,uid
+    cout << "                      30.查看申请列表               " << endl;  // set:groupid+groupapply,uid
     cout << "                      31.同意加群申请               " << endl;
     cout << "                      32.删除群成员                 " << endl;
     cout << "                      33.解散该群（群主）            " << endl;
@@ -118,6 +118,7 @@ void addgroup_client(int client_socket, string id, Queue<string> &RecvQue)
     string buf = RecvQue.remove();
     json parsed_data = json::parse(buf);
     int state_ = parsed_data["state"];
+
 
     // 判断是否发送成功
     if (state_ == HADINGROUP)

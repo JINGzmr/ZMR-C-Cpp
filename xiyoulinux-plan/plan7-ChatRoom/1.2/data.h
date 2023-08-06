@@ -54,6 +54,7 @@ struct Group
     vector<string> adminid; // 群管理们的id
     vector<string> nums;    // 群成员们的id（包括群主和管理员）
     string userid;          // 个人id（加群时用）
+    string msg;             // 通知消息
     int state;              // 标记状态
 };
 

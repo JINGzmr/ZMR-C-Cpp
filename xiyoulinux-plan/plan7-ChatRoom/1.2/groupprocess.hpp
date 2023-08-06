@@ -80,10 +80,14 @@ void addgroup_server(int fd, string buf)
     Redis redis;
     redis.connect();
 
-    // // 构造好友列表
-    // string key = group.id + ":friends";            // id+friends作为键，值就是id用户的好友们
-    // string key_ = group.oppoid + ":friends_apply"; // 对方的好友申请表
-    // string unkey = group.oppoid + ":unreadnotice"; // 未读通知
+    string key = group.groupid + ":admin";
+    int len = redis.scard(key);
+    redisReply **arry = redis.smembers(key);
+    vector<string> admins_Vector;  // 放群主及管理员的的容器
+    vector<string> online_Vector;  // 在线的管理员名单
+    // vector<string> offline_Vector; // 离线管理员名单
+    int online_len = 0;            // 名单长度
+    // int offline_len = 0;
 
     // 加群
     if (redis.hashexists("groupid_name", group.groupid) != 1) // 群id不存在
@@ -101,40 +105,39 @@ void addgroup_server(int fd, string buf)
     else // 可以申请
     {
         // 找出群管理员
-        string key = group.groupid + "admin";
-        string key_ = group.groupid + "owner";
-        int len = redis.scard(key);
-        redisReply **arry = redis.smembers(key);
-        vector<string> admins_Vector; // 放群主及管理员的的容器
         for (int i = 0; i < len; i++)
         {
-            
-            admins_Vector.push_back(arry[i]->str);
-            freeReplyObject(arry[i]);
+            string admin_id = arry[i]->str;
+            admins_Vector.push_back(admin_id);
 
-            if (redis.sismember("onlinelist", arry[i]->str) == 1) // 在线列表里有群管理员，那就给每个在线的发送通知
+            if (redis.sismember("onlinelist", admin_id) == 1) // 在线列表里有群管理员，那就给每个在线的发送通知
             {
-                cout << "对方在线" << endl;
-                group.msg = redis.gethash("id_name", group.id) + "向你发送了一条好友申请";
+                cout << admin_id << "在线" << endl;
+                online_Vector.push_back(admin_id);
+                online_len++;
+                group.msg = redis.gethash("id_name", group.userid) + "向" + redis.gethash("groupid_name", group.groupid) + "发送了一条加群申请";
                 group.state = SUCCESS;
                 group.type = NOTICE;
 
                 // 放到该群的申请表中
-                redis.saddvalue(group.groupid + "apply", group.userid);
+                redis.saddvalue(group.groupid + ":groupapply", group.userid);
             }
-            else // 对方不在线：加入数据库，等管理员上线时提醒，如果被其他管理员同意了，进入申请进群列表里无法看到
+            else // 对方不在线：加入数据库，等管理员上线时提醒，如果被其他管理员同意了，进入申请进群列表里无法看到(同意时要把这个从申请表中移除)
             {
-                cout << "对方不在线" << endl;
-                group.msg = redis.gethash("id_name", group.id) + "向你发送了一条好友申请";
+                cout << admin_id << "不在线" << endl;
+                // offline_Vector.push_back(admin_id);
+                // offline_len++;
+                group.msg = redis.gethash("id_name", group.userid) + "向" + redis.gethash("groupid_name", group.groupid) + "发送了一条加群申请";
                 group.state = SUCCESS;
-                group.type = NORMAL; // 对方不在线，不能及时通知，因此设为普通事件，让用户知道已经发送了好友申请
+                group.type = NORMAL;
 
                 // 加入到对方的未读通知消息队列里
-                redis.saddvalue(unkey, group.msg);
+                redis.saddvalue(admin_id + ":unreadnotice", group.msg);
 
                 // 放到该群的申请表中
-                redis.saddvalue(group.groupid + "apply", group.userid);
+                redis.saddvalue(group.groupid + ":groupapply", group.userid);
             }
+            freeReplyObject(arry[i]);
         }
     }
 
@@ -147,14 +150,18 @@ void addgroup_server(int fd, string buf)
     };
     string json_string = json_.dump();
     SendMsg sendmsg;
+
     if (group.type == NORMAL)
     {
         sendmsg.SendMsg_client(fd, json_string);
     }
-    else if (group.type == NOTICE) // 如果是通知消息，那就把这条消息发给对方（所以下面要根据对方的id获得对方的socket）
+    else if (group.type == NOTICE) // 如果是通知消息，那就把这条消息发给管理员（所以下面要根据管理员的id获得对方的socket）
     {
-        sendmsg.SendMsg_client(stoi(redis.gethash("usersocket", group.oppoid)), json_string);
-
+        for (int i = 0; i < online_len; i++)
+        {
+            string onlineadmin_id = online_Vector[i];
+            sendmsg.SendMsg_client(stoi(redis.gethash("usersocket", onlineadmin_id)), json_string);
+        }
         // 改成正常的类型后给本用户的客户端发回去，不然客户端接不到事件的处理进度
         json_["type"] = NORMAL;
         json_string = json_.dump();
