@@ -243,15 +243,16 @@ void outgroup_server(int fd, string buf)
         if (redis.sismember(group.userid + ":mycreatgroup", group.groupid) == 1) // 自己是群组，则解散该群
         {
             group.groupname = redis.gethash("groupid_name", group.groupid);
-            int m = redis.sremvalue("groupname", group.groupname);  // 所有的群聊名称
-            int n = redis.hashdel("groupname_id", group.groupname); // 群名找群id
-            int o = redis.hashdel("groupid_name", group.groupid);   // 群id找群名
+            int m = redis.sremvalue("groupname", group.groupname);                 // 所有的群聊名称
+            int n = redis.hashdel("groupname_id", group.groupname);                // 群名找群id
+            int o = redis.hashdel("groupid_name", group.groupid);                  // 群id找群名
+            // int s = redis.sremvalue(group.userid + "mycreatgroup", group.groupid); // id对应用户创建的群聊
         }
         else
         {
-            int p = redis.sremvalue(group.userid + ":group", group.groupid);    // id对应用户所加的群聊
-            int q = redis.sremvalue(group.groupid + ":num", group.userid);      // 群成员名单
-            if (redis.sismember(group.userid + ":myadmingroup", group.groupid)) // 自己是管理员
+            int p = redis.sremvalue(group.userid + ":group", group.groupid);         // id对应用户所加的群聊
+            int q = redis.sremvalue(group.groupid + ":num", group.userid);           // 群成员名单
+            if (redis.sismember(group.userid + ":myadmingroup", group.groupid) == 1) // 自己是管理员
             {
                 int r = redis.sremvalue(group.groupid + ":admin", group.userid);        // 群管理员
                 int t = redis.sremvalue(group.userid + ":myadmingroup", group.groupid); // id对应用户管理的群聊（包括当群主的群聊）
@@ -354,7 +355,5 @@ void checkgroupnum_server(int fd, string buf)
     SendMsg sendmsg;
     sendmsg.SendMsg_client(fd, json_string);
 }
-
-
 
 #endif

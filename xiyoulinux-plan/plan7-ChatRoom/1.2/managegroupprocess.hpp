@@ -25,34 +25,54 @@ void addmin_server(int fd, string buf)
     Redis redis;
     redis.connect();
 
-// ***********判断用户是否存在************
-    if (redis.sismember(group.userid + ":mycreatgroup", group.groupid) != 1) // 不是群主，无权操作
+    if (redis.hashexists("userinfo", group.oppoid) != 1) // 用户不存在
     {
+        cout << "该用户不存在" << endl;
         group.type = NORMAL;
-        group.state = FAIL;
+        group.state = USERNAMEUNEXIST;
     }
-    else if (redis.sismember(group.groupid + ":admin", group.oppoid) == 1) // 对方已经是管理员了
+    else if (redis.sismember(group.oppoid + ":group", group.groupid) != 1) // 对方不是群成员
     {
+        cout << "该用户不在群聊中" << endl;
         group.type = NORMAL;
-        group.state = HADADMIN;
+        group.state = NOTINGROUP;
     }
-    else if (redis.sismember("onlinelist", group.oppoid) == 1) // 对方在线
+    else
     {
-        redis.saddvalue(group.groupid + ":admin", group.oppoid);
-        redis.saddvalue(group.oppoid + ":myadmingroup", group.groupid);
-        group.msg = "你被添加为“" + redis.gethash("groupid_name", group.groupid) + "”群的管理员";
-        group.type = NOTICE;
-        group.state = SUCCESS;
-    }
-    else // 离线
-    {
-        redis.saddvalue(group.groupid + ":admin", group.oppoid);
-        redis.saddvalue(group.oppoid + ":myadmingroup", group.groupid);
-        group.msg = "你被添加为“" + redis.gethash("groupid_name", group.groupid) + "”群的管理员";
-        group.type = NOTICE;
-        group.state = SUCCESS;
+        if (redis.sismember(group.userid + ":mycreatgroup", group.groupid) != 1) // 不是群主，无权操作
+        {
+            cout << "权限不够，操作失败" << endl;
+            group.type = NORMAL;
+            group.state = FAIL;
+        }
+        else if (redis.sismember(group.groupid + ":admin", group.oppoid) == 1) // 对方已经是管理员了
+        {
+            cout << "该成员已是管理员" << endl;
+            group.type = NORMAL;
+            group.state = HADADMIN;
+        }
+        else if (redis.sismember("onlinelist", group.oppoid) == 1) // 对方在线
+        {
+            redis.saddvalue(group.groupid + ":admin", group.oppoid);
+            redis.saddvalue(group.oppoid + ":myadmingroup", group.groupid);
+            cout << "群管理添加成功" << endl;
 
-        redis.saddvalue(group.oppoid + ":unreadnotice", group.msg);
+            group.msg = "你被添加为“" + redis.gethash("groupid_name", group.groupid) + "”群的管理员";
+            group.type = NOTICE;
+            group.state = SUCCESS;
+        }
+        else // 离线
+        {
+            redis.saddvalue(group.groupid + ":admin", group.oppoid);
+            redis.saddvalue(group.oppoid + ":myadmingroup", group.groupid);
+            cout << "群管理添加成功" << endl;
+
+            group.msg = "你被添加为“" + redis.gethash("groupid_name", group.groupid) + "”群的管理员";
+            group.type = NOTICE;
+            group.state = SUCCESS;
+
+            redis.saddvalue(group.oppoid + ":unreadnotice", group.msg);
+        }
     }
 
     // 发送状态和信息类型

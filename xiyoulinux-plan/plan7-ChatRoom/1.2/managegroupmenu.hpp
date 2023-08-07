@@ -70,13 +70,21 @@ void addmin_client(int client_socket, string id, Queue<string> &RecvQue)
         int state_ = parsed_data["state"];
 
         // 判断是否成功
-        if (state_ == SUCCESS)
+        if (state_ == USERNAMEUNEXIST)
+        {
+            cout << "该用户不存在!" << endl;
+        }
+        else if (state_ == NOTINGROUP)
+        {
+            cout << "该用户不在群聊中!" << endl;
+        }
+        else if (state_ == SUCCESS)
         {
             cout << "群管理添加成功！" << endl;
         }
         else if (state_ == HADADMIN)
         {
-            cout << "该成员已是管理员！" << endl;
+            cout << "该成员已是管理员或群主！" << endl;
         }
         else if (state_ == FAIL)
         {

@@ -118,8 +118,9 @@ void addgroup_client(int client_socket, string id, Queue<string> &RecvQue)
 }
 
 // 查看已加入的群组
-void checkgroup_client(int client_socket, string id, Queue<string> &RecvQue, int fl)
+int checkgroup_client(int client_socket, string id, Queue<string> &RecvQue, int fl)
 {
+    int re;
     // 发送数据
     nlohmann::json sendJson_client = {
         {"userid", id},
@@ -139,6 +140,7 @@ void checkgroup_client(int client_socket, string id, Queue<string> &RecvQue, int
     if (groupname_Vector.empty())
     {
         cout << "暂无加入任何群组！" << endl;
+        re = 0;
     }
     else
     {
@@ -161,6 +163,7 @@ void checkgroup_client(int client_socket, string id, Queue<string> &RecvQue, int
             }
         }
         cout << "——————————————————————————————————————————" << endl;
+        re = 1;
     }
 
     if (fl == 1)
@@ -170,15 +173,19 @@ void checkgroup_client(int client_socket, string id, Queue<string> &RecvQue, int
         while (cin >> a && a != "q")
         {
         }
-        return;
+        return re;
     }
+
+    return re;
 }
 
 // 退出已加入的群组
 void outgroup_client(int client_socket, string id, Queue<string> &RecvQue)
 {
     // 先打印出群聊信息
-    checkgroup_client(client_socket, id, RecvQue, 0);
+    int re = checkgroup_client(client_socket, id, RecvQue, 0);
+    if (re == 0) // 没加入任何群组，则直接返回
+        return;
 
     Group group;
     cout << "请输入你要退出的群id：（警告：若你为该群的群主，则直接解散该群！）";
@@ -216,7 +223,9 @@ void outgroup_client(int client_socket, string id, Queue<string> &RecvQue)
 string checkgroupnum_client(int client_socket, string id, Queue<string> &RecvQue, int fl)
 {
     // 先打印出群聊信息
-    checkgroup_client(client_socket, id, RecvQue, 0);
+    int re = checkgroup_client(client_socket, id, RecvQue, 0);
+    if (re == 0)
+        return "fail";
 
     Group group;
     cout << "请输入你要查看的群id：";
