@@ -320,11 +320,11 @@ void managegroup_client(int client_socket, string id, Queue<string> &RecvQue)
             addmin_client(client_socket, id, RecvQue);
             manegegroupUI();
             break;
-        // case 27:
-        //     system("clear");
-        //     addgroup_client(client_socket, id, RecvQue);
-        //     manegegroupUI();
-        //     break;
+        case 27:
+            system("clear");
+            deladmin_client(client_socket, id, RecvQue);
+            manegegroupUI();
+            break;
         // case 28:
         //     system("clear");
         //     checkgroup_client(client_socket, id, RecvQue, 1);

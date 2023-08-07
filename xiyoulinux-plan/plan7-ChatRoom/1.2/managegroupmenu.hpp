@@ -93,4 +93,62 @@ void addmin_client(int client_socket, string id, Queue<string> &RecvQue)
     }
 }
 
+// 删除群管理员
+void deladmin_client(int client_socket, string id, Queue<string> &RecvQue)
+{
+    // 先打查看群成员列表
+    string re = checkgroupnum_client(client_socket, id, RecvQue, 0);
+    if (re == "fail")
+    {
+        return;
+    }
+    else
+    {
+        Group group;
+        group.groupid = re;
+        cout << "请输入你要删除管理员的成员id：（警告：此操作仅对群主生效！）";
+        cin >> group.oppoid;
+        group.userid = id;
+        group.flag = DELADMIN;
+
+        // 发送数据
+        nlohmann::json sendJson_client = {
+            {"oppoid", group.oppoid},
+            {"userid", group.userid},
+            {"groupid", group.groupid},
+            {"flag", group.flag},
+        };
+        string sendJson_client_string = sendJson_client.dump();
+        SendMsg sendmsg;
+        sendmsg.SendMsg_client(client_socket, sendJson_client_string);
+
+        // 从消息队列里取消息
+        string buf = RecvQue.remove();
+        json parsed_data = json::parse(buf);
+        int state_ = parsed_data["state"];
+
+        // 判断是否成功
+        if (state_ == USERNAMEUNEXIST)
+        {
+            cout << "该用户不存在!" << endl;
+        }
+        else if (state_ == NOTINGROUP)
+        {
+            cout << "该用户不在群聊中!" << endl;
+        }
+        else if (state_ == SUCCESS)
+        {
+            cout << "群管理删除成功！" << endl;
+        }
+        else if (state_ == NOTADMIN)
+        {
+            cout << "该成员不是管理员！" << endl;
+        }
+        else if (state_ == FAIL)
+        {
+            cout << "你权限不够，操作失败！" << endl;
+        }
+    }
+}
+
 #endif

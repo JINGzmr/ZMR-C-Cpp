@@ -3,6 +3,7 @@
 
 const int BUFFER_SIZE = 10240; // 缓冲区的大小（用于存储recv来的序列化好的string）
 
+#define NOTADMIN -11       // 不是群管理
 #define NOTINGROUP -10     // 不是群成员
 #define HADADMIN -9        // 已经是群管理
 #define HADINGROUP -8      // 已加入群聊
