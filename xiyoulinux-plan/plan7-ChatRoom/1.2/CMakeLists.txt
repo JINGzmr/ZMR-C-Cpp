@@ -17,6 +17,7 @@ add_executable(client
     threadwork.hpp
     queue.hpp
     groupmenu.hpp
+    managegroupmenu.hpp
 )
 
 # 添加可执行文件 "server" 并指定源文件
@@ -32,6 +33,7 @@ add_executable(server
     redis.hpp
     personalprocess.hpp
     groupprocess.hpp
+    managegroupprocess.hpp
 )
 
 # 添加链接库

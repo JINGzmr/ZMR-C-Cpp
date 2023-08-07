@@ -3,6 +3,7 @@
 
 const int BUFFER_SIZE = 10240; // 缓冲区的大小（用于存储recv来的序列化好的string）
 
+#define HADADMIN -9        // 已经是群管理
 #define HADINGROUP -8      // 已加入群聊
 #define HADBLACK -7        // 已拉黑对方
 #define HADFRIEND -6       // 已添加为好友
@@ -32,7 +33,8 @@ const int BUFFER_SIZE = 10240; // 缓冲区的大小（用于存储recv来的序
 #define CHECKGROUP 19       // 查看已加入的群组
 #define OUTGROUP 20         // 退出已加入的群组
 #define CHECKGROUPNUM 21    // 查看群组成员列表
-#define GROUPCHAT 22        // 选择群组聊天
+#define MANAGEGROUP 22      // 管理群组
+#define GROUPCHAT 23        // 选择群组聊天
 #define HISTORYGROUPCHAT 24 // 查看群组聊天记录
 
 #define ADDADMIN 26       // 添加管理员

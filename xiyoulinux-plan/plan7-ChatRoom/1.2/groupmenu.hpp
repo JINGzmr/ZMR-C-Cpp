@@ -8,6 +8,7 @@
 #include "IO.h"
 #include "menu.hpp"
 #include "threadwork.hpp"
+#include "managegroupmenu.hpp"
 
 #include <iostream>
 using json = nlohmann::json;
@@ -18,7 +19,7 @@ void groupmenuUI(void)
     cout << "——————————————————————————————————————————————————" << endl;
     cout << "----------------------  群聊  ---------------------" << endl;
     cout << "——————————————————————————————————————————————————" << endl;
-    cout << "                      17.创建群组                  " << endl;
+    cout << "                      17.创建群组                   " << endl;
     cout << "                      18.加入群组                   " << endl;
     cout << "                      19.查看已加入的群组            " << endl;
     cout << "                      20.退出已加入的群组            " << endl;
@@ -26,24 +27,6 @@ void groupmenuUI(void)
     cout << "                      22.管理群组（群主、管理员）     " << endl;
     cout << "                      23.选择群组聊天               " << endl;
     cout << "                      24.查看群组聊天记录            " << endl;
-    cout << "--------------------------------------------------" << endl;
-    cout << "                      25.返回上一级                 " << endl;
-    cout << "---------------------------------------------------" << endl;
-    cout << "                      16.刷新页面                   " << endl;
-    cout << "———————————————————————————————————————————————————" << endl;
-}
-
-void manegegroupUI(void)
-{
-    cout << "——————————————————————————————————————————————————" << endl;
-    cout << "---------------------  管理群组  -------------------" << endl;
-    cout << "——————————————————————————————————————————————————" << endl;
-    cout << "                      26.添加管理员（群主）          " << endl;
-    cout << "                      27.删除管理员（群主）          " << endl;
-    cout << "                      28.查看申请列表               " << endl;
-    cout << "                      29.同意加群申请               " << endl;
-    cout << "                      30.删除群成员                 " << endl;
-    cout << "                      31.解散该群（群主）            " << endl;
     cout << "--------------------------------------------------" << endl;
     cout << "                      25.返回上一级                 " << endl;
     cout << "---------------------------------------------------" << endl;
@@ -230,7 +213,7 @@ void outgroup_client(int client_socket, string id, Queue<string> &RecvQue)
 }
 
 // 查看群组成员列表
-void checkgroupnum_client(int client_socket, string id, Queue<string> &RecvQue, int fl)
+string checkgroupnum_client(int client_socket, string id, Queue<string> &RecvQue, int fl)
 {
     // 先打印出群聊信息
     checkgroup_client(client_socket, id, RecvQue, 0);
@@ -244,7 +227,7 @@ void checkgroupnum_client(int client_socket, string id, Queue<string> &RecvQue, 
     // 发送数据
     nlohmann::json sendJson_client = {
         {"userid", group.userid},
-        {"groupid",group.groupid},
+        {"groupid", group.groupid},
         {"flag", group.flag},
     };
     string sendJson_client_string = sendJson_client.dump();
@@ -297,8 +280,79 @@ void checkgroupnum_client(int client_socket, string id, Queue<string> &RecvQue, 
         while (cin >> a && a != "q")
         {
         }
-        return;
+        return "";
     }
+
+    if (state_ == SUCCESS)
+        return group.groupid;
+    else
+        return "fail";
+}
+
+// 管理群组
+void managegroup_client(int client_socket, string id, Queue<string> &RecvQue)
+{
+    system("clear");
+    manegegroupUI();
+
+    int num__ = 1;
+    do
+    {
+        // 清空缓冲区
+        std::cin.clear();
+        std::cin.sync();
+
+        cin >> num__;
+
+        switch (num__)
+        {
+        case 26:
+            system("clear");
+            addmin_client(client_socket, id, RecvQue);
+            manegegroupUI();
+            break;
+        // case 27:
+        //     system("clear");
+        //     addgroup_client(client_socket, id, RecvQue);
+        //     manegegroupUI();
+        //     break;
+        // case 28:
+        //     system("clear");
+        //     checkgroup_client(client_socket, id, RecvQue, 1);
+        //     system("clear");
+        //     manegegroupUI();
+        //     break;
+        // case 29:
+        //     system("clear");
+        //     outgroup_client(client_socket, id, RecvQue);
+        //     manegegroupUI();
+        //     break;
+        // case 30:
+        //     system("clear");
+        //     checkgroupnum_client(client_socket, id, RecvQue, 1);
+        //     manegegroupUI();
+        //     break;
+        // case 31:
+        //     system("clear");
+        //     managegroup_client(client_socket, id, RecvQue);
+        //     system("clear");
+        //     manegegroupUI();
+        //     break;
+        // case 25:
+        //     system("clear");
+        //     blackfriendlist_client(client_socket, id, RecvQue);
+        //     manegegroupUI();
+        //     break;
+        case 16:
+            system("clear");
+            manegegroupUI();
+        default:
+            cout << "无效的数字，请重新输入！" << endl;
+            manegegroupUI();
+        }
+    } while (num__ != 25); // 退出循环，返回上一级
+
+    return;
 }
 
 #endif

@@ -333,6 +333,7 @@ CMakeFiles/client.dir/client.cc.o: \
  /usr/include/c++/11/bits/stl_queue.h \
  /usr/include/c++/11/condition_variable \
  /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.2/groupmenu.hpp \
+ /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.2/managegroupmenu.hpp \
  /usr/include/c++/11/csignal /usr/include/signal.h \
  /usr/include/x86_64-linux-gnu/bits/signum-generic.h \
  /usr/include/x86_64-linux-gnu/bits/signum-arch.h \

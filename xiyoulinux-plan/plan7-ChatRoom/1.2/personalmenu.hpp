@@ -680,12 +680,12 @@ void group_client(int client_socket, string id, Queue<string> &RecvQue)
             checkgroupnum_client(client_socket, id, RecvQue, 1);
             groupmenuUI();
             break;
-        // case 22:
-        //     system("clear");
-        //     friendinfo_client(client_socket, id, RecvQue, 1);
-        //     system("clear");
-        //     groupmenuUI();
-        //     break;
+        case 22:
+            system("clear");
+            managegroup_client(client_socket, id, RecvQue);
+            system("clear");
+            groupmenuUI();
+            break;
         // case 23:
         //     system("clear");
         //     addblack_client(client_socket, id, RecvQue);
