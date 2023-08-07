@@ -239,11 +239,12 @@ void checkgroupnum_client(int client_socket, string id, Queue<string> &RecvQue, 
     cout << "请输入你要查看的群id：";
     cin >> group.groupid;
     group.userid = id;
-    group.flag = CHECKGROUP;
+    group.flag = CHECKGROUPNUM;
 
     // 发送数据
     nlohmann::json sendJson_client = {
         {"userid", group.userid},
+        {"groupid",group.groupid},
         {"flag", group.flag},
     };
     string sendJson_client_string = sendJson_client.dump();

@@ -345,6 +345,7 @@ void checkgroupnum_server(int fd, string buf)
     nlohmann::json json_ = {
         {"type", NORMAL},
         {"flag", 0},
+        {"state",group.state},
         {"groupnumnamevector", groupnumname_Vector},
         {"groupnumidvector", groupnumid_Vector},
         {"groupnumpositionvector", groupnumposition_Vector},
@@ -352,6 +353,7 @@ void checkgroupnum_server(int fd, string buf)
     string json_string = json_.dump();
     SendMsg sendmsg;
     sendmsg.SendMsg_client(fd, json_string);
+
 }
 
 #endif
