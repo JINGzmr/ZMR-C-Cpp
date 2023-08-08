@@ -320,15 +320,15 @@ void checkgroupnum_server(int fd, string buf)
             if (redis.hashexists("userinfo", groupnumid) != 1) // 用户id不存在，说明该用户已注销，但在该用户加入的群的数据库里仍存着（不好删）
                 continue;
 
-            string name = redis.gethash("id_name", group.userid); // 拿着id去找name
+            string name = redis.gethash("id_name", groupnumid); // 拿着id去找name
 
             groupnumname_Vector.push_back(name);
-            groupnumid_Vector.push_back(group.userid);
-            if (redis.sismember(group.userid + ":mycreatgroup", group.groupid) == 1)
+            groupnumid_Vector.push_back(groupnumid);
+            if (redis.sismember(groupnumid + ":mycreatgroup", group.groupid) == 1)
             {
                 groupnumposition_Vector.push_back(2);
             }
-            else if (redis.sismember(group.userid + ":myadmingroup", group.groupid) == 1)
+            else if (redis.sismember(groupnumid + ":myadmingroup", group.groupid) == 1)
             {
                 groupnumposition_Vector.push_back(1);
             }

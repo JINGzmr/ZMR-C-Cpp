@@ -15,6 +15,8 @@ using json = nlohmann::json;
 using namespace std;
 
 string checkgroupnum_client(int client_socket, string id, Queue<string> &RecvQue, int fl);
+int checkgroup_client(int client_socket, string id, Queue<string> &RecvQue, int fl);
+
 
 void manegegroupUI(void)
 {
@@ -148,6 +150,67 @@ void deladmin_client(int client_socket, string id, Queue<string> &RecvQue)
         {
             cout << "你权限不够，操作失败！" << endl;
         }
+    }
+}
+
+// 查看申请加群列表
+void checkapplylist_client(int client_socket, string id, Queue<string> &RecvQue,int fl)
+{
+    // 先打印出群聊信息
+    int re = checkgroup_client(client_socket, id, RecvQue, 0);
+    if (re == 0)
+        return;
+
+    Group group;
+    cout << "请输入你要查看的群id：（警告：此操作仅对群主、管理员生效！）";
+    cin >> group.groupid;
+    group.userid = id;
+    group.flag = CHECKAPPLYLIST;
+
+    // 发送数据
+    nlohmann::json sendJson_client = {
+        {"userid", group.userid},
+        {"groupid", group.groupid},
+        {"flag", group.flag},
+    };
+    string sendJson_client_string = sendJson_client.dump();
+    SendMsg sendmsg;
+    sendmsg.SendMsg_client(client_socket, sendJson_client_string);
+
+    // 从消息队列里取消息
+    string buf = RecvQue.remove();
+    json parsed_data = json::parse(buf);
+    vector<string> groupapply_Vector = parsed_data["groupapplyvector"];
+    int state_ = parsed_data["state"];
+
+    // 判断是否成功
+    if (state_ == USERNAMEUNEXIST)
+    {
+        cout << "该群id不存在！" << endl;
+    }
+    else if (state_ == FAIL)
+    {
+        cout << "你未加入该群 或 没有权限，无法查看！" << endl;
+    }
+    else
+    {
+        // 循环打印输出
+        cout << "————————————以下为群组申请列表————————————" << endl;
+        for (int i = 0; i < groupapply_Vector.size(); i++)
+        {
+            cout << groupapply_Vector[i] << endl;
+        }
+        cout << "——————————————————————————————————————————" << endl;
+    }
+
+    if (fl == 1)
+    {
+        cout << "按'q'返回上一级" << endl;
+        string a;
+        while (cin >> a && a != "q")
+        {
+        }
+        return ;
     }
 }
 

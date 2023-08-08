@@ -186,4 +186,72 @@ void deladmin_server(int fd, string buf)
     }
 }
 
+// 查看申请加群列表
+void checkapplylist_server(int fd, string buf)
+{
+    json parsed_data = json::parse(buf);
+    struct Group group;
+    group.userid = parsed_data["userid"];
+    group.groupid = parsed_data["groupid"];
+    printf("--- %s 用户查看 %s 群的加群申请表 ---\n", group.userid.c_str(), group.groupid.c_str());
+
+    Redis redis;
+    redis.connect();
+
+    vector<string> groupapply_Vector;
+
+    if (redis.hashexists("groupid_name", group.groupid) != 1) // 群id不存在
+    {
+        cout << "该群id不存在" << endl;
+        group.state = USERNAMEUNEXIST;
+    }
+    else if (redis.sismember(group.userid + ":group", group.groupid) != 1) // 未加入该群
+    {
+        cout << "你未加入该群！" << endl;
+        group.state = FAIL;
+    }
+    else
+    {
+        if (redis.sismember(group.groupid + ":admin", group.userid) != 1) // 操作的不是管理员或群主
+        {
+            cout << "没有权限" << endl;
+            group.state = FAIL;
+        }
+        else
+        {
+            string key = group.groupid + ":groupapply";
+            int len = redis.scard(key);
+
+            redisReply **arry = redis.smembers(key);
+
+            // 把数据从数据库转移到容器里
+            for (int i = 0; i < len; i++)
+            {
+                // 得到用户id
+                string applyuserid = arry[i]->str;
+                if (redis.hashexists("userinfo", applyuserid) != 1) // 用户id不存在，说明该用户已注销，但在该用户加入的群的数据库里仍存着（不好删）
+                    continue;
+
+                string applyusername = redis.gethash("id_name", applyuserid); // 拿着id去找name
+
+                groupapply_Vector.push_back(applyusername);
+
+                freeReplyObject(arry[i]);
+            }
+            group.state = SUCCESS;
+        }
+    }
+
+    // 发送状态和信息类型
+    nlohmann::json json_ = {
+        {"type", NORMAL},
+        {"flag", 0},
+        {"state", group.state},
+        {"groupapplyvector", groupapply_Vector},
+    };
+    string json_string = json_.dump();
+    SendMsg sendmsg;
+    sendmsg.SendMsg_client(fd, json_string);
+}
+
 #endif

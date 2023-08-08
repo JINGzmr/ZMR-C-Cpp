@@ -263,7 +263,7 @@ string checkgroupnum_client(int client_socket, string id, Queue<string> &RecvQue
     else
     {
         // 循环打印输出
-        cout << "————————————以下为已群组成员列表————————————" << endl;
+        cout << "————————————以下为群组成员列表————————————" << endl;
         for (int i = 0; i < groupnumname_Vector.size(); i++)
         {
             cout << groupnumname_Vector[i] << "  " << groupnumid_Vector[i];
@@ -325,12 +325,12 @@ void managegroup_client(int client_socket, string id, Queue<string> &RecvQue)
             deladmin_client(client_socket, id, RecvQue);
             manegegroupUI();
             break;
-        // case 28:
-        //     system("clear");
-        //     checkgroup_client(client_socket, id, RecvQue, 1);
-        //     system("clear");
-        //     manegegroupUI();
-        //     break;
+        case 28:
+            system("clear");
+            checkapplylist_client(client_socket, id, RecvQue, 1);
+            system("clear");
+            manegegroupUI();
+            break;
         // case 29:
         //     system("clear");
         //     outgroup_client(client_socket, id, RecvQue);
