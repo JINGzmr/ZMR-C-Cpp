@@ -55,6 +55,7 @@ struct Group
     vector<string> nums;    // 群成员们的id（包括群主和管理员）
     string userid;          // 个人id（加群时用）
     string oppoid;          // 目标成员id（增删管理、踢人）
+    string opponame;        // 目标成员名字
     string msg;             // 通知消息
     int state;              // 标记状态
 };

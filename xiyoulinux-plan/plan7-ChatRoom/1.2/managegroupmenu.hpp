@@ -17,7 +17,6 @@ using namespace std;
 string checkgroupnum_client(int client_socket, string id, Queue<string> &RecvQue, int fl);
 int checkgroup_client(int client_socket, string id, Queue<string> &RecvQue, int fl);
 
-
 void manegegroupUI(void)
 {
     cout << "——————————————————————————————————————————————————" << endl;
@@ -153,54 +152,93 @@ void deladmin_client(int client_socket, string id, Queue<string> &RecvQue)
     }
 }
 
-// 查看申请加群列表
-void checkapplylist_client(int client_socket, string id, Queue<string> &RecvQue,int fl)
+// 查看申请加群列表(包括同意请求一起写，但服务器那边要有不同的函数来处理)
+string checkapplylist_client(int client_socket, string id, Queue<string> &RecvQue, int fl)
 {
     // 先打印出群聊信息
     int re = checkgroup_client(client_socket, id, RecvQue, 0);
-    if (re == 0)
-        return;
-
-    Group group;
-    cout << "请输入你要查看的群id：（警告：此操作仅对群主、管理员生效！）";
-    cin >> group.groupid;
-    group.userid = id;
-    group.flag = CHECKAPPLYLIST;
-
-    // 发送数据
-    nlohmann::json sendJson_client = {
-        {"userid", group.userid},
-        {"groupid", group.groupid},
-        {"flag", group.flag},
-    };
-    string sendJson_client_string = sendJson_client.dump();
-    SendMsg sendmsg;
-    sendmsg.SendMsg_client(client_socket, sendJson_client_string);
-
-    // 从消息队列里取消息
-    string buf = RecvQue.remove();
-    json parsed_data = json::parse(buf);
-    vector<string> groupapply_Vector = parsed_data["groupapplyvector"];
-    int state_ = parsed_data["state"];
-
-    // 判断是否成功
-    if (state_ == USERNAMEUNEXIST)
+    if (re != 0) // 表明该用户有加入的群聊
     {
-        cout << "该群id不存在！" << endl;
-    }
-    else if (state_ == FAIL)
-    {
-        cout << "你未加入该群 或 没有权限，无法查看！" << endl;
-    }
-    else
-    {
-        // 循环打印输出
-        cout << "————————————以下为群组申请列表————————————" << endl;
-        for (int i = 0; i < groupapply_Vector.size(); i++)
+        Group group;
+        cout << "请输入你要查看的群id：（警告：此操作仅对群主、管理员生效！）";
+        cin >> group.groupid;
+        group.userid = id;
+        group.flag = CHECKAPPLYLIST;
+
+        // 发送数据
+        nlohmann::json sendJson_client = {
+            {"userid", group.userid},
+            {"groupid", group.groupid},
+            {"flag", group.flag},
+        };
+        string sendJson_client_string = sendJson_client.dump();
+        SendMsg sendmsg;
+        sendmsg.SendMsg_client(client_socket, sendJson_client_string);
+
+        // 从消息队列里取消息
+        string buf = RecvQue.remove();
+        json parsed_data = json::parse(buf);
+        vector<string> groupapply_Vector = parsed_data["groupapplyvector"];
+        int state_ = parsed_data["state"];
+
+        // 判断是否成功
+        if (state_ == USERNAMEUNEXIST)
         {
-            cout << groupapply_Vector[i] << endl;
+            cout << "该群id不存在！" << endl;
         }
-        cout << "——————————————————————————————————————————" << endl;
+        else if (state_ == FAIL)
+        {
+            cout << "你未加入该群 或 没有权限，无法查看！" << endl;
+        }
+        else
+        {
+            // 循环打印输出
+            cout << "————————————以下为群组申请列表————————————" << endl;
+            for (int i = 0; i < groupapply_Vector.size(); i++)
+            {
+                cout << groupapply_Vector[i] << endl;
+            }
+            cout << "——————————————————————————————————————————" << endl;
+
+            // 同意加群申请
+            Group group;
+            int state;
+            cout << "输入要编辑的用户昵称" << endl;
+            cin >> group.opponame;
+            cout << "同意---1 / 拒绝---0" << endl;
+            cin >> state;
+            group.userid = id;
+
+            // 发送数据
+            nlohmann::json sendJson_client = {
+                {"userid", group.userid},
+                {"flag", AGREEAPPLY},
+                {"opponame", group.opponame},
+                {"state", state},
+            };
+            string sendJson_client_string = sendJson_client.dump();
+            SendMsg sendmsg;
+            sendmsg.SendMsg_client(client_socket, sendJson_client_string);
+
+            // 从消息队列里取消息
+            string buf = RecvQue.remove();
+            json parsed_data = json::parse(buf);
+            int state_ = parsed_data["state"];
+
+            // 判断是否操作成功
+            if (state_ == SUCCESS)
+            {
+                cout << "操作成功！" << endl;
+            }
+            else if (state_ == FAIL)
+            {
+                cout << "不存在此好友申请！" << endl;
+            }
+            else if (state_ == USERNAMEUNEXIST)
+            {
+                cout << "查无此人! " << endl;
+            }
+        }
     }
 
     if (fl == 1)
@@ -210,8 +248,19 @@ void checkapplylist_client(int client_socket, string id, Queue<string> &RecvQue,
         while (cin >> a && a != "q")
         {
         }
-        return ;
+        return;
     }
 }
+
+// // 同意加群申请
+// void agreeapply_client(int client_socket, string id, Queue<string> &RecvQue)
+// {
+//     // 先打印申请信息
+//     string re_str = checkapplylist_client(client_socket, id, RecvQue, 0);
+//     if(re_str=="havegroup")//表明该用户有加入的群聊
+//     {
+
+//     }
+// }
 
 #endif

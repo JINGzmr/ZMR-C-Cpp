@@ -269,25 +269,29 @@ void work(void *arg)
     {
         checkgroup_server(fd, recvJson_buf);
     }
-    else if(flag_ == OUTGROUP)
+    else if (flag_ == OUTGROUP)
     {
-        outgroup_server(fd,recvJson_buf);
+        outgroup_server(fd, recvJson_buf);
     }
-    else if(flag_ == CHECKGROUPNUM)
+    else if (flag_ == CHECKGROUPNUM)
     {
-        checkgroupnum_server(fd,recvJson_buf);
+        checkgroupnum_server(fd, recvJson_buf);
     }
-    else if(flag_ == ADDADMIN)
+    else if (flag_ == ADDADMIN)
     {
-        addmin_server(fd,recvJson_buf);
+        addmin_server(fd, recvJson_buf);
     }
-    else if(flag_ == DELADMIN)
+    else if (flag_ == DELADMIN)
     {
-        deladmin_server(fd,recvJson_buf);
+        deladmin_server(fd, recvJson_buf);
     }
-    else if(flag_ == CHECKAPPLYLIST)
+    else if (flag_ == CHECKAPPLYLIST)
     {
-        checkapplylist_server(fd,recvJson_buf);
+        checkapplylist_server(fd, recvJson_buf);
+    }
+    else if (flag_ == AGREEAPPLY)
+    {
+        agreeapply_server(fd, recvJson_buf);
     }
 
     // 当前任务都处理完了（或出问题）之后，再挂树

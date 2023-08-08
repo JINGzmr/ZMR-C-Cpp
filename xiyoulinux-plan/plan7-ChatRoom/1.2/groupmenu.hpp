@@ -333,7 +333,7 @@ void managegroup_client(int client_socket, string id, Queue<string> &RecvQue)
             break;
         // case 29:
         //     system("clear");
-        //     outgroup_client(client_socket, id, RecvQue);
+        //     agreeapply_client(client_socket, id, RecvQue);
         //     manegegroupUI();
         //     break;
         // case 30:
