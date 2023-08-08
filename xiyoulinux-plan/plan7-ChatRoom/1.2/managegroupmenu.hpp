@@ -191,50 +191,57 @@ void checkapplylist_client(int client_socket, string id, Queue<string> &RecvQue,
         }
         else
         {
-            // 循环打印输出
-            cout << "————————————以下为群组申请列表————————————" << endl;
-            for (int i = 0; i < groupapply_Vector.size(); i++)
+            if (groupapply_Vector.empty())
             {
-                cout << groupapply_Vector[i] << endl;
+                cout << "暂无加群申请！" << endl;
             }
-            cout << "——————————————————————————————————————————" << endl;
-
-            // 同意加群申请
-            int state;
-            cout << "输入要编辑的用户昵称" << endl;
-            cin >> group.opponame;
-            cout << "同意---1 / 拒绝---0" << endl;
-            cin >> state;
-
-            // 发送数据
-            nlohmann::json sendJson_client = {
-                {"userid", group.userid},
-                {"groupid",group.groupid},
-                {"opponame", group.opponame},
-                {"state", state},
-                {"flag", AGREEAPPLY},
-            };
-            string sendJson_client_string = sendJson_client.dump();
-            SendMsg sendmsg;
-            sendmsg.SendMsg_client(client_socket, sendJson_client_string);
-
-            // 从消息队列里取消息
-            string buf = RecvQue.remove();
-            json parsed_data = json::parse(buf);
-            int state_ = parsed_data["state"];
-
-            // 判断是否操作成功
-            if (state_ == SUCCESS)
+            else
             {
-                cout << "操作成功！" << endl;
-            }
-            else if (state_ == FAIL)
-            {
-                cout << "不存在此好友申请！" << endl;
-            }
-            else if (state_ == USERNAMEUNEXIST)
-            {
-                cout << "查无此人! " << endl;
+                // 循环打印输出
+                cout << "————————————以下为群组申请列表————————————" << endl;
+                for (int i = 0; i < groupapply_Vector.size(); i++)
+                {
+                    cout << groupapply_Vector[i] << endl;
+                }
+                cout << "——————————————————————————————————————————" << endl;
+
+                // 同意加群申请
+                int state;
+                cout << "输入要编辑的用户昵称" << endl;
+                cin >> group.opponame;
+                cout << "同意---1 / 拒绝---0" << endl;
+                cin >> state;
+
+                // 发送数据
+                nlohmann::json sendJson_client = {
+                    {"userid", group.userid},
+                    {"groupid", group.groupid},
+                    {"opponame", group.opponame},
+                    {"state", state},
+                    {"flag", AGREEAPPLY},
+                };
+                string sendJson_client_string = sendJson_client.dump();
+                SendMsg sendmsg;
+                sendmsg.SendMsg_client(client_socket, sendJson_client_string);
+
+                // 从消息队列里取消息
+                string buf = RecvQue.remove();
+                json parsed_data = json::parse(buf);
+                int state_ = parsed_data["state"];
+
+                // 判断是否操作成功
+                if (state_ == SUCCESS)
+                {
+                    cout << "操作成功！" << endl;
+                }
+                else if (state_ == FAIL)
+                {
+                    cout << "不存在此好友申请！" << endl;
+                }
+                else if (state_ == USERNAMEUNEXIST)
+                {
+                    cout << "查无此人! " << endl;
+                }
             }
         }
     }
@@ -250,6 +257,67 @@ void checkapplylist_client(int client_socket, string id, Queue<string> &RecvQue,
     }
 }
 
+// 删除群成员
+void delgroupnum_client(int client_socket, string id, Queue<string> &RecvQue)
+{
+    // 先打查看群成员列表
+    string re = checkgroupnum_client(client_socket, id, RecvQue, 0);
+    if (re != "fail")
+    {
+        Group group;
+        group.groupid = re;
+        do
+        {
+            cout << "请输入你要删除的成员id：（警告：此操作仅对群主生效！）";
+            cin >> group.oppoid;
+            group.userid = id;
+            group.flag = DELGROUPNUM;
+            if (group.userid == group.oppoid)
+            {
+                cout << "不可删除自己！请重新输入！" << endl;
+            }
+        } while (group.userid == group.oppoid);
 
+        // 发送数据
+        nlohmann::json sendJson_client = {
+            {"oppoid", group.oppoid},
+            {"userid", group.userid},
+            {"groupid", group.groupid},
+            {"flag", group.flag},
+        };
+        string sendJson_client_string = sendJson_client.dump();
+        SendMsg sendmsg;
+        sendmsg.SendMsg_client(client_socket, sendJson_client_string);
+
+        // 从消息队列里取消息
+        string buf = RecvQue.remove();
+        json parsed_data = json::parse(buf);
+        int state_ = parsed_data["state"];
+
+        // 判断是否成功
+        if (state_ == USERNAMEUNEXIST)
+        {
+            cout << "该用户不存在!" << endl;
+        }
+        else if (state_ == NOTINGROUP)
+        {
+            cout << "该用户不在群聊中!" << endl;
+        }
+        else if (state_ == SUCCESS)
+        {
+            cout << "该用户删除成功！" << endl;
+        }
+        else if (state_ == FAIL) //**群主可以踢任何人，但管理员不能踢管理员和群主**
+        {
+            cout << "你权限不够，操作失败！" << endl;
+        }
+    }
+
+    cout << "按'q'返回上一级" << endl;
+    string a;
+    while (cin >> a && a != "q")
+    {
+    }
+}
 
 #endif

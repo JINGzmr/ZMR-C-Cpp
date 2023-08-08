@@ -68,7 +68,7 @@ void creatgroup_server(int fd, string buf)
     sendmsg.SendMsg_client(fd, json_string);
 }
 
-// 加入群组
+// 加入群组(通知管理员)
 void addgroup_server(int fd, string buf)
 {
     json parsed_data = json::parse(buf);

@@ -331,11 +331,12 @@ void managegroup_client(int client_socket, string id, Queue<string> &RecvQue)
             system("clear");
             manegegroupUI();
             break;
-        // case 29:
-        //     system("clear");
-        //     agreeapply_client(client_socket, id, RecvQue);
-        //     manegegroupUI();
-        //     break;
+        case 29:
+            system("clear");
+            delgroupnum_client(client_socket, id, RecvQue);
+            system("clear");
+            manegegroupUI();
+            break;
         // case 30:
         //     system("clear");
         //     checkgroupnum_client(client_socket, id, RecvQue, 1);

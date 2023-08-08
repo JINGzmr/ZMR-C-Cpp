@@ -254,7 +254,7 @@ void checkapplylist_server(int fd, string buf)
     sendmsg.SendMsg_client(fd, json_string);
 }
 
-// 同意加群申请(*****还没编辑*****)
+// 同意加群申请
 void agreeapply_server(int fd, string buf)
 {
     json parsed_data = json::parse(buf);
@@ -315,6 +315,129 @@ void agreeapply_server(int fd, string buf)
     string json_string = json_.dump();
     SendMsg sendmsg;
     sendmsg.SendMsg_client(fd, json_string);
+}
+
+// 删除群成员（通知被删除的成员）
+void delgroupnum_server(int fd, string buf)
+{
+    json parsed_data = json::parse(buf);
+    struct Group group;
+    group.groupid = parsed_data["groupid"];
+    group.userid = parsed_data["userid"];
+    group.oppoid = parsed_data["oppoid"];
+    printf("--- %s 用户将要把 %s 从 %s 群中踢出  ---\n", group.userid.c_str(), group.oppoid.c_str(), group.groupid.c_str());
+
+    Redis redis;
+    redis.connect();
+
+    if (redis.hashexists("userinfo", group.oppoid) != 1) // 用户不存在
+    {
+        cout << "该用户不存在" << endl;
+        group.type = NORMAL;
+        group.state = USERNAMEUNEXIST;
+    }
+    else if (redis.sismember(group.oppoid + ":group", group.groupid) != 1) // 对方不是群成员
+    {
+        cout << "该用户不在群聊中" << endl;
+        group.type = NORMAL;
+        group.state = NOTINGROUP;
+    }
+    else
+    {
+        if (redis.sismember(group.oppoid + ":mycreatgroup", group.groupid) == 1) // 对方是群主，动不了
+        {
+            cout << "权限不够，操作失败" << endl;
+            group.type = NORMAL;
+            group.state = FAIL;
+        }
+        else if (redis.sismember(group.oppoid + ":myadmingroup", group.groupid) == 1) // 对方是管理员，那么只能群主才能踢他
+        {
+            if (redis.sismember(group.userid + ":mycreatgroup", group.groupid) != 1) // 自己不是群主，无权操作
+            {
+                cout << "权限不够，操作失败" << endl;
+                group.type = NORMAL;
+                group.state = FAIL;
+            }
+            else if (redis.sismember("onlinelist", group.oppoid) == 1) // 对方在线
+            {
+                redis.sremvalue(group.groupid + ":admin", group.oppoid);        // 从群管理移除
+                redis.sremvalue(group.oppoid + ":myadmingroup", group.groupid); // 他管理的群移除
+                redis.sremvalue(group.oppoid + ":group", group.groupid);        // 他加的群移除
+                redis.sremvalue(group.groupid + ":num", group.oppoid);          // 从群成员里移除
+                cout << "该用户删除成功" << endl;
+
+                group.msg = "你被从“" + redis.gethash("groupid_name", group.groupid) + "”群请出";
+                group.type = NOTICE;
+                group.state = SUCCESS;
+            }
+            else // 离线
+            {
+                redis.sremvalue(group.groupid + ":admin", group.oppoid);        // 从群管理移除
+                redis.sremvalue(group.oppoid + ":myadmingroup", group.groupid); // 他管理的群移除
+                redis.sremvalue(group.oppoid + ":group", group.groupid);        // 他加的群移除
+                redis.sremvalue(group.groupid + ":num", group.oppoid);          // 从群成员里移除
+                cout << "该用户删除成功" << endl;
+
+                group.msg = "你被从“" + redis.gethash("groupid_name", group.groupid) + "”群请出";
+                group.type = NORMAL;
+                group.state = SUCCESS;
+
+                redis.saddvalue(group.oppoid + ":unreadnotice", group.msg);
+            }
+        }
+        else // 对方只是群成员
+        {
+            if (redis.sismember("onlinelist", group.oppoid) == 1) // 对方在线
+            {
+                redis.sremvalue(group.groupid + ":admin", group.oppoid);        // 从群管理移除
+                redis.sremvalue(group.oppoid + ":myadmingroup", group.groupid); // 他管理的群移除
+                redis.sremvalue(group.oppoid + ":group", group.groupid);        // 他加的群移除
+                redis.sremvalue(group.groupid + ":num", group.oppoid);          // 从群成员里移除
+                cout << "该用户删除成功" << endl;
+
+                group.msg = "你被从“" + redis.gethash("groupid_name", group.groupid) + "”群请出";
+                group.type = NOTICE;
+                group.state = SUCCESS;
+            }
+            else // 离线
+            {
+                redis.sremvalue(group.groupid + ":admin", group.oppoid);        // 从群管理移除
+                redis.sremvalue(group.oppoid + ":myadmingroup", group.groupid); // 他管理的群移除
+                redis.sremvalue(group.oppoid + ":group", group.groupid);        // 他加的群移除
+                redis.sremvalue(group.groupid + ":num", group.oppoid);          // 从群成员里移除
+                cout << "该用户删除成功" << endl;
+
+                group.msg = "你被从“" + redis.gethash("groupid_name", group.groupid) + "”群请出";
+                group.type = NORMAL;
+                group.state = SUCCESS;
+
+                redis.saddvalue(group.oppoid + ":unreadnotice", group.msg);
+            }
+        }
+    }
+
+    // 发送状态和信息类型
+    nlohmann::json json_ = {
+        {"type", group.type},
+        {"flag", 0},
+        {"state", group.state},
+        {"msg", group.msg},
+    };
+    string json_string = json_.dump();
+    SendMsg sendmsg;
+    if (group.type == NORMAL)
+    {
+        sendmsg.SendMsg_client(fd, json_string);
+    }
+    else if (group.type == NOTICE)
+    {
+        sendmsg.SendMsg_client(stoi(redis.gethash("usersocket", group.oppoid)), json_string);
+
+        // 改成正常的类型后给本用户的客户端发回去，不然客户端接不到事件的处理进度
+        json_["type"] = NORMAL;
+        json_string = json_.dump();
+        sendmsg.SendMsg_client(fd, json_string);
+    }
 }
 
 #endif
