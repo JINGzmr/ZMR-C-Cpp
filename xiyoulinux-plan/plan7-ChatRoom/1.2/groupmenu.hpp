@@ -337,11 +337,12 @@ void managegroup_client(int client_socket, string id, Queue<string> &RecvQue)
             system("clear");
             manegegroupUI();
             break;
-        // case 30:
-        //     system("clear");
-        //     checkgroupnum_client(client_socket, id, RecvQue, 1);
-        //     manegegroupUI();
-        //     break;
+        case 30:
+            system("clear");
+            delgroup_client(client_socket, id, RecvQue);
+            system("clear");
+            manegegroupUI();
+            break;
         case 16:
             system("clear");
             manegegroupUI();
@@ -350,7 +351,8 @@ void managegroup_client(int client_socket, string id, Queue<string> &RecvQue)
             manegegroupUI();
         }
     } while (num__ != 25); // 退出循环，返回上一级
-
+    
+    system("clear");
     return;
 }
 

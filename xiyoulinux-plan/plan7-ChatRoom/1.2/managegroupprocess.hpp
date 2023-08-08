@@ -440,4 +440,46 @@ void delgroupnum_server(int fd, string buf)
     }
 }
 
+// 解散群组
+void delgroup_server(int fd, string buf)
+{
+    json parsed_data = json::parse(buf);
+    struct Group group;
+    group.groupid = parsed_data["groupid"];
+    group.userid = parsed_data["userid"];
+    printf("--- %s 用户将要解散 %s 群 ---\n", group.userid.c_str(), group.groupid.c_str());
+
+    Redis redis;
+    redis.connect();
+
+    if (redis.hashexists("groupid_name", group.groupid) == 1 && redis.sismember(group.userid + ":group", group.groupid) == 1) // 存在该群且已加入
+    {
+        if (redis.sismember(group.userid + ":mycreatgroup", group.groupid) == 1) // 自己是群主
+        {
+            group.groupname = redis.gethash("groupid_name", group.groupid);
+            int m = redis.sremvalue("groupname", group.groupname);  // 所有的群聊名称
+            int n = redis.hashdel("groupname_id", group.groupname); // 群名找群id
+            int o = redis.hashdel("groupid_name", group.groupid);   // 群id找群名
+
+            cout << "解散成功！" << endl;
+            group.state == SUCCESS;
+        }
+        else
+        {
+            cout << "权限不够！" << endl;
+            group.state == FAIL;
+        }
+    }
+
+    // 发送状态和信息类型
+    nlohmann::json json_ = {
+        {"type", NORMAL},
+        {"flag", 0},
+        {"state", group.state},
+    };
+    string json_string = json_.dump();
+    SendMsg sendmsg;
+    sendmsg.SendMsg_client(fd, json_string);
+}
+
 #endif

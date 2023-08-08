@@ -706,6 +706,7 @@ void group_client(int client_socket, string id, Queue<string> &RecvQue)
         }
     } while (num_ != 25); // 退出循环，返回上一级
 
+    system("clear");
     return;
 }
 

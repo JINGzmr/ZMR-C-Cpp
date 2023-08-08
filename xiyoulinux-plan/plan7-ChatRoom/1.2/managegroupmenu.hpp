@@ -268,7 +268,7 @@ void delgroupnum_client(int client_socket, string id, Queue<string> &RecvQue)
         group.groupid = re;
         do
         {
-            cout << "请输入你要删除的成员id：（警告：此操作仅对群主生效！）";
+            cout << "请输入你要删除的成员id：（警告：此操作仅对群主、管理员生效！）";
             cin >> group.oppoid;
             group.userid = id;
             group.flag = DELGROUPNUM;
@@ -313,6 +313,52 @@ void delgroupnum_client(int client_socket, string id, Queue<string> &RecvQue)
         }
     }
 
+    cout << "按'q'返回上一级" << endl;
+    string a;
+    while (cin >> a && a != "q")
+    {
+    }
+}
+
+// 解散群组
+void delgroup_client(int client_socket, string id, Queue<string> &RecvQue)
+{
+    // 先打印出群聊信息
+    int re = checkgroup_client(client_socket, id, RecvQue, 0);
+    if (re == 0) // 没加入任何群组，则直接返回
+        return;
+
+    Group group;
+    cout << "请输入你要解散的群id：（警告：此操作仅对群主生效！）";
+    cin >> group.groupid;
+    group.userid = id;
+    group.flag = DELGROUP;
+
+    // 发送数据
+    nlohmann::json sendJson_client = {
+        {"groupid", group.groupid},
+        {"userid", group.userid},
+        {"flag", group.flag},
+    };
+    string sendJson_client_string = sendJson_client.dump();
+    SendMsg sendmsg;
+    sendmsg.SendMsg_client(client_socket, sendJson_client_string);
+
+    // 从消息队列里取消息
+    string buf = RecvQue.remove();
+    json parsed_data = json::parse(buf);
+    int state_ = parsed_data["state"];
+
+    // 判断是否成功
+    if (state_ == SUCCESS)
+    {
+        cout << "解散成功！" << endl;
+    }
+    else if (state_ == FAIL)
+    {
+        cout << "权限不够！" << endl;
+    }
+    
     cout << "按'q'返回上一级" << endl;
     string a;
     while (cin >> a && a != "q")
