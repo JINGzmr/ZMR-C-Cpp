@@ -24,10 +24,9 @@ void manegegroupUI(void)
     cout << "——————————————————————————————————————————————————" << endl;
     cout << "                      26.添加管理员（群主）          " << endl;
     cout << "                      27.删除管理员（群主）          " << endl;
-    cout << "                      28.查看申请列表               " << endl;
-    cout << "                      29.同意加群申请               " << endl;
-    cout << "                      30.删除群成员                 " << endl;
-    cout << "                      31.解散该群（群主）            " << endl;
+    cout << "                      28.编辑加群申请               " << endl;
+    cout << "                      29.删除群成员                 " << endl;
+    cout << "                      30.解散该群（群主）            " << endl;
     cout << "--------------------------------------------------" << endl;
     cout << "                      25.返回上一级                 " << endl;
     cout << "---------------------------------------------------" << endl;
@@ -153,7 +152,7 @@ void deladmin_client(int client_socket, string id, Queue<string> &RecvQue)
 }
 
 // 查看申请加群列表(包括同意请求一起写，但服务器那边要有不同的函数来处理)
-string checkapplylist_client(int client_socket, string id, Queue<string> &RecvQue, int fl)
+void checkapplylist_client(int client_socket, string id, Queue<string> &RecvQue, int fl)
 {
     // 先打印出群聊信息
     int re = checkgroup_client(client_socket, id, RecvQue, 0);
@@ -201,20 +200,19 @@ string checkapplylist_client(int client_socket, string id, Queue<string> &RecvQu
             cout << "——————————————————————————————————————————" << endl;
 
             // 同意加群申请
-            Group group;
             int state;
             cout << "输入要编辑的用户昵称" << endl;
             cin >> group.opponame;
             cout << "同意---1 / 拒绝---0" << endl;
             cin >> state;
-            group.userid = id;
 
             // 发送数据
             nlohmann::json sendJson_client = {
                 {"userid", group.userid},
-                {"flag", AGREEAPPLY},
+                {"groupid",group.groupid},
                 {"opponame", group.opponame},
                 {"state", state},
+                {"flag", AGREEAPPLY},
             };
             string sendJson_client_string = sendJson_client.dump();
             SendMsg sendmsg;
@@ -252,15 +250,6 @@ string checkapplylist_client(int client_socket, string id, Queue<string> &RecvQu
     }
 }
 
-// // 同意加群申请
-// void agreeapply_client(int client_socket, string id, Queue<string> &RecvQue)
-// {
-//     // 先打印申请信息
-//     string re_str = checkapplylist_client(client_socket, id, RecvQue, 0);
-//     if(re_str=="havegroup")//表明该用户有加入的群聊
-//     {
 
-//     }
-// }
 
 #endif

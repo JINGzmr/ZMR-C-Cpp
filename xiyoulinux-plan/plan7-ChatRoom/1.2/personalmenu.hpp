@@ -697,11 +697,6 @@ void group_client(int client_socket, string id, Queue<string> &RecvQue)
         //     delfriend_client(client_socket, id, RecvQue);
         //     groupmenuUI();
         //     break;
-        // case 25:
-        //     system("clear");
-        //     blackfriendlist_client(client_socket, id, RecvQue);
-        //     groupmenuUI();
-        //     break;
         case 16:
             system("clear");
             groupmenuUI();

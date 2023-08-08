@@ -254,69 +254,63 @@ void checkapplylist_server(int fd, string buf)
     sendmsg.SendMsg_client(fd, json_string);
 }
 
-
-// 同意加群申请(还没编辑*****)
+// 同意加群申请(*****还没编辑*****)
 void agreeapply_server(int fd, string buf)
 {
     json parsed_data = json::parse(buf);
-    struct Friend friend_;
-    friend_.id = parsed_data["id"];
-    string name = parsed_data["name"];
+    struct Group group;
+    group.userid = parsed_data["userid"];
+    group.groupid = parsed_data["groupid"];
+    group.opponame = parsed_data["opponame"];
     int state = parsed_data["state"];
-    printf("--- %s 用户编辑好友申请 ---\n", friend_.id.c_str());
-    cout << name << endl;
+    printf("--- %s 用户编辑 %s 群的加群申请 ---\n", group.userid.c_str(), group.groupid.c_str());
+    cout << group.opponame << endl;
     cout << state << endl;
 
     Redis redis;
     redis.connect();
 
-    string key = friend_.id + ":friends_apply";
+    string key = group.groupid + ":groupapply";
 
-    if (redis.sismember("username", name) != 1)
+    if (redis.sismember("username", group.opponame) != 1)
     {
         cout << "查无此人" << endl;
 
-        friend_.state = USERNAMEUNEXIST;
-        friend_.type = NORMAL;
+        group.state = USERNAMEUNEXIST;
     }
     else
     {
         // 得到发送请求的用户id
-        string applyfriend_id = redis.gethash("name_id", name); // 由昵称找id
+        group.oppoid = redis.gethash("name_id", group.opponame); // 由昵称找id
 
-        if (redis.sismember(key, applyfriend_id) != 1)
+        if (redis.sismember(key, group.oppoid) != 1)
         {
-            cout << "不存在此好友申请！" << endl;
-            friend_.state = FAIL;
-            friend_.type = NORMAL;
+            cout << "不存在此加群申请！" << endl;
+            group.state = FAIL;
         }
         else if (state == 1)
         {
             cout << "已同意" << endl;
-            redis.sremvalue(key, applyfriend_id); // 从申请列表中移除
-            string key1 = friend_.id + ":friends";
-            string key2 = applyfriend_id + ":friends";
-            redis.saddvalue(key1, applyfriend_id); // 对方成为自己好友
-            redis.saddvalue(key2, friend_.id);     // 自己成为对方好友
+            redis.sremvalue(key, group.oppoid);                      // 从申请列表中移除
+            redis.saddvalue(group.oppoid + ":group", group.groupid); // id对应用户所加的群聊
+            redis.saddvalue(group.groupid + ":num", group.oppoid);   // 群成员名单
 
-            friend_.state = SUCCESS;
-            friend_.type = NORMAL;
+            group.state = SUCCESS;
         }
         else
         {
             cout << "已拒绝" << endl;
-            redis.sremvalue(key, applyfriend_id); // 从申请列表中移除
+            redis.sremvalue(key, group.oppoid); // 从申请列表中移除
 
-            friend_.state = SUCCESS;
-            friend_.type = NORMAL;
+            group.state = SUCCESS;
         }
     }
 
     // 发送状态和信息类型
     nlohmann::json json_ = {
-        {"type", friend_.type},
+        {"type", NORMAL},
         {"flag", 0},
-        {"state", friend_.state},
+        {"state", group.state},
     };
     string json_string = json_.dump();
     SendMsg sendmsg;

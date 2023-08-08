@@ -341,17 +341,6 @@ void managegroup_client(int client_socket, string id, Queue<string> &RecvQue)
         //     checkgroupnum_client(client_socket, id, RecvQue, 1);
         //     manegegroupUI();
         //     break;
-        // case 31:
-        //     system("clear");
-        //     managegroup_client(client_socket, id, RecvQue);
-        //     system("clear");
-        //     manegegroupUI();
-        //     break;
-        // case 25:
-        //     system("clear");
-        //     blackfriendlist_client(client_socket, id, RecvQue);
-        //     manegegroupUI();
-        //     break;
         case 16:
             system("clear");
             manegegroupUI();
