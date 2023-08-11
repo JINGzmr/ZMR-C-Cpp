@@ -384,7 +384,7 @@ void delgroupnum_server(int fd, string buf)
 
                 redis.saddvalue(group.oppoid + ":unreadnotice", group.msg);
             }
-        }
+        } 
         else // 对方只是群成员
         {
             if (redis.sismember("onlinelist", group.oppoid) == 1) // 对方在线
