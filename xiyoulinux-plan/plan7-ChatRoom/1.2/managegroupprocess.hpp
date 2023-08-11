@@ -481,5 +481,5 @@ void delgroup_server(int fd, string buf)
     SendMsg sendmsg;
     sendmsg.SendMsg_client(fd, json_string);
 }
-
+ 
 #endif
