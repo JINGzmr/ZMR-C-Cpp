@@ -173,12 +173,14 @@ void checkgroup_server(int fd, string buf)
     struct Group group;
     group.userid = parsed_data["userid"];
     printf("--- %s 用户查看已加入的群组 ---\n", group.userid.c_str());
-
+cout<< "1"<< endl;
     Redis redis;
     redis.connect();
+cout<< "2"<< endl;
 
     string key = group.userid + ":group";
     int len = redis.scard(key);
+cout<< "3"<< endl;
 
     redisReply **arry = redis.smembers(key);
     vector<string> groupname_Vector;  // 放群名的容器
@@ -188,6 +190,7 @@ void checkgroup_server(int fd, string buf)
     groupname_Vector.clear();
     groupid_Vector.clear();
     groupposition_Vector.clear();
+cout<< "4"<< endl;
 
     // 把数据从数据库转移到容器里
     for (int i = 0; i < len; i++)
@@ -216,6 +219,7 @@ void checkgroup_server(int fd, string buf)
 
         freeReplyObject(arry[i]);
     }
+cout<< "5"<< endl;
 
     // 发送状态和信息类型
     nlohmann::json json_ = {
@@ -228,6 +232,8 @@ void checkgroup_server(int fd, string buf)
     string json_string = json_.dump();
     SendMsg sendmsg;
     sendmsg.SendMsg_client(fd, json_string);
+cout<< "6"<< endl;
+
 }
 
 // 退出已加入的群组（就不通知管理员了）

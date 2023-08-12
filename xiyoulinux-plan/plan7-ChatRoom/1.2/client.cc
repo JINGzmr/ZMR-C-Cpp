@@ -12,14 +12,28 @@
 #include <pthread.h>
 #include <csignal>
 
-#define PORT 8080
 #define ServerAddr "127.0.0.1"
+#define PORT 8080
 
-int main()
+int main(int argc, char *argv[])
 {
     // 忽略SIGINT和SIGTSTP信号
-    signal(SIGINT, SIG_IGN);  // 忽略Ctrl+C
+    signal(SIGINT, SIG_IGN); // 忽略Ctrl+C
     // signal(SIGTSTP, SIG_IGN); // 忽略Ctrl+Z
+
+    // 默认值
+    string serverAddr = ServerAddr;
+    int port = PORT;
+
+    // 解析命令行参数
+    if (argc >= 2)
+    {
+        serverAddr = argv[1];
+    }
+    if (argc >= 3)
+    {
+        port = stoi(argv[2]);
+    }
 
     // 创建连接对象
     int client_socket = socket(AF_INET, SOCK_STREAM, 0);
@@ -33,10 +47,10 @@ int main()
     sockaddr_in server_address{};
     memset(&server_address, 0, sizeof(server_address));
     server_address.sin_family = AF_INET;
-    server_address.sin_port = htons(PORT);
-    if (inet_pton(AF_INET, ServerAddr, &server_address.sin_addr) <= 0)
+    server_address.sin_port = htons(port);
+    if (inet_pton(AF_INET, serverAddr.c_str(), &server_address.sin_addr) <= 0)
     {
-        perror("invalid address");
+        perror("请输入正确的ip地址及端口号！");
         return EXIT_FAILURE;
     }
 

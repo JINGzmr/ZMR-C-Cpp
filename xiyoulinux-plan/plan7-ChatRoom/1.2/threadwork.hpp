@@ -19,18 +19,23 @@ void recvfunc(int fd, string id, Queue<string> *RecvQue)
 {
     while (1)
     {
+cout << "-1" << endl;
+
         // 接收服务器返回的数据
         string recvJson_buf = "";
         RecvMsg recvmsg;
+cout << "0" << endl;
+
         while (recvJson_buf.empty()) // 不为空时，表面本次接收到了消息，退出循环
         {
             recvmsg.RecvMsg_client(fd, recvJson_buf);
         }
-
+cout << "1" << endl;
         // 反序列化
         json parsed_data = json::parse(recvJson_buf);
         int type = parsed_data["type"];
         int flag = parsed_data["flag"];
+cout << "2" << endl;
 
         if (flag == LOGOUT)
             return;
@@ -79,6 +84,8 @@ void recvfunc(int fd, string id, Queue<string> *RecvQue)
             RecvQue->add(recvJson_buf);
 
         }
+cout << "3" << endl;
+
     }
 }
 

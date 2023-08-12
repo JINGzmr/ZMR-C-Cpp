@@ -21,12 +21,27 @@
 
 using json = nlohmann::json;
 #define PORT 8080
+#define ServerAddr "127.0.0.1"
 const int MAX_CONN = 1024; // 最大连接数
 
 void work(void *arg);
 
-int main()
+int main(int argc, char *argv[])
 {
+    // 默认值
+    string serverAddr = ServerAddr;
+    int port = PORT;
+
+    // 解析命令行参数
+    if (argc >= 2)
+    {
+        serverAddr = argv[1];
+    }
+    if (argc >= 3)
+    {
+        port = stoi(argv[2]);
+    }
+
     // 创建线程池(24个线程)
     ThreadPool threadpool(24);
 
@@ -41,9 +56,12 @@ int main()
     // 绑定本地ip和端口
     struct sockaddr_in addr;
     addr.sin_family = AF_INET;
-    addr.sin_addr.s_addr = htonl(INADDR_ANY);
-    addr.sin_port = htons(PORT);
-
+    addr.sin_port = htons(port);
+    if(inet_pton(AF_INET, serverAddr.c_str(), &addr.sin_addr.s_addr)<=0)
+    {
+        perror("invalid address");
+        return EXIT_FAILURE;
+    }
     int ret = bind(sockfd, (struct sockaddr *)&addr, sizeof(addr));
     if (sockfd < 0)
     {
