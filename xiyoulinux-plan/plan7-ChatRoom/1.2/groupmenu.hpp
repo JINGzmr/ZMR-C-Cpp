@@ -351,13 +351,139 @@ void managegroup_client(int client_socket, string id, Queue<string> &RecvQue)
             manegegroupUI();
         }
     } while (num__ != 25); // 退出循环，返回上一级
-    
+
     system("clear");
     return;
 }
 
+// 查看群组聊天记录
+string historygroupchat_client(int client_socket, string id, Queue<string> &RecvQue, int fl)
+{
+    // 先打印出群聊信息
+    int re = checkgroup_client(client_socket, id, RecvQue, 0);
+    if (re != 0)
+    {
+        Group group;
+        cout << "请输入你要查看聊天记录的群id：";
+        cin >> group.groupid;
+        group.userid = id;
+        group.flag = HISTORYGROUPCHAT;
+
+        // 发送数据
+        nlohmann::json sendJson_client = {
+            {"userid", group.userid},
+            {"groupid", group.groupid},
+            {"flag", group.flag},
+        };
+        string sendJson_client_string = sendJson_client.dump();
+        SendMsg sendmsg;
+        sendmsg.SendMsg_client(client_socket, sendJson_client_string);
+
+        // 从消息队列里取消息
+        string buf = RecvQue.remove();
+        json parsed_data = json::parse(buf);
+        vector<string> historygroupchat_Vector = parsed_data["vector"];
+        int state_ = parsed_data["state"];
+        string str;
+
+        if (state_ == FAIL)
+        {
+            cout << "历史消息获取失败！请检查群id是否正确" << endl;
+            str = "fail";
+        }
+        else if (historygroupchat_Vector.empty())
+        {
+            cout << "———————————————暂无历史消息——————————————" << endl;
+            str = group.groupid;
+        }
+        else
+        {
+            // 循环打印输出
+            cout << "————————————————————————————————————————————————" << endl;
+            for (int i = historygroupchat_Vector.size() - 1; i >= 0; i--)
+            {
+                json parsed_data = json::parse(historygroupchat_Vector[i]); // 容器里的元素还是json类型的
+                struct Chatinfo chatinfo;
+                chatinfo.name = parsed_data["name"];
+                chatinfo.msg = parsed_data["msg"];
+                // chatinfo.time = parsed_data["time"]; // 消息发送的时间最后来
+
+                cout << chatinfo.name << ": " << chatinfo.msg << endl;
+            }
+            cout << "————————————————以上为历史消息———————————————————" << endl;
+            str = group.groupid;
+        }
+
+        if (fl == 1)
+        {
+            cout << "按'q'返回上一级" << endl;
+            string a;
+            while (cin >> a && a != "q")
+                str = "";
+        }
+
+        return str; // 返回所选择的群聊id
+    }
+
+    cout << "按'q'返回上一级" << endl;
+    string a;
+    while (cin >> a && a != "q")
+    {
+    }
+    return "";
+}
 
 // 选择群组聊天
+void groupchat_client(int client_socket, string id, Queue<string> &RecvQue)
+{
+    Group group;
+    // 先打印出历史消息（包括选择群聊）
+    group.groupid = historygroupchat_client(client_socket, id, RecvQue, 0);
+    if (group.groupid != "fail" && group.groupid != "") // 说明该群id存在
+    {
 
+        chatgroup = group.groupid;
+
+        group.msg;
+        group.userid = id;
+        group.flag = GROUPCHAT;
+        cout << "(开始聊天吧，'quit'退出)" << endl;
+        while (cin >> group.msg && group.msg != "quit") // 输入为quit时退出聊天
+        {
+            // 发送数据
+            nlohmann::json sendJson_client = {
+                {"groupid", group.groupid},
+                {"userid", group.userid},
+                {"flag", group.flag},
+                {"msg", group.msg},
+            };
+            string sendJson_client_string = sendJson_client.dump();
+            SendMsg sendmsg;
+            sendmsg.SendMsg_client(client_socket, sendJson_client_string);
+
+            // 从消息队列里取消息
+            string buf = RecvQue.remove();
+            json parsed_data = json::parse(buf);
+            int state_ = parsed_data["state"];
+
+            if (state_ == FAIL)
+            {
+                cout << "消息发送失败,请检查是否 你已被移除群聊 或 该群聊已被解散" << endl;
+                cout << "输入quit退出聊天" << endl;
+            }
+        }
+
+        chatgroup = "";
+    }
+    else if (group.groupid != "")
+    {
+        cout << "按'q'返回上一级" << endl;
+        string a;
+        while (cin >> a && a != "q")
+        {
+        }
+    }
+}
 
 #endif
+

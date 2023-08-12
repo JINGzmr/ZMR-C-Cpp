@@ -384,7 +384,7 @@ void delgroupnum_server(int fd, string buf)
 
                 redis.saddvalue(group.oppoid + ":unreadnotice", group.msg);
             }
-        } 
+        }
         else // 对方只是群成员
         {
             if (redis.sismember("onlinelist", group.oppoid) == 1) // 对方在线
@@ -440,7 +440,7 @@ void delgroupnum_server(int fd, string buf)
     }
 }
 
-// 解散群组
+// 解散群组(不通知)
 void delgroup_server(int fd, string buf)
 {
     json parsed_data = json::parse(buf);
@@ -481,5 +481,7 @@ void delgroup_server(int fd, string buf)
     SendMsg sendmsg;
     sendmsg.SendMsg_client(fd, json_string);
 }
- 
+
+
+
 #endif

@@ -61,7 +61,7 @@ void login_server(int fd, string buf)
             redis.hsetValue("userinfo", user.id, userjson_string);
             redis.saddvalue("onlinelist", user.id);                   // 在线列表
             redis.hsetValue("usersocket", user.id, to_string(fd)); // 存套接字（用to_string将int类型转换成string类型）-->客户端与服务器连接时才会产生套接字，所以只记录在线用户的套接字（则也只是为了能实时通知）
-
+            redis.hsetValue("usersocket_id", to_string(fd), user.id);
             //------------登录成功后，是客户端进入下一步，服务端只需要根据客户端发来的请求 调用相应的函数 来处理即可-------------
             // 现在这个登录的任务服务器处理完毕了，也就可以返回上一级了
             // 该线程也就被回收了^_^

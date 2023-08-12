@@ -7,8 +7,11 @@
 #include <iostream>
 using namespace std;
 
+// int epld;
+
 // string chatid = "";
 string chatname = "";
+string chatgroup = "";
 
 // 注册登录（哈希存，键：userinfo，字段：用户id，值：User的json字符串）
 struct User
@@ -35,7 +38,7 @@ struct Friend
     int online;      // 是否在线（在线ONLINE，不在OFFLINE）
 };
 
-// 聊天消息
+// 聊天消息(群聊也ok)
 struct Chatinfo
 {
     string name;
@@ -68,5 +71,14 @@ string produce_id(void)
     string id = to_string(timestamp);
     return id;
 }
+
+// 根据send和recv函数返回值判断客户端是否正常 来对socket、redis描述符、用户在线状态进行更改
+// 函数部分：
+void errorprocess(int fd)
+{
+
+}
+
+
 
 #endif

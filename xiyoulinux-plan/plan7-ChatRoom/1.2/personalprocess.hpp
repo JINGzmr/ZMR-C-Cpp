@@ -37,7 +37,7 @@ void showunreadnotice_server(int fd, string buf)
         unreadnotice_Vector.push_back(unreadnotice);
 
         freeReplyObject(arry[i]);
-        redis.sremvalue(key,unreadnotice);
+        redis.sremvalue(key, unreadnotice);
     }
 
     // 发送状态和信息类型
@@ -70,7 +70,8 @@ void logout_server(int fd, string buf)
     userjson_string = parsed_data.dump();
     redis.hsetValue("userinfo", id, userjson_string);
     redis.sremvalue("onlinelist", id); // 把用户从在线列表中移除
-    redis.hashdel("usersocket", id);   // 把用户的套接字移除
+    redis.hashdel("usersocket_id", redis.gethash("usersocket",id));
+    redis.hashdel("usersocket", id); // 把用户的套接字移除
 
     // 发送状态和信息类型
     nlohmann::json json_ = {
@@ -378,7 +379,7 @@ void delfriend_server(int fd, string buf)
     string key = friend_.id + ":friends";
     string key_ = friend_.oppoid + ":friends";
     string bkey = friend_.id + ":bfriends";
-    
+
     //*************还要删除聊天记录****************
     if (redis.sismember(key, friend_.oppoid) == 1 && redis.sremvalue(key, friend_.oppoid) == 3 && redis.sremvalue(key_, friend_.id) == 3 && redis.sremvalue(bkey, friend_.oppoid))
     {
@@ -582,7 +583,7 @@ void chatfriend_server(int fd, string buf)
 
     // 看是否拉黑对方和被对方拉黑
     string bkey = friend_.id + ":bfriends";
-    string oppobkey = friend_.oppoid + ":bfriends"; 
+    string oppobkey = friend_.oppoid + ":bfriends";
     if (redis.sismember(bkey, friend_.oppoid) == 1 || redis.sismember(oppobkey, friend_.id) == 1) // 被拉黑
     {
         friend_.type = NORMAL;

@@ -687,16 +687,18 @@ void group_client(int client_socket, string id, Queue<string> &RecvQue)
             system("clear");
             groupmenuUI();
             break;
-        // case 23:
-        //     system("clear");
-        //     addblack_client(client_socket, id, RecvQue);
-        //     groupmenuUI();
-        //     break;
-        // case 24:
-        //     system("clear");
-        //     delfriend_client(client_socket, id, RecvQue);
-        //     groupmenuUI();
-        //     break;
+        case 23:
+            system("clear");
+            groupchat_client(client_socket, id, RecvQue);
+            system("clear");
+            groupmenuUI();
+            break;
+        case 24:
+            system("clear");
+            historygroupchat_client(client_socket, id, RecvQue, 1);
+            system("clear");
+            groupmenuUI();
+            break;
         case 16:
             system("clear");
             groupmenuUI();

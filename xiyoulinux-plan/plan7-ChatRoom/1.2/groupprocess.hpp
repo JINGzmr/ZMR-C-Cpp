@@ -184,6 +184,10 @@ void checkgroup_server(int fd, string buf)
     vector<string> groupname_Vector;  // 放群名的容器
     vector<string> groupid_Vector;    // 放群id的容器
     vector<int> groupposition_Vector; // 放该用户在目标群职位的容器
+    // 将容器置空
+    groupname_Vector.clear();
+    groupid_Vector.clear();
+    groupposition_Vector.clear();
 
     // 把数据从数据库转移到容器里
     for (int i = 0; i < len; i++)
@@ -243,9 +247,9 @@ void outgroup_server(int fd, string buf)
         if (redis.sismember(group.userid + ":mycreatgroup", group.groupid) == 1) // 自己是群组，则解散该群
         {
             group.groupname = redis.gethash("groupid_name", group.groupid);
-            int m = redis.sremvalue("groupname", group.groupname);                 // 所有的群聊名称
-            int n = redis.hashdel("groupname_id", group.groupname);                // 群名找群id
-            int o = redis.hashdel("groupid_name", group.groupid);                  // 群id找群名
+            int m = redis.sremvalue("groupname", group.groupname);  // 所有的群聊名称
+            int n = redis.hashdel("groupname_id", group.groupname); // 群名找群id
+            int o = redis.hashdel("groupid_name", group.groupid);   // 群id找群名
             // int s = redis.sremvalue(group.userid + "mycreatgroup", group.groupid); // id对应用户创建的群聊
         }
         else
@@ -354,6 +358,154 @@ void checkgroupnum_server(int fd, string buf)
     string json_string = json_.dump();
     SendMsg sendmsg;
     sendmsg.SendMsg_client(fd, json_string);
+}
+
+// 查看群组聊天记录
+void historygroupchat_server(int fd, string buf)
+{
+    json parsed_data = json::parse(buf);
+    struct Group group;
+    group.groupid = parsed_data["groupid"];
+    group.userid = parsed_data["userid"];
+    printf("--- %s 用户将要查看 %s 群的历史消息 ---\n", group.userid.c_str(), group.groupid.c_str());
+
+    Redis redis;
+    redis.connect();
+
+    string key = group.groupid + ":historygroupchat";
+    vector<string> historygroupchat_Vector; // 放聊天记录的容器
+
+    if (redis.hashexists("groupid_name", group.groupid) == 1 && redis.sismember(group.userid + ":group", group.groupid) == 1) // 存在该群且已加入
+    {
+        int len = redis.llen(key);
+        redisReply **arry = redis.lrange(key);
+
+        // 把数据从数据库转移到容器里
+        for (int i = 0; i < len; i++)
+        {
+            // 得到历史消息json的字符串
+            string msg = arry[i]->str;
+
+            historygroupchat_Vector.push_back(msg);
+
+            freeReplyObject(arry[i]);
+        }
+        group.state = SUCCESS;
+    }
+    else
+    {
+        cout << "查看失败" << endl;
+        group.state = FAIL;
+    }
+    // 发送状态和信息类型
+    nlohmann::json json_ = {
+        {"type", NORMAL},
+        {"flag", 0},
+        {"vector", historygroupchat_Vector},
+        {"state", group.state},
+    };
+    string json_string = json_.dump();
+    SendMsg sendmsg;
+    sendmsg.SendMsg_client(fd, json_string);
+}
+
+// 选择群组聊天
+void groupchat_server(int fd, string buf)
+{
+    json parsed_data = json::parse(buf);
+    struct Group group;
+    group.groupid = parsed_data["groupid"];
+    group.userid = parsed_data["userid"];
+    group.msg = parsed_data["msg"];
+    printf("--- %s 用户向 %s 群组发送聊天消息 ---\n", group.userid.c_str(), group.groupid.c_str());
+    cout << group.msg << endl;
+
+    Redis redis;
+    redis.connect();
+    nlohmann::json json_;
+
+    // 看是否还在群组中（会不会聊天到一半被踢出群聊或群聊被解散）
+    if (redis.hashexists("groupid_name", group.groupid) == 1 && redis.sismember(group.userid + ":group", group.groupid) == 1) // 该群存在且已加入
+    {
+        group.groupname = redis.gethash("groupid_name", group.groupid);
+        string key = group.groupid + ":num";
+        string historykey = group.groupid + ":historygroupchat";
+        int len = redis.scard(key);
+        redisReply **arry = redis.smembers(key);
+
+        json_ = {
+            {"name", redis.gethash("id_name", group.userid)},
+            {"msg", group.msg},
+        };
+        string msg = json_.dump();
+        redis.lpush(historykey, msg);
+
+        // 把数据从数据库转移到容器里
+        for (int i = 0; i < len; i++)
+        {
+            // 得到群聊成员id
+            string groupnumid = arry[i]->str;
+            if (redis.hashexists("userinfo", groupnumid) != 1) // 用户id不存在，说明该用户已注销，但在该用户加入的群的数据库里仍存着（不好删）
+                continue;
+
+            string unkey = groupnumid + ":unreadnotice"; // 该群所有人的未读通知
+
+            // 群聊每个人是否在线
+            if (redis.sismember("onlinelist", groupnumid) == 1) // 在线
+            {
+                cout << redis.gethash("id_name", groupnumid) << "在线" << endl;
+                group.type = NOTICE;
+            }
+            else // 不在线：加入数据库，等用户上线时提醒
+            {
+                cout << redis.gethash("id_name", groupnumid) << "不在线" << endl;
+                redis.saddvalue(unkey, group.groupname + "有新消息"); // 加入到对方的未读通知消息队列里
+                group.type = NORMAL;
+            }
+
+            if (groupnumid == group.userid) // 别再给自己通知一遍了
+            {
+                group.type = NORMAL;
+            }
+                
+            // 发送状态和信息类型
+            json_ = {
+                {"type", group.type},
+                {"state", group.state},
+                {"msg", group.msg},
+                {"name", redis.gethash("id_name", group.userid)},
+                {"groupname", group.groupname},
+                {"groupid", group.groupid},
+                {"flag", GROUP},
+            };
+            string json_string = json_.dump();
+            SendMsg sendmsg;
+            if (group.type == NOTICE)
+            {
+                sendmsg.SendMsg_client(stoi(redis.gethash("usersocket", groupnumid)), json_string);
+            }
+            else
+            {
+                sendmsg.SendMsg_client(fd, json_string);
+            }
+        }
+    }
+    else
+    {
+        group.type = NORMAL;
+        group.state = FAIL;
+
+        // 发送状态和信息类型
+        json_ = {
+            {"type", group.type},
+            {"state", group.state},
+            {"flag", 0},
+        };
+        string json_string = json_.dump();
+        SendMsg sendmsg;
+        sendmsg.SendMsg_client(fd, json_string);
+    }
+    cout << "here" << endl;
 }
 
 #endif

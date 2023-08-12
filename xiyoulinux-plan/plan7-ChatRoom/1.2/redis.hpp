@@ -23,6 +23,7 @@ using namespace std;
 // id与昵称对应 id_name为键，字段id，值：昵称
 // 昵称与id对应 name_id为键，字段昵称，值：id
 // id与套接字对应 usersocket为键，字段为id，值：socket
+// 套接字与id对应 usersocket_id为键，字段为socket，值：id
 
 // id与群名对应 groupname_id,name,id
 // 群名与id对应 groupid_name,id,name
@@ -45,8 +46,8 @@ using namespace std;
 
 
 // list表中：
-// 历史消息：小的id+大的id+historychat为键，消息的结构体为值
-// 群历史消息：groupid为键，消息的结构体为值
+// 历史消息：小的id+大的id+:historychat为键，消息的结构体为值
+// 群历史消息：groupid+:historygroupchat为键，消息的结构体为值
 
 class Redis
 {
