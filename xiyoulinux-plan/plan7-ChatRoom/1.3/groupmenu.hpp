@@ -39,7 +39,7 @@ void creatgroup_client(int client_socket, string id, Queue<string> &RecvQue)
 {
     Group group;
     cout << "输入你要创建的群组名称：(不可有空格或其他非法字符)" << endl;
-    group.groupname= getInputWithoutCtrlD();
+    group.groupname = getInputWithoutCtrlD();
     group.ownerid = id;
     group.flag = CREATGROUP;
 
@@ -81,7 +81,7 @@ void addgroup_client(int client_socket, string id, Queue<string> &RecvQue)
     Group group;
 
     cout << "请输入你要加入的群组ID：";
-     group.groupid= getInputWithoutCtrlD();
+    group.groupid = getInputWithoutCtrlD();
     group.userid = id;
     group.flag = ADDGROUP;
 
@@ -170,7 +170,7 @@ int checkgroup_client(int client_socket, string id, Queue<string> &RecvQue, int 
     {
         cout << "按'q'返回上一级" << endl;
         string a;
-        while ((a= getInputWithoutCtrlD()) != "q")
+        while ((a = getInputWithoutCtrlD()) != "q")
         {
         }
         return re;
@@ -189,7 +189,7 @@ void outgroup_client(int client_socket, string id, Queue<string> &RecvQue)
 
     Group group;
     cout << "请输入你要退出的群id：（警告：若你为该群的群主，则直接解散该群！）";
-    group.groupid= getInputWithoutCtrlD();
+    group.groupid = getInputWithoutCtrlD();
     group.userid = id;
     group.flag = OUTGROUP;
 
@@ -229,7 +229,7 @@ string checkgroupnum_client(int client_socket, string id, Queue<string> &RecvQue
 
     Group group;
     cout << "请输入你要查看的群id：";
-    group.groupid= getInputWithoutCtrlD();
+    group.groupid = getInputWithoutCtrlD();
     group.userid = id;
     group.flag = CHECKGROUPNUM;
 
@@ -286,7 +286,7 @@ string checkgroupnum_client(int client_socket, string id, Queue<string> &RecvQue
     {
         cout << "按'q'返回上一级" << endl;
         string a;
-        while ((a= getInputWithoutCtrlD()) != "q")
+        while ((a = getInputWithoutCtrlD()) != "q")
         {
         }
         return "";
@@ -347,9 +347,11 @@ void managegroup_client(int client_socket, string id, Queue<string> &RecvQue)
         case 16:
             system("clear");
             manegegroupUI();
+            break;
         default:
             cout << "无效的数字，请重新输入！" << endl;
             manegegroupUI();
+            break;
         }
     } while (num__ != 25); // 退出循环，返回上一级
 
@@ -366,7 +368,7 @@ string historygroupchat_client(int client_socket, string id, Queue<string> &Recv
     {
         Group group;
         cout << "请输入你要查看聊天记录的群id：";
-        group.groupid= getInputWithoutCtrlD();
+        group.groupid = getInputWithoutCtrlD();
         group.userid = id;
         group.flag = HISTORYGROUPCHAT;
 
@@ -419,7 +421,7 @@ string historygroupchat_client(int client_socket, string id, Queue<string> &Recv
         {
             cout << "按'q'返回上一级" << endl;
             string a;
-            while ((a= getInputWithoutCtrlD()) != "q")
+            while ((a = getInputWithoutCtrlD()) != "q")
                 str = "";
         }
 
@@ -428,7 +430,7 @@ string historygroupchat_client(int client_socket, string id, Queue<string> &Recv
 
     cout << "按'q'返回上一级" << endl;
     string a;
-    while ((a= getInputWithoutCtrlD()) != "q")
+    while ((a = getInputWithoutCtrlD()) != "q")
     {
     }
     return "";
@@ -449,8 +451,11 @@ void groupchat_client(int client_socket, string id, Queue<string> &RecvQue)
         group.userid = id;
         group.flag = GROUPCHAT;
         cout << "(开始聊天吧，按'Esc'键退出)" << endl;
-        while ((group.msg= getInputWithoutCtrlD()) != "esc") // 按'Esc'键退出聊天
+        while ((group.msg = getInputWithoutCtrlD()) != "esc") // 按'Esc'键退出聊天
         {
+            if (group.msg == "")
+                continue;
+                
             // 发送数据
             nlohmann::json sendJson_client = {
                 {"groupid", group.groupid},
@@ -480,11 +485,10 @@ void groupchat_client(int client_socket, string id, Queue<string> &RecvQue)
     {
         cout << "按'q'返回上一级" << endl;
         string a;
-        while ((a= getInputWithoutCtrlD()) != "q")
+        while ((a = getInputWithoutCtrlD()) != "q")
         {
         }
     }
 }
 
 #endif
-

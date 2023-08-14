@@ -297,7 +297,7 @@ void agreeapply_server(int fd, string buf)
 
             group.state = SUCCESS;
         }
-        else
+        else if(state == "2")
         {
             cout << "已拒绝" << endl;
             redis.sremvalue(key, group.oppoid); // 从申请列表中移除

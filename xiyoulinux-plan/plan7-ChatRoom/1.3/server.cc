@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
     struct sockaddr_in addr;
     addr.sin_family = AF_INET;
     addr.sin_port = htons(port);
-    if(inet_pton(AF_INET, serverAddr.c_str(), &addr.sin_addr.s_addr)<=0)
+    if (inet_pton(AF_INET, serverAddr.c_str(), &addr.sin_addr.s_addr) <= 0)
     {
         perror("invalid address");
         return EXIT_FAILURE;
@@ -227,6 +227,10 @@ void work(void *arg)
     {
         signout_server(fd, recvJson_buf);
     }
+    else if (flag_ == FINDPASSWORD) // 注销
+    {
+        findpassword_server(fd, recvJson_buf);
+    }
     else if (flag_ == SHOUNOTICE) // 展示离线消息
     {
         showunreadnotice_server(fd, recvJson_buf);
@@ -274,6 +278,10 @@ void work(void *arg)
     else if (flag_ == CHATFRIEND)
     {
         chatfriend_server(fd, recvJson_buf);
+    }
+    else if (flag_ == PERSONALINFO)
+    {
+        personalinfo_server(fd, recvJson_buf);
     }
     else if (flag_ == CREATGROUP)
     {

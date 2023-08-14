@@ -26,6 +26,7 @@ void blackfriendlist_client(int client_socket, string id, Queue<string> &RecvQue
 void blackfriendedit_client(int client_socket, string id, Queue<string> &RecvQue);
 string historychat_client(int client_socket, string id, Queue<string> &RecvQue, int fl);
 void chatfriend_client(int client_socket, string id, Queue<string> &RecvQue);
+void personalinfo_client(int client_socket, string id, Queue<string> &RecvQue);
 void group_client(int client_socket, string id, Queue<string> &RecvQue);
 
 void personalmenuUI(void)
@@ -34,18 +35,18 @@ void personalmenuUI(void)
     cout << "---------------------  聊天室  --------------------" << endl;
     cout << "——————————————————————————————————————————————————" << endl;
     cout << "                      4.添加好友                   " << endl;
-    cout << "         51.查看好友申请列表   52.编辑好友申请         " << endl;
+    cout << "                      5.编辑好友申请                " << endl;
     cout << "                      6.选择好友私聊                " << endl;
     cout << "                      7.查看历史聊天记录            " << endl;
     cout << "                      8.好友信息                   " << endl;
     cout << "                      9.屏蔽好友                   " << endl;
     cout << "                      10.删除好友                  " << endl;
     cout << "         111.查看屏蔽好友列表   112.编辑屏蔽好友       " << endl;
+    cout << "                      12.个人信息                   " << endl;
     cout << "--------------------------------------------------" << endl;
-    cout << "                      12.群聊                      " << endl;
+    cout << "                      13.群聊                      " << endl;
     cout << "---------------------------------------------------" << endl;
-    cout << "                      13.发送文件                   " << endl;
-    cout << "                      14.接受文件                   " << endl;
+    cout << "                      14.文件传输                   " << endl;
     cout << "---------------------------------------------------" << endl;
     cout << "                      15.退出登录                   " << endl;
     cout << "---------------------------------------------------" << endl;
@@ -76,12 +77,7 @@ void messagemenu(int client_socket, string id, Queue<string> &RecvQue)
             addfriend_client(client_socket, id, RecvQue);
             personalmenuUI();
             break;
-        case 51:
-            system("clear");
-            friendapplylist_client(client_socket, id, RecvQue);
-            personalmenuUI();
-            break;
-        case 52:
+        case 5:
             friendapplyedit_client(client_socket, id, RecvQue);
             personalmenuUI();
             break;
@@ -122,6 +118,12 @@ void messagemenu(int client_socket, string id, Queue<string> &RecvQue)
             personalmenuUI();
             break;
         case 12:
+            system("clear");
+            personalinfo_client(client_socket, id, RecvQue);
+            system("clear");
+            personalmenuUI();
+            break;
+        case 13:
             system("clear");
             group_client(client_socket, id, RecvQue);
             personalmenuUI();
@@ -241,9 +243,10 @@ void addfriend_client(int client_socket, string id, Queue<string> &RecvQue)
     return;
 }
 
-// 好友申请
-void friendapplylist_client(int client_socket, string id, Queue<string> &RecvQue)
+// 编辑好友申请
+void friendapplyedit_client(int client_socket, string id, Queue<string> &RecvQue)
 {
+    // 查看好友申请
     // 发送数据
     nlohmann::json sendJson_client = {
         {"id", id},
@@ -270,10 +273,8 @@ void friendapplylist_client(int client_socket, string id, Queue<string> &RecvQue
         std::cout << str << std::endl;
     }
     cout << "——————————————————————————————————————————" << endl;
-}
-// 编辑申请
-void friendapplyedit_client(int client_socket, string id, Queue<string> &RecvQue)
-{
+
+    // 编辑好友申请
     string name;
     string state;
     cout << "输入要编辑的好友昵称" << endl;
@@ -282,19 +283,19 @@ void friendapplyedit_client(int client_socket, string id, Queue<string> &RecvQue
     state = getInputWithoutCtrlD();
 
     // 发送数据
-    nlohmann::json sendJson_client = {
+    sendJson_client = {
         {"id", id},
         {"flag", FRIENDAPPLYEDIT},
         {"name", name},
         {"state", state},
     };
-    string sendJson_client_string = sendJson_client.dump();
-    SendMsg sendmsg;
+    sendJson_client_string = sendJson_client.dump();
+    sendmsg;
     sendmsg.SendMsg_client(client_socket, sendJson_client_string);
 
     // 从消息队列里取消息
-    string buf = RecvQue.remove();
-    json parsed_data = json::parse(buf);
+    buf = RecvQue.remove();
+    parsed_data = json::parse(buf);
     int state_ = parsed_data["state"];
 
     // 判断是否操作成功
@@ -309,6 +310,10 @@ void friendapplyedit_client(int client_socket, string id, Queue<string> &RecvQue
     else if (state_ == USERNAMEUNEXIST)
     {
         cout << "查无此人! " << endl;
+    }
+    else
+    {
+        cout << "操作失败，请重新尝试！" << endl;
     }
 }
 
@@ -642,6 +647,40 @@ void chatfriend_client(int client_socket, string id, Queue<string> &RecvQue)
     chatname = "";
 }
 
+// 个人信息
+void personalinfo_client(int client_socket, string id, Queue<string> &RecvQue)
+{
+    // 发送数据
+    nlohmann::json sendJson_client = {
+        {"id", id},
+        {"flag", PERSONALINFO},
+    };
+    string sendJson_client_string = sendJson_client.dump();
+    SendMsg sendmsg;
+    sendmsg.SendMsg_client(client_socket, sendJson_client_string);
+
+    // 从消息队列里取消息
+    User user;
+    string buf = RecvQue.remove();
+    json parsed_data = json::parse(buf);
+    user.username = parsed_data["username"];
+    user.password = parsed_data["password"];
+    user.secrecy = parsed_data["secrecy"];
+
+    // 打印个人信息
+    cout << "用户名：" << user.username << endl;
+    cout << "id：" << id << endl;
+    cout << "密码：" << user.password << endl;
+    cout << "密保：" << user.secrecy << endl;
+
+    cout << "按'q'返回上一级" << endl;
+    string a;
+    while ((a = getInputWithoutCtrlD()) != "q")
+    {
+    }
+    return;
+}
+
 // 群聊
 void group_client(int client_socket, string id, Queue<string> &RecvQue)
 {
@@ -708,9 +747,11 @@ void group_client(int client_socket, string id, Queue<string> &RecvQue)
         case 16:
             system("clear");
             groupmenuUI();
+            break;
         default:
             cout << "无效的数字，请重新输入！" << endl;
             groupmenuUI();
+            break;
         }
     } while (num_ != 25); // 退出循环，返回上一级
 

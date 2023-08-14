@@ -19,23 +19,23 @@ void recvfunc(int fd, string id, Queue<string> *RecvQue)
 {
     while (1)
     {
-// cout << "-1" << endl;
+        // cout << "-1" << endl;
 
         // 接收服务器返回的数据
         string recvJson_buf = "";
         RecvMsg recvmsg;
-// cout << "0" << endl;
+        // cout << "0" << endl;
 
         while (recvJson_buf.empty()) // 不为空时，表明本次接收到了消息，退出循环
         {
             recvmsg.RecvMsg_client(fd, recvJson_buf);
         }
-// cout << "1" << endl;
+        // cout << "1" << endl;
         // 反序列化
         json parsed_data = json::parse(recvJson_buf);
         int type = parsed_data["type"];
         int flag = parsed_data["flag"];
-// cout << "2" << endl;
+        // cout << "2" << endl;
 
         if (flag == LOGOUT)
             return;
@@ -46,46 +46,44 @@ void recvfunc(int fd, string id, Queue<string> *RecvQue)
             {
                 // string id = parsed_data["id"];     // 发送信息方的id
                 string name = parsed_data["name"]; // 发送信息方的名字
-                if (name != chatname) // 对方不在聊天窗口，chatname是当用户进入聊天窗口时更改
+                if (name != chatname)              // 对方不在聊天窗口，chatname是当用户进入聊天窗口时更改
                 {
-                    cout << "                            " << name << "发来新消息" << endl;
+                    cout << "\033[90m                            " << name << "发来新消息\033[0m" << endl; // 灰色
                 }
                 else // 对方在聊天窗口，则直接打印
                 {
                     string msg = parsed_data["msg"];
-                    cout << name << ": " << msg << endl;
+                    cout << "\033[32m" << name << ": " << msg << "\033[0m" << endl; // 深绿色
                 }
             }
             else if (flag == GROUP)
             {
-                string groupid = parsed_data["groupid"];  // 群id
+                string groupid = parsed_data["groupid"];     // 群id
                 string groupname = parsed_data["groupname"]; // 群名
                 string name = parsed_data["name"];           // 发送消息的人的名字
 
                 if (groupid != chatgroup) // 对方不在聊天窗口，chatgroup是当用户进入聊天窗口时更改
                 {
-                    cout << "                            " << groupname << " 群有新消息" << endl;
+                    cout << "\033[90m                            " << groupname << " 群有新消息\033[0m" << endl; // 灰色
                 }
                 else // 对方在聊天窗口，则直接打印
                 {
                     string msg = parsed_data["msg"];
-                    cout << name << ": " << msg << endl;
+                    cout << "\033[32m" << name << ": " << msg << "\033[0m" << endl; // 深绿色
                 }
             }
             else
             {
                 string msg = parsed_data["msg"];
-                cout << "                               " << msg << endl;
+                cout << "\033[90m                              " << msg << "\033[0m" << endl; // 灰色
             }
         }
         else if (type == NORMAL)
         {
-            cout << "（ 一条消息放入消息队列 ）" << endl;
+            // cout << "\033[30;1m（ 一条消息放入消息队列 ）\033[0m" << endl; // 深灰色
             RecvQue->add(recvJson_buf);
-
         }
-// cout << "3" << endl;
-
+        // cout << "3" << endl;
     }
 }
 
