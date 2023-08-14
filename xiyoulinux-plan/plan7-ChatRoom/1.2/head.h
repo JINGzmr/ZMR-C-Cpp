@@ -16,6 +16,7 @@
 #include <regex>
 #include <cstdlib> //system("clear");
 #include <thread> 
+#include <termios.h> //屏蔽ctrl+d
 
 #include <cstring>     //memset
 #include <arpa/inet.h> //htonl

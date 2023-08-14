@@ -395,6 +395,18 @@ CMakeFiles/server.dir/IO.cc.o: ../IO.cc \
   /usr/include/c++/11/thread \
   /usr/include/c++/11/bits/std_thread.h \
   /usr/include/c++/11/bits/this_thread_sleep.h \
+  /usr/include/termios.h \
+  /usr/include/x86_64-linux-gnu/bits/termios.h \
+  /usr/include/x86_64-linux-gnu/bits/termios-struct.h \
+  /usr/include/x86_64-linux-gnu/bits/termios-c_cc.h \
+  /usr/include/x86_64-linux-gnu/bits/termios-c_iflag.h \
+  /usr/include/x86_64-linux-gnu/bits/termios-c_oflag.h \
+  /usr/include/x86_64-linux-gnu/bits/termios-baud.h \
+  /usr/include/x86_64-linux-gnu/bits/termios-c_cflag.h \
+  /usr/include/x86_64-linux-gnu/bits/termios-c_lflag.h \
+  /usr/include/x86_64-linux-gnu/bits/termios-tcflow.h \
+  /usr/include/x86_64-linux-gnu/bits/termios-misc.h \
+  /usr/include/x86_64-linux-gnu/sys/ttydefaults.h \
   ../define.h
 
 CMakeFiles/server.dir/server.cc.o: ../server.cc \
@@ -794,6 +806,18 @@ CMakeFiles/server.dir/server.cc.o: ../server.cc \
   /usr/include/c++/11/thread \
   /usr/include/c++/11/bits/std_thread.h \
   /usr/include/c++/11/bits/this_thread_sleep.h \
+  /usr/include/termios.h \
+  /usr/include/x86_64-linux-gnu/bits/termios.h \
+  /usr/include/x86_64-linux-gnu/bits/termios-struct.h \
+  /usr/include/x86_64-linux-gnu/bits/termios-c_cc.h \
+  /usr/include/x86_64-linux-gnu/bits/termios-c_iflag.h \
+  /usr/include/x86_64-linux-gnu/bits/termios-c_oflag.h \
+  /usr/include/x86_64-linux-gnu/bits/termios-baud.h \
+  /usr/include/x86_64-linux-gnu/bits/termios-c_cflag.h \
+  /usr/include/x86_64-linux-gnu/bits/termios-c_lflag.h \
+  /usr/include/x86_64-linux-gnu/bits/termios-tcflow.h \
+  /usr/include/x86_64-linux-gnu/bits/termios-misc.h \
+  /usr/include/x86_64-linux-gnu/sys/ttydefaults.h \
   ../data.h \
   ../define.h \
   ../login.hpp \
@@ -1208,6 +1232,18 @@ CMakeFiles/server.dir/threadpool.cc.o: ../threadpool.cc \
   /usr/include/c++/11/thread \
   /usr/include/c++/11/bits/std_thread.h \
   /usr/include/c++/11/bits/this_thread_sleep.h \
+  /usr/include/termios.h \
+  /usr/include/x86_64-linux-gnu/bits/termios.h \
+  /usr/include/x86_64-linux-gnu/bits/termios-struct.h \
+  /usr/include/x86_64-linux-gnu/bits/termios-c_cc.h \
+  /usr/include/x86_64-linux-gnu/bits/termios-c_iflag.h \
+  /usr/include/x86_64-linux-gnu/bits/termios-c_oflag.h \
+  /usr/include/x86_64-linux-gnu/bits/termios-baud.h \
+  /usr/include/x86_64-linux-gnu/bits/termios-c_cflag.h \
+  /usr/include/x86_64-linux-gnu/bits/termios-c_lflag.h \
+  /usr/include/x86_64-linux-gnu/bits/termios-tcflow.h \
+  /usr/include/x86_64-linux-gnu/bits/termios-misc.h \
+  /usr/include/x86_64-linux-gnu/sys/ttydefaults.h \
   ../threadpool.h \
   /usr/include/c++/11/queue \
   /usr/include/c++/11/bits/stl_queue.h
@@ -1234,6 +1270,22 @@ CMakeFiles/server.dir/threadpool.cc.o: ../threadpool.cc \
 ../login.hpp:
 
 ../data.h:
+
+/usr/include/x86_64-linux-gnu/bits/termios-misc.h:
+
+/usr/include/x86_64-linux-gnu/bits/termios-c_lflag.h:
+
+/usr/include/x86_64-linux-gnu/bits/termios-c_cflag.h:
+
+/usr/include/x86_64-linux-gnu/bits/termios-baud.h:
+
+/usr/include/x86_64-linux-gnu/bits/termios-c_oflag.h:
+
+/usr/include/x86_64-linux-gnu/bits/termios-c_iflag.h:
+
+/usr/include/x86_64-linux-gnu/bits/termios.h:
+
+/usr/include/termios.h:
 
 /usr/include/c++/11/bits/regex_executor.h:
 
@@ -1425,6 +1477,8 @@ CMakeFiles/server.dir/threadpool.cc.o: ../threadpool.cc \
 
 /usr/include/c++/11/bits/cxxabi_forced.h:
 
+/usr/include/x86_64-linux-gnu/bits/termios-c_cc.h:
+
 /usr/include/x86_64-linux-gnu/bits/endian.h:
 
 /usr/include/c++/11/bits/stl_deque.h:
@@ -1539,6 +1593,8 @@ CMakeFiles/server.dir/threadpool.cc.o: ../threadpool.cc \
 
 /usr/include/c++/11/bits/stl_iterator.h:
 
+/usr/include/x86_64-linux-gnu/bits/termios-tcflow.h:
+
 /usr/include/x86_64-linux-gnu/sys/epoll.h:
 
 /usr/include/c++/11/bits/sstream.tcc:
@@ -1554,6 +1610,8 @@ CMakeFiles/server.dir/threadpool.cc.o: ../threadpool.cc \
 /usr/include/c++/11/bits/cxxabi_init_exception.h:
 
 /usr/include/c++/11/string:
+
+/usr/include/x86_64-linux-gnu/bits/termios-struct.h:
 
 /usr/include/x86_64-linux-gnu/bits/epoll.h:
 
@@ -2026,6 +2084,8 @@ CMakeFiles/server.dir/threadpool.cc.o: ../threadpool.cc \
 /usr/include/x86_64-linux-gnu/bits/types/__FILE.h:
 
 /usr/include/math.h:
+
+/usr/include/x86_64-linux-gnu/sys/ttydefaults.h:
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/stddef.h:
 

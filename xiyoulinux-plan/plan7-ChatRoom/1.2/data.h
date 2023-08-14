@@ -72,13 +72,79 @@ string produce_id(void)
     return id;
 }
 
+// 屏蔽ctrl的输入函数
+string getInputWithoutCtrlD()
+{
+    struct termios oldt, newt;
+
+    // 获取当前终端模式
+    tcgetattr(STDIN_FILENO, &oldt);
+    newt = oldt;
+
+    // 禁用 ECHO 和 ICANON 标志
+    newt.c_lflag &= ~(ICANON | ECHO);
+
+    // 设置新终端模式
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+
+    std::string input;
+    char ch;
+    while (std::cin.get(ch))
+    {
+        if (ch == '\x04')
+        { // Ctrl+D
+            // 不做任何响应
+        }
+        else if (ch == '\n')
+        {
+            std::cout << ch;
+            break; // 回车表示输入结束
+        }
+        else
+        {
+            std::cout << ch; // 输出字符到终端
+            input += ch;
+        }
+    }
+
+    // 恢复原始终端模式
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+
+    return input;
+}
+
+// 检测是否为非法输入的函数
+int checkcin(const string &str)
+{
+    try
+    {
+        size_t pos;
+        int result = std::stoi(str, &pos);
+
+        // 确保整个字符串都被转换
+        if (pos == str.length())
+        {
+            return result;
+        }
+        else
+        {
+            return -1;
+        }
+    }
+    catch (const std::invalid_argument &)
+    {
+        return -1; // 无法转换成数字
+    }
+    catch (const std::out_of_range &)
+    {
+        return -1; // 数字超出范围
+    }
+}
+
 // 根据send和recv函数返回值判断客户端是否正常 来对socket、redis描述符、用户在线状态进行更改
 // 函数部分：
 void errorprocess(int fd)
 {
-
 }
-
-
 
 #endif
