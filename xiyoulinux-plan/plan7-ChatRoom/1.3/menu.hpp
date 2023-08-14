@@ -40,7 +40,6 @@ void menu(int client_socket)
         std::cin.sync();
 
         string str = getInputWithoutCtrlD();
-        cout << str << endl;
         int num = checkcin(str);
         switch (num)
         {
@@ -64,10 +63,8 @@ void login_client(int client_socket)
 {
     User user;
     cout << "请输入id: ";
-    // cin >> user.id;
     user.id = getInputWithoutCtrlD();
     cout << "请输入密码: ";
-    // cin >> user.password;
     user.password = getInputWithoutCtrlD();
     user.flag = LOGIN; // 表示是要登录
 
@@ -92,7 +89,7 @@ void login_client(int client_socket)
         cout << "登入成功！" << endl;
         Queue<string> RecvQue;
         thread RecvThread = thread(recvfunc, client_socket, user.id, &RecvQue); // 工作线程启动
-        //********一个进入下一页面的入口********
+        //********进入下一页面的入口********
         messagemenu(client_socket, user.id, RecvQue);
         RecvThread.join(); // 回收线程
         system("clear");   // 刷新终端页面
@@ -122,9 +119,9 @@ void register_client(int client_socket)
 {
     User user;
     cout << "请输入用户名: ";
-    cin >> user.username;
+    user.username = getInputWithoutCtrlD();
     cout << "请输入密码: ";
-    cin >> user.password;
+    user.password = getInputWithoutCtrlD();
     user.flag = REGISTER; // 表示是要注册
 
     // 序列化，发送数据
@@ -169,9 +166,9 @@ void signout_client(int client_socket)
 {
     User user;
     cout << "请输入id: ";
-    cin >> user.id;
+    user.id = getInputWithoutCtrlD();
     cout << "请输入密码: ";
-    cin >> user.password;
+    user.password = getInputWithoutCtrlD();
     user.flag = SIGNOUT; // 表示是要注销
 
     // 序列化，发送数据（不用把结构体的所有成员都序列化）

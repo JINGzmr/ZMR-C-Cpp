@@ -73,8 +73,7 @@ string produce_id(void)
 }
 
 // 屏蔽ctrl的输入函数
-string getInputWithoutCtrlD()
-{
+string getInputWithoutCtrlD() {
     struct termios oldt, newt;
 
     // 获取当前终端模式
@@ -89,26 +88,34 @@ string getInputWithoutCtrlD()
 
     std::string input;
     char ch;
-    while (std::cin.get(ch))
-    {
-        if (ch == '\x04')
-        { // Ctrl+D
+    while (std::cin.get(ch)) {
+        if (ch == '\x04') {  // Ctrl+D
             // 不做任何响应
-        }
-        else if (ch == '\n')
-        {
-            std::cout << ch;
-            break; // 回车表示输入结束
-        }
-        else
-        {
-            std::cout << ch; // 输出字符到终端
+        } else if (ch == '\n') {
+            cout << ch;
+            break;  // 回车表示输入结束
+        } else if (ch == 27) { // Esc
+            cout << "esc" << endl;
+            return "esc";
+        } else if (ch == 127) { // Backspace
+            if (!input.empty()) {
+                input.pop_back();
+                std::cout << "\b \b"; // 清除前一个字符并移动光标
+            }
+        } else {
+            cout << ch; // 输出字符到终端
             input += ch;
         }
     }
 
     // 恢复原始终端模式
     tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+
+    // 检查输入是否包含空格
+    if (input.find(' ') != std::string::npos) {
+        cout << "\033[31m警告：输入不能包含空格，请重新输入\033[0m\n"; //红色告示
+        return ""; // 返回一个空字符串表示输入无效
+    }
 
     return input;
 }

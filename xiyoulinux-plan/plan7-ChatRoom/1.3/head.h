@@ -17,6 +17,7 @@
 #include <cstdlib> //system("clear");
 #include <thread> 
 #include <termios.h> //屏蔽ctrl+d
+// #include <ncurses.h> //关联f11，表示退出聊天
 
 #include <cstring>     //memset
 #include <arpa/inet.h> //htonl

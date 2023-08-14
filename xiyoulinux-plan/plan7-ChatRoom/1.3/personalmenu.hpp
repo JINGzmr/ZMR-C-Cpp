@@ -66,7 +66,8 @@ void messagemenu(int client_socket, string id, Queue<string> &RecvQue)
         std::cin.clear();
         std::cin.sync();
 
-        cin >> num;
+        string str = getInputWithoutCtrlD();
+        num = checkcin(str);
 
         switch (num)
         {
@@ -134,9 +135,10 @@ void messagemenu(int client_socket, string id, Queue<string> &RecvQue)
         case 15:
             logout_client(client_socket, id);
             break;
-        case 16: // 如果是666，则不能准确识别出，而是走了6的选项
+        case 16:
             system("clear");
             personalmenuUI();
+            break;
         default:
             cout << "无效的数字，请重新输入！" << endl;
             personalmenuUI();
@@ -187,6 +189,7 @@ void logout_client(int client_socket, string id)
     SendMsg sendmsg;
     sendmsg.SendMsg_client(client_socket, sendJson_client_string);
     cout << "退出成功！" << endl;
+    return;
 }
 
 // 加好友
@@ -196,7 +199,7 @@ void addfriend_client(int client_socket, string id, Queue<string> &RecvQue)
     do
     {
         cout << "请输入你要添加的朋友ID：";
-        cin >> friend_.oppoid;
+        friend_.oppoid = getInputWithoutCtrlD();
         friend_.id = id;
         friend_.flag = ADDFRIEND;
 
@@ -272,11 +275,11 @@ void friendapplylist_client(int client_socket, string id, Queue<string> &RecvQue
 void friendapplyedit_client(int client_socket, string id, Queue<string> &RecvQue)
 {
     string name;
-    int state;
+    string state;
     cout << "输入要编辑的好友昵称" << endl;
-    cin >> name;
+    name = getInputWithoutCtrlD();
     cout << "同意---1 / 拒绝---0" << endl;
-    cin >> state;
+    state = getInputWithoutCtrlD();
 
     // 发送数据
     nlohmann::json sendJson_client = {
@@ -355,7 +358,7 @@ void friendinfo_client(int client_socket, string id, Queue<string> &RecvQue, int
     {
         cout << "按'q'返回上一级" << endl;
         string a;
-        while (cin >> a && a != "q")
+        while ((a = getInputWithoutCtrlD()) != "q")
         {
         }
         return;
@@ -372,7 +375,7 @@ void addblack_client(int client_socket, string id, Queue<string> &RecvQue)
     do
     {
         cout << "请输入你要屏蔽的朋友ID：";
-        cin >> friend_.oppoid;
+        friend_.oppoid = getInputWithoutCtrlD();
         friend_.id = id;
         friend_.flag = ADDBLACK;
 
@@ -422,7 +425,7 @@ void delfriend_client(int client_socket, string id, Queue<string> &RecvQue)
     do
     {
         cout << "请输入你要删除的朋友ID：";
-        cin >> friend_.oppoid;
+        friend_.oppoid = getInputWithoutCtrlD();
         friend_.id = id;
         friend_.flag = DELFRIEND;
 
@@ -494,7 +497,7 @@ void blackfriendedit_client(int client_socket, string id, Queue<string> &RecvQue
     string name;
     int state;
     cout << "输入要移除黑名单的好友昵称" << endl;
-    cin >> name;
+    name = getInputWithoutCtrlD();
 
     // 发送数据
     nlohmann::json sendJson_client = {
@@ -534,7 +537,7 @@ string historychat_client(int client_socket, string id, Queue<string> &RecvQue, 
 
     string opponame;
     cout << "输入好友昵称：" << endl;
-    cin >> opponame;
+    opponame = getInputWithoutCtrlD();
 
     // 发送数据
     nlohmann::json sendJson_client = {
@@ -590,7 +593,7 @@ string historychat_client(int client_socket, string id, Queue<string> &RecvQue, 
     {
         cout << "按'q'返回上一级" << endl;
         string a;
-        while (cin >> a && a != "q")
+        while ((a = getInputWithoutCtrlD()) != "q")
             str = "";
     }
 
@@ -610,9 +613,11 @@ void chatfriend_client(int client_socket, string id, Queue<string> &RecvQue)
     chatname = opponame;
 
     string msg;
-    cout << "(开始聊天吧，'quit'退出)" << endl;
-    while (cin >> msg && msg != "quit") // 输入为quit时退出聊天
+    cout << "(开始聊天吧，按'Esc'键退出)" << endl;
+    while ((msg = getInputWithoutCtrlD()) != "esc") // 按'Esc'键退出聊天
     {
+        if (msg == "")
+            continue;
         // 发送数据
         nlohmann::json sendJson_client = {
             {"id", id},
@@ -631,7 +636,7 @@ void chatfriend_client(int client_socket, string id, Queue<string> &RecvQue)
         if (state_ == FAIL)
         {
             cout << "消息发送失败,请检查是否屏蔽对方 或 已被对方屏蔽" << endl;
-            cout << "输入quit退出聊天" << endl;
+            cout << "按'Esc'键退出聊天" << endl;
         }
     }
     chatname = "";
@@ -650,7 +655,8 @@ void group_client(int client_socket, string id, Queue<string> &RecvQue)
         std::cin.clear();
         std::cin.sync();
 
-        cin >> num_;
+        string str = getInputWithoutCtrlD();
+        num_ = checkcin(str);
 
         switch (num_)
         {

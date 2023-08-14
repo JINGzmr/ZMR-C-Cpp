@@ -262,7 +262,7 @@ void agreeapply_server(int fd, string buf)
     group.userid = parsed_data["userid"];
     group.groupid = parsed_data["groupid"];
     group.opponame = parsed_data["opponame"];
-    int state = parsed_data["state"];
+    string state = parsed_data["state"];
     printf("--- %s 用户编辑 %s 群的加群申请 ---\n", group.userid.c_str(), group.groupid.c_str());
     cout << group.opponame << endl;
     cout << state << endl;
@@ -288,7 +288,7 @@ void agreeapply_server(int fd, string buf)
             cout << "不存在此加群申请！" << endl;
             group.state = FAIL;
         }
-        else if (state == 1)
+        else if (state == "1")
         {
             cout << "已同意" << endl;
             redis.sremvalue(key, group.oppoid);                      // 从申请列表中移除

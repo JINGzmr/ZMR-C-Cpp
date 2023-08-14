@@ -211,7 +211,7 @@ void friendapplyedit_server(int fd, string buf)
     struct Friend friend_;
     friend_.id = parsed_data["id"];
     string name = parsed_data["name"];
-    int state = parsed_data["state"];
+    string state = parsed_data["state"];
     printf("--- %s 用户编辑好友申请 ---\n", friend_.id.c_str());
     cout << name << endl;
     cout << state << endl;
@@ -239,7 +239,7 @@ void friendapplyedit_server(int fd, string buf)
             friend_.state = FAIL;
             friend_.type = NORMAL;
         }
-        else if (state == 1)
+        else if (state == "1")
         {
             cout << "已同意" << endl;
             redis.sremvalue(key, applyfriend_id); // 从申请列表中移除

@@ -49,7 +49,7 @@ void addmin_client(int client_socket, string id, Queue<string> &RecvQue)
         Group group;
         group.groupid = re;
         cout << "请输入你要设置管理员的成员id：（警告：此操作仅对群主生效！）";
-        cin >> group.oppoid;
+        group.oppoid= getInputWithoutCtrlD();
         group.userid = id;
         group.flag = ADDADMIN;
 
@@ -107,7 +107,7 @@ void deladmin_client(int client_socket, string id, Queue<string> &RecvQue)
         Group group;
         group.groupid = re;
         cout << "请输入你要删除管理员的成员id：（警告：此操作仅对群主生效！）";
-        cin >> group.oppoid;
+        group.oppoid= getInputWithoutCtrlD();
         group.userid = id;
         group.flag = DELADMIN;
 
@@ -160,7 +160,7 @@ void checkapplylist_client(int client_socket, string id, Queue<string> &RecvQue,
     {
         Group group;
         cout << "请输入你要查看的群id：（警告：此操作仅对群主、管理员生效！）";
-        cin >> group.groupid;
+        group.groupid= getInputWithoutCtrlD();
         group.userid = id;
         group.flag = CHECKAPPLYLIST;
 
@@ -206,11 +206,11 @@ void checkapplylist_client(int client_socket, string id, Queue<string> &RecvQue,
                 cout << "——————————————————————————————————————————" << endl;
 
                 // 同意加群申请
-                int state;
+                string state;
                 cout << "输入要编辑的用户昵称" << endl;
-                cin >> group.opponame;
+                group.opponame= getInputWithoutCtrlD();
                 cout << "同意---1 / 拒绝---0" << endl;
-                cin >> state;
+                state= getInputWithoutCtrlD();
 
                 // 发送数据
                 nlohmann::json sendJson_client = {
@@ -250,7 +250,7 @@ void checkapplylist_client(int client_socket, string id, Queue<string> &RecvQue,
     {
         cout << "按'q'返回上一级" << endl;
         string a;
-        while (cin >> a && a != "q")
+        while ((a= getInputWithoutCtrlD()) != "q")
         {
         }
         return;
@@ -269,7 +269,7 @@ void delgroupnum_client(int client_socket, string id, Queue<string> &RecvQue)
         do
         {
             cout << "请输入你要删除的成员id：（警告：此操作仅对群主、管理员生效！）";
-            cin >> group.oppoid;
+            group.oppoid= getInputWithoutCtrlD();
             group.userid = id;
             group.flag = DELGROUPNUM;
             if (group.userid == group.oppoid)
@@ -315,7 +315,7 @@ void delgroupnum_client(int client_socket, string id, Queue<string> &RecvQue)
 
     cout << "按'q'返回上一级" << endl;
     string a;
-    while (cin >> a && a != "q")
+    while ((a= getInputWithoutCtrlD()) != "q")
     {
     }
 }
@@ -330,7 +330,7 @@ void delgroup_client(int client_socket, string id, Queue<string> &RecvQue)
 
     Group group;
     cout << "请输入你要解散的群id：（警告：此操作仅对群主生效！）";
-    cin >> group.groupid;
+    group.groupid= getInputWithoutCtrlD();
     group.userid = id;
     group.flag = DELGROUP;
 
@@ -361,7 +361,7 @@ void delgroup_client(int client_socket, string id, Queue<string> &RecvQue)
     
     cout << "按'q'返回上一级" << endl;
     string a;
-    while (cin >> a && a != "q")
+    while ((a= getInputWithoutCtrlD()) != "q")
     {
     }
 }
