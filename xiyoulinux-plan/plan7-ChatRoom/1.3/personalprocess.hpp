@@ -330,7 +330,7 @@ void addblack_server(int fd, string buf)
     friend_.oppoid = parsed_data["oppoid"];
     printf("--- %s 用户将要屏蔽好友 ---\n", friend_.id.c_str());
 
-    Redis redis;
+    Redis redis; 
     redis.connect();
 
     string key = friend_.id + ":bfriends";
