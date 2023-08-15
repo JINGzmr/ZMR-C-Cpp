@@ -2,10 +2,10 @@
 #ifndef PERSONALPROCESS_HPP
 #define PERSONALPROCESS_HPP
 
-#include "data.h"
-#include "define.h"
-#include "IO.h"
-#include "redis.hpp"
+#include "../others/data.h"
+#include "../others/define.h"
+#include "../others/IO.h"
+#include "../others/redis.hpp"
 #include <vector>
 
 #include <iostream>

@@ -1,8 +1,8 @@
 // 对客户端发来的各种json进行处理，并将事件加到工作队列，从线程池中取出工作线程进行相应的处理
-#include "threadpool.h"
-#include "IO.h"
-#include "data.h"
-#include "define.h"
+#include "../others/threadpool.h"
+#include "../others/IO.h"
+#include "../others/data.h"
+#include "../others/define.h"
 #include "login.hpp"
 #include "personalprocess.hpp"
 #include "groupprocess.hpp"

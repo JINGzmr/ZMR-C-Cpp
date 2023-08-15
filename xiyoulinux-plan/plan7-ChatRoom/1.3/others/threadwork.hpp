@@ -8,8 +8,8 @@
 
 #include "head.h"
 #include "queue.hpp"
-#include "define.h"
-#include "data.h"
+#include "../others/define.h"
+#include "../others/data.h"
 
 // 根据type来决定是否将受到的recvjson_buf放入消息队列里
 // type：普通normal、通知notice

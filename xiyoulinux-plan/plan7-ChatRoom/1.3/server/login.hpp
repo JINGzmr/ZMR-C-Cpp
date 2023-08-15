@@ -1,8 +1,8 @@
 // 服务端处理客户端在登录界面输入的注册、登入、注销
-#include "data.h"
-#include "define.h"
-#include "redis.hpp"
-#include "IO.h"
+#include "../others/data.h"
+#include "../others/define.h"
+#include "../others/redis.hpp"
+#include "../others/IO.h"
 
 #include <iostream>
 using json = nlohmann::json;

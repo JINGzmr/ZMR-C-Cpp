@@ -9,7 +9,6 @@ using namespace std;
 
 // int epld;
 
-// string chatid = "";
 string chatname = "";
 string chatgroup = "";
 
@@ -73,7 +72,7 @@ string produce_id(void)
     return id;
 }
 
-// 屏蔽ctrl的输入函数
+// 屏蔽ctrl+d的输入函数
 string getInputWithoutCtrlD() {
     struct termios oldt, newt;
 
@@ -101,7 +100,7 @@ string getInputWithoutCtrlD() {
         } else if (ch == 127) { // Backspace
             if (!input.empty()) {
                 input.pop_back();
-                std::cout << "\b \b"; // 清除前一个字符并移动光标
+                cout << "\b \b"; // 清除前一个字符并移动光标
             }
         } else {
             cout << ch; // 输出字符到终端
@@ -127,7 +126,7 @@ int checkcin(const string &str)
     try
     {
         size_t pos;
-        int result = std::stoi(str, &pos);
+        int result = stoi(str, &pos);
 
         // 确保整个字符串都被转换
         if (pos == str.length())
@@ -139,11 +138,11 @@ int checkcin(const string &str)
             return -1;
         }
     }
-    catch (const std::invalid_argument &)
+    catch (const invalid_argument &)
     {
         return -1; // 无法转换成数字
     }
-    catch (const std::out_of_range &)
+    catch (const out_of_range &)
     {
         return -1; // 数字超出范围
     }

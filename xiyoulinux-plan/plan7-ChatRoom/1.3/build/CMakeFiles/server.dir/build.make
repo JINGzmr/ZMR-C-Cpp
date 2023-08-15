@@ -69,60 +69,60 @@ include CMakeFiles/server.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/server.dir/flags.make
 
-CMakeFiles/server.dir/server.cc.o: CMakeFiles/server.dir/flags.make
-CMakeFiles/server.dir/server.cc.o: ../server.cc
-CMakeFiles/server.dir/server.cc.o: CMakeFiles/server.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.3/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/server.dir/server.cc.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/server.dir/server.cc.o -MF CMakeFiles/server.dir/server.cc.o.d -o CMakeFiles/server.dir/server.cc.o -c /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.3/server.cc
+CMakeFiles/server.dir/server/server.cc.o: CMakeFiles/server.dir/flags.make
+CMakeFiles/server.dir/server/server.cc.o: ../server/server.cc
+CMakeFiles/server.dir/server/server.cc.o: CMakeFiles/server.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.3/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/server.dir/server/server.cc.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/server.dir/server/server.cc.o -MF CMakeFiles/server.dir/server/server.cc.o.d -o CMakeFiles/server.dir/server/server.cc.o -c /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.3/server/server.cc
 
-CMakeFiles/server.dir/server.cc.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/server.dir/server.cc.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.3/server.cc > CMakeFiles/server.dir/server.cc.i
+CMakeFiles/server.dir/server/server.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/server.dir/server/server.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.3/server/server.cc > CMakeFiles/server.dir/server/server.cc.i
 
-CMakeFiles/server.dir/server.cc.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/server.dir/server.cc.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.3/server.cc -o CMakeFiles/server.dir/server.cc.s
+CMakeFiles/server.dir/server/server.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/server.dir/server/server.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.3/server/server.cc -o CMakeFiles/server.dir/server/server.cc.s
 
-CMakeFiles/server.dir/threadpool.cc.o: CMakeFiles/server.dir/flags.make
-CMakeFiles/server.dir/threadpool.cc.o: ../threadpool.cc
-CMakeFiles/server.dir/threadpool.cc.o: CMakeFiles/server.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.3/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/server.dir/threadpool.cc.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/server.dir/threadpool.cc.o -MF CMakeFiles/server.dir/threadpool.cc.o.d -o CMakeFiles/server.dir/threadpool.cc.o -c /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.3/threadpool.cc
+CMakeFiles/server.dir/others/threadpool.cc.o: CMakeFiles/server.dir/flags.make
+CMakeFiles/server.dir/others/threadpool.cc.o: ../others/threadpool.cc
+CMakeFiles/server.dir/others/threadpool.cc.o: CMakeFiles/server.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.3/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/server.dir/others/threadpool.cc.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/server.dir/others/threadpool.cc.o -MF CMakeFiles/server.dir/others/threadpool.cc.o.d -o CMakeFiles/server.dir/others/threadpool.cc.o -c /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.3/others/threadpool.cc
 
-CMakeFiles/server.dir/threadpool.cc.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/server.dir/threadpool.cc.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.3/threadpool.cc > CMakeFiles/server.dir/threadpool.cc.i
+CMakeFiles/server.dir/others/threadpool.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/server.dir/others/threadpool.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.3/others/threadpool.cc > CMakeFiles/server.dir/others/threadpool.cc.i
 
-CMakeFiles/server.dir/threadpool.cc.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/server.dir/threadpool.cc.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.3/threadpool.cc -o CMakeFiles/server.dir/threadpool.cc.s
+CMakeFiles/server.dir/others/threadpool.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/server.dir/others/threadpool.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.3/others/threadpool.cc -o CMakeFiles/server.dir/others/threadpool.cc.s
 
-CMakeFiles/server.dir/IO.cc.o: CMakeFiles/server.dir/flags.make
-CMakeFiles/server.dir/IO.cc.o: ../IO.cc
-CMakeFiles/server.dir/IO.cc.o: CMakeFiles/server.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.3/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/server.dir/IO.cc.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/server.dir/IO.cc.o -MF CMakeFiles/server.dir/IO.cc.o.d -o CMakeFiles/server.dir/IO.cc.o -c /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.3/IO.cc
+CMakeFiles/server.dir/others/IO.cc.o: CMakeFiles/server.dir/flags.make
+CMakeFiles/server.dir/others/IO.cc.o: ../others/IO.cc
+CMakeFiles/server.dir/others/IO.cc.o: CMakeFiles/server.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.3/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/server.dir/others/IO.cc.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/server.dir/others/IO.cc.o -MF CMakeFiles/server.dir/others/IO.cc.o.d -o CMakeFiles/server.dir/others/IO.cc.o -c /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.3/others/IO.cc
 
-CMakeFiles/server.dir/IO.cc.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/server.dir/IO.cc.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.3/IO.cc > CMakeFiles/server.dir/IO.cc.i
+CMakeFiles/server.dir/others/IO.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/server.dir/others/IO.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.3/others/IO.cc > CMakeFiles/server.dir/others/IO.cc.i
 
-CMakeFiles/server.dir/IO.cc.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/server.dir/IO.cc.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.3/IO.cc -o CMakeFiles/server.dir/IO.cc.s
+CMakeFiles/server.dir/others/IO.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/server.dir/others/IO.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/zhangminrui/桌面/ZMR-C/xiyoulinux-plan/plan7-ChatRoom/1.3/others/IO.cc -o CMakeFiles/server.dir/others/IO.cc.s
 
 # Object files for target server
 server_OBJECTS = \
-"CMakeFiles/server.dir/server.cc.o" \
-"CMakeFiles/server.dir/threadpool.cc.o" \
-"CMakeFiles/server.dir/IO.cc.o"
+"CMakeFiles/server.dir/server/server.cc.o" \
+"CMakeFiles/server.dir/others/threadpool.cc.o" \
+"CMakeFiles/server.dir/others/IO.cc.o"
 
 # External object files for target server
 server_EXTERNAL_OBJECTS =
 
-server: CMakeFiles/server.dir/server.cc.o
-server: CMakeFiles/server.dir/threadpool.cc.o
-server: CMakeFiles/server.dir/IO.cc.o
+server: CMakeFiles/server.dir/server/server.cc.o
+server: CMakeFiles/server.dir/others/threadpool.cc.o
+server: CMakeFiles/server.dir/others/IO.cc.o
 server: CMakeFiles/server.dir/build.make
 server: /usr/lib/x86_64-linux-gnu/libhiredis.so
 server: CMakeFiles/server.dir/link.txt
