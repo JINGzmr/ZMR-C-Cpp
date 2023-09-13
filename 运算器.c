@@ -3,8 +3,8 @@
 // void mycat(char*a,char*b);
 // int main()
 // {
-//   char a[15]="hello ";
-//   char b[]="world!";
+//   char arr_a[15]="hello ";
+//   char arr_b[]="world!";
 //   mycat(a,b);
 //   printf("%s\n",a);
 
@@ -15,9 +15,9 @@
 //   int n=strlen(a);
 //   int i,j;
 //   for(i=n,j=0;j<strlen(b);i++,j++){
-//     a[i]=b[j];
+//     arr_a[i]=arr_b[j];
 //   }
-//   a[i]='\0';
+//   arr_a[i]='\0';
 // //   int c=sqrt(9);
 // }
 
@@ -38,18 +38,18 @@
 // {
 //     int i;
 //     // printf("%d\n",ss(2));
-//     int a[150]={0};
-//     char b[100]="";
+//     int arr_a[150]={0};
+//     char arr_b[100]="";
 //     gets(b);
 //     int n=strlen(b);
 //     for(i=0;i<n;i++){
-//         a[b[i]]++;
+//         arr_a[arr_b[i]]++;
 //     }
 //     int max=0,min=100;
 //     for(i=0;i<150;i++){
-//         if(a[i]!=0){
-//             if(a[i]>max)max=a[i];
-//             if(a[i]<min)min=a[i];
+//         if(arr_a[i]!=0){
+//             if(arr_a[i]>max)max=arr_a[i];
+//             if(arr_a[i]<min)min=arr_a[i];
 //         }
 //     }
 //     int x=max-min;
@@ -218,28 +218,28 @@
 //     int n,m;
 //     scanf("%d %d",&n,&m);
 //     int i,j,k,l,max=0,t,sum=0;
-//     int a[20]={0};
+//     int arr_a[20]={0};
 //     for(i=0;i<n;i++){
 //         sum=0;
 //         for(j=0;j<m;j++){
-//             scanf("%d",&a[j]);
-//             sum+=a[j];
+//             scanf("%d",&arr_a[j]);
+//             sum+=arr_a[j];
 //         }
 //         for(k=0;k<m-1;k++){
 //             for(l=0;l<m-1-k;l++){
-//                 if(a[l]>a[l+1]){
-//                     int t=a[l];
-//                     a[l]=a[l+1];
-//                     a[l+1]=t;
+//                 if(arr_a[l]>arr_a[l+1]){
+//                     int t=arr_a[l];
+//                     arr_a[l]=arr_a[l+1];
+//                     arr_a[l+1]=t;
 //                 }
 //             }
 //         }
 //         int sum=0;
 //         for(k=1;k<m-1;k++){
-//             sum+=a[k];
+//             sum+=arr_a[k];
 //         }
 //         // printf("%d\n",sum);
-//         // sum=sum-a[0]-a[m-1];
+//         // sum=sum-arr_a[0]-arr_a[m-1];
 //         if(sum>max){
 //             max=sum;
 //             t=i;
@@ -309,11 +309,11 @@
 //     int n,m;
 //     scanf("%d",&n);
 //     m=n;
-//     int a[n][n];
+//     int arr_a[n][n];
 //     int i,j;
 //     for(i=0;i<n;i++){
 //         for(j=0;j<n;j++){
-//             scanf("%d",&a[i][j]);
+//             scanf("%d",&arr_a[i][j]);
 //         }
 //     }
 
@@ -322,15 +322,15 @@
 //     while(m--){
 //         int max=-1,min=1000000;
 //         for(j=0;j<n;j++){
-//             if(a[i][j]>max){
-//                 max=a[i][j];
+//             if(arr_a[i][j]>max){
+//                 max=arr_a[i][j];
 //                 h=i;
 //                 l=j;
 //             }
 //         }
 //         for(j=l,x=0;x<n;x++){
-//             if(a[x][j]<min){
-//                 min=a[x][j];
+//             if(arr_a[x][j]<min){
+//                 min=arr_a[x][j];
 //                 y=x;//hangshu
 //             }
 //         }
@@ -351,24 +351,24 @@
 // #include<stdio.h>
 // int main()
 // {
-//     char a[1001];
-//     char b[1001];
+//     char arr_a[1001];
+//     char arr_b[1001];
 //     gets(a);
 
 //     int i,j,x,y;
-//     for(i=0,j=0;a[i]!='\0';i++,j++){
-//         while(a[i]==' '&&a[i]!='\0'){
+//     for(i=0,j=0;arr_a[i]!='\0';i++,j++){
+//         while(arr_a[i]==' '&&arr_a[i]!='\0'){
 //             i++;
 //             j++;
-//         }if(a[i]=='\0')break;
-//         while(a[j]!=' '&&a[j]!='\0'){
+//         }if(arr_a[i]=='\0')break;
+//         while(arr_a[j]!=' '&&arr_a[j]!='\0'){
 //             j++;
 //         }
 //         j--;
 
 //         x=i;y=j;
 //         for(;x<=y;y--){
-//             printf("%c",a[y]);
+//             printf("%c",arr_a[y]);
 //         }
 //         printf(" ");
 
@@ -385,7 +385,7 @@
 // struct book{
 // char name[31];
 // double price;
-// }a[10];
+// }arr_a[10];
 // int main()
 // {
 // int i,n,max1,min1;
@@ -394,30 +394,30 @@
 // getchar();
 // for(i=0;i<n;i++)
 // {
-// gets(a[i].name);
-// scanf("%lf",&a[i].price);
+// gets(arr_a[i].name);
+// scanf("%lf",&arr_a[i].price);
 // getchar();
-// if(a[i].price>max)
+// if(arr_a[i].price>max)
 // {
-// max=a[i].price;
+// max=arr_a[i].price;
 // max1=i;
 // }
-// if(a[i].price<min)
+// if(arr_a[i].price<min)
 // {
-// min=a[i].price;
+// min=arr_a[i].price;
 // min1=i;
 // }
 // }
-// printf("%.2f %s\n",a[max1].price,a[max1].name);
-// printf("%.2f %s",a[min1].price,a[min1].name);
+// printf("%.2f %s\n",arr_a[max1].price,arr_a[max1].name);
+// printf("%.2f %s",arr_a[min1].price,arr_a[min1].name);
 // }
 
 // #include<stdio.h>
 // int main()
 // {
 //     struct student{
-//         char a[6];
-//         char b[11];
+//         char arr_a[6];
+//         char arr_b[11];
 //         int c;
 //     }x[10];
 
@@ -490,7 +490,7 @@
 //     scanf("%d",&n);
 //     while(getchar()!='\n');
 //     struct book{
-//         char a[31];
+//         char arr_a[31];
 //         double b;
 //     }x[10],t;
 
@@ -607,10 +607,12 @@
 //       struct ListNode *next;
 //  };
 
-// struct ListNode* mergeTwoLists(struct ListNode* list1, struct ListNode* list2){
+// struct ListNode* mergeTwoLists(struct ListNode* list1, struct ListNode*
+// list2){
 // //排除空表
 //     if(list1==NULL)/*不是list1->next=NULL，因为list1指向第一个节点，而非头节点*/
-//         return list2;/*list1->next=NULL表示他有且只有第一个节点（也就是有val，像[1]）*/
+//         return
+//         list2;/*list1->next=NULL表示他有且只有第一个节点（也就是有val，像[1]）*/
 //     if(list2==NULL)
 //         return list1;
 
@@ -765,7 +767,8 @@
 //                 printf("%d is a primer\n", i);
 //             }
 //             sleep(10000);
-//             exit(0); //该子进程的判断任务完成了，就退出当前子进程，使子进程都是由bash的这个子进程fork出来的
+//             exit(0);
+//             //该子进程的判断任务完成了，就退出当前子进程，使子进程都是由bash的这个子进程fork出来的
 //         }
 //     }
 
@@ -785,7 +788,8 @@
 //     int n;
 //     scanf("%d",&n);
 //     int i,j;
-//     int sum=1,count=0,max=0,l=0;//sum多个因子的乘积,count连续个数,max最大连续个数
+//     int
+//     sum=1,count=0,max=0,l=0;//sum多个因子的乘积,count连续个数,max最大连续个数
 //     int tag=0;
 //     for(i=2;i<n/2;i++){
 //         count=0;
@@ -801,7 +805,8 @@
 //             }else
 //             break;
 //         }
-//         if(count>max && tag==1){//如果连续个数大于之前的，且因为sum==n而出循环的，则将开头元素记下来
+//         if(count>max &&
+//         tag==1){//如果连续个数大于之前的，且因为sum==n而出循环的，则将开头元素记下来
 //             l=i;
 //             max=count;
 //         }
@@ -813,52 +818,51 @@
 //             printf("*");
 //         }
 //     }
-        
-    
+
 //     return 0;
 // }
 
-// #include <stdio.h>  
-// #include <stdlib.h>  
+// #include <stdio.h>
+// #include <stdlib.h>
 // #include <pthread.h>
 
 // #define NUM_THREADS 2
 
 // int global_variable = 0;
 
-// void *worker_thread(void *threadarg) {  
-//     printf("Worker thread started.\n");  
-//     while (1) {  
-//         printf("Worker thread updating global variable.\n");  
-//         global_variable++;  
-//         printf("Worker thread finished.\n");  
+// void *worker_thread(void *threadarg) {
+//     printf("Worker thread started.\n");
+//     while (1) {
+//         printf("Worker thread updating global variable.\n");
+//         global_variable++;
+//         printf("Worker thread finished.\n");
 //         break;
-//     }  
-//     printf("Main thread waiting for worker thread to finish.\n");  
-//     pthread_exit(NULL);  
+//     }
+//     printf("Main thread waiting for worker thread to finish.\n");
+//     pthread_exit(NULL);
 // }
 
-// int main() {  
-//     pthread_t threads[NUM_THREADS];  
-//     int exit_code = 0;  
-//     for (int i = 0; i < NUM_THREADS; i++) {  
-//         printf("Main thread started.\n");  
-//         printf("Creating thread %d ...\n", i + 1);  
-//         exit_code = pthread_create(&threads[i], NULL, worker_thread, (void *)(i + 1));  
-//         if (exit_code != 0) {  
-//             printf("Failed to create thread %d!\n", i + 1);  
-//             exit(-1);  
-//         }  
-//         printf("Thread %d created.\n", i + 1);  
-//     }  
-//     for (int i = 0; i < NUM_THREADS; i++) {  
-//         printf("Main thread waiting for thread %d to finish.\n", i + 1);  
-//         pthread_join(threads[i], NULL);  
-//         printf("Thread %d joined.\n", i + 1);  
-//     }  
-//     printf("Main thread finished.\n");  
-//     printf("Global variable = %d.\n", global_variable);  
-//     exit(0);  
+// int main() {
+//     pthread_t threads[NUM_THREADS];
+//     int exit_code = 0;
+//     for (int i = 0; i < NUM_THREADS; i++) {
+//         printf("Main thread started.\n");
+//         printf("Creating thread %d ...\n", i + 1);
+//         exit_code = pthread_create(&threads[i], NULL, worker_thread, (void
+//         *)(i + 1)); if (exit_code != 0) {
+//             printf("Failed to create thread %d!\n", i + 1);
+//             exit(-1);
+//         }
+//         printf("Thread %d created.\n", i + 1);
+//     }
+//     for (int i = 0; i < NUM_THREADS; i++) {
+//         printf("Main thread waiting for thread %d to finish.\n", i + 1);
+//         pthread_join(threads[i], NULL);
+//         printf("Thread %d joined.\n", i + 1);
+//     }
+//     printf("Main thread finished.\n");
+//     printf("Global variable = %d.\n", global_variable);
+//     exit(0);
 // }
 
 // struct thrd
@@ -880,7 +884,7 @@
 // void *tfn(void *arg)
 // {
 //     struct thrd tval;
-    
+
 //     tval.var=100;
 //     strcpy(tval.str,"hello thread");
 
@@ -891,30 +895,30 @@
 // #include<string.h>
 // int main()
 // {
-//     int a[17]={7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2};
+//     int arr_a[17]={7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2};
 //     char x[11]={1,0,'X',9,8,7,6,5,4,3,2};
 //     int n,m=0;
-//     char b[100][18]={0};
+//     char arr_b[100][18]={0};
 //     char c[100][18]={0};
 //     scanf("%d",&n);
 //     int i,j,cnt=0;
 //     for(i=0;i<n;i++){
-//         scanf("%s",b[i]);
+//         scanf("%s",arr_b[i]);
 //     }
 
 //     for(i=0;i<n;i++){
 //         m=0;
 //         int tag=0;
 //         for(j=0;j<17;j++){
-//             m+=(b[i][j]-'0')*a[j];
-//             if(b[i][j]>'9'&&b[i][j]<'0'){
+//             m+=(arr_b[i][j]-'0')*arr_a[j];
+//             if(arr_b[i][j]>'9'&&arr_b[i][j]<'0'){
 //                 tag=1;
 //                 break;
 //             }
 //         }
 //         m=(m)%11;
-//         if(b[i][j]!=x[m]||tag==1){
-//             strcpy(c[cnt++],b[i]);
+//         if(arr_b[i][j]!=x[m]||tag==1){
+//             strcpy(c[cnt++],arr_b[i]);
 //         }
 //     }
 
@@ -926,52 +930,50 @@
 //         }
 //     }
 
-    
 //     return 0;
 // }
-
 
 // #include<stdio.h>
 // int main()
 // {
-//     int a[17]={7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2};
+//     int arr_a[17]={7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2};
 //     char x[11]={'1','0','X','9','8','7','6','5','4','3','2'};
 //     int n,m=0;
-//     char b[100][19]={""};
+//     char arr_b[100][19]={""};
 //     char c[100][19]={""};
 //     scanf("%d",&n);
 //     int i,j,cnt=0;
 // //     getchar();
 
 //     for(i=0;i<n;i++){
-//         scanf("%s",b[i]);
-// //         gets(b[i]);
+//         scanf("%s",arr_b[i]);
+// //         gets(arr_b[i]);
 //     }
 //     for(i=0;i<n;i++){
 //         m=0;
 //         int tag=0;
 //         for(j=0;j<17;j++){
-//             if(b[i][j]>'9'&&b[i][j]<'0'){
+//             if(arr_b[i][j]>'9'&&arr_b[i][j]<'0'){
 //                 tag=1;
 //                 break;
 //             }
-//             m+=(b[i][j]-'0')*a[j];
+//             m+=(arr_b[i][j]-'0')*arr_a[j];
 //         }
 //         m=m%11;
-//         if(b[i][j]!=x[m]||tag==1){
-//             strcpy(c[cnt++],b[i]);
+//         if(arr_b[i][j]!=x[m]||tag==1){
+//             strcpy(c[cnt++],arr_b[i]);
 //         }
 //     }
 //     if(cnt==0){
 //         printf("All passed");
 //     }else{
-        
+
 //         for(i=0;i<cnt;i++){
 //             printf("%s\n",c[i]);
 //         }
 //     }
 // //        for(i=0;i<n;i++){
-// //             printf("%s\n",b[i]);
+// //             printf("%s\n",arr_b[i]);
 // //         }
 
 //     return 0;
@@ -985,22 +987,22 @@
 //     scanf("%d",&n);
 //     int m=n;
 //     int i;
-//     int b[100]={0};
-//     int a[100][1000]={0};
-    
+//     int arr_b[100]={0};
+//     int arr_a[100][1000]={0};
+
 //     while(m--)
 //     {
 //         int k;
 //         scanf("%d",&k);
-//         b[n-m-1]=k;
-        
+//         arr_b[n-m-1]=k;
+
 //         for(i=0;i<k;i++){
 //             int x;
 //             scanf("%d",&x);
-//             a[n-m-1][i]=x;
+//             arr_a[n-m-1][i]=x;
 //         }
 //     }
-    
+
 //     scanf("%d",&m);
 //     int c[10000]={0};
 //     for(i=0;i<m;i++){
@@ -1008,17 +1010,16 @@
 //         scanf("%d",&id);
 //         c[i]=id;
 //     }
-    
-//     int x,y;
 
+//     int x,y;
 
 //     int tag=0;
 //     for(i=0;i<m;i++){
 // //         tag=0;
 
 //         for(x=0;x<n;x++){
-//             for(y=0;y<b[i];y++){
-//                 if(c[i]==a[x][y]&&b[i]>1)c[i]=-1;
+//             for(y=0;y<arr_b[i];y++){
+//                 if(c[i]==arr_a[x][y]&&arr_b[i]>1)c[i]=-1;
 //             }
 //         }
 //     }
@@ -1030,43 +1031,37 @@
 //             }
 //         if(tag==0)printf("No one is handsome");
 //     }
-    
-
-
 
 //     return 0;
 // }
-
 
 // #include<stdio.h>
 // int main()
 // {
 //     int n;//行数
 //     scanf("%d",&n);
-//     char a[10000]="";
+//     char arr_a[10000]="";
 //     getchar();
 //     gets(a);
-    
-//     char b[100][1000]={""};
+
+//     char arr_b[100][1000]={""};
 //     int x=strlen(a);
 //     int i,j;
 //     int m=x/n;//列数，五列m=4
 //     int hang=0;
-//     int nn=0;//a[]的指针
+//     int nn=0;//arr_a[]的指针
 //     for(i=m;i>=0;i--){
 //         for(j=0;j<n;j++){
-//             b[j][i]=a[nn++];
-//         }        
+//             arr_b[j][i]=arr_a[nn++];
+//         }
 //     }
-
 
 //     for(i=0;i<n;i++){
 //         for(j=0;j<=m;j++){
-//             printf("%c",b[i][j]);
+//             printf("%c",arr_b[i][j]);
 //         }
 //         printf("\n");
 //     }
-
 
 //     return 0;
 // }
@@ -1106,12 +1101,10 @@
 // #include<stdio.h>
 // int main()
 // {
-//     char a[5]={0};
+//     char arr_a[5]={0};
 //     scanf("%s",a);
-    
+
 //     printf("%s",a);
-
-
 
 //     return 0;
 // }
@@ -1184,12 +1177,713 @@
 //     return 0;
 // }
 
+// #include<stdio.h>
+// int main()
+// {
+//     int arr_a[200][300];
+//     printf("%d",arr_a[100][200]);
 
+// }
 
-#include<stdio.h>
-int main()
-{
-    int a[200][300];
-    printf("%d",a[100][200]);
+// #include <stdio.h>
+// struct Term {
+//     int ccficient;
+//     int exponent;
+// };
 
+// int main() {
+//     int n1, n2;
+//     scanf("%d", &n1);
+
+//     struct Term poly1[n1];
+
+//     for (int i = 0; i < n1; i++) {
+//         scanf(" (%d,%d)", &poly1[i].ccficient, &poly1[i].exponent);
+//     }
+//     scanf("%d", &n2);
+
+//     struct Term poly2[n2];
+
+//     for (int i = 0; i < n2; i++) {
+//         scanf(" (%d,%d)", &poly2[i].ccficient, &poly2[i].exponent);
+//     }
+
+//     // 执行多项式相加运算
+//     int result_size = n1 + n2;  // 结果多项式的最大项数
+//     struct Term result[result_size];
+//     int i = 0, j = 0, k = 0;
+
+//     while (i < n1 && j < n2) {
+//         if (poly1[i].exponent < poly2[j].exponent) {
+//             result[k++] = poly1[i++];
+//         } else if (poly1[i].exponent > poly2[j].exponent) {
+//             result[k++] = poly2[j++];
+//         } else {
+//             // 指数相同，系数相加
+//             result[k].exponent = poly1[i].exponent;
+//             result[k].ccficient = poly1[i].ccficient + poly2[j].ccficient;
+//             i++;
+//             j++;
+//             k++;
+//         }
+//     }
+
+//     // 处理剩余的项
+//     while (i < n1) {
+//         result[k++] = poly1[i++];
+//     }
+
+//     while (j < n2) {
+//         result[k++] = poly2[j++];
+//     }
+
+//     for (int i = 0; i < k; i++) {
+//         if (i == 0) {
+//             printf("%d", result[i].ccficient);
+//         } else {
+//             if (result[i].ccficient > 0) {
+//                 printf("+%d", result[i].ccficient);
+//                 if (result[i].exponent > 0) {
+//                     printf("X");
+//                     if (result[i].exponent > 1) {
+//                         printf("^%d", result[i].exponent);
+//                     }
+//                 }
+//             }
+//         }
+//     }
+
+//     printf("\n");
+
+//     return 0;
+// }
+
+// #include <stdio.h>
+
+// struct Term {
+//     int ccficient;
+//     int exponent;
+// };
+
+// int main() {
+//     int n1, n2;
+//     scanf("%d", &n1);
+
+//     struct Term poly1[n1];
+
+//     for (int i = 0; i < n1; i++) {
+//         scanf(" (%d,%d)", &poly1[i].ccficient, &poly1[i].exponent);
+//     }
+
+//     scanf("%d", &n2);
+
+//     struct Term poly2[n2];
+
+//     for (int i = 0; i < n2; i++) {
+//         scanf(" (%d,%d)", &poly2[i].ccficient, &poly2[i].exponent);
+//     }
+
+//     // 执行多项式相减运算
+//     int result_size = n1 + n2; // 结果多项式的最大项数
+//     struct Term result[result_size];
+//     int i = 0, j = 0, k = 0;
+
+//     while (i < n1 && j < n2) {
+//         if (poly1[i].exponent < poly2[j].exponent) {
+//             result[k++] = poly1[i++];
+//         } else if (poly1[i].exponent > poly2[j].exponent) {
+//             result[k].exponent = poly2[j].exponent;
+//             result[k].ccficient = -poly2[j].ccficient;
+//             j++;
+//             k++;
+//         } else {
+//             // 指数相同，系数相减
+//             int diff_ccficient = poly1[i].ccficient - poly2[j].ccficient;
+//             if (diff_ccficient != 0) {
+//                 result[k].exponent = poly1[i].exponent;
+//                 result[k].ccficient = diff_ccficient;
+//                 k++;
+//             }
+//             i++;
+//             j++;
+//         }
+//     }
+
+//     // 处理剩余的项
+//     while (i < n1) {
+//         result[k++] = poly1[i++];
+//     }
+
+//     while (j < n2) {
+//         result[k].exponent = poly2[j].exponent;
+//         result[k].ccficient = -poly2[j].ccficient;
+//         j++;
+//         k++;
+//     }
+
+//     for (int i = 0; i < k; i++) {
+//         if (i == 0) {
+//             printf("%d", result[i].ccficient);
+//         } else {
+//             if (result[i].ccficient > 0) {
+//                 printf("+%d", result[i].ccficient);
+//             } else {
+//                 printf("%d", result[i].ccficient);
+//             }
+//         }
+
+//         if (result[i].exponent > 0) {
+//             printf("X");
+//             if (result[i].exponent > 1) {
+//                 printf("^%d", result[i].exponent);
+//             }
+//         }
+//     }
+
+//     printf("\n");
+
+//     return 0;
+// }
+
+// #include<stdio.h>
+// #include<string.h>
+// #include<stdlib.h>
+
+// typedef struct node {
+//     int cc;
+//     int ee;
+//     struct node *next;
+// }Node, *List;
+
+// List Creat(int i) {
+//     List head;
+//     head = (List)malloc(sizeof(Node));
+//     List pre, pnew;
+//     pre = head;
+//     char a,b;
+//     for(int j = 0; j <= i; j++) {
+//         pnew = (List)malloc(sizeof(Node));
+//         scanf("%c%d,%d%c", &a, &pnew->cc, &pnew->ee, &b);
+//         pre -> next = pnew;
+//         pre = pnew;
+//     }
+//     return head;
+// }
+
+// void Print(List head) {
+//     List q = head->next->next;
+//     int flag = 1;
+//     if(!q) {
+//         putchar('0');
+//         printf("\n");
+//         return;
+//     }
+//     while(q) {
+//         if(q->cc > 0 && flag != 1) {
+//             putchar('+');
+//         }
+//         if(q->cc != 1 && q->cc != -1) {
+//             printf("%d", q->cc);
+//             if(q->ee == 1) {
+//                 putchar('X');
+//             } else if (q->ee) {
+//                 printf("X^%d", q->ee);
+//             }
+//         } else {
+//             if(q->cc == 1) {
+//                 if(!q->ee) {
+//                     putchar('1');
+//                 } else if (q->ee == 1) {
+//                     putchar('X');
+//                 } else {
+//                     printf("X^%d", q->ee);
+//                 }
+//             }
+//             if(q->cc == -1) {
+//                 if(!q->ee) {
+//                     printf("-1");
+//                 } else if(q->ee == 1) {
+//                     printf("-X");
+//                 } else {
+//                     printf("-X^%d", q->ee);
+//                 }
+//             }
+//         }
+//         q = q->next;
+//         flag++;
+//     }
+// }
+
+// List Plus(List head1, List head2) {
+//     List pre = NULL, p = NULL, qre = NULL, q = NULL;
+//     pre = head1->next;
+//     p = head1->next->next;
+//     qre = head2->next;
+//     q = head2->next->next;
+//     int index = 1;
+//     while (p != NULL) {
+//         if (q == NULL) {
+//             return head1;
+//         }
+//         if (p->ee == q->ee) {
+//             p->cc = p->cc - q->cc;
+//             if (p->cc == 0) {
+//                 pre->next = p->next;
+//                 free(p);
+//                 if (pre) {
+//                     p = pre->next;
+//                 } else {
+//                     p = NULL;
+//                 }
+//                 qre->next = q->next;
+//                 free(q);
+//                 if (qre) {
+//                     q = qre->next;
+//                 } else {
+//                     q = NULL;
+//                 }
+//             } else {
+//                 pre = p;
+//                 p = p->next;
+//                 qre->next = q->next;
+//                 free(q);
+//                 if (qre) {
+//                     q = qre->next;
+//                 } else {
+//                     q = NULL;
+//                 }
+//             }
+//         } else if (p->ee > q->ee) {
+//             q->cc = -q->cc;
+//             qre->next = q->next;
+//             q->next = p;
+//             pre->next = q;
+//             pre = q;
+//             q = qre->next;
+//         } else if (q->ee > p->ee && p->next &&q->ee < (p->next)->ee) {
+//             q->cc = -q->cc;
+//             qre->next = q->next;
+//             pre = p;
+//             p = p->next;
+//             q->next = p;
+//             pre->next = q;
+//             pre = q;
+//             q = qre->next;
+//         } else if (q->ee > p->ee && p->next && q->ee >= (p->next)->ee) {
+//             pre = p;
+//             p = p->next;
+//         } else {
+//             pre = p;
+//             break;
+//         }
+//         index ++;
+//     }
+//     if (q) {
+//         pre->next = q;
+//         List qq = q;
+//         while(qq) {
+//             qq->cc = - qq->cc;
+//             qq = qq->next;
+//         }
+//     }
+//     return head1;
+// }
+
+// int main() {
+//     int i1, i2;
+//     List head1, head2;
+//     scanf("%d", &i1);
+//     head1 = Creat(i1);
+//     scanf("%d", &i2);
+//     head2 = Creat(i2);
+//     List head = Plus(head1, head2);
+//     Print(head);
+// }
+
+// #include<stdio.h>
+// #include<string.h>
+// #include<stdlib.h>
+
+// typedef struct node {
+//     int cc;
+//     int ee;
+//     struct node *next;
+// }Node, *List;
+
+// List Creat(int i) {
+//     List head;
+//     head = (List)malloc(sizeof(Node));
+//     List pre, pnew;
+//     pre = head;
+//     char a,b;
+//     for(int j = 0; j <= i; j++) {
+//         pnew = (List)malloc(sizeof(Node));
+//         scanf("%c%d,%d%c", &a, &pnew->cc, &pnew->ee, &b);
+//         pre -> next = pnew;
+//         pre = pnew;
+//     }
+//     return head;
+// }
+
+// void Print(List head) {
+//     List q = head->next->next;
+//     int flag = 1;
+//     if(!q) {
+//         putchar('0');
+//         printf("\n");
+//         return;
+//     }
+//     while(q) {
+//         if(q->cc > 0 && flag != 1) {
+//             putchar('+');
+//         }
+//         if(q->cc != 1 && q->cc != -1) {
+//             printf("%d", q->cc);
+//             if(q->ee == 1) {
+//                 putchar('X');
+//             } else if (q->ee) {
+//                 printf("X^%d", q->ee);
+//             }
+//         } else {
+//             if(q->cc == 1) {
+//                 if(!q->ee) {
+//                     putchar('1');
+//                 } else if (q->ee == 1) {
+//                     putchar('X');
+//                 } else {
+//                     printf("X^%d", q->ee);
+//                 }
+//             }
+//             if(q->cc == -1) {
+//                 if(!q->ee) {
+//                     printf("-1");
+//                 } else if(q->ee == 1) {
+//                     printf("-X");
+//                 } else {
+//                     printf("-X^%d", q->ee);
+//                 }
+//             }
+//         }
+//         q = q->next;
+//         flag++;
+//     }
+// }
+
+// List CopyList (List head) {
+//     List newHead = (List)malloc(sizeof(Node));
+//     newHead->next = NULL;
+//     List p = head->next;
+//     List p2 = newHead;
+//     while (p) {
+//         List new = (List)malloc(sizeof(Node));
+//         new->cc = p->cc;
+//         new->ee = p->ee;
+//         p2->next = new;
+//         p2 = new;
+//         p = p->next;
+//     }
+//     p2->next = NULL;
+//     return newHead;
+// }
+
+// List Plus(List head1, List head2) {
+//     List pre = NULL, p = NULL, qre = NULL, q = NULL;
+//     pre = head1->next;
+//     p = head1->next->next;
+//     qre = head2->next;
+//     q = head2->next->next;
+//     int index = 1;
+//     while (p != NULL) {
+//         if (q == NULL) {
+//             return head1;
+//         }
+//         if (p->ee == q->ee) {
+//             p->cc = p->cc + q->cc;
+//             if (p->cc == 0) {
+//                 pre->next = p->next;
+//                 free(p);
+//                 if (pre) {
+//                     p = pre->next;
+//                 } else {
+//                     p = NULL;
+//                 }
+//                 qre->next = q->next;
+//                 free(q);
+//                 if (qre) {
+//                     q = qre->next;
+//                 } else {
+//                     q = NULL;
+//                 }
+//             } else {
+//                 pre = p;
+//                 p = p->next;
+//                 qre->next = q->next;
+//                 free(q);
+//                 if (qre) {
+//                     q = qre->next;
+//                 } else {
+//                     q = NULL;
+//                 }
+//             }
+// //            printf("4\n");
+//         } else if (p->ee > q->ee) {//多项式1的项的指数大于多项式2的项时
+//             qre->next = q->next;
+//             q->next = p;
+//             pre->next = q;
+//             pre = q;
+//             q = qre->next;
+// //            printf("3\n");
+//         } else if (q->ee > p->ee && p->next &&q->ee < (p->next)->ee)
+//         {//多项式2的项指数大小在多项式1的项与下一项中间时
+// //            printf("1\n");
+//             qre->next = q->next;
+//             pre = p;
+//             p = p->next;
+//             q->next = p;
+//             pre->next = q;
+//             pre = q;
+//             q = qre->next;
+//         } else if (q->ee > p->ee && p->next && q->ee >= (p->next)->ee) {
+//             pre = p;
+//             p = p->next;
+// //            printf("2\n");
+//         } else {
+//             pre = p;
+//             break;
+//         }
+//         index ++;
+//     }
+//     if (q) {//多项式2未计算完
+//         pre->next = q;
+//     }
+//     return head1;
+// }
+
+// List Multiply (List head1, List head2) {
+//     List p2 = head2->next->next;
+//     List newHead = (List)malloc(sizeof(Node));
+//     List pp = (List)malloc(sizeof(Node));
+//     newHead->next = pp;
+//     pp->next = NULL;
+//     List p1;
+//     List head1Pre = CopyList(head1);
+//     List res = NULL;
+//     while (p2) {
+//         p1 = head1->next->next;
+//         while (p1) {
+//             p1->cc *= p2->cc;
+//             p1->ee += p2->ee;
+//             p1 = p1->next;
+//         }
+//         p2 = p2->next;
+//         res = Plus(head1, newHead);
+//         newHead = CopyList(head1);
+//         head1 = CopyList(head1Pre);
+//     }
+//     return res;
+// }
+
+// int main() {
+//     int i1, i2;
+//     List head1, head2;
+//     scanf("%d", &i1);
+//     head1 = Creat(i1);
+//     scanf("%d", &i2);
+//     head2 = Creat(i2);
+//     List head = Multiply(head1, head2);
+//     Print(head);
+// }
+
+// #include <stdio.h>
+// #include <stdlib.h>
+
+// typedef struct node {
+//     int number;
+//     struct node* next;
+// } Node, *List;
+
+// int main(void) {
+//     List head = (List)malloc(sizeof(Node));
+//     head->next = head;
+//     List prev = head;
+//     int numbers, password;
+//     scanf("%d%d", &numbers, &password);
+//     for (int i = 1; i <= numbers; i++) {
+//         List pnew = (List)malloc(sizeof(Node));
+//         prev->next = pnew;
+//         pnew->number = i;
+//         pnew->next = head;
+//         prev = pnew;
+//     }
+//     List p = head->next;
+//     prev = head;
+
+//     while (head->next != head) {
+//         for (int i = 0; i < password - 1; i++) {
+//             if (p->next == head)  // 跳过头节点
+//             {
+//                 p = p->next;
+//                 prev = prev->next;
+//             }
+//             p = p->next;
+//             prev = prev->next;
+//         }
+//         if (p->next == head) {
+//             printf("%d ", p->number);
+//             prev->next = head;
+//             prev = head;
+//             List t = p;
+//             p = head->next;
+//             free(t);
+//         } else {
+//             printf("%d ", p->number);
+//             prev->next = p->next;
+//             List t = p;
+//             p = p->next;
+//             free(t);
+//         }
+//     }
+
+//     return 0;
+// }
+
+// #include <malloc.h>
+// #include <stdio.h>
+// typedef struct set {
+//     int password;
+//     int num;
+//     struct set* next;
+// } Node;
+
+// int main(void) {
+//     int n, m, i, j = 1, k = 1, flag = 1;
+//     int arr_a[100000];
+//     Node head, *phead, *p0, *p1;
+//     phead = NULL;
+//     scanf("%d %d", &n, &m);
+//     getchar();
+
+//     for (i = 0; i < n; i++) {
+//         if (phead == NULL) {
+//             phead = &head;
+//             phead->num = j;
+//             p0 = phead;
+//             phead->next = phead;
+
+//         } else {
+//             p1 = (Node*)malloc(sizeof(Node));
+//             p1->next = p0;
+//             phead->next = p1;
+//             phead = p1;
+//             phead->num = j;
+//         }
+//         scanf("%d", &phead->password);
+//         j++;
+//     }
+//     i = 0;
+
+//     while (p0) {
+//         if (p0->num == 0) {
+//             p0 = p0->next;
+//             continue;
+//         }
+//         if (k == m && p0->num != 0) {
+//             arr_a[i] = p0->num;
+//             m = p0->password;
+//             p0->num = 0;
+//             i++;
+//             k = 0;
+//         }
+//         k++;
+//         if (i == (j - 1))
+//             break;
+//         p0 = p0->next;
+//     }
+
+//     for (j = 0; j < i; j++)
+//         printf("%d ", arr_a[j]);
+
+//     return 0;
+// }
+
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct node {
+    int number;
+    struct node* next;
+} Node, *List;
+
+List head = NULL;
+List pFront = NULL;
+List per = NULL;
+int n, m, k;
+int arr_b[10000];
+
+void Create() {
+    List tail;
+    for (int i = 0; i < n; i++) {
+        List pnew;
+        pnew = (List)malloc(sizeof(Node));
+        pnew->number = i + 1;
+        if (head == NULL) {
+            head = pnew;
+        } else {
+            tail->next = pnew;
+        }
+        tail = pnew;
+    }
+    tail->next = head;
+    pFront = tail;
+}
+
+void Joseph(int number, int m) {
+    if (number == 0) {
+        return;
+    }
+    int count = 1;
+    List p = NULL;
+    while (count != m) {
+        per = per->next;
+        pFront = pFront->next;
+        count++;
+    }
+    p = per;
+    pFront->next = per->next;
+    if (number == 1) {
+        arr_b[k++] = p->number;
+    } else {
+        arr_b[k++] = p->number;
+    }
+    per = per->next;
+    free(p);
+    Joseph(number - 1, m);
+}
+
+int main() {
+    scanf("%d %d", &n, &m);
+    int i;
+    int arr_a[n];
+    for (i = n - m; i < n; i++) {
+        scanf("%d", &arr_a[i]);
+    }
+    for (i = 1; i <= n; i++) {
+        head = NULL;
+        pFront = NULL;
+        k = 0;
+        int flag = 1;
+        Create();
+        per = head;
+        Joseph(n, i);
+        for (int j = n - m; j < n; j++) {
+            if (arr_a[j] != arr_b[j]) {
+                flag = 0;
+            }
+        }
+        if (flag == 1) {
+            printf("%d", i);
+            return 0;
+        }
+    }
+    return 0;
 }
