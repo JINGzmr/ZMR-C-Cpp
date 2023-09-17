@@ -1806,84 +1806,84 @@
 //     return 0;
 // }
 
-#include <stdio.h>
-#include <stdlib.h>
+// #include <stdio.h>
+// #include <stdlib.h>
 
-typedef struct node {
-    int number;
-    struct node* next;
-} Node, *List;
+// typedef struct node {
+//     int number;
+//     struct node* next;
+// } Node, *List;
 
-List head = NULL;
-List pFront = NULL;
-List per = NULL;
-int n, m, k;
-int arr_b[10000];
+// List head = NULL;
+// List pFront = NULL;
+// List per = NULL;
+// int n, m, k;
+// int arr_b[10000];
 
-void Create() {
-    List tail;
-    for (int i = 0; i < n; i++) {
-        List pnew;
-        pnew = (List)malloc(sizeof(Node));
-        pnew->number = i + 1;
-        if (head == NULL) {
-            head = pnew;
-        } else {
-            tail->next = pnew;
-        }
-        tail = pnew;
-    }
-    tail->next = head;
-    pFront = tail;
-}
+// void Create() {
+//     List tail;
+//     for (int i = 0; i < n; i++) {
+//         List pnew;
+//         pnew = (List)malloc(sizeof(Node));
+//         pnew->number = i + 1;
+//         if (head == NULL) {
+//             head = pnew;
+//         } else {
+//             tail->next = pnew;
+//         }
+//         tail = pnew;
+//     }
+//     tail->next = head;
+//     pFront = tail;
+// }
 
-void Joseph(int number, int m) {
-    if (number == 0) {
-        return;
-    }
-    int count = 1;
-    List p = NULL;
-    while (count != m) {
-        per = per->next;
-        pFront = pFront->next;
-        count++;
-    }
-    p = per;
-    pFront->next = per->next;
-    if (number == 1) {
-        arr_b[k++] = p->number;
-    } else {
-        arr_b[k++] = p->number;
-    }
-    per = per->next;
-    free(p);
-    Joseph(number - 1, m);
-}
+// void Joseph(int number, int m) {
+//     if (number == 0) {
+//         return;
+//     }
+//     int count = 1;
+//     List p = NULL;
+//     while (count != m) {
+//         per = per->next;
+//         pFront = pFront->next;
+//         count++;
+//     }
+//     p = per;
+//     pFront->next = per->next;
+//     if (number == 1) {
+//         arr_b[k++] = p->number;
+//     } else {
+//         arr_b[k++] = p->number;
+//     }
+//     per = per->next;
+//     free(p);
+//     Joseph(number - 1, m);
+// }
 
-int main() {
-    scanf("%d %d", &n, &m);
-    int i;
-    int arr_a[n];
-    for (i = n - m; i < n; i++) {
-        scanf("%d", &arr_a[i]);
-    }
-    for (i = 1; i <= n; i++) {
-        head = NULL;
-        pFront = NULL;
-        k = 0;
-        int flag = 1;
-        Create();
-        per = head;
-        Joseph(n, i);
-        for (int j = n - m; j < n; j++) {
-            if (arr_a[j] != arr_b[j]) {
-                flag = 0;
-            }
-        }
-        if (flag == 1) {
-            printf("%d", i);
-            return 0;
-        }
-    }
-    return 0;
-}
+// int main() {
+//     scanf("%d %d", &n, &m);
+//     int i;
+//     int arr_a[n];
+//     for (i = n - m; i < n; i++) {
+//         scanf("%d", &arr_a[i]);
+//     }
+//     for (i = 1; i <= n; i++) {
+//         head = NULL;
+//         pFront = NULL;
+//         k = 0;
+//         int flag = 1;
+//         Create();
+//         per = head;
+//         Joseph(n, i);
+//         for (int j = n - m; j < n; j++) {
+//             if (arr_a[j] != arr_b[j]) {
+//                 flag = 0;
+//             }
+//         }
+//         if (flag == 1) {
+//             printf("%d", i);
+//             return 0;
+//         }
+//     }
+//     return 0;
+// }
