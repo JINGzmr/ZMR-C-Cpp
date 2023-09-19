@@ -137,7 +137,8 @@
 
 //     // 成员函数
 //     void sayHello() {
-//       cout << "Hello, my name is " << name << " and I'm " << age << " years old." << endl;
+//       cout << "Hello, my name is " << name << " and I'm " << age << " years
+//       old." << endl;
 //     }
 // };
 
@@ -378,7 +379,8 @@
 //     }
 
 //     // 拷贝构造函数
-//     MyClass(const MyClass& other) {  //注意我们不需要修改原来的值，所以传的值用const修饰，且是“引用&”
+//     MyClass(const MyClass& other) {
+//     //注意我们不需要修改原来的值，所以传的值用const修饰，且是“引用&”
 //        this->value = other.value;
 //         cout << "Copy constructor called." << endl;
 //     }
@@ -529,7 +531,8 @@
 
 // class phone
 // {
-// // private: //不能设置为私有，否者person类里的m_phone.m_phonename该语句报错，显示无法访问m_phonename
+// // private:
+// //不能设置为私有，否者person类里的m_phone.m_phonename该语句报错，显示无法访问m_phonename
 // public:
 //     string m_phonename;
 
@@ -861,7 +864,8 @@
 // 	virtual void put() = 0;
 
 // 	//制作饮品
-// 	void makedrink()	//抽象类也可以定义其他东西（包括不是虚函数的其他成员函数）
+// 	void makedrink()
+// //抽象类也可以定义其他东西（包括不是虚函数的其他成员函数）
 // 	{
 // 		boil();
 // 		brew();
@@ -1079,21 +1083,21 @@
 // 	VideoCard *intel_VideoCard_ptr = new intel_VideoCard;
 // 	Memory *intel_Memory_ptr = new intel_Memory;
 
-// 	Computer *computer_ptr1 = new Computer(intel_cpu_ptr, intel_VideoCard_ptr, intel_Memory_ptr);
-// 	computer_ptr1->work();
-// 	delete  computer_ptr1;
+// 	Computer *computer_ptr1 = new Computer(intel_cpu_ptr,
+// intel_VideoCard_ptr, intel_Memory_ptr); 	computer_ptr1->work(); 	delete
+// computer_ptr1;
 
 // 	cout << "-------------------" << endl;
 // 	//第二台电脑组装（法二）
-// 	Computer *computer_ptr2 = new Computer(new lenovo_cpu, new lenovo_VideoCard, new lenovo_Memory);
-// 	computer_ptr2->work();
-// 	delete  computer_ptr2;
+// 	Computer *computer_ptr2 = new Computer(new lenovo_cpu, new
+// lenovo_VideoCard, new lenovo_Memory); 	computer_ptr2->work(); 	delete
+// computer_ptr2;
 
 // 	cout << "-------------------" << endl;
 // 	//第三台电脑组装（法二）
-// 	Computer *computer_ptr3 = new Computer(new lenovo_cpu, new intel_VideoCard, new intel_Memory);
-// 	computer_ptr3->work();
-// 	delete  computer_ptr3;
+// 	Computer *computer_ptr3 = new Computer(new lenovo_cpu, new
+// intel_VideoCard, new intel_Memory); 	computer_ptr3->work(); 	delete
+// computer_ptr3;
 
 // }
 
@@ -1232,193 +1236,321 @@
 
 // }
 
+// #include <netinet/in.h>
+// #include <string.h>
+// #include <sys/socket.h>
+// #include <sys/types.h>
+// #include <unistd.h>
+// #include <iostream>
+
+// using namespace std;
+
+// int main() {
+//     // 创建Socket
+//     // 第一个参数：AF_INET表示是ipv4，ipv6是AF_INET6；
+//     // 第二个参数：传输层协议 这里是流式传输协议（一般tcp用）；
+//     // 第三个参数：0表示采用流式传输协议中的tcp协议
+//     // 返回值：失败返回-1
+//     int server_socket = socket(AF_INET, SOCK_STREAM, 0);
+
+//     if (server_socket == -1) {
+//         cout << "Error: Failed to create socket!" << endl;
+//         return -1;
+//     }
+
+//     // 设置服务器地址和端口号
+//     struct sockaddr_in server_addr;
+//     memset(&server_addr, 0, sizeof(server_addr));
+//     server_addr.sin_family = AF_INET;
+//     server_addr.sin_port = htons(8888);
+//     server_addr.sin_addr.s_addr = INADDR_ANY;
+
+//     // 绑定Socket到地址和端口号
+//     // 第一个参数：用于监听的文件描述符，由socket（）返回值得到
+//     //
+//     第二个参数：结构体(要另外对里面的成员进行初始化，如上几行代码)，存的是本地的ip及端口（一定是大端的-->网络字节序）
+//     // 第三个参数：结构体的大小
+//     // 返回值:失败返回-1
+//     int ret = bind(server_socket, (struct sockaddr*)&server_addr,
+//                    sizeof(server_addr));
+//     if (ret == -1) {
+//         cout << "Error: Failed to bind socket to address and port!" << endl;
+//         close(server_socket);
+//         return -1;
+//     }
+
+//     // 监听Socket
+//     //
+//     第一个参数：用于监听的文件描述符，由socket（）返回值得到，并由bind函数做了绑定
+//     // 第二个参数：一次性能够检测到客户端连接的数量，最大为128（该参数的大小
+//     和
+//     // 客户端与服务器之间最多可以建立多少个连接 没有关系） 返回值：失败返回-1
+//     // listen（）内部维护了一个任务队列，最多可以存储128个请求
+//     ret = listen(server_socket, 5);
+//     if (ret == -1) {
+//         cout << "Error: Failed to listen on socket!" << endl;
+//         close(server_socket);
+//         return -1;
+//     }
+
+//     // 等待客户端连接
+//     struct sockaddr_in client_addr;
+//     socklen_t client_addr_len = sizeof(client_addr);
+//     // 第一个参数：文件描述符
+//     // 第二个参数：结构体（不用初始化，调用成功后，里面存的是 发起连接请求的
+//     // 客户端的 ip及端口），可以理解为accept（）函数的传出参数
+//     // 第三个参数：结构体大小
+//     // 返回值：成功 得到用于通信的文件描述符，失败返回-1
+//     // 阻塞，直到有客户端连接connect
+//     int client_socket =
+//         accept(server_socket, (struct sockaddr*)&client_addr,
+//         &client_addr_len);
+//     if (client_socket == -1) {
+//         cout << "Error: Failed to accept client connection!" << endl;
+//         close(server_socket);
+//         return -1;
+//     }
+
+//     // 接收客户端数据
+//     char buffer[1024] = {0};
+//     ret = recv(client_socket, buffer, sizeof(buffer), 0);
+//     if (ret == -1) {
+//         cout << "Error: Failed to receive data from client!" << endl;
+//         close(client_socket);
+//         close(server_socket);
+//         return -1;
+//     }
+
+//     cout << "Received data from client: " << buffer << endl;
+
+//     // 发送响应数据到客户端
+//     const char* data = "Hello, client!";
+//     ret = send(client_socket, data, strlen(data), 0);
+//     if (ret == -1) {
+//         cout << "Error: Failed to send response data to client!" << endl;
+//         close(client_socket);
+//         close(server_socket);
+//         return -1;
+//     }
+
+//     // 关闭Socket连接
+//     // 参数:要关闭的套接字对应的文件描述符
+//     // 返回值：失败返回-1
+//     close(client_socket);
+//     close(server_socket);
+
+//     return 0;
+// }
+
+// #include <iostream>
+// #include <string>
+// #include <cstring>
+// #include <sys/socket.h>
+// #include <arpa/inet.h>
+// #include <unistd.h>
+
+// using namespace std;
+
+// const int PORT = 8888;
+// const char* SERVER_IP = "127.0.0.1";
+
+// int main() {
+//     // 创建一个TCP连接对象
+//     int client_socket = socket(AF_INET, SOCK_STREAM, 0);
+//     if (client_socket < 0) {
+//         perror("socket creation failed");
+//         return EXIT_FAILURE;
+//     }
+
+//     // 客户端连接的IP和端口号
+//     struct sockaddr_in server_address;
+//     memset(&server_address, 0, sizeof(server_address));
+//     server_address.sin_family = AF_INET;
+//     server_address.sin_port = htons(PORT);
+//     if (inet_pton(AF_INET, SERVER_IP, &server_address.sin_addr) <= 0) {
+//         perror("invalid address");
+//         return EXIT_FAILURE;
+//     }
+
+//     // 连接服务器
+//     // 第一个参数：用于通信的文件描述符
+//     //
+//     第二个参数：结构体(要另外对里面的成员进行初始化，如上几行代码)，服务器绑定的是什么ip和端口，这里就初始化相同的数据
+//     // 第三个参数：结构体的大小
+//     // 返回值：失败返回-1
+//     //
+//     注：客户端不用bind（）对ip和端口进行绑定，因为客户端会随机绑定一个ip和端口，服务器中accept（）得到的ip和端口便是客户端随机绑定的
+//     // （因为服务器不会主动连接客户端）
+//     int connect_result = connect(client_socket, (struct
+//     sockaddr*)&server_address, sizeof(server_address)); if (connect_result ==
+//     -1) {
+//         perror("connection failed");
+//         return EXIT_FAILURE;
+//     }
+
+//     // 发送数据(write() or send())
+//     // 第一个参数：用于通信的文件描述符
+//     // 第二个参数：指针，指向一块内存，存的是要发送的数据
+//     // 第三个参数：发送数据的大小
+//     // 第四个参数：一般为0
+//     // 返回值: >0 实际的发送的字节数,一般等于第三个参数;  =-1 发送失败
+//     string message = "Hello, server!";
+//     if (send(client_socket, message.c_str(), message.length(), 0) < 0) {
+//         perror("send failed");
+//         return EXIT_FAILURE;
+//     }
+
+//     // 接收数据（read() or recv()）
+//     // 第一个参数：用于通信的文件描述符
+//     // 第二个参数：指针，指向一块内存，用于存储接收的数据
+//     // 第三个参数：内存的最大容量
+//     // 第四个参数：一般为0
+//     // 返回值：>0 实际接收的字节数； =0 对方断开连接；  =-1 接收数据失败
+//     char buffer[1024] = {0};
+//     int bytes_received = recv(client_socket, buffer, 1024, 0);
+//     if (bytes_received < 0) {
+//         perror("receive failed");
+//         return EXIT_FAILURE;
+//     }
+
+//     //
+//     return EXIT_SUCCESS;
+
+// // 处理接收到的数据
+//     cout << "Received from server: " << buffer << endl;
+
+//     // 关闭连接
+//     // 参数:要关闭的套接字对应的文件描述符
+//     // 返回值：失败返回-1
+//     close(client_socket);
+
+//     return EXIT_SUCCESS;
+// }
+
+// #include <iostream>
+// using namespace std;
+
+// int main() {
+//     int n;
+//     cin >> n;
+
+//     for (int i = 1; i <= n; i++) {
+
+//     }
+// }
+
 #include <iostream>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <unistd.h>
-#include <string.h>
+#include <vector>
 
-using namespace std;
+// 定义一个函数来生成杨辉三角的前n行
+std::vector<std::vector<int>> generatePascalTriangle(int numRows) {
+    std::vector<std::vector<int>> triangle;
 
-int main()
-{
-    // 创建Socket
-    // 第一个参数：AF_INET表示是ipv4，ipv6是AF_INET6；
-    // 第二个参数：传输层协议 这里是流式传输协议（一般tcp用）；
-    // 第三个参数：0表示采用流式传输协议中的tcp协议
-    // 返回值：失败返回-1
-    int server_socket = socket(AF_INET, SOCK_STREAM, 0);
+    for (int i = 0; i < numRows; i++) {
+        std::vector<int> row(i + 1, 1);
 
-    if (server_socket == -1)
-    {
-        cout << "Error: Failed to create socket!" << endl;
-        return -1;
+        for (int j = 1; j < i; j++) {
+            row[j] = triangle[i - 1][j - 1] + triangle[i - 1][j];
+        }
+
+        triangle.push_back(row);
     }
 
-    // 设置服务器地址和端口号
-    struct sockaddr_in server_addr;
-    memset(&server_addr, 0, sizeof(server_addr));
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_port = htons(8888);
-    server_addr.sin_addr.s_addr = INADDR_ANY; 
+    return triangle;
+}
 
-    // 绑定Socket到地址和端口号
-    // 第一个参数：用于监听的文件描述符，由socket（）返回值得到
-    // 第二个参数：结构体(要另外对里面的成员进行初始化，如上几行代码)，存的是本地的ip及端口（一定是大端的-->网络字节序）
-    // 第三个参数：结构体的大小 
-    // 返回值:失败返回-1
-    int ret = bind(server_socket, (struct sockaddr *)&server_addr, sizeof(server_addr));
-    if (ret == -1)
-    {
-        cout << "Error: Failed to bind socket to address and port!" << endl;
-        close(server_socket);
-        return -1;
+// 打印杨辉三角
+void printPascalTriangle(int numRows) {
+    std::vector<std::vector<int>> triangle = generatePascalTriangle(numRows);
+
+    for (int i = 0; i < numRows; i++) {
+        int numSpaces = numRows - i;
+
+        // 添加前导空格
+        for (int j = 0; j < numSpaces; j++) {
+            std::cout << " ";
+        }
+
+        for (int j = 0; j <= i; j++) {
+            std::cout << triangle[i][j] << " ";
+        }
+
+        std::cout << std::endl;
     }
+}
 
-    // 监听Socket
-    // 第一个参数：用于监听的文件描述符，由socket（）返回值得到，并由bind函数做了绑定 
-    // 第二个参数：一次性能够检测到客户端连接的数量，最大为128（该参数的大小 和 客户端与服务器之间最多可以建立多少个连接 没有关系）
-    // 返回值：失败返回-1  
-    // listen（）内部维护了一个任务队列，最多可以存储128个请求
-    ret = listen(server_socket, 5); 
-    if (ret == -1)
-    {
-        cout << "Error: Failed to listen on socket!" << endl;
-        close(server_socket);
-        return -1;
-    }
+int main() {
+    int numRows;
+    std::cout << "请输入要打印的杨辉三角的行数：";
+    std::cin >> numRows;
 
-    // 等待客户端连接
-    struct sockaddr_in client_addr;
-    socklen_t client_addr_len = sizeof(client_addr);
-    // 第一个参数：文件描述符
-    // 第二个参数：结构体（不用初始化，调用成功后，里面存的是 发起连接请求的 客户端的 ip及端口），可以理解为accept（）函数的传出参数
-    // 第三个参数：结构体大小
-    // 返回值：成功 得到用于通信的文件描述符，失败返回-1  
-    // 阻塞，直到有客户端连接connect
-    int client_socket = accept(server_socket, (struct sockaddr *)&client_addr, &client_addr_len);
-    if (client_socket == -1)
-    { 
-        cout << "Error: Failed to accept client connection!" << endl;
-        close(server_socket);
-        return -1;
-    }
-
-    // 接收客户端数据
-    char buffer[1024] = {0};
-    ret = recv(client_socket, buffer, sizeof(buffer), 0);
-    if (ret == -1)
-    {
-        cout << "Error: Failed to receive data from client!" << endl;
-        close(client_socket);
-        close(server_socket);
-        return -1;
-    }
-
-    cout << "Received data from client: " << buffer << endl;
-
-    // 发送响应数据到客户端
-    const char *data = "Hello, client!";
-    ret = send(client_socket, data, strlen(data), 0);
-    if (ret == -1)
-    {
-        cout << "Error: Failed to send response data to client!" << endl;
-        close(client_socket);
-        close(server_socket);
-        return -1;
-    }
-
-    // 关闭Socket连接
-    // 参数:要关闭的套接字对应的文件描述符
-    // 返回值：失败返回-1
-    close(client_socket);
-    close(server_socket);
+    printPascalTriangle(numRows);
 
     return 0;
 }
 
+// vector<int> ivec;           // ivec保存int类型的对象
+// vector<vector<int>> ivec1;  // 该向量的元素是vector对象
 
-#include <iostream>
-#include <string>
-#include <cstring>
-#include <sys/socket.h>
-#include <arpa/inet.h>
-#include <unistd.h>
+// vector<int> ivec{"hello", "world"};
 
-using namespace std;
+// vector<int> ivec(10, 1);//10个int类型的元素，每个初始化为1
 
-const int PORT = 8888;
-const char* SERVER_IP = "127.0.0.1";
+// vector<int> ivec(10);//10个int类型的元素，默认初始化为0
 
-int main() {
-    // 创建一个TCP连接对象
-    int client_socket = socket(AF_INET, SOCK_STREAM, 0);
-    if (client_socket < 0) {
-        perror("socket creation failed");
-        return EXIT_FAILURE;
-    }
+// int main() {
+//     // std::vector<int> ivec;
+//     // for (int i = 0; i < 100; i++) {
+//     //     ivec.push_back(i);
+//     // }
 
-    // 客户端连接的IP和端口号
-    struct sockaddr_in server_address;
-    memset(&server_address, 0, sizeof(server_address));
-    server_address.sin_family = AF_INET;
-    server_address.sin_port = htons(PORT);
-    if (inet_pton(AF_INET, SERVER_IP, &server_address.sin_addr) <= 0) {
-        perror("invalid address");
-        return EXIT_FAILURE;
-    }
- 
-    // 连接服务器
-    // 第一个参数：用于通信的文件描述符
-    // 第二个参数：结构体(要另外对里面的成员进行初始化，如上几行代码)，服务器绑定的是什么ip和端口，这里就初始化相同的数据
-    // 第三个参数：结构体的大小
-    // 返回值：失败返回-1
-    // 注：客户端不用bind（）对ip和端口进行绑定，因为客户端会随机绑定一个ip和端口，服务器中accept（）得到的ip和端口便是客户端随机绑定的
-    // （因为服务器不会主动连接客户端）
-    int connect_result = connect(client_socket, (struct sockaddr*)&server_address, sizeof(server_address));
-    if (connect_result == -1) {
-        perror("connection failed");
-        return EXIT_FAILURE;
-    }
+//     // // 使用范围-based for 循环遍历并打印每个元素
+//     // for (const int& element : ivec) { //
+//     // 把ivec的每个元素赋给int类型的变量element（相当于const int&
+//     // element=ivec[i]）
+//     //     std::cout << element << " ";  // 对element输出
+//     // }
 
-    // 发送数据(write() or send())
-    // 第一个参数：用于通信的文件描述符
-    // 第二个参数：指针，指向一块内存，存的是要发送的数据
-    // 第三个参数：发送数据的大小
-    // 第四个参数：一般为0
-    // 返回值: >0 实际的发送的字节数,一般等于第三个参数;  =-1 发送失败
-    string message = "Hello, server!";
-    if (send(client_socket, message.c_str(), message.length(), 0) < 0) {
-        perror("send failed");
-        return EXIT_FAILURE;
-    }
-
-    // 接收数据（read() or recv()）
-    // 第一个参数：用于通信的文件描述符
-    // 第二个参数：指针，指向一块内存，用于存储接收的数据
-    // 第三个参数：内存的最大容量
-    // 第四个参数：一般为0
-    // 返回值：>0 实际接收的字节数； =0 对方断开连接；  =-1 接收数据失败
-    char buffer[1024] = {0};
-    int bytes_received = recv(client_socket, buffer, 1024, 0);
-    if (bytes_received < 0) {
-        perror("receive failed");
-        return EXIT_FAILURE;
-    }
-
-    // 
-    return EXIT_SUCCESS;
-
-// 处理接收到的数据
-    cout << "Received from server: " << buffer << endl;
-
-    // 关闭连接
-    // 参数:要关闭的套接字对应的文件描述符
-    // 返回值：失败返回-1
-    close(client_socket);
-
-    return EXIT_SUCCESS;
-}
+//     std::vector<int> v{1, 2, 3, 4, 5};
+//     for (auto &i : v) { // i是一个引用
+//         i *= i;         // 可以通过改变i来改变vector里的值（如果i不是引用，则输出还是12345）
+//     }
+//     for (auto i : v) {
+//         std::cout << i << " "; // 1 4 9 16 25 
+//     }
+// }
 
 
+// #include <vector>
+// #include <iostream>
+
+// int main() {
+//     // 创建一个包含3行2列的二维整数数组
+//     std::vector<std::vector<int>> twoDArray(3, std::vector<int>(2));
+
+//     // 向二维数组中添加一些值
+//     twoDArray[0][0] = 1;
+//     twoDArray[0][1] = 2;
+//     twoDArray[1][0] = 3;
+//     twoDArray[1][1] = 4;
+//     twoDArray[2][0] = 5;
+//     twoDArray[2][1] = 6;
+
+//     // 访问和输出二维数组中的值
+//     for (int i = 0; i < 3; i++) {
+//         for (int j = 0; j < 2; j++) {
+//             std::cout << twoDArray[i][j] << " ";
+//         }
+//         std::cout << std::endl;
+//     }
+
+//   // 使用范围-based for 循环遍历二维数组并输出其内容
+//     for (const auto& row : twoDArray) {
+//         for (const auto& element : row) {
+//             std::cout << element << " ";
+//         }
+//         std::cout << std::endl;
+//     }
+
+//     return 0;
+// }
