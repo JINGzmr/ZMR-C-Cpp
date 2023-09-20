@@ -1439,55 +1439,55 @@
 //     }
 // }
 
-#include <iostream>
-#include <vector>
+// #include <iostream>
+// #include <vector>
 
-// 定义一个函数来生成杨辉三角的前n行
-std::vector<std::vector<int>> generatePascalTriangle(int numRows) {
-    std::vector<std::vector<int>> triangle;
+// // 定义一个函数来生成杨辉三角的前n行
+// std::vector<std::vector<int>> generatePascalTriangle(int numRows) {
+//     std::vector<std::vector<int>> triangle;
 
-    for (int i = 0; i < numRows; i++) {
-        std::vector<int> row(i + 1, 1);
+//     for (int i = 0; i < numRows; i++) {
+//         std::vector<int> row(i + 1, 1);
 
-        for (int j = 1; j < i; j++) {
-            row[j] = triangle[i - 1][j - 1] + triangle[i - 1][j];
-        }
+//         for (int j = 1; j < i; j++) {
+//             row[j] = triangle[i - 1][j - 1] + triangle[i - 1][j];
+//         }
 
-        triangle.push_back(row);
-    }
+//         triangle.push_back(row);
+//     }
 
-    return triangle;
-}
+//     return triangle;
+// }
 
-// 打印杨辉三角
-void printPascalTriangle(int numRows) {
-    std::vector<std::vector<int>> triangle = generatePascalTriangle(numRows);
+// // 打印杨辉三角
+// void printPascalTriangle(int numRows) {
+//     std::vector<std::vector<int>> triangle = generatePascalTriangle(numRows);
 
-    for (int i = 0; i < numRows; i++) {
-        int numSpaces = numRows - i;
+//     for (int i = 0; i < numRows; i++) {
+//         int numSpaces = numRows - i;
 
-        // 添加前导空格
-        for (int j = 0; j < numSpaces; j++) {
-            std::cout << " ";
-        }
+//         // 添加前导空格
+//         for (int j = 0; j < numSpaces; j++) {
+//             std::cout << " ";
+//         }
 
-        for (int j = 0; j <= i; j++) {
-            std::cout << triangle[i][j] << " ";
-        }
+//         for (int j = 0; j <= i; j++) {
+//             std::cout << triangle[i][j] << " ";
+//         }
 
-        std::cout << std::endl;
-    }
-}
+//         std::cout << std::endl;
+//     }
+// }
 
-int main() {
-    int numRows;
-    std::cout << "请输入要打印的杨辉三角的行数：";
-    std::cin >> numRows;
+// int main() {
+//     int numRows;
+//     std::cout << "请输入要打印的杨辉三角的行数：";
+//     std::cin >> numRows;
 
-    printPascalTriangle(numRows);
+//     printPascalTriangle(numRows);
 
-    return 0;
-}
+//     return 0;
+// }
 
 // vector<int> ivec;           // ivec保存int类型的对象
 // vector<vector<int>> ivec1;  // 该向量的元素是vector对象
@@ -1513,13 +1513,13 @@ int main() {
 
 //     std::vector<int> v{1, 2, 3, 4, 5};
 //     for (auto &i : v) { // i是一个引用
-//         i *= i;         // 可以通过改变i来改变vector里的值（如果i不是引用，则输出还是12345）
+//         i *= i;         //
+//         可以通过改变i来改变vector里的值（如果i不是引用，则输出还是12345）
 //     }
 //     for (auto i : v) {
-//         std::cout << i << " "; // 1 4 9 16 25 
+//         std::cout << i << " "; // 1 4 9 16 25
 //     }
 // }
-
 
 // #include <vector>
 // #include <iostream>
@@ -1554,3 +1554,62 @@ int main() {
 
 //     return 0;
 // }
+
+// #include <iostream>
+// #include <vector>
+// using namespace std;
+
+// int main() {
+//     int n;
+//     vector<vector<int>> v;
+
+//     cin >> n;
+//     for (int i = 0; i < n; i++) {
+//         vector<int> row(i + 1, 1);
+
+//         for (int j = 1; j < i; j++) {
+//             row[j] = v[i - 1][j - 1] + v[i - 1][j];
+//         }
+
+//         v.push_back(row);
+//     }
+
+//     for (auto row_ : v) {
+//         for (auto element : row_) {
+//             cout << element << " ";
+//         }
+//         cout << endl;
+//     }
+// }
+
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int main() {
+    string str;
+    cin >> str;
+
+    vector<char> v;
+    int half_length = str.length() / 2;
+
+    for (int i = 0; i < half_length; i++) {
+        v.push_back(str[i]);
+    }
+
+    int flag = half_length;
+    if (str.length() % 2 != 0) {  // 说明长度为奇数
+        flag ++;
+    }
+
+    while (!v.empty()) {
+        char c = v.back();
+        v.pop_back();
+        if(c!=str[flag++]){
+            cout<< "不是回文";
+            return 0;
+        }
+    }
+    cout << "回文";
+}
