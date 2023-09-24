@@ -1887,3 +1887,79 @@
 //     }
 //     return 0;
 // }
+
+#include <stdio.h>
+#define MAXSIZE 10000
+
+typedef struct {
+    int num[MAXSIZE];
+    int top;
+} nump, *numpp;
+
+typedef struct {
+    char oth[MAXSIZE];
+    int top;
+} othp, *othpp;
+
+//栈的创建                                    
+numpp init_num() {
+    nump* s;
+    s = (nump*)malloc(sizeof(nump));
+    s->top =-1;
+    return s;
+}
+
+othpp init_oth() {
+    othp* s;
+    s = (othp*)malloc(sizeof(othp));
+    s->top =-1;
+    return s;
+}
+
+// // 判断是否为空（空返回1）
+// int empty_num(numpp s)
+// {
+//     if(s->top==-1)
+//         return 1;
+//     else    
+//         return 0;
+// }
+
+// int empty_oth(othpp s)
+// {
+//     if(s->top==-1)
+//         return 1;
+//     else    
+//         return 0;
+// }
+
+// 入栈(成功1)
+int push_num(numpp s,int num){
+    if(s->top==MAXSIZE-1)
+        return 0;
+
+    s->num[s->top++]=num;
+    return 1;
+}
+
+int push_oth(othpp s,char oth){
+    if(s->top==MAXSIZE-1)
+        return 0;
+
+    s->oth[s->top++]=oth;
+    return 1;
+}
+
+
+
+int main() {
+    numpp s1 = init_num();
+    othpp s2 = init_oth();
+
+    char buffer[MAXSIZE]; 
+
+    scanf("%s", buffer); 
+
+
+    
+}

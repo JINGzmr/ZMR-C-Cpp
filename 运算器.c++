@@ -15,7 +15,7 @@
 // }
 // #include <iostream>
 
-// using namespace std;
+// using namespace std; 
 // double PI = 3.14;
 // class Circle
 // {
@@ -1582,34 +1582,36 @@
 //     }
 // }
 
-#include <iostream>
-#include <vector>
+// #include <iostream>
+// #include <vector>
 
-using namespace std;
+// using namespace std;
 
-int main() {
-    string str;
-    cin >> str;
+// int main() {
+//     string str;
+//     cin >> str;
 
-    vector<char> v;
-    int half_length = str.length() / 2;
+//     vector<char> v;
+//     int half_length = str.length() / 2;
 
-    for (int i = 0; i < half_length; i++) {
-        v.push_back(str[i]);
-    }
+//     for (int i = 0; i < half_length; i++) {
+//         v.push_back(str[i]);
+//     }
 
-    int flag = half_length;
-    if (str.length() % 2 != 0) {  // 说明长度为奇数
-        flag ++;
-    }
+//     int flag = half_length;
+//     if (str.length() % 2 != 0) {  // 说明长度为奇数
+//         flag ++;
+//     }
 
-    while (!v.empty()) {
-        char c = v.back();
-        v.pop_back();
-        if(c!=str[flag++]){
-            cout<< "不是回文";
-            return 0;
-        }
-    }
-    cout << "回文";
-}
+//     while (!v.empty()) {
+//         char c = v.back();
+//         v.pop_back();
+//         if(c!=str[flag++]){
+//             cout<< "不是回文";
+//             return 0;
+//         }
+//     }
+//     cout << "回文";
+// }
+
+
