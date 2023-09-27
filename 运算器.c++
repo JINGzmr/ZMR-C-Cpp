@@ -1582,36 +1582,61 @@
 //     }
 // }
 
+// #include <iostream>
+// #include <vector>
+
+// using namespace std;
+
+// int main() {
+//     string str;
+//     cin >> str;
+
+//     vector<char> v;
+//     int half_length = str.length() / 2;
+
+//     for (int i = 0; i < half_length; i++) {
+//         v.push_back(str[i]);
+//     }
+
+//     int flag = half_length;
+//     if (str.length() % 2 != 0) {  // 说明长度为奇数
+//         flag ++;
+//     }
+
+//     while (!v.empty()) {
+//         char c = v.back();
+//         v.pop_back();
+//         if(c!=str[flag++]){
+//             cout<< "不是回文";
+//             return 0;
+//         }
+//     }
+//     cout << "回文";
+// }
+
 #include <iostream>
 #include <vector>
-
 using namespace std;
 
 int main() {
-    string str;
-    cin >> str;
+    int n;
+    vector<vector<int>> v;
 
-    vector<char> v;
-    int half_length = str.length() / 2;
+    cin >> n;
+    for (int i = 0; i < n; i++) {
+        vector<int> row(i + 1, 1);
 
-    for (int i = 0; i < half_length; i++) {
-        v.push_back(str[i]);
-    }
-
-    int flag = half_length;
-    if (str.length() % 2 != 0) {  // 说明长度为奇数
-        flag ++;
-    }
-
-    while (!v.empty()) {
-        char c = v.back();
-        v.pop_back();
-        if(c!=str[flag++]){
-            cout<< "不是回文";
-            return 0;
+        for (int j = 1; j < i; j++) {
+            row[j] = v[i - 1][j - 1] + v[i - 1][j];
         }
+
+        v.push_back(row);
     }
-    cout << "回文";
+
+    for (auto row_ : v) {
+        for (auto element : row_) {
+            cout << element << " ";
+        }
+        cout << endl;
+    }
 }
-
-
