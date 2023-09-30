@@ -1614,29 +1614,35 @@
 //     cout << "回文";
 // }
 
+// #include <iostream>
+// #include <vector>
+// using namespace std;
+
+// int main() {
+//     int n;
+//     vector<vector<int>> v;
+
+//     cin >> n;
+//     for (int i = 0; i < n; i++) {
+//         vector<int> row(i + 1, 1);
+
+//         for (int j = 1; j < i; j++) {
+//             row[j] = v[i - 1][j - 1] + v[i - 1][j];
+//         }
+
+//         v.push_back(row);
+//     }
+
+//     for (auto row_ : v) {
+//         for (auto element : row_) {
+//             cout << element << " ";
+//         }
+//         cout << endl;
+//     }
+// }
+
 #include <iostream>
-#include <vector>
-using namespace std;
-
-int main() {
-    int n;
-    vector<vector<int>> v;
-
-    cin >> n;
-    for (int i = 0; i < n; i++) {
-        vector<int> row(i + 1, 1);
-
-        for (int j = 1; j < i; j++) {
-            row[j] = v[i - 1][j - 1] + v[i - 1][j];
-        }
-
-        v.push_back(row);
-    }
-
-    for (auto row_ : v) {
-        for (auto element : row_) {
-            cout << element << " ";
-        }
-        cout << endl;
-    }
+int main()
+{
+    
 }
