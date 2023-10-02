@@ -1644,5 +1644,5 @@
 #include <iostream>
 int main()
 {
-    
+    std::cout << "today is a good day!"<< std::endl;
 }
