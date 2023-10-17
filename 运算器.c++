@@ -1647,36 +1647,179 @@
 //     std::cout << "today is a good day!"<< std::endl;
 // }
 
-#include <vector>
-#include <iostream>
+// #include <vector>
+// #include <iostream>
 
-int main() {
-    // 创建一个包含3行2列的二维整数数组
-    std::vector<std::vector<int>> twoDArray(3, std::vector<int>(2));
+// int main() {
+//     // 创建一个包含3行2列的二维整数数组
+//     std::vector<std::vector<int>> twoDArray(3, std::vector<int>(2));
 
-    // 向二维数组中添加一些值
-    twoDArray[0][0] = 1;
-    twoDArray[0][1] = 2;
-    twoDArray[1][0] = 3;
-    twoDArray[1][1] = 4;
-    twoDArray[2][0] = 5;
-    twoDArray[2][1] = 6;
+//     // 向二维数组中添加一些值
+//     twoDArray[0][0] = 1;
+//     twoDArray[0][1] = 2;
+//     twoDArray[1][0] = 3;
+//     twoDArray[1][1] = 4;
+//     twoDArray[2][0] = 5;
+//     twoDArray[2][1] = 6;
 
-    // 访问和输出二维数组中的值
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 2; j++) {
-            std::cout << twoDArray[i][j] << " ";
-        }
-        std::cout << std::endl;
-    }
+//     // 访问和输出二维数组中的值
+//     for (int i = 0; i < 3; i++) {
+//         for (int j = 0; j < 2; j++) {
+//             std::cout << twoDArray[i][j] << " ";
+//         }
+//         std::cout << std::endl;
+//     }
 
-  // 使用范围-based for 循环遍历二维数组并输出其内容
-    for (const auto& row : twoDArray) {
-        for (const auto& element : row) {
-            std::cout << element << " ";
-        }
-        std::cout << std::endl;
-    }
+//   // 使用范围-based for 循环遍历二维数组并输出其内容
+//     for (const auto& row : twoDArray) {
+//         for (const auto& element : row) {
+//             std::cout << element << " ";
+//         }
+//         std::cout << std::endl;
+//     }
 
-    return 0;
-}
+//     return 0;
+// }
+
+// struct Node* reverseLinkedList(struct Node* head) {
+//     struct Node* prev = NULL;
+//     struct Node* current = head;
+//     struct Node* nextNode;
+
+//     while (current != NULL) {
+//         nextNode = current->next;
+//         current->next = prev;
+//         prev = current;
+//         current = nextNode;
+//     }
+
+//     return prev;  // 返回逆置后的头节点
+// }
+
+// #include <stdio.h>
+// #include <stdlib.h>
+
+// // 单链表节点的定义
+// struct Node {
+//     int data;
+//     struct Node* next;
+// };
+
+// // 从表la中删除自第i个元素起共len个元素，并插入到表lb的第j个元素之后
+// void deleteAndInsert(struct Node** la, struct Node** lb, int i, int len, int j) {
+//     if (*la == NULL) {
+//         printf("Error: Source list (la) is empty.\n");
+//         return;
+//     }
+
+//     // 定位删除的起始位置
+//     struct Node* current = *la;
+//     struct Node* prev = NULL;
+//     int count = 1;
+//     while (count < i && current != NULL) {
+//         prev = current;
+//         current = current->next;
+//         count++;
+//     }
+
+//     if (count < i) {
+//         printf("Error: Invalid starting position (i).\n");
+//         return;
+//     }
+
+//     // 从表la中删除元素
+//     struct Node* temp = current;
+//     count = 0;
+//     while (count < len && temp != NULL) {
+//         temp = temp->next;
+//         count++;
+//     }
+
+//     if (count < len) {
+//         printf("Error: Invalid number of elements to delete (len).\n");
+//         return;
+//     }
+
+//     if (prev != NULL) {
+//         prev->next = temp;
+//     } else {
+//         *la = temp;
+//     }
+
+//     // 定位插入位置
+//     struct Node* lbCurrent = *lb;
+//     count = 1;
+//     while (count < j && lbCurrent != NULL) {
+//         lbCurrent = lbCurrent->next;
+//         count++;
+//     }
+
+//     if (count < j) {
+//         printf("Error: Invalid insertion position (j).\n");
+//         return;
+//     }
+
+//     // 将删除的元素插入到表lb的第j个元素之后
+//     if (lbCurrent != NULL) {
+//         temp = lbCurrent->next;
+//         lbCurrent->next = current;
+//         while (current->next != NULL) {
+//             current = current->next;
+//         }
+//         current->next = temp;
+//     } else {
+//         printf("Error: Invalid insertion position (j).\n");
+//     }
+// }
+
+// // 打印链表元素
+// void printList(struct Node* head) {
+//     struct Node* current = head;
+//     while (current != NULL) {
+//         printf("%d ", current->data);
+//         current = current->next;
+//     }
+//     printf("\n");
+// }
+
+// // 示例用法
+// int main() {
+//     // 创建两个单链表
+//     struct Node* la = (struct Node*)malloc(sizeof(struct Node));
+//     la->data = 1;
+//     la->next = (struct Node*)malloc(sizeof(struct Node));
+//     la->next->data = 2;
+//     la->next->next = (struct Node*)malloc(sizeof(struct Node));
+//     la->next->next->data = 3;
+//     la->next->next->next = NULL;
+
+//     struct Node* lb = (struct Node*)malloc(sizeof(struct Node));
+//     lb->data = 9;
+//     lb->next = (struct Node*)malloc(sizeof(struct Node));
+//     lb->next->data = 10;
+//     lb->next->next = NULL;
+
+//     // 打印原始链表
+//     printf("Original list la: ");
+//     printList(la);
+//     printf("Original list lb: ");
+//     printList(lb);
+
+//     // 删除从第1个元素开始共2个元素，插入到lb的第1个元素之后
+//     deleteAndInsert(&la, &lb, 1, 2, 1);
+
+//     // 打印修改后的链表
+//     printf("Modified list la: ");
+//     printList(la);
+//     printf("Modified list lb: ");
+//     printList(lb);
+
+//     // 释放内存
+//     free(la->next->next);
+//     free(la->next);
+//     free(la);
+//     free(lb->next);
+//     free(lb);
+
+//     return 0;
+// 

@@ -1,22 +1,28 @@
-/*栈（Stack）数据结构： 栈是一种数据结构，它遵循先进后出（LIFO，Last In First Out）的原则。在这个问题中，栈被用来存储可能的移动路径。当需要回退时，可以从栈中弹出元素，模拟递归调用栈的行为。
+/*栈（Stack）数据结构： 栈是一种数据结构，它遵循先进后出（LIFO，Last In First
+Out）的原则。在这个问题中，栈被用来存储可能的移动路径。当需要回退时，可以从栈中弹出元素，模拟递归调用栈的行为。
 
-循环结构： 非递归版本使用了循环结构（while循环）来迭代处理栈中的元素。每次循环迭代都相当于模拟递归的一层调用，直到栈为空。
+循环结构：
+非递归版本使用了循环结构（while循环）来迭代处理栈中的元素。每次循环迭代都相当于模拟递归的一层调用，直到栈为空。
 
-结构体（Struct）： 结构体被用来存储栈中的元素。在这个问题中，结构体包含了位置信息和移动步数。
+结构体（Struct）：
+结构体被用来存储栈中的元素。在这个问题中，结构体包含了位置信息和移动步数。
 
-条件判断和逻辑运算： 在非递归版本中，使用条件判断语句（if语句）来确定下一步的可走位置，以及使用逻辑运算符来组合条件，确保选择合适的路径。
+条件判断和逻辑运算：
+在非递归版本中，使用条件判断语句（if语句）来确定下一步的可走位置，以及使用逻辑运算符来组合条件，确保选择合适的路径。
 
-算法设计： 非递归版本中使用了一种贪心算法，每次选择下一步中度数最小的位置，以减少搜索的分支数。这种策略被称为贪心策略，是一种常见的优化算法。
+算法设计：
+非递归版本中使用了一种贪心算法，每次选择下一步中度数最小的位置，以减少搜索的分支数。这种策略被称为贪心策略，是一种常见的优化算法。
 
 错误处理： 在程序中进行错误检查，例如检查栈是否为空，以避免访问空栈的情况。*/
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 // 马的移动方式，x和y分别表示在横纵方向上的移动距离
 int move_x[8] = {2, 1, -1, -2, -2, -1, 1, 2};
 int move_y[8] = {1, 2, 2, 1, -1, -2, -2, -1};
-int board[8][8] ;  // 棋盘
+int board[8][8];  // 棋盘
 
 // 定义坐标结构体
 typedef struct {
@@ -32,10 +38,16 @@ typedef struct {
 
 // 打印棋盘
 void printBoard() {
-    printf("解决方案：\n");
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {
-            printf("%2d ", board[i][j]);
+            if (board[i][j] != -1) {
+                printf("\033[33m");  // 设置文本颜色为黄色
+                printf("%2d ", board[i][j]);
+                printf("\033[0m");  // 恢复默认文本颜色
+            } else {
+                int x = 0;
+                printf("%2d ", x);
+            }
         }
         printf("\n");
     }
@@ -50,7 +62,8 @@ int isValid(int x, int y) {
 int getDegree(int x, int y) {
     int count = 0;
     for (int i = 0; i < 8; ++i) {
-        if (isValid(x + move_x[i], y + move_y[i])) count++;
+        if (isValid(x + move_x[i], y + move_y[i]))
+            count++;
     }
     return count;
 }
@@ -58,47 +71,74 @@ int getDegree(int x, int y) {
 // 使用非递归的方式解决骑士周游问题
 int solve(int startX, int startY) {
     int move_count = 2;
-    StackElement stack[64];
+    StackElement stack[64 * 64 * 64];
     int top = 0;
 
     // 设置起始位置为已访问，并将起始位置入栈
     board[startX][startY] = 1;
     Position startPos = {startX, startY};
-    stack[top++] = (StackElement) {startPos, move_count};
+    stack[top++] = (StackElement){
+        startPos,
+        move_count};  // 将起始位置的点坐标放到栈的第一个位置，且放入走当前步数
 
+    // 进入循环，不断的找可能的位置
     while (top > 0) {
-        StackElement current = stack[--top];
-        move_count = current.move_count;
-        Position currentPosition = current.pos;
+        system("clear");
+        printBoard();
+        usleep(100000);
+        StackElement current = stack[top-1];  // 每次先得到马的位置数据
+        move_count = current.move_count;      // 当前走的次数
+        Position currentPosition = current.pos;  // 当前坐标
 
         // 如果找到解决方案，打印棋盘并返回
         if (move_count == 65) {
+            printf("******解决方案******\n\n");
             printBoard();
             return 1;
         }
 
-        int min_deg_idx = -1;
-        int min_deg = 9;
+        // int min_deg_idx = -1;
+        // int min_deg = 9;
+        int xx;
+        int yy;
 
+        int a = 0;
         // 寻找下一步的可走位置，并选择下一步移动到可走位置中度数最小的位置
         for (int i = 0; i < 8; ++i) {
             int next_x = currentPosition.x + move_x[i];
             int next_y = currentPosition.y + move_y[i];
-            if (isValid(next_x, next_y)) {
-                int degree = getDegree(next_x, next_y);
-                if (degree < min_deg) {
-                    min_deg = degree;
-                    min_deg_idx = i;
-                }
+            if (isValid(next_x, next_y)) {  // 如果位置是合法的
+                // int degree = getDegree(next_x, next_y);  //
+                // 看看有几种可能是ok的 if (degree < min_deg) {
+                //     min_deg = degree;
+                //     min_deg_idx = i;
+                // }
+                a = 1;
+                stack[top++] = (StackElement){{next_x, next_y}, move_count + 1};
+                xx = next_x;
+                yy = next_y;
             }
+
+
         }
 
         // 如果有可走位置，将下一步入栈，并标记为已访问
-        if (min_deg_idx != -1) {
-            int next_x = currentPosition.x + move_x[min_deg_idx];
-            int next_y = currentPosition.y + move_y[min_deg_idx];
+        // if (min_deg_idx != -1) {
+        //     int next_x = currentPosition.x + move_x[min_deg_idx];
+        //     int next_y = currentPosition.y + move_y[min_deg_idx];
+        //     board[next_x][next_y] = move_count;
+        //     stack[top++] = (StackElement){{next_x, next_y}, move_count + 1};
+        // }
+        if (a == 1) {
+            int next_x = xx;
+            int next_y = yy;
             board[next_x][next_y] = move_count;
-            stack[top++] = (StackElement) {{next_x, next_y}, move_count + 1};
+        }
+
+        // 如果没有可走位置，将当前位置标记为未访问，并进行回退（栈的弹出操作）
+        else {
+            top--;
+            board[currentPosition.x][currentPosition.y] = -1;
         }
     }
 
@@ -139,4 +179,3 @@ int main() {
 
     return 0;
 }
-

@@ -1888,78 +1888,110 @@
 //     return 0;
 // }
 
+// #include <stdio.h>
+// #define MAXSIZE 10000
+
+// typedef struct {
+//     int num[MAXSIZE];
+//     int top;
+// } nump, *numpp;
+
+// typedef struct {
+//     char oth[MAXSIZE];
+//     int top;
+// } othp, *othpp;
+
+// //栈的创建
+// numpp init_num() {
+//     nump* s;
+//     s = (nump*)malloc(sizeof(nump));
+//     s->top =-1;
+//     return s;
+// }
+
+// othpp init_oth() {
+//     othp* s;
+//     s = (othp*)malloc(sizeof(othp));
+//     s->top =-1;
+//     return s;
+// }
+
+// // // 判断是否为空（空返回1）
+// // int empty_num(numpp s)
+// // {
+// //     if(s->top==-1)
+// //         return 1;
+// //     else
+// //         return 0;
+// // }
+
+// // int empty_oth(othpp s)
+// // {
+// //     if(s->top==-1)
+// //         return 1;
+// //     else
+// //         return 0;
+// // }
+
+// // 入栈(成功1)
+// int push_num(numpp s,int num){
+//     if(s->top==MAXSIZE-1)
+//         return 0;
+
+//     s->num[s->top++]=num;
+//     return 1;
+// }
+
+// int push_oth(othpp s,char oth){
+//     if(s->top==MAXSIZE-1)
+//         return 0;
+
+//     s->oth[s->top++]=oth;
+//     return 1;
+// }
+
+// int main() {
+//     numpp s1 = init_num();
+//     othpp s2 = init_oth();
+
+//     char buffer[MAXSIZE];
+
+//     scanf("%s", buffer);
+
+// // }
+// #include <stdio.h>
+// #include <string.h>
+// int main(void){
+//     char *ptr0 = "Welcome to Xiyou Linux!";
+//     char ptr1[] = "Welcome to Xiyou Linux!";
+//     printf("%c %c",*ptr0,*ptr1);
+//     if (*ptr0 == *ptr1)
+//         printf("%d\n", printf("Hello, Linux Group - 2%d", printf("")));
+//      int diff = ptr0 - ptr1;
+//      printf("Pointer Difference: %d\n", diff);
+// }
+
+// int main() {
+//     char arr[] = {'L', 'i', 'n', 'u', 'x', '\0', '!'}, str[20];
+//     short num = 520;
+//     int num2 = 1314;
+//     printf("%zu\t%zu\t%zu\n", sizeof(*&arr), sizeof(arr + 0),
+//            sizeof(num = num2 + 4));
+//     printf("%d\n", sprintf(str, "0x%x", num) == num);
+//     printf("%zu\t%zu\n", strlen(&str[0] + 1), strlen(arr + 0));
+// }
+
 #include <stdio.h>
-#define MAXSIZE 10000
 
-typedef struct {
-    int num[MAXSIZE];
-    int top;
-} nump, *numpp;
-
-typedef struct {
-    char oth[MAXSIZE];
-    int top;
-} othp, *othpp;
-
-//栈的创建                                    
-numpp init_num() {
-    nump* s;
-    s = (nump*)malloc(sizeof(nump));
-    s->top =-1;
-    return s;
+int func(int a, int b)
+{
+    if (!a)
+        return b;
+    return func((a & b) << 1, a ^ b);
 }
 
-othpp init_oth() {
-    othp* s;
-    s = (othp*)malloc(sizeof(othp));
-    s->top =-1;
-    return s;
-}
-
-// // 判断是否为空（空返回1）
-// int empty_num(numpp s)
-// {
-//     if(s->top==-1)
-//         return 1;
-//     else    
-//         return 0;
-// }
-
-// int empty_oth(othpp s)
-// {
-//     if(s->top==-1)
-//         return 1;
-//     else    
-//         return 0;
-// }
-
-// 入栈(成功1)
-int push_num(numpp s,int num){
-    if(s->top==MAXSIZE-1)
-        return 0;
-
-    s->num[s->top++]=num;
-    return 1;
-}
-
-int push_oth(othpp s,char oth){
-    if(s->top==MAXSIZE-1)
-        return 0;
-
-    s->oth[s->top++]=oth;
-    return 1;
-}
-
-
-
-int main() {
-    numpp s1 = init_num();
-    othpp s2 = init_oth();
-
-    char buffer[MAXSIZE]; 
-
-    scanf("%s", buffer); 
-
-
-    
+int main()
+{
+    int a = 4, b = 9,c=-7;
+    printf("%d", func(a,func(b,c)));
 }
