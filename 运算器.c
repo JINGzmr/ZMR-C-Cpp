@@ -1981,17 +1981,35 @@
 //     printf("%zu\t%zu\n", strlen(&str[0] + 1), strlen(arr + 0));
 // }
 
+// #include <stdio.h>
+
+// int func(int a, int b)
+// {
+//     if (!a)
+//         return b;
+//     return func((a & b) << 1, a ^ b);
+// }
+
+// int main()
+// {
+//     int a = 4, b = 9,c=-7;
+//     printf("%d", func(a,func(b,c)));
+// }
+
 #include <stdio.h>
 
-int func(int a, int b)
+int* getStaticValue()
 {
-    if (!a)
-        return b;
-    return func((a & b) << 1, a ^ b);
+    static int value = 42; // 静态变量
+    int *ptr1 = &value;
+    return ptr1;
 }
 
 int main()
 {
-    int a = 4, b = 9,c=-7;
-    printf("%d", func(a,func(b,c)));
+    int* ptr1 = getStaticValue();
+    printf("Value: %d\n", *ptr1); // 输出 Value: 42
+
+    return 0;
 }
+// 在上述示例中，getStaticValue 函数返回一个指向静态变量 value 的指针。不论调用函数多少次，返回的指针都指向同一个 value 变量。在主函数中通过指针修改 value 的值，会影响到后续函数调用中该变量的值。
