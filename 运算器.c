@@ -1996,20 +1996,164 @@
 //     printf("%d", func(a,func(b,c)));
 // }
 
-#include <stdio.h>
+// #include <stdio.h>
 
-int* getStaticValue()
-{
-    static int value = 42; // 静态变量
-    int *ptr1 = &value;
-    return ptr1;
-}
+// int* getStaticValue()
+// {
+//     static int value = 42; // 静态变量
+//     int *ptr1 = &value;
+//     return ptr1;
+// }
 
+// int main()
+// {
+//     int* ptr1 = getStaticValue();
+//     printf("Value: %d\n", *ptr1); // 输出 Value: 42
+
+//     return 0;
+// }
+// // 在上述示例中，getStaticValue 函数返回一个指向静态变量 value
+// 的指针。不论调用函数多少次，返回的指针都指向同一个 value
+// 变量。在主函数中通过指针修改 value 的值，会影响到后续函数调用中该变量的值。
+// #include<stdio.h>
+// int main(int argc, char* argv[]) {
+//     printf("%s",*argv);
+//     printf("[%d]\n", argc);
+//     while (argc) {
+//       ++argc;
+//     }
+//     int i = -1, j = argc, k = 1;
+//     i++ && j++ || k++;
+//     printf("i = %d, j = %d, k = %d\n", i, j, k);
+//     // return EXIT_SUCCESS;
+// }
+
+// #include <stdio.h>
+// #include <stdlib.h>
+// #include <string.h>
+
+// struct Student {
+//     char *name;
+//     int age;
+// };
+
+// void initializeStudent(struct Student *student, const char *name, int age) {
+//     student->name = (char *)malloc(strlen(name) + 1);
+//     strcpy(student->name, name);
+//     student->age = age;
+// }
+
+// int main() {
+//     struct Student s1, s2;
+//     initializeStudent(&s1, "Tom", 18);
+//     initializeStudent(&s2, "Jerry", 28);
+//     s1 = s2;
+//     // strcpy(s1.name,s2.name);
+//     printf("s1的姓名: %s 年龄: %d\n", s1.name, s1.age);
+//     printf("s2的姓名: %s 年龄: %d\n", s2.name, s2.age);
+//     free(s1.name);
+//     free(s2.name);
+//     return 0;
+// }
+
+// struct structure {
+//     int foo;  // 4
+//     // 4
+//     union {
+//         int integer;
+//         char string[11];
+//         void* pointer;
+//         // 5
+//     } node;     // 16
+//     short bar;  // 2
+//     // 6
+//         int array[7];   // 28
+//     long long baz;  // 8
+
+//     // 4
+// };
+
+// int main() {
+//   printf("%d",sizeof(struct structure));
+// }
+
+// struct structure {
+//     int foo;
+
+//     union {
+//         int integer;
+//         char string[11];
+//         void *pointer;
+//     } node;
+//     short bar;
+//     long long baz;
+//     int array[7];
+// };
+// int main()
+// {
+//     int arr[] = {0x590ff23c, 0x2fbc5a4d, 0x636c6557, 0x20656d6f, 0x58206f74,
+//     0x20545055,
+//                  0x6577202c, 0x6d6f636c, 0x6f742065, 0x79695820, 0x4c20756f,
+//                  0x78756e69, 0x6f724720, 0x5b207075, 0x33323032, 0x7825005d,
+//                  0x636c6557, 0x64fd6d1d};
+//     printf("%s", ((struct structure *)arr)->node.string);
+// }
+
+// int main() {
+//     char a = 64 & 127;
+//     char b = 64 ^ 127;
+//     char c = -64 >> 6;
+//     char ch = a + b - c;
+//     printf("a = %d b = %d c = %d\n", a, b, c);
+//     printf("ch = %d\n", ch);
+// }
+
+// typedef int (*Predicate)(int);
+
+// int *filter(int *array, int length, Predicate predicate, int *resultLength) {
+//     int *result = (int *) malloc(length * sizeof(int));
+//     int count = 0;
+//     for (int i = 0; i < length; i++) {
+//         if (predicate(array[i])) {
+//             result[count++] = array[i];
+//         }
+//     }
+//     *resultLength = count;
+//     return result;
+// }
+
+// int isPositive(int num) {
+//     return num > 0;
+// }
+
+// int main() {
+//     int array[] = {-3, -2, -1, 0, 1, 2, 3, 4, 5, 6};
+//     int length = sizeof(array) / sizeof(array[0]);
+//     int resultLength;
+//     int *filteredNumbers = filter(array, length, isPositive, &resultLength);
+//     for (int i = 0; i < resultLength; i++) {
+//         printf("%d ", filteredNumbers[i]);
+//     }
+//     printf("\n");
+//     free(filteredNumbers);
+//     return 0;
+// }
+
+#include<stdio.h>
 int main()
 {
-    int* ptr1 = getStaticValue();
-    printf("Value: %d\n", *ptr1); // 输出 Value: 42
-
+    int n;
+    scanf("%d",&n);
+    int i;
+    for(i=0;i<n;i++){
+        char a;
+        double b;
+        scanf("%c%lf",&a,&b);
+        if(a=='M'){
+            printf("%.2lf\n",1.00*b/1.09);
+        }else{
+            printf("%.2lf\n",1.00*b*1.09);
+        }
+    }
     return 0;
 }
-// 在上述示例中，getStaticValue 函数返回一个指向静态变量 value 的指针。不论调用函数多少次，返回的指针都指向同一个 value 变量。在主函数中通过指针修改 value 的值，会影响到后续函数调用中该变量的值。
