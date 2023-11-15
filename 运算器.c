@@ -2139,21 +2139,90 @@
 //     return 0;
 // }
 
-#include<stdio.h>
-int main()
+// #include<stdio.h>
+// int main()
+// {
+//     int n;
+//     scanf("%d",&n);
+//     int i;
+//     for(i=0;i<n;i++){
+//         char a;
+//         double b;
+//         scanf("%c%lf",&a,&b);
+//         if(a=='M'){
+//             printf("%.2lf\n",1.00*b/1.09);
+//         }else{
+//             printf("%.2lf\n",1.00*b*1.09);
+//         }
+//     }
+//     return 0;
+// }
+
+// int Degree2(BiTree bt) {
+//     int cont = 0;
+//     BiTree b = bt;
+//     if (bt) {
+//         if (bt->Lchild && bt->Rchild) {
+//             cont++;
+//         }
+//         cont += Degree2(bt->Lchild);
+//         cont += Degree2(bt->Rchild);
+//     }
+
+//     return cont;
+// }
+
+#include <stdio.h>
+#include <stdlib.h>
+typedef char DataType;
+typedef struct Node {
+    DataType data;
+    struct Node* Lchild;
+    struct Node* Rchild;
+} BiTNode, *BiTree;
+
+BiTree CreatBiTree();  // 用扩展先序遍历序列创建二叉链表
+void SwapLR(BiTree bt);
+void PrintTree(BiTree bt, int h);  // 按树状打印二叉树（课本P168算法6-16
+
+int main() {
+    BiTree root;
+    root = CreatBiTree();
+    SwapLR(root);
+    PrintTree(root, 0);
+}
+
+BiTree CreatBiTree()  // 用扩展先序遍历序列创建二叉链表
 {
-    int n;
-    scanf("%d",&n);
-    int i;
-    for(i=0;i<n;i++){
-        char a;
-        double b;
-        scanf("%c%lf",&a,&b);
-        if(a=='M'){
-            printf("%.2lf\n",1.00*b/1.09);
-        }else{
-            printf("%.2lf\n",1.00*b*1.09);
-        }
+    BiTree bt;
+    char ch;
+    ch = getchar();
+    if (ch == '^')
+        return NULL;
+    bt = (BiTree)malloc(sizeof(BiTNode));
+    bt->data = ch;
+    bt->Lchild = CreatBiTree();
+    bt->Rchild = CreatBiTree();
+    return bt;
+}
+
+void PrintTree(BiTree bt, int h) {
+    if (bt == NULL)
+        return;
+    PrintTree(bt->Rchild, h + 1);
+    for (int i = 0; i < h; i++)
+        printf("  ");
+    printf("%c\n", bt->data);
+    PrintTree(bt->Lchild, h + 1);
+}
+
+void SwapLR(BiTree bt) {
+    if (bt) {
+        BiTree b = bt->Lchild;
+        bt->Lchild = bt->Rchild;
+        bt->Rchild = b;
     }
-    return 0;
+    SwapLR(bt->Lchild);
+    SwapLR(bt->Rchild);
+    return;
 }
