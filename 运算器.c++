@@ -1878,3 +1878,86 @@
 
 //     return prev;  // 返回逆置后的头节点
 // }
+
+// #include<iostream>
+// #include<vector>
+// using namespace std;
+// int main()
+// {
+//     int n;
+//     cin >> n;
+//     vector<vector<int>> v;
+
+//     for(int i=0;i<n;i++){
+//         vector<int> row(i+1,1);
+        
+//         for(int j=1;j<i;j++){
+//             row[j]=v[i-1][j-1]+v[i-1][j];
+//         }
+        
+//         v.push_back(row);
+//     }
+
+//     for(int i=0;i<n;i++){
+//         for(int j=0;j<=i;j++){
+//             cout << v[i][j]<<" ";
+//         }
+//         cout << endl;
+//     }
+
+
+// //     for (auto row_ : v) {
+// //         for (auto element : row_) {
+// //             cout << element << " ";
+// //         }
+// //         cout << endl;
+// //     }
+
+// }
+
+#include <iostream>
+#include <queue>
+using namespace std;
+typedef struct Node
+{
+    char data;
+    struct Node* Lchild;
+    struct Node* Rchild;
+}*pnode,node;
+
+queue<pnode> myQueue;
+
+pnode init()
+{
+    pnode bt;
+    char ch = getchar();
+    if(ch=='#')
+        return NULL;
+    bt = (pnode)malloc(sizeof(node));
+    bt->data = ch;
+    bt->Lchild = init();
+    bt->Rchild = init();
+    return bt;
+}
+
+void print1(pnode root)
+{
+    myQueue.push(root);
+    while(!myQueue.empty()){
+        pnode p = myQueue.front();
+        myQueue.pop();
+        printf("%c",p->data);
+        if(p->Lchild)
+            myQueue.push(p->Lchild);
+        if(p->Rchild)
+            myQueue.push(p->Rchild);
+        
+    }
+}
+
+int main()
+{
+    pnode root;
+    root = init();
+    print1(root);
+}
