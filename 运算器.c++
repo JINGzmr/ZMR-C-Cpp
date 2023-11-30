@@ -8,7 +8,7 @@
 
 // int main()
 // {
-// // fun();//
+// // fun();// 
 // fun(10);
 // fun(10,10);
 // cout << fun(10) << fun(10,10) <<endl;
@@ -1915,49 +1915,49 @@
 
 // }
 
-#include <iostream>
-#include <queue>
-using namespace std;
-typedef struct Node
-{
-    char data;
-    struct Node* Lchild;
-    struct Node* Rchild;
-}*pnode,node;
+// #include <iostream>
+// #include <queue>
+// using namespace std;
+// typedef struct Node
+// {
+//     char data;
+//     struct Node* Lchild;
+//     struct Node* Rchild;
+// }*pnode,node;
 
-queue<pnode> myQueue;
+// queue<pnode> myQueue;
 
-pnode init()
-{
-    pnode bt;
-    char ch = getchar();
-    if(ch=='#')
-        return NULL;
-    bt = (pnode)malloc(sizeof(node));
-    bt->data = ch;
-    bt->Lchild = init();
-    bt->Rchild = init();
-    return bt;
-}
+// pnode init()
+// {
+//     pnode bt;
+//     char ch = getchar();
+//     if(ch=='#')
+//         return NULL;
+//     bt = (pnode)malloc(sizeof(node));
+//     bt->data = ch;
+//     bt->Lchild = init();
+//     bt->Rchild = init();
+//     return bt;
+// }
 
-void print1(pnode root)
-{
-    myQueue.push(root);
-    while(!myQueue.empty()){
-        pnode p = myQueue.front();
-        myQueue.pop();
-        printf("%c",p->data);
-        if(p->Lchild)
-            myQueue.push(p->Lchild);
-        if(p->Rchild)
-            myQueue.push(p->Rchild);
+// void print1(pnode root)
+// {
+//     myQueue.push(root);
+//     while(!myQueue.empty()){
+//         pnode p = myQueue.front();
+//         myQueue.pop();
+//         printf("%c",p->data);
+//         if(p->Lchild)
+//             myQueue.push(p->Lchild);
+//         if(p->Rchild)
+//             myQueue.push(p->Rchild);
         
-    }
-}
+//     }
+// }
 
-int main()
-{
-    pnode root;
-    root = init();
-    print1(root);
-}
+// int main()
+// {
+//     pnode root;
+//     root = init();
+//     print1(root);
+// }
