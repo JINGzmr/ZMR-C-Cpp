@@ -1961,3 +1961,50 @@
 //     root = init();
 //     print1(root);
 // }
+
+#include <iostream>
+#include <queue>
+using namespace std;
+typedef struct Node
+{
+    char data;
+    struct Node* Lchild;
+    struct Node* Rchild;
+}*pnode,node;
+
+queue<pnode> myQueue;
+
+pnode init()
+{
+    pnode bt;
+    char ch = getchar();
+    if(ch=='#')
+        return NULL;
+    bt = (pnode)malloc(sizeof(node));
+    bt->data = ch;
+    bt->Lchild = init();
+    bt->Rchild = init();
+    return bt;
+}
+
+void print1(pnode root)
+{
+    myQueue.push(root);
+    while(!myQueue.empty()){
+        pnode p = myQueue.front();
+        myQueue.pop();
+        printf("%c",p->data);
+        if(p->Lchild)
+            myQueue.push(p->Lchild);
+        if(p->Rchild)
+            myQueue.push(p->Rchild);
+        
+    }
+}
+
+int main()
+{
+    pnode root;
+    root = init();
+    print1(root);
+}

@@ -2172,57 +2172,137 @@
 //     return cont;
 // }
 
-#include <stdio.h>
-#include <stdlib.h>
-typedef char DataType;
-typedef struct Node {
-    DataType data;
-    struct Node* Lchild;
-    struct Node* Rchild;
-} BiTNode, *BiTree;
+// #include <stdio.h>
+// #include <stdlib.h>
+// typedef char DataType;
+// typedef struct Node {
+//     DataType data;
+//     struct Node* Lchild;
+//     struct Node* Rchild;
+// } BiTNode, *BiTree;
 
-BiTree CreatBiTree();  // 用扩展先序遍历序列创建二叉链表
-void SwapLR(BiTree bt);
-void PrintTree(BiTree bt, int h);  // 按树状打印二叉树（课本P168算法6-16
+// BiTree CreatBiTree();  // 用扩展先序遍历序列创建二叉链表
+// void SwapLR(BiTree bt);
+// void PrintTree(BiTree bt, int h);  // 按树状打印二叉树（课本P168算法6-16
 
+// int main() {
+//     BiTree root;
+//     root = CreatBiTree();
+//     SwapLR(root);
+//     PrintTree(root, 0);
+// }
+
+// BiTree CreatBiTree()  // 用扩展先序遍历序列创建二叉链表
+// {
+//     BiTree bt;
+//     char ch;
+//     ch = getchar();
+//     if (ch == '^')
+//         return NULL;
+//     bt = (BiTree)malloc(sizeof(BiTNode));
+//     bt->data = ch;
+//     bt->Lchild = CreatBiTree();
+//     bt->Rchild = CreatBiTree();
+//     return bt;
+// }
+
+// void PrintTree(BiTree bt, int h) {
+//     if (bt == NULL)
+//         return;
+//     PrintTree(bt->Rchild, h + 1);
+//     for (int i = 0; i < h; i++)
+//         printf("  ");
+//     printf("%c\n", bt->data);
+//     PrintTree(bt->Lchild, h + 1);
+// }
+
+// void SwapLR(BiTree bt) {
+//     if (bt) {
+//         BiTree b = bt->Lchild;
+//         bt->Lchild = bt->Rchild;
+//         bt->Rchild = b;
+//     }
+//     SwapLR(bt->Lchild);
+//     SwapLR(bt->Rchild);
+//     return;
+// }
+
+// #include<stdio.h>
+// struct name{
+//     char name[20];
+//     char familyname[20];
+// };
+// struct student{
+//     struct name st;
+//     float grade[3];
+//     float ave;
+// }s;
+// #define CSIZE 4
+// int main()
+// {
+//     struct student s[CSIZE];
+//     int i;
+//     float sum=0;
+//     for(i=0;i<CSIZE;i++)
+//     {
+//         scanf("%s %s %f %f
+//         %f",s[i].st.name,s[i].st.familyname,&s[i].grade[0],&s[i].grade[1],&s[i].grade[2]);
+//         s[i].ave=(s[i].grade[0]+s[i].grade[1]+s[i].grade[2])/3;
+//         sum+=s[i].ave*3;
+//     }
+//     for(i=0;i<CSIZE;i++)
+//     {
+//         printf("%s %s %.2f %.2f %.2f
+//         %.2f\n",s[i].st.name,s[i].st.familyname,s[i].grade[0],s[i].grade[1],s[i].grade[2],s[i].ave);
+//     }
+//     printf("%f",sum);
+//     return 0;
+// }   \\
+
+#include <stdio.h>  //'0' 48
+#include <string.h>
+#include <ctype.h>
 int main() {
-    BiTree root;
-    root = CreatBiTree();
-    SwapLR(root);
-    PrintTree(root, 0);
-}
-
-BiTree CreatBiTree()  // 用扩展先序遍历序列创建二叉链表
-{
-    BiTree bt;
-    char ch;
-    ch = getchar();
-    if (ch == '^')
-        return NULL;
-    bt = (BiTree)malloc(sizeof(BiTNode));
-    bt->data = ch;
-    bt->Lchild = CreatBiTree();
-    bt->Rchild = CreatBiTree();
-    return bt;
-}
-
-void PrintTree(BiTree bt, int h) {
-    if (bt == NULL)
-        return;
-    PrintTree(bt->Rchild, h + 1);
-    for (int i = 0; i < h; i++)
-        printf("  ");
-    printf("%c\n", bt->data);
-    PrintTree(bt->Lchild, h + 1);
-}
-
-void SwapLR(BiTree bt) {
-    if (bt) {
-        BiTree b = bt->Lchild;
-        bt->Lchild = bt->Rchild;
-        bt->Rchild = b;
+    char a[1001], b[1001];
+    gets(a);
+    gets(b);
+    char c[1001];
+    int len1 = strlen(a);
+    int len2 = strlen(b);
+    int i, t;
+    int s = 0;
+    if (len1 < len2) {
+        i = len2 - 1;
+        t = len1 - 1;
+        while (i >= 0) {
+            c[i] = b[i] + s;
+            if (t >= 0)
+                c[i] += a[t] - 48;
+            if (c[i] > 57) {
+                c[i] -= 10;
+                s++;
+            } else
+                s = 0;
+            i--;
+            t--;
+        }
+    } else {
+        i = len1 - 1;
+        t = len2 - 1;
+        while (i >= 0) {
+            c[i] = a[i] + s;
+            if (t >= 0)
+                c[i] += b[t] - 48;
+            if (c[i] > 57) {
+                c[i] -= 10;
+                s++;
+            } else
+                s = 0;
+            i--;
+            t--;
+        }
     }
-    SwapLR(bt->Lchild);
-    SwapLR(bt->Rchild);
-    return;
+    if (s)
+        printf("1");
+    puts(c);
 }
