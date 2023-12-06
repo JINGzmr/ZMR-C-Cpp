@@ -2009,108 +2009,108 @@
 //     print1(root);
 // }
 
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <climits>
+// #include <iostream>
+// #include <vector>
+// #include <algorithm>
+// #include <climits>
 
-#define min(x, y) (x < y ? x : y)
+// #define min(x, y) (x < y ? x : y)
 
-using namespace std;
+// using namespace std;
 
-struct edge {  // 边的结构体
-    int s;
-    int e;
-    int v;
-    edge(int ss, int ee, int vv) {
-        s = ss;
-        e = ee;
-        v = vv;
-    }
-};
+// struct edge {  // 边的结构体
+//     int s;
+//     int e;
+//     int v;
+//     edge(int ss, int ee, int vv) {
+//         s = ss;
+//         e = ee;
+//         v = vv;
+//     }
+// };
 
-vector<edge> vc;  // 存放所有边
+// vector<edge> vc;  // 存放所有边
 
-int pre[10010];  // 记录前节点
+// int pre[10010];  // 记录前节点
 
-bool cmp(const edge& a, const edge& b) {
-    return a.v < b.v;
-}
+// bool cmp(const edge& a, const edge& b) {
+//     return a.v < b.v;
+// }
 
-int Find(int a) {  // 找根节点
-    int t = a;
-    while (pre[t] != t) {
-        t = pre[t];
-    }
+// int Find(int a) {  // 找根节点
+//     int t = a;
+//     while (pre[t] != t) {
+//         t = pre[t];
+//     }
 
-    while (pre[a] != t) {  // 路径压缩
-        int tt = a;
-        a = pre[a];
-        pre[tt] = t;
-    }
-    return t;
-}
+//     while (pre[a] != t) {  // 路径压缩
+//         int tt = a;
+//         a = pre[a];
+//         pre[tt] = t;
+//     }
+//     return t;
+// }
 
-int merg(int a, int b, int val) {  // 引入新边
-    int ta = Find(a);
-    int tb = Find(b);
-    if (ta != tb) {
-        pre[ta] = tb;
-        return 1;
-    } else {
-        if (val <=
-            0) {  // 这就是最大的坑，必须当这条边为负，且加入后构成环时返回2（意味着边数不加1）
-        }
-    }
+// int merg(int a, int b, int val) {  // 引入新边
+//     int ta = Find(a);
+//     int tb = Find(b);
+//     if (ta != tb) {
+//         pre[ta] = tb;
+//         return 1;
+//     } else {
+//         if (val <=
+//             0) {  // 这就是最大的坑，必须当这条边为负，且加入后构成环时返回2（意味着边数不加1）
+//         }
+//     }
 
-    int kruskal(vector<edge> & vc,
-                int n) {  // 生成最小生成树，返回值为最小生成树值
-        sort(vc.begin(), vc.end(), cmp);
-        int te = 0;    // 边数
-        int tsum = 0;  // 权值和
-        for (int i = 0; i < vc.size(); i++) {
-            int tt;
-            if (tt = merg(vc[i].s, vc[i].e, vc[i].v)) {
-                if (tt != 2) {  /// 最大的坑，不为2时边数才++
-                    te++;
-                }
-                tsum += vc[i].v;
-            }
-        }
-        if (te == n - 1) {  // 构成生成树了
-            return tsum;
-        }
-        return INT_MAX;  // 不连通
-    }
+//     int kruskal(vector<edge> & vc,
+//                 int n) {  // 生成最小生成树，返回值为最小生成树值
+//         sort(vc.begin(), vc.end(), cmp);
+//         int te = 0;    // 边数
+//         int tsum = 0;  // 权值和
+//         for (int i = 0; i < vc.size(); i++) {
+//             int tt;
+//             if (tt = merg(vc[i].s, vc[i].e, vc[i].v)) {
+//                 if (tt != 2) {  /// 最大的坑，不为2时边数才++
+//                     te++;
+//                 }
+//                 tsum += vc[i].v;
+//             }
+//         }
+//         if (te == n - 1) {  // 构成生成树了
+//             return tsum;
+//         }
+//         return INT_MAX;  // 不连通
+//     }
 
-    int main() {
-        int n;
-        int m;
-        cin >> n >> m;
-        for (int i = 0; i < m; i++) {
-            int a, b, c;
-            cin >> a >> b >> c;
-            vc.push_back(edge(a, b, c));
-        }
-        for (int i = 1; i <= n; i++) {
-            pre[i] = i;
-        }
-        int t1 = kruskal(vc, n);  // 求n个节点的最小生成树
+//     int main() {
+//         int n;
+//         int m;
+//         cin >> n >> m;
+//         for (int i = 0; i < m; i++) {
+//             int a, b, c;
+//             cin >> a >> b >> c;
+//             vc.push_back(edge(a, b, c));
+//         }
+//         for (int i = 1; i <= n; i++) {
+//             pre[i] = i;
+//         }
+//         int t1 = kruskal(vc, n);  // 求n个节点的最小生成树
 
-        for (int i = 1; i <= n; i++) {
-            int t;
-            cin >> t;
-            if (t != -1) {
-                vc.push_back(
-                    edge(0, i, t));  // vc中加入可以修建码头的点到0点的边
-            }
-        }
-        for (int i = 0; i <= n; i++) {
-            pre[i] = i;
-        }
-        int t2 = kruskal(vc, n + 1);  // 求n+1个节点的最小生成树
+//         for (int i = 1; i <= n; i++) {
+//             int t;
+//             cin >> t;
+//             if (t != -1) {
+//                 vc.push_back(
+//                     edge(0, i, t));  // vc中加入可以修建码头的点到0点的边
+//             }
+//         }
+//         for (int i = 0; i <= n; i++) {
+//             pre[i] = i;
+//         }
+//         int t2 = kruskal(vc, n + 1);  // 求n+1个节点的最小生成树
 
-        cout << min(t1, t2);
-        return 0;
-    }
-}
+//         cout << min(t1, t2);
+//         return 0;
+//     }
+// }
