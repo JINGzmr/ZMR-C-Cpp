@@ -2114,3 +2114,38 @@
 //         return 0;
 //     }
 // }
+
+
+#include <vector>
+#include <iostream>
+
+int main() {
+    // 创建一个包含3行2列的二维整数数组
+    std::vector<std::vector<int>> twoDArray(3, std::vector<int>(2));
+
+    // 向二维数组中添加一些值
+    twoDArray[0][0] = 1;
+    twoDArray[0][1] = 2;
+    twoDArray[1][0] = 3;
+    twoDArray[1][1] = 4;
+    twoDArray[2][0] = 5;
+    twoDArray[2][1] = 6;
+
+    // 访问和输出二维数组中的值
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 2; j++) {
+            std::cout << twoDArray[i][j] << " ";
+        }
+        std::cout << std::endl;
+    }
+
+  // 使用范围-based for 循环遍历二维数组并输出其内容
+    for (const auto& row : twoDArray) {
+        for (const auto& element : row) {
+            std::cout << element << " ";
+        }
+        std::cout << std::endl;
+    }
+
+    return 0;
+}
