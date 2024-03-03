@@ -2059,7 +2059,8 @@
 //         return 1;
 //     } else {
 //         if (val <=
-//             0) {  // 这就是最大的坑，必须当这条边为负，且加入后构成环时返回2（意味着边数不加1）
+//             0) {  //
+//             这就是最大的坑，必须当这条边为负，且加入后构成环时返回2（意味着边数不加1）
 //         }
 //     }
 
@@ -2115,37 +2116,82 @@
 //     }
 // }
 
+// #include <vector>
+// #include <iostream>
 
-#include <vector>
+// int main() {
+//     // 创建一个包含3行2列的二维整数数组
+//     std::vector<std::vector<int>> twoDArray(3, std::vector<int>(2));
+
+//     // 向二维数组中添加一些值
+//     twoDArray[0][0] = 1;
+//     twoDArray[0][1] = 2;
+//     twoDArray[1][0] = 3;
+//     twoDArray[1][1] = 4;
+//     twoDArray[2][0] = 5;
+//     twoDArray[2][1] = 6;
+
+//     // 访问和输出二维数组中的值
+//     for (int i = 0; i < 3; i++) {
+//         for (int j = 0; j < 2; j++) {
+//             std::cout << twoDArray[i][j] << " ";
+//         }
+//         std::cout << std::endl;
+//     }
+
+//   // 使用范围-based for 循环遍历二维数组并输出其内容
+//     for (const auto& row : twoDArray) {
+//         for (const auto& element : row) {
+//             std::cout << element << " ";
+//         }
+//         std::cout << std::endl;
+//     }
+
+//     return 0;
+// }
+
 #include <iostream>
+using namespace std;
+
+// int main()
+// {
+//     int a=2;
+//     int *b =&a;
+//     cout << b << endl << *b<< endl;
+// }
+
+template <typename T>
+void printX(T& t) {
+    std::cout << "left value" << std::endl;
+}
+
+template <typename T>
+void printX(T&& t) {
+    std::cout << "rifht value " << std::endl;
+}
+
+template <typename T>
+void test(T&& v) {
+    printX(v);
+    printX(move(v));
+    printX(forward<T>(v));
+}
 
 int main() {
-    // 创建一个包含3行2列的二维整数数组
-    std::vector<std::vector<int>> twoDArray(3, std::vector<int>(2));
+    test(100);
+    cout << "--------" << endl;
 
-    // 向二维数组中添加一些值
-    twoDArray[0][0] = 1;
-    twoDArray[0][1] = 2;
-    twoDArray[1][0] = 3;
-    twoDArray[1][1] = 4;
-    twoDArray[2][0] = 5;
-    twoDArray[2][1] = 6;
+    int num = 10;
+    test(num);
+    cout << "--------" << endl;
 
-    // 访问和输出二维数组中的值
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 2; j++) {
-            std::cout << twoDArray[i][j] << " ";
-        }
-        std::cout << std::endl;
-    }
+    test(forward<int>(num));
+    cout << "--------" << endl;
 
-  // 使用范围-based for 循环遍历二维数组并输出其内容
-    for (const auto& row : twoDArray) {
-        for (const auto& element : row) {
-            std::cout << element << " ";
-        }
-        std::cout << std::endl;
-    }
+    test(forward<int&>(num));
+    cout << "--------" << endl;
+
+    test(forward<int&&>(num));
 
     return 0;
 }
