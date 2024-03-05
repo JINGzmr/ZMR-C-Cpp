@@ -2150,48 +2150,48 @@
 //     return 0;
 // }
 
-#include <iostream>
-using namespace std;
+// #include <iostream>
+// using namespace std;
 
-// int main()
-// {
-//     int a=2;
-//     int *b =&a;
-//     cout << b << endl << *b<< endl;
+// // int main()
+// // {
+// //     int a=2;
+// //     int *b =&a;
+// //     cout << b << endl << *b<< endl;
+// // }
+
+// template <typename T>
+// void printX(T& t) {
+//     std::cout << "left value" << std::endl;
 // }
 
-template <typename T>
-void printX(T& t) {
-    std::cout << "left value" << std::endl;
-}
+// template <typename T>
+// void printX(T&& t) {
+//     std::cout << "rifht value " << std::endl;
+// }
 
-template <typename T>
-void printX(T&& t) {
-    std::cout << "rifht value " << std::endl;
-}
+// template <typename T>
+// void test(T&& v) {
+//     printX(v);
+//     printX(move(v));
+//     printX(forward<T>(v));
+// }
 
-template <typename T>
-void test(T&& v) {
-    printX(v);
-    printX(move(v));
-    printX(forward<T>(v));
-}
+// int main() {
+//     test(100);
+//     cout << "--------" << endl;
 
-int main() {
-    test(100);
-    cout << "--------" << endl;
+//     int num = 10;
+//     test(num);
+//     cout << "--------" << endl;
 
-    int num = 10;
-    test(num);
-    cout << "--------" << endl;
+//     test(forward<int>(num));
+//     cout << "--------" << endl;
 
-    test(forward<int>(num));
-    cout << "--------" << endl;
+//     test(forward<int&>(num));
+//     cout << "--------" << endl;
 
-    test(forward<int&>(num));
-    cout << "--------" << endl;
+//     test(forward<int&&>(num));
 
-    test(forward<int&&>(num));
-
-    return 0;
-}
+//     return 0;
+// }
