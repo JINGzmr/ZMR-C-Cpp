@@ -2196,89 +2196,196 @@
 //     return 0;
 // }
 
+// #include <iostream>
+// #include <queue>
+// using namespace std;
+
+// int a[100][100];  // 各位置信息（是否有路径）
+// int v[100][100];  // 标记某个位置是否被访问过（1有0无）
+// struct point {
+//     int x;
+//     int y;
+//     int step;
+// };                          // 队列里每个元素
+// queue<point> r;             // 申请队列
+// int dx[4] = {1, 0, -1, 0};  // 向四个方向延伸，顺序为：右 下 左 上
+// int dy[4] = {0, -1, 0, 1};
+// int flag = 0;  // 是否到达终点
+
+// int main() {
+//     // 数据输入
+//     int n, m, startx, starty, endx, endy;
+//     scanf("%d %d", &n, &m);
+//     for (int i = 1; i <= n; i++) { 
+//         for (int j = 1; j <= m; j++) {
+//             scanf("%d", &a[i][j]);//1为路径，2为墙
+//         }
+//     }
+//     scanf("%d %d %d %d", &startx, &starty, &endx,
+//           &endy);  // 输入起点坐标和终点坐标
+
+//     // BFS
+//     point start;
+//     start.x = startx;
+//     start.y = starty;
+//     start.step = 0;
+//     r.push(start);          // 将起点坐标入队
+//     v[startx][starty] = 1;  // 将该点标记为已访问
+
+//     while (!r.empty()) {
+//         int x = r.front().x;  // 取队首元素的x坐标
+//         int y = r.front().y;  // 取队首元素的y坐标
+//         int step = r.front().step;
+//         printf("%d %d %d\n",x,y,step);
+
+//         if (x == endx && y == endy) {  // 到达终点了
+//             flag = 1;
+//             printf("%d\n", step);
+//             break;
+//         }
+
+//         for (int k = 0; k <= 3; k++) {  // 向四个方向拓展
+//             int newx, newy;
+//             newx = x + dx[k];
+//             newy = y + dy[k];
+//             if (a[newx][newy] == 1 &&
+//                 v[newx][newy] == 0)  // 该拓展点可以被访问且未被访问过
+//             {
+//                 point newpoint;
+//                 newpoint.x = newx;
+//                 newpoint.y = newy;
+//                 newpoint.step = step+1;
+//                 r.push(newpoint);  // 新拓展点入队
+//                 v[newx][newy] = 1;
+//             }
+//         }
+//         r.pop();  // 拓展完后将队首元素出队
+//     }
+
+//     if (flag == 1) {
+//         printf("找到路径");
+//     } else {
+//         printf("未找到路径");
+//     }
+
+//     return 0;
+// }
+
+// // #include <iostream>
+// // #include <vector>
+
+// // using namespace std;
+
+// // class Solution {
+// // public:
+// //     int orangesRotting(vector<vector<int>>& grid) {
+
+// //     }
+// // };
+
+
+// #include <iostream>
+// #include <string>
+
+// int main() {
+//     std::string str = "Hello, World!";
+//     int length = str.length();
+//     // 或者使用 int length = str.size();
+
+//     std::cout << "字符串长度为: " << length << std::endl;
+
+//     return 0;
+// }
+
+// #include <iostream>
+// #include <string>
+
+// int main() {
+//     std::string str1 = "Hello, World!";
+//     std::string str2 = "World";
+    
+//     int pos = str1.find(str2);
+    
+//     if (pos != std::string::npos) {
+//         std::cout << "找到了子字符串 \"" << str2 << "\"，位置在 " << pos << std::endl;
+//     } else {
+//         std::cout << "未找到子字符串 \"" << str2 << "\"" << std::endl;
+//     }
+    
+//     return 0;
+// }
+
+// #include <iostream>
+// #include <string>
+
+// int main() {
+//     std::string str1 = "Hello, ";
+//     std::string str2 = "World!";
+    
+//     std::string result = str1 + str2;
+    
+//     std::cout << "拼接结果: " << result << std::endl;
+    
+//     return 0;
+// }
+
+// #include <iostream>
+// #include <string>
+
+// int main() {
+//     std::string str1 = "Hell";
+//     std::string str2 = "HelL";
+    
+//     if (str1 <= str2) {
+//         std::cout << "两个字符串相等" << std::endl;
+//     } else {
+//         std::cout << "两个字符串不相等" << std::endl;
+//     }
+    
+//     return 0;
+// }
+
+// #include <iostream>
+// #include <string>
+
+// int main() {
+//     std::string str1 = "Hello";
+//     std::string str2;
+    
+//     if (str1.empty()) {
+//         std::cout << "str1是空字符串" << std::endl;
+//     } else {
+//         std::cout << "str1不是空字符串" << std::endl;
+//     }
+    
+//     if (str2.empty()) {
+//         std::cout << "str2是空字符串" << std::endl;
+//     } else {
+//         std::cout << "str2不是空字符串" << std::endl;
+//     }
+    
+//     return 0;
+// }
+
 #include <iostream>
-#include <queue>
+#include <string>
 using namespace std;
-
-int a[100][100];  // 各位置信息（是否有路径）
-int v[100][100];  // 标记某个位置是否被访问过（1有0无）
-struct point {
-    int x;
-    int y;
-    int step;
-};                          // 队列里每个元素
-queue<point> r;             // 申请队列
-int dx[4] = {1, 0, -1, 0};  // 向四个方向延伸，顺序为：右 下 左 上
-int dy[4] = {0, -1, 0, 1};
-int flag = 0;  // 是否到达终点
-
 int main() {
-    // 数据输入
-    int n, m, startx, starty, endx, endy;
-    scanf("%d %d", &n, &m);
-    for (int i = 1; i <= n; i++) { 
-        for (int j = 1; j <= m; j++) {
-            scanf("%d", &a[i][j]);//1为路径，2为墙
+    std::string str = "Hello, World!";
+    int a = 'a'-'A';
+    cout << a << endl;
+    // 将字符串转换为小写
+    for(int i=0;i<str.length();i++){
+        if(str[i]>='A'&&str[i]<='Z'){
+            char ch = str[i]+a;
+            cout << ch;
+        }else if(str[i]>='a'&&str[i]<='z'){
+            char ch = str[i]-a;
+            cout << ch;
+        }else{
+            cout << str[i];
         }
-    }
-    scanf("%d %d %d %d", &startx, &starty, &endx,
-          &endy);  // 输入起点坐标和终点坐标
-
-    // BFS
-    point start;
-    start.x = startx;
-    start.y = starty;
-    start.step = 0;
-    r.push(start);          // 将起点坐标入队
-    v[startx][starty] = 1;  // 将该点标记为已访问
-
-    while (!r.empty()) {
-        int x = r.front().x;  // 取队首元素的x坐标
-        int y = r.front().y;  // 取队首元素的y坐标
-        int step = r.front().step;
-        printf("%d %d %d\n",x,y,step);
-
-        if (x == endx && y == endy) {  // 到达终点了
-            flag = 1;
-            printf("%d\n", step);
-            break;
-        }
-
-        for (int k = 0; k <= 3; k++) {  // 向四个方向拓展
-            int newx, newy;
-            newx = x + dx[k];
-            newy = y + dy[k];
-            if (a[newx][newy] == 1 &&
-                v[newx][newy] == 0)  // 该拓展点可以被访问且未被访问过
-            {
-                point newpoint;
-                newpoint.x = newx;
-                newpoint.y = newy;
-                newpoint.step = step+1;
-                r.push(newpoint);  // 新拓展点入队
-                v[newx][newy] = 1;
-            }
-        }
-        r.pop();  // 拓展完后将队首元素出队
-    }
-
-    if (flag == 1) {
-        printf("找到路径");
-    } else {
-        printf("未找到路径");
     }
 
     return 0;
 }
-
-// #include <iostream>
-// #include <vector>
-
-// using namespace std;
-
-// class Solution {
-// public:
-//     int orangesRotting(vector<vector<int>>& grid) {
-
-//     }
-// };
