@@ -2367,25 +2367,25 @@
 //     return 0;
 // }
 
-#include <iostream>
-#include <string>
-using namespace std;
-int main() {
-    std::string str = "Hello, World!";
-    int a = 'a'-'A';
-    cout << a << endl;
-    // 将字符串转换为小写
-    for(int i=0;i<str.length();i++){
-        if(str[i]>='A'&&str[i]<='Z'){
-            char ch = str[i]+a;
-            cout << ch;
-        }else if(str[i]>='a'&&str[i]<='z'){
-            char ch = str[i]-a;
-            cout << ch;
-        }else{
-            cout << str[i];
-        }
-    }
+// #include <iostream>
+// #include <string>
+// using namespace std;
+// int main() {
+//     std::string str = "Hello, World!";
+//     int a = 'a'-'A';
+//     cout << a << endl;
+//     // 将字符串转换为小写
+//     for(int i=0;i<str.length();i++){
+//         if(str[i]>='A'&&str[i]<='Z'){
+//             char ch = str[i]+a;
+//             cout << ch;
+//         }else if(str[i]>='a'&&str[i]<='z'){
+//             char ch = str[i]-a;
+//             cout << ch;
+//         }else{
+//             cout << str[i];
+//         }
+//     }
 
-    return 0;
-}
+//     return 0;
+// }
