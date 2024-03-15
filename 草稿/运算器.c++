@@ -2216,7 +2216,7 @@
 //     // 数据输入
 //     int n, m, startx, starty, endx, endy;
 //     scanf("%d %d", &n, &m);
-//     for (int i = 1; i <= n; i++) { 
+//     for (int i = 1; i <= n; i++) {
 //         for (int j = 1; j <= m; j++) {
 //             scanf("%d", &a[i][j]);//1为路径，2为墙
 //         }
@@ -2283,7 +2283,6 @@
 // //     }
 // // };
 
-
 // #include <iostream>
 // #include <string>
 
@@ -2303,15 +2302,16 @@
 // int main() {
 //     std::string str1 = "Hello, World!";
 //     std::string str2 = "World";
-    
+
 //     int pos = str1.find(str2);
-    
+
 //     if (pos != std::string::npos) {
-//         std::cout << "找到了子字符串 \"" << str2 << "\"，位置在 " << pos << std::endl;
+//         std::cout << "找到了子字符串 \"" << str2 << "\"，位置在 " << pos <<
+//         std::endl;
 //     } else {
 //         std::cout << "未找到子字符串 \"" << str2 << "\"" << std::endl;
 //     }
-    
+
 //     return 0;
 // }
 
@@ -2321,11 +2321,11 @@
 // int main() {
 //     std::string str1 = "Hello, ";
 //     std::string str2 = "World!";
-    
+
 //     std::string result = str1 + str2;
-    
+
 //     std::cout << "拼接结果: " << result << std::endl;
-    
+
 //     return 0;
 // }
 
@@ -2335,13 +2335,13 @@
 // int main() {
 //     std::string str1 = "Hell";
 //     std::string str2 = "HelL";
-    
+
 //     if (str1 <= str2) {
 //         std::cout << "两个字符串相等" << std::endl;
 //     } else {
 //         std::cout << "两个字符串不相等" << std::endl;
 //     }
-    
+
 //     return 0;
 // }
 
@@ -2351,19 +2351,19 @@
 // int main() {
 //     std::string str1 = "Hello";
 //     std::string str2;
-    
+
 //     if (str1.empty()) {
 //         std::cout << "str1是空字符串" << std::endl;
 //     } else {
 //         std::cout << "str1不是空字符串" << std::endl;
 //     }
-    
+
 //     if (str2.empty()) {
 //         std::cout << "str2是空字符串" << std::endl;
 //     } else {
 //         std::cout << "str2不是空字符串" << std::endl;
 //     }
-    
+
 //     return 0;
 // }
 
@@ -2389,3 +2389,90 @@
 
 //     return 0;
 // }
+
+// #include <iostream>
+// #include <string>
+// using namespace std;
+
+// int main() {
+//     string user_name;
+//     cout << "Please enter your first name: ";
+//     cin >> user_name;
+//     cout << '\n' << "Hello, " << user_name << " ... and goodbye!\n";
+//     return 0;
+// }
+
+// #include <iostream>
+// int max(int x, int y);
+// int main() {
+//     int a, b, c;
+//     std::cin >> a >> b;
+//     c = max(a, b);
+//     std::cout << "max= " << c <<'\n';
+// }
+// int max(int x, int y)
+// {
+//     int z;
+//     if (x > y)
+//         z = x;
+//     else
+//         z = y;
+//     return (z);
+// }
+
+// I/O stream 单行注释(single line comment)
+// #include <iostream>
+// using namespace std;
+// int main() {
+//     int i;
+//     float f;
+//     char s[80];
+//     cout << "Enter an integer,float,and string:";
+//     cin >> i >> f >> s;
+//     cout << "Here's your data:" << i << ' ' << f << endl << s << '\n';
+//     return 0;
+// }
+
+// #include <iostream>
+// using namespace std;
+// int main() {
+//     int a, b, c;
+//     cin >> a >> b;
+//     if (b == 0)
+//         return -1;
+//     c = a / b;
+//     cout << "c= " << c << '\n';
+//     return 0;
+// }
+
+// #include <iostream>
+// using namespace std;
+
+// int model = 90;
+// int v[] = {1, 2, 3, 4};
+// const int x = 0;
+// void f() {
+//     model = 200;
+//     v[2]++;
+// }
+// int main()
+// {
+//     f();
+//     return 0;
+// }
+
+// #include <iostream>
+// using namespace std;
+
+// void sqr_it(int* i);
+// int main() {
+//     int x;
+//     x = 10;
+//     sqr_it(&x);
+//     cout << "The square of x is " << x << '\n';
+//     return 0;
+// }
+// void sqr_it(int* i) {
+//     *i = (*i) * (*i);
+// }
+
