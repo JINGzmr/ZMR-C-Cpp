@@ -9,7 +9,7 @@ class Solution {
    public:
     void solve(vector<vector<char>>& board) {
         memset(v, 0, sizeof(v));
-        pair<int, int> start = find(board);
+        find(board);
 
         while (!q.empty()) {
             BFS(board);
@@ -25,7 +25,7 @@ class Solution {
     }
 
    private:
-    pair<int, int> find(vector<vector<char>>& board) {
+    void find(vector<vector<char>>& board) {
         pair<int, int> point = make_pair(-1,-1);
         for (int i = 0; i < board.size(); i++) {
             for (int j = 0; j < board[i].size(); j++) {
@@ -38,7 +38,6 @@ class Solution {
                     }
             }
         }
-        return point;  // 没找到
     }
 
     void BFS(vector<vector<char>>& board) {
