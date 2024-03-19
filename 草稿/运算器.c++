@@ -2476,4 +2476,66 @@
 //     *i = (*i) * (*i);
 // }
 
-#
+// 21：55
+#include <iostream>
+#include <vector>
+#include <bits/stdc++.h>
+using namespace std;
+int dx[4] = {1, 0, -1, 0};
+int dy[4] = {0, 1, 0, -1};
+int v[50][50] = {0};
+int num = 0;
+
+void BFS(vector<vector<int>>& grid, queue<pair<int, int>>& q) {
+    while (!q.empty()) {
+        pair<int, int> newpoint, point = q.front();
+        for (int i = 0; i < 4; i++) {
+            newpoint.first = point.first + dx[i];
+            newpoint.second = point.second + dy[i];
+            if (newpoint.first < 0 || newpoint.second < 0 ||
+                newpoint.first >= grid.size() ||
+                newpoint.second >= grid[0].size())
+                continue;
+            if (grid[newpoint.first][newpoint.second] == 1 &&
+                v[newpoint.first][newpoint.second] == 0) {
+                q.push(newpoint);
+                v[newpoint.first][newpoint.second] == 1;
+            }
+        }
+    }
+
+    
+}
+
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        int m, n;
+        cin >> m >> n;
+        vector<vector<int>> grid(m, vector<int>(n));
+        for (int i = 0; i < m; i++) {
+            string row;
+            cin >> row;
+            for (int j = 0; j < n; j++) {
+                grid[i][j] = row[j] - '0';
+            }
+        }
+
+        num = 0;  // 岛屿数量
+        v[50][50] = {0};
+        queue<pair<int, int>> q;
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 1 && v[i][j] == 0) {
+                    pair<int, int> point = make_pair(i, j);
+                    q.push(point);
+                    BFS(grid, q);
+                }
+            }
+        }
+    }
+
+    return 0;
+}
