@@ -2476,66 +2476,141 @@
 //     *i = (*i) * (*i);
 // }
 
-// 21：55
-#include <iostream>
-#include <vector>
-#include <bits/stdc++.h>
-using namespace std;
-int dx[4] = {1, 0, -1, 0};
-int dy[4] = {0, 1, 0, -1};
-int v[50][50] = {0};
-int num = 0;
+// #include <bits/stdc++.h>
+// using namespace std;
 
-void BFS(vector<vector<int>>& grid, queue<pair<int, int>>& q) {
-    while (!q.empty()) {
-        pair<int, int> newpoint, point = q.front();
-        for (int i = 0; i < 4; i++) {
-            newpoint.first = point.first + dx[i];
-            newpoint.second = point.second + dy[i];
-            if (newpoint.first < 0 || newpoint.second < 0 ||
-                newpoint.first >= grid.size() ||
-                newpoint.second >= grid[0].size())
-                continue;
-            if (grid[newpoint.first][newpoint.second] == 1 &&
-                v[newpoint.first][newpoint.second] == 0) {
-                q.push(newpoint);
-                v[newpoint.first][newpoint.second] == 1;
-            }
-        }
-    }
+// int main()
+// {
+//     char* name = new char[30];
+//     cin.getline(name,30);
+//     cout << name << endl;
+// }
 
-    
-}
+// #include <iostream>
+// using namespace std;
 
-int main() {
-    int t;
-    cin >> t;
-    while (t--) {
-        int m, n;
-        cin >> m >> n;
-        vector<vector<int>> grid(m, vector<int>(n));
-        for (int i = 0; i < m; i++) {
-            string row;
-            cin >> row;
-            for (int j = 0; j < n; j++) {
-                grid[i][j] = row[j] - '0';
-            }
-        }
+// void f(int a[], int n, int& max, int& min) {
+//     max = min = a[0];
+//     for (int i = 1; i < n; i++) {
+//         if (max < a[i])
+//             max = a[i];
+//         if (min > a[i])
+//             min = a[i];
+//     }
+// }
+// int main() {
+//     int a[10] = {2, 5, 3, 9, 0, 8, 1, 7, 6, 4};
+//     int max, min;
+//     f(a, 10, max, min);
+//     cout << "Max: " << max << endl;
+//     cout << "Min: " << min << endl;
+// }
 
-        num = 0;  // 岛屿数量
-        v[50][50] = {0};
-        queue<pair<int, int>> q;
+// class FindMax {
+//    public:
+//     int max(int a, int b) { return a > b ? a : b; }
 
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                if (grid[i][j] == 1 && v[i][j] == 0) {
-                    pair<int, int> point = make_pair(i, j);
-                    q.push(point);
-                    BFS(grid, q);
-                }
-            }
-        }
-    }
+//     long max(long a, long b) { return a > b ? a : b; }
 
-    return 0;
-}
+//     double max(double a, double b) { return a > b ? a : b; }
+// };
+
+// int main() {
+//     FindMax findmax;
+//     cout << findmax.max(2,3) << endl;
+//     cout << findmax.max(1000000000,2000000000) << endl;
+//     cout << findmax.max(2.2,3.3) << endl;
+// }
+
+// // 21：55
+// #include <iostream>
+// #include <vector>
+// #include <bits/stdc++.h>
+// using namespace std;
+// int dx[4] = {1, 0, -1, 0};
+// int dy[4] = {0, 1, 0, -1};
+// int dxx[8] = {1, 1, 0, -1, -1, -1, 0, 1};
+// int dyy[8] = {0, 1, 1, 1, 0, -1, -1, -1};
+// int v[50][50] = {0};
+// int num = 0;
+
+// int BFS(vector<vector<int>>& grid, queue<pair<int, int>>& q) {
+//     queue<pair<int, int>> p = q;
+//     int flag = 0;  // 默认没找到
+//     while (!q.empty() && !flag) {
+//         pair<int, int> newpoint, point = p.front();
+//         p.pop();
+//         for (int i = 0; i < 8; i++) {
+//             newpoint.first = point.first + dxx[i];
+//             newpoint.second = point.second + dyy[i];
+//             if (newpoint.first < 0 || newpoint.second < 0 ||
+//                 newpoint.first >= grid.size() ||
+//                 newpoint.second >= grid[0].size())
+//                 continue;
+//             if (newpoint.first == 0 || newpoint.second == 0 ||
+//                 newpoint.first == grid.size() - 1 ||
+//                 newpoint.second == grid[0].size() - 1)
+//                 flag = 1;
+//             if (grid[newpoint.first][newpoint.second] == 0) {
+//                 p.push(newpoint);
+//             }
+//         }
+//     }
+//     if (flag == 0)
+//         return flag;
+
+//     while (!q.empty()) {
+//         pair<int, int> newpoint, point = q.front();
+//         q.pop();
+//         for (int i = 0; i < 4; i++) {
+//             newpoint.first = point.first + dx[i];
+//             newpoint.second = point.second + dy[i];
+//             if (newpoint.first < 0 || newpoint.second < 0 ||
+//                 newpoint.first >= grid.size() ||
+//                 newpoint.second >= grid[0].size())
+//                 continue;
+//             if (grid[newpoint.first][newpoint.second] == 1 &&
+//                 v[newpoint.first][newpoint.second] == 0) {
+//                 q.push(newpoint);
+//                 v[newpoint.first][newpoint.second] = 1;
+//             }
+//         }
+//     }
+//     return 1;
+// }
+
+// int main() {
+//     int t;
+//     cin >> t;
+//     while (t--) {
+//         int m, n;
+//         cin >> m >> n;
+//         vector<vector<int>> grid(m, vector<int>(n));
+//         for (int i = 0; i < m; i++) {
+//             string row;
+//             cin >> row;
+//             for (int j = 0; j < n; j++) {
+//                 grid[i][j] = row[j] - '0';
+//             }
+//         }
+
+//         num = 0;  // 岛屿数量
+//         v[50][50] = {0};
+//         queue<pair<int, int>> q;
+
+//         for (int i = 0; i < m; i++) {
+//             for (int j = 0; j < n; j++) {
+//                 if (grid[i][j] == 1 && v[i][j] == 0) {
+//                     pair<int, int> point = make_pair(i, j);
+//                     q.push(point);
+//                     v[i][j] = 1;
+//                     if (BFS(grid, q))
+//                         num++;
+//                 }
+//             }
+//         }
+//         cout <<"-----------"<< num-1<< "-----------" << endl;
+//     }
+
+//     return 0;
+// }
