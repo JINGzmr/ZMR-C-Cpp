@@ -2631,15 +2631,15 @@ void BFS(vector<vector<int>>& grid,
          queue<pair<int, int>>& q,
          vector<vector<int>>& v,
          int flag) {
-    pair<int, int> newpoint, point = q.front();
-    q.pop();
     while (!q.empty()) {
-        for (int i = 0; i < 8; i++) {
-            int x = point.first + dxx[i];
-            int y = point.second + dyy[i];
-            if (x < 0 || y < 0 || x >= grid.size() || y >= grid[0].size())
-                continue;
-            if (flag == 2) {  // 说明是标志海能够到达的区域模块
+        pair<int, int> newpoint, point = q.front();
+        q.pop();
+        if (flag == 2) {  // 说明是标志海能够到达的区域模块
+            for (int i = 0; i < 8; i++) {
+                int x = point.first + dxx[i];
+                int y = point.second + dyy[i];
+                if (x < 0 || y < 0 || x >= grid.size() || y >= grid[0].size())
+                    continue;
                 if (grid[x][y] == 0) {
                     newpoint.first = x;
                     newpoint.second = y;
@@ -2647,8 +2647,14 @@ void BFS(vector<vector<int>>& grid,
                     grid[x][y] = 2;
                 }
             }
-            if (flag == 1) {  // 说明是统计岛屿个数模块
-                if (grid[x][y] == 1&&v[x][y]==0) {
+        }
+        if (flag == 1) {  // 说明是统计岛屿个数模块
+            for (int i = 0; i < 4; i++) {
+                int x = point.first + dx[i];
+                int y = point.second + dy[i];
+                if (x < 0 || y < 0 || x >= grid.size() || y >= grid[0].size())
+                    continue;
+                if (grid[x][y] == 1 && v[x][y] == 0) {
                     newpoint.first = x;
                     newpoint.second = y;
                     q.push(newpoint);
@@ -2683,6 +2689,7 @@ int main() {
         // }
 
         // 从00开始,通过八个方向遍历地图,把是0的地方全部设置为2,表示外部海水能到达的区域
+
         queue<pair<int, int>> q;
         pair<int, int> point(0, 0);
         q.push(point);
@@ -2710,6 +2717,7 @@ int main() {
         }
 
         // 打印岛屿个数
-        cout << "-----"<<num << "------" << endl;
+        // cout << "-----" << num << "------" << endl;
+        cout << num << endl;
     }
 }
