@@ -6,13 +6,10 @@ int dy[4] = {0, 1, 0, -1};
 int dxx[8] = {1, 1, 0, -1, -1, -1, 0, 1};
 int dyy[8] = {0, 1, 1, 1, 0, -1, -1, -1};
 
-void BFS(vector<vector<int>>& grid,
-         queue<pair<int, int>>& q,
-         vector<vector<int>>& v,
-         int flag) {
+void BFS(vector<vector<int>>& grid,queue<pair<int, int>>& q,vector<vector<int>>& v,int flag) {
+    pair<int, int> newpoint, point = q.front();
+    q.pop();
     while (!q.empty()) {
-        pair<int, int> newpoint, point = q.front();
-        q.pop();
         if (flag == 2) {  // 说明是标志海能够到达的区域模块
             for (int i = 0; i < 8; i++) {
                 int x = point.first + dxx[i];
