@@ -2619,105 +2619,381 @@
 //     return 0;
 // }
 
-#include <bits/stdc++.h>
-using namespace std;
+// #include <bits/stdc++.h>
+// using namespace std;
 
-int dx[4] = {1, 0, -1, 0};
-int dy[4] = {0, 1, 0, -1};
-int dxx[8] = {1, 1, 0, -1, -1, -1, 0, 1};
-int dyy[8] = {0, 1, 1, 1, 0, -1, -1, -1};
+// int dx[4] = {1, 0, -1, 0};
+// int dy[4] = {0, 1, 0, -1};
+// int dxx[8] = {1, 1, 0, -1, -1, -1, 0, 1};
+// int dyy[8] = {0, 1, 1, 1, 0, -1, -1, -1};
 
-void BFS(vector<vector<int>>& grid,
-         queue<pair<int, int>>& q,
-         vector<vector<int>>& v,
-         int flag) {
-    while (!q.empty()) {
-        pair<int, int> newpoint, point = q.front();
-        q.pop();
-        if (flag == 2) {  // 说明是标志海能够到达的区域模块
-            for (int i = 0; i < 8; i++) {
-                int x = point.first + dxx[i];
-                int y = point.second + dyy[i];
-                if (x < 0 || y < 0 || x >= grid.size() || y >= grid[0].size())
-                    continue;
-                if (grid[x][y] == 0) {
-                    newpoint.first = x;
-                    newpoint.second = y;
-                    q.push(newpoint);
-                    grid[x][y] = 2;
-                }
-            }
-        }
-        if (flag == 1) {  // 说明是统计岛屿个数模块
-            for (int i = 0; i < 4; i++) {
-                int x = point.first + dx[i];
-                int y = point.second + dy[i];
-                if (x < 0 || y < 0 || x >= grid.size() || y >= grid[0].size())
-                    continue;
-                if (grid[x][y] == 1 && v[x][y] == 0) {
-                    newpoint.first = x;
-                    newpoint.second = y;
-                    q.push(newpoint);
-                    v[x][y] = 1;
-                }
-            }
-        }
-    }
-}
+// void BFS(vector<vector<int>>& grid,
+//          queue<pair<int, int>>& q,
+//          vector<vector<int>>& v,
+//          int flag) {
+//     while (!q.empty()) {
+//         pair<int, int> newpoint, point = q.front();
+//         q.pop();
+//         if (flag == 2) {  // 说明是标志海能够到达的区域模块
+//             for (int i = 0; i < 8; i++) {
+//                 int x = point.first + dxx[i];
+//                 int y = point.second + dyy[i];
+//                 if (x < 0 || y < 0 || x >= grid.size() || y >=
+//                 grid[0].size())
+//                     continue;
+//                 if (grid[x][y] == 0) {
+//                     newpoint.first = x;
+//                     newpoint.second = y;
+//                     q.push(newpoint);
+//                     grid[x][y] = 2;
+//                 }
+//             }
+//         }
+//         if (flag == 1) {  // 说明是统计岛屿个数模块
+//             for (int i = 0; i < 4; i++) {
+//                 int x = point.first + dx[i];
+//                 int y = point.second + dy[i];
+//                 if (x < 0 || y < 0 || x >= grid.size() || y >=
+//                 grid[0].size())
+//                     continue;
+//                 if (grid[x][y] == 1 && v[x][y] == 0) {
+//                     newpoint.first = x;
+//                     newpoint.second = y;
+//                     q.push(newpoint);
+//                     v[x][y] = 1;
+//                 }
+//             }
+//         }
+//     }
+// }
 
-int main() {
-    int t;
-    cin >> t;
-    while (t--) {
-        int m, n, num = 0;
-        cin >> m >> n;
-        vector<vector<int>> grid(m + 2, vector<int>(n + 2)),
-            v(m + 2, vector<int>(n + 2));
-        string str;
-        for (int i = 0; i < m; i++) {
-            cin >> str;
-            for (int j = 0; j < n; j++) {
-                grid[i + 1][j + 1] = str[j] - '0';
-            }
-        }
+// int main() {
+//     int t;
+//     cin >> t;
+//     while (t--) {
+//         int m, n, num = 0;
+//         cin >> m >> n;
+//         vector<vector<int>> grid(m + 2, vector<int>(n + 2)),
+//             v(m + 2, vector<int>(n + 2));
+//         string str;
+//         for (int i = 0; i < m; i++) {
+//             cin >> str;
+//             for (int j = 0; j < n; j++) {
+//                 grid[i + 1][j + 1] = str[j] - '0';
+//             }
+//         }
 
-        // for(int i=0;i<m+2;i++){
-        //     for(int j=0;j<n+2;j++){
-        //         cout << grid[i][j];
-        //     }
-        //     cout << endl;
-        // }
+//         // for(int i=0;i<m+2;i++){
+//         //     for(int j=0;j<n+2;j++){
+//         //         cout << grid[i][j];
+//         //     }
+//         //     cout << endl;
+//         // }
 
-        // 从00开始,通过八个方向遍历地图,把是0的地方全部设置为2,表示外部海水能到达的区域
+//         //
+//         从00开始,通过八个方向遍历地图,把是0的地方全部设置为2,表示外部海水能到达的区域
 
-        queue<pair<int, int>> q;
-        pair<int, int> point(0, 0);
-        q.push(point);
-        BFS(grid, q, v, 2);
+//         queue<pair<int, int>> q;
+//         pair<int, int> point(0, 0);
+//         q.push(point);
+//         BFS(grid, q, v, 2);
 
-        // 遍历一次地图,把所有0变为1.这样内部的子岛屿就和外部的岛屿连到一起了
-        for (int i = 0; i < m + 2; i++) {
-            for (int j = 0; j < n + 2; j++) {
-                if (grid[i][j] == 0)
-                    grid[i][j] = 1;
-            }
-        }
+//         // 遍历一次地图,把所有0变为1.这样内部的子岛屿就和外部的岛屿连到一起了
+//         for (int i = 0; i < m + 2; i++) {
+//             for (int j = 0; j < n + 2; j++) {
+//                 if (grid[i][j] == 0)
+//                     grid[i][j] = 1;
+//             }
+//         }
 
-        // 正常BFS,找岛屿的个数即可
-        for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <= m; j++) {
-                if (v[i][j] == 0 && grid[i][j] == 1) {
-                    pair<int, int> point = make_pair(i, j);
-                    q.push(point);
-                    v[i][j] = 1;
-                    num++;
-                    BFS(grid, q, v, 1);
-                }
-            }
-        }
+//         // 正常BFS,找岛屿的个数即可
+//         for (int i = 1; i <= n; i++) {
+//             for (int j = 1; j <= m; j++) {
+//                 if (v[i][j] == 0 && grid[i][j] == 1) {
+//                     pair<int, int> point = make_pair(i, j);
+//                     q.push(point);
+//                     v[i][j] = 1;
+//                     num++;
+//                     BFS(grid, q, v, 1);
+//                 }
+//             }
+//         }
 
-        // 打印岛屿个数
-        // cout << "-----" << num << "------" << endl;
-        cout << num << endl;
-    }
-}
+//         // 打印岛屿个数
+//         // cout << "-----" << num << "------" << endl;
+//         cout << num << endl;
+//     }
+// }
+
+// #include <bits/stdc++.h>
+// using namespace std;
+
+// class counter {
+//    private:
+//     int value;
+
+//    public:
+//     counter(int number) : value(number) {}  // 构造函数用于初始化计数器的值
+
+//     // 方法用于增加计数器的值
+//     void increment() { value++; }
+
+//     // 方法用于减少计数器的值
+//     void decrement() { value--; }
+
+//     // 方法用于获取计数器的当前值
+//     int getvalue() { return value; }
+
+//     // 方法用于打印计数器的当前值
+//     void print() { std::cout << "计数器的值为: " << value << std::endl; }
+// };
+
+// int main() {
+//     // 创建一个初始值为5的计数器实例
+//     counter myCounter(5);
+
+//     // 增加计数器的值
+//     myCounter.increment();
+
+//     // 打印当前计数器的值
+//     myCounter.print();  // 输出将会是: 计数器的值为: 6
+
+//     // 减少计数器的值
+//     myCounter.decrement();
+
+//     // 打印当前计数器的值
+//     myCounter.print();  // 输出将会是: 计数器的值为: 5
+
+//     return 0;
+// }
+
+
+// class Score{
+//     float computer;
+//     float english;
+//     float mathematics;
+//     public:
+//     Score(float x1;float y1;float z1);
+//     Score();
+//     void print();
+//     void modify(float x2,float y2,float z2);
+// };
+
+// #include <bits/stdc++.h>
+// using namespace std;
+
+// // Student类的定义部分存放在接口文件student.h 中
+// class Student {
+//    private:
+//     int number;
+//     char* name;
+//     float score;
+
+//    public:
+//     Student(int number1, char* name1, float score1);  // 构造函数的声明
+//     ~Student();                                       // 析构函数的声明
+//     void modify(float score1) { score = score1; }
+//     void print();
+// };
+// // Student类中成员函数的定义部分存放在实现文件student.cpp 中
+
+// using namespace std;
+// // 构造函数的定义
+// Student::Student(int number1, char* name1, float score1) {
+//     number = number1;
+//     name = new char[strlen(name1) + 1];  // 申请动态内存单元
+//     strcpy(name, name1);
+//     score = score1;
+// }
+// // 析构函数的定义
+// Student::~Student() {
+//     delete[] name;  // 释放动态内存单元
+// }
+// void Student::print() {
+//     cout << "number: " << number << " name: " << name << " score: " << score
+//          << '\n';
+// }
+
+// // main( )函数主模块文件main.cpp
+// #include <iostream>
+// #include <string>
+// using namespace std;
+// int main() {
+//     int numberi;
+//     char namei[15];
+//     float scorei;
+
+//     cout << "Enter number:\n";
+//     cin >> numberi;
+//     cout << "Enter name:\n";
+//     cin >> namei;
+//     cout << "Enter score:\n";
+//     cin >> scorei;
+//     Student stu1(numberi, namei, scorei);  // 创建对象stu1时执行了初始化
+
+//     cout << "Enter number:\n";
+//     cin >> numberi;
+//     cout << "Enter name:\n";
+//     cin >> namei;
+//     Student stu 2(numberi, namei, scorei);  // 创建对象stu2时执行了初始化
+//     stu2.modify(87);  // 对象stu2调用成员函数modify( )
+
+//     stu1.print();  // 对象stu1调用成员函数print( )
+//     stu2.print();  // 对象stu2调用成员函数print( )
+//     return 0;
+// }
+
+// #include <iostream>
+
+// class Rectangle {
+// private:
+//     double length;
+//     double width;
+
+// public:
+//     // 构造函数
+//     Rectangle(double l, double w) {
+//         length = l;
+//         width = w;
+//     }
+
+//     // 计算矩形面积的成员函数
+//     double calculateArea() {
+//         return length * width;
+//     }
+// };
+
+// int main() {
+//     // 创建矩形对象
+//     Rectangle rect(5.0, 3.0);
+
+//     // 计算并显示矩形面积
+//     std::cout << "Rectangle Area: " << rect.calculateArea() << std::endl;
+
+//     return 0;
+// }
+
+// #include<iostream>
+// using namespace std;
+
+// class Date {
+//     int d, m, y;
+
+// public:
+//     Date(int day, int month, int year) : d(day), m(month), y(year) {}
+
+//     int day() const { return d; }
+//     int month() const { return m; }
+//     inline int year() {
+//         return y++;
+//     }
+// };
+
+// int main() {
+//     Date date(26, 3, 2024);
+//     cout << "Day: " << date.day() << endl;
+//     cout << "Month: " << date.month() << endl;
+//     cout << "Year: " << date.year() << endl;
+
+//     return 0;
+// }
+
+
+// #include <iostream>
+// #include <cstring>
+// #include <string>
+// using namespace std;
+
+// class Score {
+// private:
+//     float computer;
+//     float english;
+//     float mathematics;
+
+// public:
+//     Score(float x1, float y1, float z1) : computer(x1), english(y1), mathematics(z1) {}
+//     Score() : computer(0), english(0), mathematics(0) {}
+
+//     void print() {
+//         cout << "Computer: " << computer << ", English: " << english << ", Mathematics: " << mathematics << endl;
+//     }
+
+//     void modify(float x2, float y2, float z2) {
+//         computer = x2;
+//         english = y2;
+//         mathematics = z2;
+//     }
+// };
+
+// class Student {
+// private:
+//     int number;
+//     char* name;
+//     Score score; // 将Score类的对象作为成员变量添加到Student类中
+
+// public:
+//     // 构造函数的声明
+//     Student(int number1, const char* name1, float comp_score, float eng_score, float math_score);
+//     // 析构函数的声明
+//     ~Student();
+//     void modify_scores(float comp_score, float eng_score, float math_score) {
+//         score.modify(comp_score, eng_score, math_score);
+//     }
+//     void print();
+// };
+
+// // 构造函数的定义
+// Student::Student(int number1, const char* name1, float comp_score, float eng_score, float math_score) : number(number1), score(comp_score, eng_score, math_score) {
+//     name = new char[strlen(name1) + 1]; // 申请动态内存单元
+//     strcpy(name, name1);
+// }
+
+// // 析构函数的定义
+// Student::~Student() {
+//     delete[] name; // 释放动态内存单元
+// }
+
+// void Student::print() {
+//     cout << "Number: " << number << ", Name: " << name << ", Scores: ";
+//     score.print();
+// }
+
+// int main() {
+//     int number;
+//     char name[15];
+//     float comp_score, eng_score, math_score;
+
+//     cout << "Enter number: ";
+//     cin >> number;
+//     cout << "Enter name: ";
+//     cin >> name;
+//     cout << "Enter Computer score: ";
+//     cin >> comp_score;
+//     cout << "Enter English score: ";
+//     cin >> eng_score;
+//     cout << "Enter Mathematics score: ";
+//     cin >> math_score;
+
+//     Student stu1(number, name, comp_score, eng_score, math_score);
+
+//     cout << "Enter number: ";
+//     cin >> number;
+//     cout << "Enter name: ";
+//     cin >> name;
+//     cout << "Enter Computer score: ";
+//     cin >> comp_score;
+//     cout << "Enter English score: ";
+//     cin >> eng_score;
+//     cout << "Enter Mathematics score: ";
+//     cin >> math_score;
+
+//     Student stu2(number, name, comp_score, eng_score, math_score);
+//     stu2.modify_scores(85, 90, 95); // 修改stu2的成绩
+
+//     cout << "\nStudent 1:\n";
+//     stu1.print();
+//     cout << "\nStudent 2:\n";
+//     stu2.print();
+
+//     return 0;
+// }
