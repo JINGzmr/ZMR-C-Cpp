@@ -2997,3 +2997,41 @@
 
 //     return 0;
 // }
+
+
+#include<iostream>
+#include<vector>
+#include<cmath>
+#include<algorithm>
+#include<string>
+
+using namespace std;
+
+struct peo
+{
+    int num;
+    string str;
+    long long int sum;
+}p[100];
+
+bool cmp(const peo&a,const peo&b){
+    // return a.num>b.num;//降序
+    return a.num<b.num;//升序
+}
+
+int main()
+{
+    int n;
+    cin >> n;
+    for(int i=0;i<n;i++){
+        cin >> p[i].num >> p[i].str >> p[i].sum;
+    }
+
+    sort(p,p+n,cmp);
+
+    for(int i=0;i<n;i++){
+        cout << p[i].num <<" " <<  p[i].str << " "<< p[i].sum<< endl;
+    }
+
+    return 0;
+}
