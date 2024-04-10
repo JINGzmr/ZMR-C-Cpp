@@ -2767,7 +2767,6 @@
 //     return 0;
 // }
 
-
 // class Score{
 //     float computer;
 //     float english;
@@ -2898,7 +2897,6 @@
 //     return 0;
 // }
 
-
 // #include <iostream>
 // #include <cstring>
 // #include <string>
@@ -2911,11 +2909,12 @@
 //     float mathematics;
 
 // public:
-//     Score(float x1, float y1, float z1) : computer(x1), english(y1), mathematics(z1) {}
-//     Score() : computer(0), english(0), mathematics(0) {}
+//     Score(float x1, float y1, float z1) : computer(x1), english(y1),
+//     mathematics(z1) {} Score() : computer(0), english(0), mathematics(0) {}
 
 //     void print() {
-//         cout << "Computer: " << computer << ", English: " << english << ", Mathematics: " << mathematics << endl;
+//         cout << "Computer: " << computer << ", English: " << english << ",
+//         Mathematics: " << mathematics << endl;
 //     }
 
 //     void modify(float x2, float y2, float z2) {
@@ -2933,7 +2932,8 @@
 
 // public:
 //     // 构造函数的声明
-//     Student(int number1, const char* name1, float comp_score, float eng_score, float math_score);
+//     Student(int number1, const char* name1, float comp_score, float
+//     eng_score, float math_score);
 //     // 析构函数的声明
 //     ~Student();
 //     void modify_scores(float comp_score, float eng_score, float math_score) {
@@ -2943,7 +2943,9 @@
 // };
 
 // // 构造函数的定义
-// Student::Student(int number1, const char* name1, float comp_score, float eng_score, float math_score) : number(number1), score(comp_score, eng_score, math_score) {
+// Student::Student(int number1, const char* name1, float comp_score, float
+// eng_score, float math_score) : number(number1), score(comp_score, eng_score,
+// math_score) {
 //     name = new char[strlen(name1) + 1]; // 申请动态内存单元
 //     strcpy(name, name1);
 // }
@@ -2998,40 +3000,253 @@
 //     return 0;
 // }
 
+// #include<iostream>
+// #include<vector>
+// #include<cmath>
+// #include<algorithm>
+// #include<string>
 
-#include<iostream>
-#include<vector>
-#include<cmath>
-#include<algorithm>
-#include<string>
+// using namespace std;
 
-using namespace std;
+// struct peo
+// {
+//     int num;
+//     string str;
+//     long long int sum;
+// }p[100];
 
-struct peo
+// bool cmp(const peo&a,const peo&b){
+//     // return a.num>b.num;//降序
+//     return a.num<b.num;//升序
+// }
+
+// int main()
+// {
+//     int n;
+//     cin >> n;
+//     for(int i=0;i<n;i++){
+//         cin >> p[i].num >> p[i].str >> p[i].sum;
+//     }
+
+//     sort(p,p+n,cmp);
+
+//     for(int i=0;i<n;i++){
+//         cout << p[i].num <<" " <<  p[i].str << " "<< p[i].sum<< endl;
+//     }
+
+//     return 0;
+// }
+
+// #include <iostream>
+// #include <string>
+
+// class Student {
+// public:
+//   std::string name;
+//   int age;
+
+//   Student(const std::string& n, int a) : name(n), age(a) {}
+// };
+
+// int main() {
+//   Student students[5] = {
+//     Student("Alice", 20),
+//     Student("Bob", 21),
+//     Student("Charlie", 19),
+//     Student("David", 22),
+//     Student("Eve", 20)
+//   };
+
+//   for (int i = 0; i < 5; ++i) {
+//     std::cout << "Student " << i+1 << ": " << students[i].name << ", " <<
+//     students[i].age << std::endl;
+//   }
+
+//   Student* studentPtrs[5];
+//   for (int i = 0; i < 5; ++i) {
+//     studentPtrs[i] = &students[i];
+//   }
+
+//   for (int i = 0; i < 5; ++i) {
+//     std::cout << "Student " << i+1 << ": " << studentPtrs[i]->name << ", " <<
+//     studentPtrs[i]->age << std::endl;
+//   }
+
+//   return 0;
+// }
+
+// #include <iostream>
+// using namespace std;
+
+// class samp {
+//     int i;
+
+//    public:
+//     samp(int x) { i = x; }
+//     void set_i(int n) { i = n; }
+//     int get_i() { return i; }
+// };
+// void sqr_it(samp &o){
+//     o.set_i(o.get_i() * o.get_i());
+//     cout << o.get_i() << endl;
+//     cout << endl;
+// }
+
+// int main() {
+//     samp a(10);
+//     sqr_it(a);
+//     cout << a.get_i();
+//     return 0;
+
+// }
+
+// #include <iostream>
+
+// class Circle {
+// private:
+//     double radius;
+//     static int count; // 静态数据成员
+
+// public:
+//     Circle(double r) : radius(r) {
+//         count++; // 在构造函数中增加对象计数
+//     }
+
+//     ~Circle() {
+//         count--; // 在析构函数中减少对象计数
+//     }
+
+//     static int getCount() { // 静态成员函数
+//         return count;
+//     }
+// };
+
+// int Circle::count = 0; // 初始化静态数据成员
+
+// int main() {
+//     Circle c1(2.0);
+//     Circle c2(3.0);
+//     Circle c3(4.0);
+
+//     std::cout << "Number of objects: " << Circle::getCount() << std::endl;
+
+//     return 0;
+// }
+
+// #include <iostream>
+// #include <cmath>
+
+// class Point {
+// private:
+//     double x;
+//     double y;
+
+// public:
+//     Point(double xCoord, double yCoord) : x(xCoord), y(yCoord) {}
+
+//     double distance(const Point& other) const;
+
+//     friend double calculateDistance(const Point& p1, const Point& p2);
+// };
+
+// double Point::distance(const Point& other) const {
+//     double dx = x - other.x;
+//     double dy = y - other.y;
+//     return std::sqrt(dx * dx + dy * dy);
+// }
+
+// double calculateDistance(const Point& p1, const Point& p2) {
+//     return p1.distance(p2);
+// }
+
+// int main() {
+//     Point p1(1.0, 2.0);
+//     Point p2(3.0, 4.0);
+
+//     double dist = calculateDistance(p1, p2);
+//     std::cout << "Distance between p1 and p2: " << dist << std::endl;
+
+//     return 0;
+// }
+
+// #include <bits/stdc++.h>
+// #include <cmath>
+// #include <algorithm>
+// using namespace std;
+// class Point {
+//    public:
+//     Point(double xi, double yi) {
+//         X = xi;
+//         Y = yi;
+//     }
+//     double GetX() { return X; }
+//     double GetY() { return Y; }
+//     double Distance(Point& b);
+
+//    private:
+//     double X, Y;
+// };
+// double Point::Distance(Point& b) {
+//     double dx = X - b.X;
+//     double dy = Y - b.Y;
+//     return sqrt(dx * dx + dy * dy);
+// }
+// int main() {
+//     Point p1(3.0, 5.0), p2(4.0, 6.0);
+//     double d = p1.Distance(p2);
+//     cout << "The distance is " << d << endl;
+//     return 0;
+// }
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<signal.h>
+#include<sys/types.h>
+#include<sys/wait.h>
+#include<string.h>
+
+int main(int argc, char *argv[])
 {
-    int num;
-    string str;
-    long long int sum;
-}p[100];
-
-bool cmp(const peo&a,const peo&b){
-    // return a.num>b.num;//降序
-    return a.num<b.num;//升序
-}
-
-int main()
-{
-    int n;
-    cin >> n;
-    for(int i=0;i<n;i++){
-        cin >> p[i].num >> p[i].str >> p[i].sum;
-    }
-
-    sort(p,p+n,cmp);
-
-    for(int i=0;i<n;i++){
-        cout << p[i].num <<" " <<  p[i].str << " "<< p[i].sum<< endl;
-    }
-
-    return 0;
-}
+    pid_t pid;
+    char cmd;
+    char *arg_psa[]={"ps","-a",NULL};
+    char *arg_psx[]={"ps","-x",NULL};
+    while(1)
+    {
+        printf("------------------------------\n");
+        printf("输入a执行'ps-a'命令\n");
+        printf("输入x执行'ps-x'命令\n");
+        printf("输入q退出\n");
+        cmd=getchar();//接收输入命令字符
+        getchar();
+        
+        if((pid=fork())<0) 
+        {
+            perror("fork error:");
+            return -1;
+        }
+        if(pid==0)
+        {
+            switch(cmd)
+            {
+                case 'a':
+                execve("/bin/ps",arg_psa,NULL);
+                break;
+                case 'x':
+                execve("/bin/ps",arg_psx,NULL);
+                break;
+                case 'q':
+                break; 
+                defaul有意设置子进程结束 
+         } else if(pid>0){
+             if(cmd=='q')
+             break;
+         } 
+    }//进程退出循环
+    while(waitpid(-1,NULL,WNOHANG)>0);
+    return 0; 
+}t:
+                perror("wrong cmd:\n");
+                break;
+            }//子进程结束 
+            exit(0);//
