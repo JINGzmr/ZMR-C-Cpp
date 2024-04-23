@@ -3250,3 +3250,420 @@
 //                 break;
 //             }//子进程结束 
 //             exit(0);//
+
+// #include <iostream>
+// #include <thread>
+// #include <queue>
+// #include <mutex>
+// #include <condition_variable>
+
+// using namespace std;
+
+// const int BUFFER_SIZE = 5;
+// queue<int> buffer;
+// mutex mtx;
+// condition_variable not_full, not_empty;
+
+// void producer() {
+//     for (int i = 0; i < 10; ++i) {
+//         unique_lock<mutex> lock(mtx);
+//         not_full.wait(lock, []{ return buffer.size() < BUFFER_SIZE; });
+//         buffer.push(i);
+//         cout << "Produced item " << i << endl;
+//         lock.unlock();
+//         not_empty.notify_one();
+//         this_thread::sleep_for(chrono::seconds(1));
+//     }
+// }
+
+// void consumer() {
+//     for (int i = 0; i < 10; ++i) {
+//         unique_lock<mutex> lock(mtx);
+//         not_empty.wait(lock, []{ return !buffer.empty(); });
+//         int item = buffer.front();
+//         buffer.pop();
+//         cout << "Consumed item " << item << endl;
+//         lock.unlock();
+//         not_full.notify_one();
+//         this_thread::sleep_for(chrono::seconds(2));
+//     }
+// }
+
+// int main() {
+//     thread prod_thread(producer);
+//     thread cons_thread(consumer);
+//     prod_thread.join();
+//     cons_thread.join();
+//     return 0;
+// }
+
+
+// #include <iostream>
+// #include <thread>
+// #include <vector>
+// #include <mutex>
+// #include <condition_variable>
+
+// using namespace std;
+
+// mutex mtx;
+// condition_variable read_cv, write_cv;
+// int readers = 0;
+// bool writing = false;
+
+// void reader(int id) {
+//     while (true) {
+//         unique_lock<mutex> lock(mtx);
+//         while (writing) {
+//             read_cv.wait(lock);
+//         }
+//         ++readers;
+//         lock.unlock();
+//         // Reading...
+//         cout << "Reader " << id << " is reading." << endl;
+//         lock.lock();
+//         --readers;
+//         if (readers == 0) {
+//             write_cv.notify_one();
+//         }
+//         lock.unlock();
+//         this_thread::sleep_for(chrono::milliseconds(1000));
+//     }
+// }
+
+// void writer(int id) {
+//     while (true) {
+//         unique_lock<mutex> lock(mtx);
+//         while (writing || readers > 0) {
+//             write_cv.wait(lock);
+//         }
+//         writing = true;
+//         lock.unlock();
+//         // Writing...
+//         cout << "Writer " << id << " is writing." << endl;
+//         lock.lock();
+//         writing = false;
+//         read_cv.notify_all();
+//         write_cv.notify_one();
+//         lock.unlock();
+//         this_thread::sleep_for(chrono::milliseconds(2000));
+//     }
+// }
+
+// int main() {
+//     vector<thread> reader_threads;
+//     vector<thread> writer_threads;
+
+//     for (int i = 0; i < 3; ++i) {
+//         reader_threads.emplace_back(reader, i);
+//         writer_threads.emplace_back(writer, i);
+//     }
+
+//     for (auto& thread : reader_threads) {
+//         thread.join();
+//     }
+
+//     for (auto& thread : writer_threads) {
+//         thread.join();
+//     }
+
+//     return 0;
+// }
+
+
+// #include <iostream>
+// #include <thread>
+// #include <mutex>
+// #include <condition_variable>
+
+// using namespace std;
+
+// const int NUM_PHILOSOPHERS = 5;
+// mutex mtx;
+// condition_variable cv;
+// bool chopsticks[NUM_PHILOSOPHERS];
+
+// void philosopher(int id) {
+//     while (true) {
+//         // Thinking...
+//         cout << "Philosopher " << id << " is thinking." << endl;
+//         this_thread::sleep_for(chrono::milliseconds(1000));
+
+//         // Pick up left chopstick
+//         unique_lock<mutex> lock(mtx);
+//         while (chopsticks[id] || chopsticks[(id + 1) % NUM_PHILOSOPHERS]) {
+//             cv.wait(lock);
+//         }
+//         chopsticks[id] = true;
+//         chopsticks[(id + 1) % NUM_PHILOSOPHERS] = true;
+//         lock.unlock();
+
+//         // Eating...
+//         cout << "Philosopher " << id << " is eating." << endl;
+//         this_thread::sleep_for(chrono::milliseconds(2000));
+
+//         // Put down left chopstick
+//         lock.lock();
+//         chopsticks[id] = false;
+//         chopsticks[(id + 1) % NUM_PHILOSOPHERS] = 
+// int main() {
+//     thread philosophers[NUM_PHILOSOPHERS];
+//     for (int i = 0; i < NUM_PHILOSOPHERS; ++i) {
+//         philosophers[i] = thread(philosopher, i);
+//     }
+//     for (int i = 0; i < NUM_PHILOSOPHERS; ++i) {
+//         philosophers[i].join();
+//     }
+//     return 0;
+// }
+
+
+// int main() {
+//     thread philosophers[NUM_PHILOSOPHERS];
+//     for (int i = 0; i < NUM_PHILOSOPHERS; ++i) {
+//         philosophers[i] = thread(philosopher, i);
+//     }
+//     for (int i = 0; i < NUM_PHILOSOPHERS; ++i) {
+//         philosophers[i].join();
+//     }
+//     return 0;
+// }
+
+
+// #include<iostream>
+
+// using namespace std;
+
+// class Point
+// {
+// public:
+//     Point():x(0), y(0) {}
+//     Point (int x,int y):x(x), y(y) {}
+
+//     int getX() const { return x; }
+//     int getY() const { return y; }
+
+//     ~Point() {}
+
+// private:
+//     int x;
+//     int y;
+// };
+
+// class Distance
+// {
+// public: 
+//     Distance(Point p1,Point p2):p1(p1), p2(p2){}
+
+//     int getDist(){
+//         return (p1.getX() - p2.getX()) * (p1.getX() - p2.getX()) + (p1.getY() - p2.getY()) * (p1.getY() - p2.getY());
+//     }
+
+// private:
+//     Point p1;
+//     Point p2;
+// };
+
+
+// int main()
+// {
+//     Point p1(0, 0);
+//     Point p2(3, 4);
+//     Distance d(p1, p2);
+
+//     cout << "两点间的距离是" << d.getDist() << endl;
+
+//     return 0;
+// }
+
+// #include <iostream>
+
+// // 基类：图形类
+// class Shape {
+// public:
+//     // 公有数据成员
+//     double height, width;
+
+//     // 无参构造函数
+//     Shape() : height(0), width(0) {}
+
+//     // 有参构造函数
+//     Shape(double h, double w) : height(h), width(w) {}
+
+//     // 设置信息函数
+//     void setInfo(double h, double w) {
+//         height = h;
+//         width = w;
+//     }
+
+//     // 显示信息函数
+//     void displayInfo() const {
+//         std::cout << "Height: " << height << ", Width: " << width << std::endl;
+//     }
+
+//     // 析构函数
+//     ~Shape() {}
+// };
+
+// // 派生类1：矩形类
+// class Rectangle : public Shape {
+// public:
+//     // 构造函数
+//     Rectangle(double h, double w) : Shape(h, w) {}
+
+//     // 计算矩形面积函数
+//     double area() const {
+//         return height * width;
+//     }
+// };
+
+// // 派生类2：等腰三角形类
+// class IsoscelesTriangle : public Shape {
+// public:
+//     // 构造函数
+//     IsoscelesTriangle(double h, double b) : Shape(h, b) {}
+
+//     // 计算等腰三角形面积函数
+//     double area() const {
+//         return (height * width) / 2;
+//     }
+// };
+
+// int main() {
+//     // 创建矩形对象并计算面积
+//     Rectangle rect(5.0, 6.0);
+//     std::cout << "Rectangle area: " << rect.area() << std::endl;
+
+//     // 创建等腰三角形对象并计算面积
+//     IsoscelesTriangle itri(7.0, 8.0);
+//     std::cout << "Isosceles Triangle area: " << itri.area() << std::endl;
+
+//     return 0;
+// }
+
+// #include<iostream>
+
+// using namespace std;
+
+// class Employee
+// {
+// private:
+//     char *name;
+//     int individualEmpNo;
+//     int grade;
+//     float accumPay;
+//     static int employeeNo;
+
+// public:
+//     Employee();
+//     ~Employee();
+//     void pay();
+//     void prommote(int);
+//     void displayStatus();
+// };
+
+// class Technician : public Employee
+// {
+// private:
+//     float hourlyRate;
+//     int workHours;
+
+// public:
+//     Technician();
+//     ~Technician();
+//     void pay();
+//     void displayStatus();
+// };
+
+// class Manager : public Employee
+// {
+// private:
+//     float bonus;
+
+// public:
+//     Manager();
+//     ~Manager();
+//     void pay();
+//     void displayStatus();
+// };
+
+// class Salesman : public Employee
+// {
+// private:
+//     float commission;
+//     float sales;
+
+// public:
+//     Salesman();
+//     ~Salesman();
+//     void pay();
+//     void displayStatus();
+// };
+
+// class Salesmanager : public Manager, public Salesman
+// {
+// private:
+//     float bonus;
+
+// public:
+//     Salesmanager();
+//     ~Salesmanager();
+//     void pay();
+//     void displayStatus();
+// };
+
+#include <iostream>
+#include <queue>
+#include <mutex>
+#include <condition_variable>
+#include <thread>
+
+class MessageQueue {
+private:
+    std::queue<std::string> buffer;  // 消息缓冲区
+    std::mutex mtx;                  // 互斥锁
+    std::condition_variable cv;      // 条件变量
+
+public:
+    void PushMessage(const std::string& message) {
+        std::unique_lock<std::mutex> lock(mtx);
+        buffer.push(message);
+        cv.notify_one();  // 通知等待的线程
+    }
+
+    std::string PopMessage() {
+        std::unique_lock<std::mutex> lock(mtx);
+        while (buffer.empty()) {
+            cv.wait(lock);  // 等待消息到达
+        }
+        std::string message = buffer.front();
+        buffer.pop();
+        return message;
+    }
+};
+
+int main() {
+    MessageQueue messageQueue;
+
+    // 生产者线程
+    std::thread producer([&]() {
+        for (int i = 0; i < 5; ++i) {
+            std::string message = "Message " + std::to_string(i + 1);
+            messageQueue.PushMessage(message);
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+        }
+    });
+
+    // 消费者线程
+    std::thread consumer([&]() {
+        for (int i = 0; i < 5; ++i) {
+            std::string message = messageQueue.PopMessage();
+            std::cout << "Received message: " << message << std::endl;
+        }
+    });
+
+    producer.join();
+    consumer.join();
+
+    return 0;
+}

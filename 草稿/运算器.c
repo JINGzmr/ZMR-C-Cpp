@@ -2343,37 +2343,39 @@
 //     }
 
 
-#include <stdio.h>
-#include <stdlib.h>
+// #include <stdio.h>
+// #include <stdlib.h>
 
-// 定义进程结构
-typedef struct Task_struct {
-    int pid; // 进程ID
-    struct Task_struct* next; // 下一个进程指针
-} Task_struct;
+// // 定义进程结构
+// typedef struct Task_struct {
+//     int pid; // 进程ID
+//     struct Task_struct* next; // 下一个进程指针
+// } Task_struct;
 
-// 定义记录型信号量结构
-typedef struct record_semaphore {
-    int value; // 信号量值
-    Task_struct* waiting_list; // 等待队列头指针
-} record_semaphore;
+// // 定义记录型信号量结构
+// typedef struct record_semaphore {
+//     int value; // 信号量值
+//     Task_struct* waiting_list; // 等待队列头指针
+// } record_semaphore;
 
-// 等待操作
-void wait(record_semaphore* sem, Task_struct* task) {
-    sem->value--; // 信号量值减一
-    if (sem->value < 0) { // 如果信号量值小于零，进程需等待
-        task->next = sem->waiting_list; // 将进程添加到等待队列头部
-        sem->waiting_list = task; // 更新等待队列头指针
-        // 这里可以添加进程阻塞的代码
-    }
-}
+// // 等待操作
+// void wait(record_semaphore* sem, Task_struct* task) {
+//     sem->value--; // 信号量值减一
+//     if (sem->value < 0) { // 如果信号量值小于零，进程需等待
+//         task->next = sem->waiting_list; // 将进程添加到等待队列头部
+//         sem->waiting_list = task; // 更新等待队列头指针
+//         // 这里可以添加进程阻塞的代码
+//     }
+// }
 
-// 释放操作
-void signal(record_semaphore* sem) {
-    sem->value++; // 信号量值加一
-    if (sem->value <= 0) { // 如果有等待进程
-        Task_struct* task = sem->waiting_list; // 取出等待队列的头进程
-        sem->waiting_list = task->next; // 更新等待队列头指针
-        // 这里可以添加唤醒进程的代码
-    }
-}
+// // 释放操作
+// void signal(record_semaphore* sem) {
+//     sem->value++; // 信号量值加一
+//     if (sem->value <= 0) { // 如果有等待进程
+//         Task_struct* task = sem->waiting_list; // 取出等待队列的头进程
+//         sem->waiting_list = task->next; // 更新等待队列头指针
+//         // 这里可以添加唤醒进程的代码
+//     }
+// }
+
+
