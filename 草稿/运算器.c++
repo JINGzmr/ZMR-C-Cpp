@@ -3650,6 +3650,7 @@ int main() {
         for (int i = 0; i < 5; ++i) {
             std::string message = "Message " + std::to_string(i + 1);
             messageQueue.PushMessage(message);
+            // std::cout << "Sent message: " << message << std::endl;
             std::this_thread::sleep_for(std::chrono::seconds(1));
         }
     });
