@@ -3219,8 +3219,8 @@
 //         printf("输入q退出\n");
 //         cmd=getchar();//接收输入命令字符
 //         getchar();
-        
-//         if((pid=fork())<0) 
+
+//         if((pid=fork())<0)
 //         {
 //             perror("fork error:");
 //             return -1;
@@ -3236,19 +3236,19 @@
 //                 execve("/bin/ps",arg_psx,NULL);
 //                 break;
 //                 case 'q':
-//                 break; 
-//                 defaul有意设置子进程结束 
+//                 break;
+//                 defaul有意设置子进程结束
 //          } else if(pid>0){
 //              if(cmd=='q')
 //              break;
-//          } 
+//          }
 //     }//进程退出循环
 //     while(waitpid(-1,NULL,WNOHANG)>0);
-//     return 0; 
+//     return 0;
 // }t:
 //                 perror("wrong cmd:\n");
 //                 break;
-//             }//子进程结束 
+//             }//子进程结束
 //             exit(0);//
 
 // #include <iostream>
@@ -3296,7 +3296,6 @@
 //     cons_thread.join();
 //     return 0;
 // }
-
 
 // #include <iostream>
 // #include <thread>
@@ -3370,7 +3369,6 @@
 //     return 0;
 // }
 
-
 // #include <iostream>
 // #include <thread>
 // #include <mutex>
@@ -3405,7 +3403,7 @@
 //         // Put down left chopstick
 //         lock.lock();
 //         chopsticks[id] = false;
-//         chopsticks[(id + 1) % NUM_PHILOSOPHERS] = 
+//         chopsticks[(id + 1) % NUM_PHILOSOPHERS] =
 // int main() {
 //     thread philosophers[NUM_PHILOSOPHERS];
 //     for (int i = 0; i < NUM_PHILOSOPHERS; ++i) {
@@ -3417,7 +3415,6 @@
 //     return 0;
 // }
 
-
 // int main() {
 //     thread philosophers[NUM_PHILOSOPHERS];
 //     for (int i = 0; i < NUM_PHILOSOPHERS; ++i) {
@@ -3428,7 +3425,6 @@
 //     }
 //     return 0;
 // }
-
 
 // #include<iostream>
 
@@ -3452,18 +3448,18 @@
 
 // class Distance
 // {
-// public: 
+// public:
 //     Distance(Point p1,Point p2):p1(p1), p2(p2){}
 
 //     int getDist(){
-//         return (p1.getX() - p2.getX()) * (p1.getX() - p2.getX()) + (p1.getY() - p2.getY()) * (p1.getY() - p2.getY());
+//         return (p1.getX() - p2.getX()) * (p1.getX() - p2.getX()) + (p1.getY()
+//         - p2.getY()) * (p1.getY() - p2.getY());
 //     }
 
 // private:
 //     Point p1;
 //     Point p2;
 // };
-
 
 // int main()
 // {
@@ -3498,7 +3494,8 @@
 
 //     // 显示信息函数
 //     void displayInfo() const {
-//         std::cout << "Height: " << height << ", Width: " << width << std::endl;
+//         std::cout << "Height: " << height << ", Width: " << width <<
+//         std::endl;
 //     }
 
 //     // 析构函数
@@ -3612,59 +3609,231 @@
 //     void displayStatus();
 // };
 
+// #include <iostream>
+// #include <queue>
+// #include <mutex>
+// #include <condition_variable>
+// #include <thread>
+
+// class MessageQueue {
+// private:
+//     std::queue<std::string> buffer;  // 消息缓冲区
+//     std::mutex mtx;                  // 互斥锁
+//     std::condition_variable cv;      // 条件变量
+
+// public:
+//     void PushMessage(const std::string& message) {
+//         std::unique_lock<std::mutex> lock(mtx);
+//         buffer.push(message);
+//         cv.notify_one();  // 通知等待的线程
+//     }
+
+//     std::string PopMessage() {
+//         std::unique_lock<std::mutex> lock(mtx);
+//         while (buffer.empty()) {
+//             cv.wait(lock);  // 等待消息到达
+//         }
+//         std::string message = buffer.front();
+//         buffer.pop();
+//         return message;
+//     }
+// };
+
+// int main() {
+//     MessageQueue messageQueue;
+
+//     // 生产者线程
+//     std::thread producer([&]() {
+//         for (int i = 0; i < 5; ++i) {
+//             std::string message = "Message " + std::to_string(i + 1);
+//             messageQueue.PushMessage(message);
+//             // std::cout << "Sent message: " << message << std::endl;
+//             std::this_thread::sleep_for(std::chrono::seconds(1));
+//         }
+//     });
+
+//     // 消费者线程
+//     std::thread consumer([&]() {
+//         for (int i = 0; i < 5; ++i) {
+//             std::string message = messageQueue.PopMessage();
+//             std::cout << "Received message: " << message << std::endl;
+//         }
+//     });
+
+//     producer.join();
+//     consumer.join();
+
+//     return 0;
+// }
+
 #include <iostream>
-#include <queue>
-#include <mutex>
-#include <condition_variable>
-#include <thread>
+#include <string>
+#include <vector>
+#include <algorithm>
 
-class MessageQueue {
-private:
-    std::queue<std::string> buffer;  // 消息缓冲区
-    std::mutex mtx;                  // 互斥锁
-    std::condition_variable cv;      // 条件变量
+using namespace std;
 
-public:
-    void PushMessage(const std::string& message) {
-        std::unique_lock<std::mutex> lock(mtx);
-        buffer.push(message);
-        cv.notify_one();  // 通知等待的线程
+class Information {
+   private:
+    int age;
+    string sex;
+
+   public:
+    Information(int a, string b) : age(a), sex(b) {}
+    Information() {}
+    ~Information() {}
+
+    int getAge() const { return age; }
+
+    string getSex() const { return sex; }
+
+    void setAge(int a) { age = a; }
+
+    void setSex(string s) { sex = s; }
+
+    void printAge() const { cout << "Age: " << age << endl; }
+
+    void printSex() const { cout << "Sex: " << sex << endl; }
+};
+
+class Student {
+   private:
+    string stu_id;
+    string name;
+    int math;
+    int chinese;
+    int total;
+    Information info;
+
+   public:
+    Student(string id, string n, int m, int c, Information i)
+        : stu_id(id), name(n), math(m), chinese(c), info(i) {
+        total = math + chinese;
     }
 
-    std::string PopMessage() {
-        std::unique_lock<std::mutex> lock(mtx);
-        while (buffer.empty()) {
-            cv.wait(lock);  // 等待消息到达
+    Student() { total = 0; }
+
+    ~Student() {}
+
+    string getStudentID() const { return stu_id; }
+
+    string getName() const { return name; }
+
+    int getMathScore() const { return math; }
+
+    int getChineseScore() const { return chinese; }
+
+    int getTotalScore() const { return total; }
+
+    Information getInfo() const { return info; }
+
+    void setStudentID(string id) { stu_id = id; }
+
+    void setName(string n) { name = n; }
+
+    void setMathScore(int m) {
+        math = m;
+        updateTotalScore();
+    }
+
+    void setChineseScore(int c) {
+        chinese = c;
+        updateTotalScore();
+    }
+
+    void setInfo(Information i) { info = i; }
+
+    void updateTotalScore() { total = math + chinese; }
+
+    void printInfo() const {
+        cout << "Student ID: " << stu_id << endl;
+        cout << "Name: " << name << endl;
+        cout << "Math Score: " << math << endl;
+        cout << "Chinese Score: " << chinese << endl;
+        cout << "Total Score: " << total << endl;
+        cout << "Information:" << endl;
+        info.printAge();
+        info.printSex();
+    }
+};
+
+class Class {
+   private:
+    vector<Student> students;
+
+   public:
+    void addStudent(const Student& s) { students.push_back(s); }
+
+    void setStudents(const vector<Student>& s) { students = s; }
+
+    vector<Student> getStudents() const { return students; }
+
+    void displayStudentInfo() const {
+        for (const auto& student : students) {
+            student.printInfo();
+            cout << endl;
         }
-        std::string message = buffer.front();
-        buffer.pop();
-        return message;
+    }
+
+    Student getHighestScoringStudent() const {
+        auto maxScoreStudent =
+            max_element(students.begin(), students.end(),
+                        [](const Student& s1, const Student& s2) {
+                            return s1.getTotalScore() < s2.getTotalScore();
+                        });
+
+        return *maxScoreStudent;
+    }
+
+    float getAverageScore() const {
+        int totalScore = 0;
+        for (const auto& student : students) {
+            totalScore += student.getTotalScore();
+        }
+
+        return static_cast<float>(totalScore) / students.size();
+    }
+
+    void sortByTotalScore() {
+        sort(students.begin(), students.end(),
+             [](const Student& s1, const Student& s2) {
+                 return s1.getTotalScore() < s2.getTotalScore();
+             });
     }
 };
 
 int main() {
-    MessageQueue messageQueue;
+    Information info1(20, "Male");
+    Information info2(22, "Female");
 
-    // 生产者线程
-    std::thread producer([&]() {
-        for (int i = 0; i < 5; ++i) {
-            std::string message = "Message " + std::to_string(i + 1);
-            messageQueue.PushMessage(message);
-            // std::cout << "Sent message: " << message << std::endl;
-            std::this_thread::sleep_for(std::chrono::seconds(1));
-        }
-    });
+    Student student1("S001", "John", 80, 90, info1);
+    Student student2("S002", "Alice", 75, 85, info2);
+    Student student3("S003", "Bob", 90, 95, info1);
 
-    // 消费者线程
-    std::thread consumer([&]() {
-        for (int i = 0; i < 5; ++i) {
-            std::string message = messageQueue.PopMessage();
-            std::cout << "Received message: " << message << std::endl;
-        }
-    });
+    Class myClass;
+    myClass.addStudent(student1);
+    myClass.addStudent(student2);
+    myClass.addStudent(student3);
 
-    producer.join();
-    consumer.join();
+    cout << "Class Information:" << endl;
+    cout << "==================" << endl;
+    cout << "Displaying student information:" << endl;
+    myClass.displayStudentInfo();
+    cout << endl;
+
+    Student highestScoringStudent = myClass.getHighestScoringStudent();
+    cout << "The highest scoring student:" << endl;
+    highestScoringStudent.printInfo();
+    cout << endl;
+
+    float averageScore = myClass.getAverageScore();
+
+    cout << "The average score of the class: " << averageScore << endl;
+    cout << "Sorting students by total score..." << endl;
+    myClass.sortByTotalScore();
+
+    cout << "Displaying student information after sorting:" << endl;
+    myClass.displayStudentInfo();
 
     return 0;
 }
