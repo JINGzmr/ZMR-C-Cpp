@@ -3666,174 +3666,175 @@
 //     return 0;
 // }
 
-#include <iostream>
-#include <string>
-#include <vector>
-#include <algorithm>
+// #include <iostream>
+// #include <string>
+// #include <vector>
+// #include <algorithm>
 
-using namespace std;
+// using namespace std;
 
-class Information {
-   private:
-    int age;
-    string sex;
+// class Information {
+//    private:
+//     int age;
+//     string sex;
 
-   public:
-    Information(int a, string b) : age(a), sex(b) {}
-    Information() {}
-    ~Information() {}
+//    public:
+//     Information(int a, string b) : age(a), sex(b) {}
+//     Information() {}
+//     ~Information() {}
 
-    int getAge() const { return age; }
+//     int getAge() const { return age; }
 
-    string getSex() const { return sex; }
+//     string getSex() const { return sex; }
 
-    void setAge(int a) { age = a; }
+//     void setAge(int a) { age = a; }
 
-    void setSex(string s) { sex = s; }
+//     void setSex(string s) { sex = s; }
 
-    void printAge() const { cout << "Age: " << age << endl; }
+//     void printAge() const { cout << "Age: " << age << endl; }
 
-    void printSex() const { cout << "Sex: " << sex << endl; }
-};
+//     void printSex() const { cout << "Sex: " << sex << endl; }
+// };
 
-class Student {
-   private:
-    string stu_id;
-    string name;
-    int math;
-    int chinese;
-    int total;
-    Information info;
+// class Student {
+//    private:
+//     string stu_id;
+//     string name;
+//     int math;
+//     int chinese;
+//     int total;
+//     Information info;
 
-   public:
-    Student(string id, string n, int m, int c, Information i)
-        : stu_id(id), name(n), math(m), chinese(c), info(i) {
-        total = math + chinese;
-    }
+//    public:
+//     Student(string id, string n, int m, int c, Information i)
+//         : stu_id(id), name(n), math(m), chinese(c), info(i) {
+//         total = math + chinese;
+//     }
 
-    Student() { total = 0; }
+//     Student() { total = 0; }
 
-    ~Student() {}
+//     ~Student() {}
 
-    string getStudentID() const { return stu_id; }
+//     string getStudentID() const { return stu_id; }
 
-    string getName() const { return name; }
+//     string getName() const { return name; }
 
-    int getMathScore() const { return math; }
+//     int getMathScore() const { return math; }
 
-    int getChineseScore() const { return chinese; }
+//     int getChineseScore() const { return chinese; }
 
-    int getTotalScore() const { return total; }
+//     int getTotalScore() const { return total; }
 
-    Information getInfo() const { return info; }
+//     Information getInfo() const { return info; }
 
-    void setStudentID(string id) { stu_id = id; }
+//     void setStudentID(string id) { stu_id = id; }
 
-    void setName(string n) { name = n; }
+//     void setName(string n) { name = n; }
 
-    void setMathScore(int m) {
-        math = m;
-        updateTotalScore();
-    }
+//     void setMathScore(int m) {
+//         math = m;
+//         updateTotalScore();
+//     }
 
-    void setChineseScore(int c) {
-        chinese = c;
-        updateTotalScore();
-    }
+//     void setChineseScore(int c) {
+//         chinese = c;
+//         updateTotalScore();
+//     }
 
-    void setInfo(Information i) { info = i; }
+//     void setInfo(Information i) { info = i; }
 
-    void updateTotalScore() { total = math + chinese; }
+//     void updateTotalScore() { total = math + chinese; }
 
-    void printInfo() const {
-        cout << "Student ID: " << stu_id << endl;
-        cout << "Name: " << name << endl;
-        cout << "Math Score: " << math << endl;
-        cout << "Chinese Score: " << chinese << endl;
-        cout << "Total Score: " << total << endl;
-        cout << "Information:" << endl;
-        info.printAge();
-        info.printSex();
-    }
-};
+//     void printInfo() const {
+//         cout << "Student ID: " << stu_id << endl;
+//         cout << "Name: " << name << endl;
+//         cout << "Math Score: " << math << endl;
+//         cout << "Chinese Score: " << chinese << endl;
+//         cout << "Total Score: " << total << endl;
+//         cout << "Information:" << endl;
+//         info.printAge();
+//         info.printSex();
+//     }
+// };
 
-class Class {
-   private:
-    vector<Student> students;
+// class Class {
+//    private:
+//     vector<Student> students;
 
-   public:
-    void addStudent(const Student& s) { students.push_back(s); }
+//    public:
+//     void addStudent(const Student& s) { students.push_back(s); }
 
-    void setStudents(const vector<Student>& s) { students = s; }
+//     void setStudents(const vector<Student>& s) { students = s; }
 
-    vector<Student> getStudents() const { return students; }
+//     vector<Student> getStudents() const { return students; }
 
-    void displayStudentInfo() const {
-        for (const auto& student : students) {
-            student.printInfo();
-            cout << endl;
-        }
-    }
+//     void displayStudentInfo() const {
+//         for (const auto& student : students) {
+//             student.printInfo();
+//             cout << endl;
+//         }
+//     }
 
-    Student getHighestScoringStudent() const {
-        auto maxScoreStudent =
-            max_element(students.begin(), students.end(),
-                        [](const Student& s1, const Student& s2) {
-                            return s1.getTotalScore() < s2.getTotalScore();
-                        });
+//     Student getHighestScoringStudent() const {
+//         auto maxScoreStudent =
+//             max_element(students.begin(), students.end(),
+//                         [](const Student& s1, const Student& s2) {
+//                             return s1.getTotalScore() < s2.getTotalScore();
+//                         });
 
-        return *maxScoreStudent;
-    }
+//         return *maxScoreStudent;
+//     }
 
-    float getAverageScore() const {
-        int totalScore = 0;
-        for (const auto& student : students) {
-            totalScore += student.getTotalScore();
-        }
+//     float getAverageScore() const {
+//         int totalScore = 0;
+//         for (const auto& student : students) {
+//             totalScore += student.getTotalScore();
+//         }
 
-        return static_cast<float>(totalScore) / students.size();
-    }
+//         return static_cast<float>(totalScore) / students.size();
+//     }
 
-    void sortByTotalScore() {
-        sort(students.begin(), students.end(),
-             [](const Student& s1, const Student& s2) {
-                 return s1.getTotalScore() < s2.getTotalScore();
-             });
-    }
-};
+//     void sortByTotalScore() {
+//         sort(students.begin(), students.end(),
+//              [](const Student& s1, const Student& s2) {
+//                  return s1.getTotalScore() < s2.getTotalScore();
+//              });
+//     }
+// };
 
-int main() {
-    Information info1(20, "Male");
-    Information info2(22, "Female");
+// int main() {
+//     Information info1(20, "Male");
+//     Information info2(22, "Female");
 
-    Student student1("S001", "John", 80, 90, info1);
-    Student student2("S002", "Alice", 75, 85, info2);
-    Student student3("S003", "Bob", 90, 95, info1);
+//     Student student1("S001", "John", 80, 90, info1);
+//     Student student2("S002", "Alice", 75, 85, info2);
+//     Student student3("S003", "Bob", 90, 95, info1);
 
-    Class myClass;
-    myClass.addStudent(student1);
-    myClass.addStudent(student2);
-    myClass.addStudent(student3);
+//     Class myClass;
+//     myClass.addStudent(student1);
+//     myClass.addStudent(student2);
+//     myClass.addStudent(student3);
 
-    cout << "Class Information:" << endl;
-    cout << "==================" << endl;
-    cout << "Displaying student information:" << endl;
-    myClass.displayStudentInfo();
-    cout << endl;
+//     cout << "Class Information:" << endl;
+//     cout << "==================" << endl;
+//     cout << "Displaying student information:" << endl;
+//     myClass.displayStudentInfo();
+//     cout << endl;
 
-    Student highestScoringStudent = myClass.getHighestScoringStudent();
-    cout << "The highest scoring student:" << endl;
-    highestScoringStudent.printInfo();
-    cout << endl;
+//     Student highestScoringStudent = myClass.getHighestScoringStudent();
+//     cout << "The highest scoring student:" << endl;
+//     highestScoringStudent.printInfo();
+//     cout << endl;
 
-    float averageScore = myClass.getAverageScore();
+//     float averageScore = myClass.getAverageScore();
 
-    cout << "The average score of the class: " << averageScore << endl;
-    cout << "Sorting students by total score..." << endl;
-    myClass.sortByTotalScore();
+//     cout << "The average score of the class: " << averageScore << endl;
+//     cout << "Sorting students by total score..." << endl;
+//     myClass.sortByTotalScore();
 
-    cout << "Displaying student information after sorting:" << endl;
-    myClass.displayStudentInfo();
+//     cout << "Displaying student information after sorting:" << endl;
+//     myClass.displayStudentInfo();
 
-    return 0;
-}
+//     return 0;
+// }
+
