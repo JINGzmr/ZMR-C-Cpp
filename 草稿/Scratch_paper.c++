@@ -3838,3 +3838,69 @@
 //     return 0;
 // }
 
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+const double PI = 3.14;
+
+class Shape {
+public:
+    virtual double getArea() = 0;
+    virtual double getPerim() = 0;
+};
+
+class Rectangle : public Shape {
+private:
+    double width;
+    double height;
+public:
+    Rectangle(double w, double h) : width(w), height(h) {}
+
+    double getArea() override {
+        return width * height;
+    }
+
+    double getPerim() override {
+        return 2 * (width + height);
+    }
+};
+
+class Circle : public Shape {
+private:
+    double radius;
+public:
+    Circle(double r) : radius(r) {}
+
+    double getArea() override {
+        return PI * radius * radius;
+    }
+
+    double getPerim() override {
+        return 2 * PI * radius;
+    }
+};
+
+int main() {
+    int n;
+    double w, h, r;
+    cin >> n;
+    switch (n) {
+        case 1: {
+            cin >> w >> h;
+            Rectangle rect(w, h);
+            cout << "area=" << rect.getArea() << endl;
+            cout << "perim=" << rect.getPerim() << endl;
+            break;
+        }
+        case 2: {
+            cin >> r;
+            Circle c(r);
+            cout << "area=" << c.getArea() << endl;
+            cout << "perim=" << c.getPerim() << endl;
+            break;
+        }
+    }
+
+    return 0;
+}
