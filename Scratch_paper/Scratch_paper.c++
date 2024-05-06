@@ -3838,69 +3838,91 @@
 //     return 0;
 // }
 
-#include <iostream>
-#include <cmath>
+// #include <iostream>
+// #include <cmath>
+// using namespace std;
+
+// const double PI = 3.14;
+
+// class Shape {
+// public:
+//     virtual double getArea() = 0;
+//     virtual double getPerim() = 0;
+// };
+
+// class Rectangle : Shape{
+// private:
+//     double w,h;
+// public:
+//     Rectangle(double w,double h):w(w),h(h){}
+//     double getArea(){
+//         return w*h;
+//     }
+//     double getPerim(){
+//         return 2*(w+h);
+//     }
+// };
+
+// class Circle : Shape{
+// private:
+//     double r;
+// public:
+//     Circle(double r):r(r){}
+//     double getArea(){
+//         return PI*r*r;
+//     }
+//     double getPerim(){
+//         return 2*PI*r;
+//     }
+// };
+
+// int main() {
+//     int n;
+//     double w, h, r;
+//     cin >> n;
+//     switch (n) {
+//         case 1: {
+//             cin >> w >> h;
+//             Rectangle rect(w, h);
+//             cout << "area=" << rect.getArea() << endl;
+//             cout << "perim=" << rect.getPerim() << endl;
+//             break;
+//         }
+//         case 2: {
+//             cin >> r;
+//             Circle c(r);
+//             cout << "area=" << c.getArea() << endl;
+//             cout << "perim=" << c.getPerim() << endl;
+//             break;
+//         }
+//     }
+
+//     return 0;
+// }
+
+#include<bits/stdc++.h>
 using namespace std;
-
-const double PI = 3.14;
-
-class Shape {
+class A {
 public:
-    virtual double getArea() = 0;
-    virtual double getPerim() = 0;
-};
-
-class Rectangle : public Shape {
-private:
-    double width;
-    double height;
-public:
-    Rectangle(double w, double h) : width(w), height(h) {}
-
-    double getArea() override {
-        return width * height;
+    void func1() {
+        cout << "A1" << endl;
     }
-
-    double getPerim() override {
-        return 2 * (width + height);
+    virtual void func2() {
+        cout << "A2" << endl;
     }
 };
-
-class Circle : public Shape {
-private:
-    double radius;
+class B : public A {
 public:
-    Circle(double r) : radius(r) {}
-
-    double getArea() override {
-        return PI * radius * radius;
+    void func1() {
+        cout << "B1" << endl;
     }
-
-    double getPerim() override {
-        return 2 * PI * radius;
+    void func2() {
+        cout << "B2" << endl;
     }
 };
 
 int main() {
-    int n;
-    double w, h, r;
-    cin >> n;
-    switch (n) {
-        case 1: {
-            cin >> w >> h;
-            Rectangle rect(w, h);
-            cout << "area=" << rect.getArea() << endl;
-            cout << "perim=" << rect.getPerim() << endl;
-            break;
-        }
-        case 2: {
-            cin >> r;
-            Circle c(r);
-            cout << "area=" << c.getArea() << endl;
-            cout << "perim=" << c.getPerim() << endl;
-            break;
-        }
-    }
-
-    return 0;
+    A *a = new B;
+    a->func1();
+    a->func2();
 }
