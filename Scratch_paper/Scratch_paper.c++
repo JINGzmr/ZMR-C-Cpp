@@ -3900,29 +3900,107 @@
 //     return 0;
 // }
 
-#include<bits/stdc++.h>
+// #include<bits/stdc++.h>
+// using namespace std;
+// class A {
+// public:
+//     void func1() {
+//         cout << "A1" << endl;
+//     }
+//     virtual void func2() {
+//         cout << "A2" << endl;
+//     }
+// };
+// class B : public A {
+// public:
+//     void func1() {
+//         cout << "B1" << endl;
+//     }
+//     void func2() {
+//         cout << "B2" << endl;
+//     }
+// };
+
+// int main() {
+//     A *a = new B;
+//     a->func1();
+//     a->func2();
+// }
+#include <iostream>
 using namespace std;
-class A {
+
+class Vehicle {
+protected:
+    string NO;  // 编号
 public:
-    void func1() {
-        cout << "A1" << endl;
+    virtual void display() = 0;  // 输出应收费用
+};
+
+class car : public Vehicle {
+private:
+    int a;
+    int b;
+public:
+    car(string NO, int a, int b) {
+        this->NO = NO;
+        this->a = a;
+        this->b = b;
     }
-    virtual void func2() {
-        cout << "A2" << endl;
+    void display() {
+        cout << NO << " " << a * 8 + b * 2 << endl;
     }
 };
-class B : public A {
+
+class truck : public Vehicle {
+private:
+    int a;
 public:
-    void func1() {
-        cout << "B1" << endl;
+    truck(string NO, int a) {
+        this->NO = NO;
+        this->a = a;
     }
-    void func2() {
-        cout << "B2" << endl;
+    void display() {
+        cout << NO << " " << a * 5 << endl;
+    }
+};
+
+class bus : public Vehicle {
+private:
+    int a;
+public:
+    bus(string NO, int a) {
+        this->NO = NO;
+        this->a = a;
+    }
+    void display() {
+        cout << NO << " " << a * 3 << endl;
     }
 };
 
 int main() {
-    A *a = new B;
-    a->func1();
-    a->func2();
+    Vehicle* pv;
+    int n;
+    cin >> n;
+    string NO;
+    int a, b;
+    while (n) {
+        switch (n) {
+            case 1:
+                cin >> NO >> a >> b;
+                pv = new car(NO, a, b);
+                break;
+            case 2:
+                cin >> NO >> a;
+                pv = new truck(NO, a);
+                break;
+            case 3:
+                cin >> NO >> a;
+                pv = new bus(NO, a);
+                break;
+        }
+        pv->display();
+        cin >> n;
+    }
+
+    return 0;
 }
