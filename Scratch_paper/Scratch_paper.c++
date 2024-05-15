@@ -3926,81 +3926,82 @@
 //     a->func1();
 //     a->func2();
 // }
-#include <iostream>
-using namespace std;
+// #include <iostream>
+// using namespace std;
 
-class Vehicle {
-protected:
-    string NO;  // 编号
-public:
-    virtual void display() = 0;  // 输出应收费用
-};
+// class Vehicle {
+// protected:
+//     string NO;  // 编号
+// public:
+//     virtual void display() = 0;  // 输出应收费用
+// };
 
-class car : public Vehicle {
-private:
-    int a;
-    int b;
-public:
-    car(string NO, int a, int b) {
-        this->NO = NO;
-        this->a = a;
-        this->b = b;
-    }
-    void display() {
-        cout << NO << " " << a * 8 + b * 2 << endl;
-    }
-};
+// class car : public Vehicle {
+// private:
+//     int a;
+//     int b;
+// public:
+//     car(string NO, int a, int b) {
+//         this->NO = NO;
+//         this->a = a;
+//         this->b = b;
+//     }
+//     void display() {
+//         cout << NO << " " << a * 8 + b * 2 << endl;
+//     }
+// };
 
-class truck : public Vehicle {
-private:
-    int a;
-public:
-    truck(string NO, int a) {
-        this->NO = NO;
-        this->a = a;
-    }
-    void display() {
-        cout << NO << " " << a * 5 << endl;
-    }
-};
+// class truck : public Vehicle {
+// private:
+//     int a;
+// public:
+//     truck(string NO, int a) {
+//         this->NO = NO;
+//         this->a = a;
+//     }
+//     void display() {
+//         cout << NO << " " << a * 5 << endl;
+//     }
+// };
 
-class bus : public Vehicle {
-private:
-    int a;
-public:
-    bus(string NO, int a) {
-        this->NO = NO;
-        this->a = a;
-    }
-    void display() {
-        cout << NO << " " << a * 3 << endl;
-    }
-};
+// class bus : public Vehicle {
+// private:
+//     int a;
+// public:
+//     bus(string NO, int a) {
+//         this->NO = NO;
+//         this->a = a;
+//     }
+//     void display() {
+//         cout << NO << " " << a * 3 << endl;
+//     }
+// };
 
-int main() {
-    Vehicle* pv;
-    int n;
-    cin >> n;
-    string NO;
-    int a, b;
-    while (n) {
-        switch (n) {
-            case 1:
-                cin >> NO >> a >> b;
-                pv = new car(NO, a, b);
-                break;
-            case 2:
-                cin >> NO >> a;
-                pv = new truck(NO, a);
-                break;
-            case 3:
-                cin >> NO >> a;
-                pv = new bus(NO, a);
-                break;
-        }
-        pv->display();
-        cin >> n;
-    }
+// int main() {
+//     Vehicle* pv;
+//     int n;
+//     cin >> n;
+//     string NO;
+//     int a, b;
+//     while (n) {
+//         switch (n) {
+//             case 1:
+//                 cin >> NO >> a >> b;
+//                 pv = new car(NO, a, b);
+//                 break;
+//             case 2:
+//                 cin >> NO >> a;
+//                 pv = new truck(NO, a);
+//                 break;
+//             case 3:
+//                 cin >> NO >> a;
+//                 pv = new bus(NO, a);
+//                 break;
+//         }
+//         pv->display();
+//         cin >> n;
+//     }
 
-    return 0;
-}
+//     return 0;
+// }
+
