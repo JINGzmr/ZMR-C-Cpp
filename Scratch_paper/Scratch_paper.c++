@@ -4005,3 +4005,43 @@
 //     return 0;
 // }
 
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> vec(n);
+
+    for (int i = 0; i < n; i++) {
+        cin >> vec[i];
+    }
+
+    int m;
+    cin >> m;
+    vector<int> q(m);
+    for (int i = 0; i < m; i++) {
+        cin >> q[i];
+    }
+
+    for (int i = 0; i < m; i++) {
+        int l = -1, r = n;
+        int x = q[i];
+
+        while (l + 1 < r) {
+            int mid = (l + r) >> 1;
+            if (vec[mid] >= x) {
+                r = mid;
+            } else {
+                l = mid;
+            }
+        }
+        if (r < n)
+            cout << r + 1 << " ";
+        else
+            cout << -1 << " ";
+    }
+
+    return 0;
+}
