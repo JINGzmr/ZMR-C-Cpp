@@ -4081,32 +4081,32 @@
 //     return 0;
 // }
 
-#include <iostream>
-#include <queue>
-#include <functional>
-#include <algorithm>
-#include <cmath>
-using namespace std;
+// #include <iostream>
+// #include <queue>
+// #include <functional>
+// #include <algorithm>
+// #include <cmath>
+// using namespace std;
 
-int main() {
-    priority_queue<pair<long long, int>> vec;
-    int n, sum = 0;
-    cin >> n;
-    for (int i = 0; i < n; i++) {
-        long long h;
-        cin >> h;
-        {  // 把高度不为1的竹子放到要砍的优先队列里
-            vec.push({h, i});
-        }
-    }
+// int main() {
+//     priority_queue<pair<long long, int>> vec;
+//     int n, sum = 0;
+//     cin >> n;
+//     for (int i = 0; i < n; i++) {
+//         long long h;
+//         cin >> h;
+//         {  // 把高度不为1的竹子放到要砍的优先队列里
+//             vec.push({h, i});
+//         }
+//     }
 
-    while (!vec.empty()) {
-        pair<long long, int> top = vec.top();
-        vec.pop();
-        cout << top.first << " " << top.second << endl;
-        cout << vec.size() << endl;
-    }
-    cout << sum;
+//     while (!vec.empty()) {
+//         pair<long long, int> top = vec.top();
+//         vec.pop();
+//         cout << top.first << " " << top.second << endl;
+//         cout << vec.size() << endl;
+//     }
+//     cout << sum;
 
-    return 0;
-}
+//     return 0;
+// }
