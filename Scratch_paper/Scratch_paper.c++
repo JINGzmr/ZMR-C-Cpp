@@ -4110,3 +4110,60 @@
 
 //     return 0;
 // }
+
+// #include <bits/stdc++.h>
+// using namespace std;
+
+// int main() {
+//     while (1) {
+//         int n;
+//         cin >> n;
+//         string str;
+//         str = "\n";
+//         getline(cin, str);
+//         getline(cin, str);
+//         // cout << str;
+//         priority_queue<pair<int, string>, vector<pair<int, string>>,
+//                        greater<pair<int, string>>>
+//             que;
+//         while (n-- && str != "stop") {
+//             que.push({str.size(), str});
+//             getline(cin, str);
+//         }
+//         while (!que.empty()) {
+//             cout << que.top().second << endl;
+//             que.pop();
+//         }
+//         getline(cin, str);
+//     }
+
+//     return 0;
+// }
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    while (true) {
+        int n;
+        cin >> n;
+        if (n == 0) break; // 如果输入的字符串个数为0，结束输入
+        string dummy;
+        getline(cin, dummy); // 处理换行符
+
+        priority_queue<pair<int, string>, vector<pair<int, string>>, greater<pair<int, string>>> que;
+        for (int i = 0; i < n; ++i) {
+            string str;
+            getline(cin, str);
+            if (str == "stop") break;
+            que.push({str.size(), str});
+        }
+
+        while (!que.empty()) {
+            cout << que.top().second << endl;
+            que.pop();
+        }
+    }
+
+    return 0;
+}
