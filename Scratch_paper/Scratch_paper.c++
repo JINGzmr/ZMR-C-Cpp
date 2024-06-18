@@ -4170,7 +4170,14 @@
 
 #include <bits/stdc++.h>
 using namespace std;
-
 int main() {
-cout<<setw(3)<<25<< oct;
+    string res = "";
+    string s, t = "123456";
+    s = string(3, '0');  // 相当于s="000";
+    s = s + "123";
+    for (int i = 5; i >= 0; i--) {
+        char c = s[i] + t[i] - '0';
+        res = c + res;
+    }
+    cout << res << endl;
 }
