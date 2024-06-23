@@ -4168,16 +4168,397 @@
 //     return 0;
 // }
 
-#include <bits/stdc++.h>
-using namespace std;
-int main() {
-    string res = "";
-    string s, t = "123456";
-    s = string(3, '0');  // 相当于s="000";
-    s = s + "123";
-    for (int i = 5; i >= 0; i--) {
-        char c = s[i] + t[i] - '0';
-        res = c + res;
-    }
-    cout << res << endl;
-}
+// #include <bits/stdc++.h>
+// using namespace std;
+// int main() {
+//     string res = "";
+//     string s, t = "123456";
+//     s = string(3, '0');  // 相当于s="000";
+//     s = s + "123";
+//     for (int i = 5; i >= 0; i--) {
+//         char c = s[i] + t[i] - '0';
+//         res = c + res;
+//     }
+//     cout << res << endl;
+// }
+
+// istream& operator>>(istream& in, Date& date) {
+//     int y = 0, m = 0, d = 0;
+//     in >> y >> m >> d;
+//     date.setYear(y);
+//     date.setMonth(m);
+//     date.setDay(d);
+//     return in;
+// }
+
+// ostream& operator<<(ostream& out, Date& date) {
+//     out << date.getYear() << "-";
+//     if (date.getMonth() < 10) {
+//         out << "0";
+//     }
+//     out << date.getMonth() << "-";
+//     if (date.getDay() < 10) {
+//         out << "0";
+//     }
+//     out << date.getDay();
+//     return out;
+// }
+
+// #include <iostream>
+// #include <string>
+// using namespace std;
+
+// class Person {
+// public:
+//     Person(const string &name, int age):
+//         m_name(name), m_age(age) {}
+// protected:
+//     string m_name;
+//     int m_age;
+// };
+
+// class Student:public Person{
+// public:
+//     Student(const string& name = "unknown", int age = 0, int score =
+//     0):Person(name,age),m_score(score){} friend istream&
+//     operator>>(istream&is, Student&s); friend ostream& operator<<(ostream&os,
+//     Student&s);
+// private:
+//     int m_score;
+// };
+
+// istream& operator>>(istream&is, Student&s){
+//     is >> s.m_name >> s.m_age >> s.m_score;
+//     return is;
+// }
+
+// ostream& operator<<(ostream&os, Student&s){
+//     os << s.m_name << " " << s.m_age << " " << s.m_score << endl;
+//     return os;
+// }
+
+// int main() {
+//     Student s; // 默认名字为unknown，年龄和分数都为0
+//     cout << s << endl;
+//     cin >> s; // 输入名字（纯字母，无空格），输入年龄，输入分数
+//     cout << s << endl;
+//     return 0;
+// }
+
+// #include <iostream>
+// #include <algorithm>
+// #include <string>
+// #include <fstream>
+// using namespace std;
+
+// class Student {
+//    public:
+//     int num;
+//     char name;
+//     int age;
+//     int maths;
+//     int english;
+//     int chinese;
+//     double ave;
+
+//    public:
+//     Student(int Num, char N, int a, int m, int e, int c) {
+//         num = Num;
+//         name = N;
+//         age = a;
+//         maths = m;
+//         english = e;
+//         chinese = c;
+//         ave = (double)(maths + english + chinese) / 3;
+//     }
+//     ~Student() {}
+// };
+
+// struct per {
+//     int n;
+//     char na;
+//     double av;
+// };
+
+// per input(Student s) {
+//     per p;
+//     p.n = s.num;
+//     p.na = s.name;
+//     p.av = s.ave;
+//     return p;
+// }
+
+// void output(per p) {
+//     cout << p.n << " " << p.na << " " << p.av << endl;
+// }
+
+// int main() {
+//     Student stu1(1, 'A', 19, 80, 79, 67);
+//     // Student stu2(2, 'B', 20, 90, 68, 43);
+//     // Student stu3(3, 'C', 19, 56, 48, 29);
+//     // Student stu4(4, 'D', 20, 93, 44, 57);
+//     // Student stu5(5, 'E', 19, 33, 55, 74);
+//     ofstream out_file;
+//     out_file.open("STUD.DAT", ios::out | ios::binary);
+//     per p = input(stu1);
+//     out_file.write((char*)&p, sizeof(per));
+//     // per p1 = input(stu2);
+//     // out_file.write((char*)&p1, sizeof(per));
+//     // per p2 = input(stu3);
+//     // out_file.write((char*)&p2, sizeof(per));
+//     // per p3 = input(stu4);
+//     // out_file.write((char*)&p3, sizeof(per));
+//     // per p4 = input(stu5);
+//     // out_file.write((char*)&p4, sizeof(per));
+//     ifstream in_file;
+//     in_file.open("STUD.DAT", ios::in | ios::binary);
+//     in_file.read((char*)&p, sizeof(per));
+//     output(p);
+//     // in_file.read((char*)&p1, sizeof(per));
+//     // output(p1);
+//     // in_file.read((char*)&p2, sizeof(per));
+//     // output(p2);
+//     // in_file.read((char*)&p3, sizeof(per));
+//     // output(p3);
+//     // in_file.read((char*)&p4, sizeof(per));
+//     // output(p4);
+// }
+
+// #include <iostream>
+// #include <string>
+// using namespace std;
+// class com {
+//    public:
+//     double real;
+//     double imag;
+
+//    public:
+//     com(double r = 0.0, double i = 0.0) : real(r), imag(i) {}
+//     friend istream& operator>>(istream& in, com& t);
+//     friend istream& operator<<(istream& out, com& c);
+// };
+// istream& operator>>(istream& in, com& t) {
+//     char sign, typ;
+//     in >> t.real >> sign >> t.imag >> typ;
+//     if (sign == '-') {
+//         t.imag = -t.imag;
+//     }
+//     return in;
+// }
+// ostream& operator<<(ostream& out, com& t) {
+//     out << t.real;
+//     if (t.imag < 0)
+//         out << t.imag << 'i';
+//     if (t.imag > 0)
+//         out << '+' << t.imag << 'i';
+//     return out;
+// }
+
+// int main() {
+//     com t;
+//     cin >> t;
+//     cout << t << endl;
+
+//     return 0;
+// }
+
+// #include<bits/stdc++.h>
+// using namespace std;
+
+// class fushu{
+// public:
+//     fushu(double real = 0.0, double imag = 0.0):real(real),imag(imag){}
+//     friend istream& operator>>(istream& is, fushu& f);
+//     friend ostream& operator<<(ostream& os, const fushu& f);
+// private:
+//     double real,imag;
+// };
+
+// istream& operator>>(istream& is, fushu& f){
+//     char sign,i;
+//     is >> f.real >> sign >> f.imag >> i;
+//     if(sign == '-') f.imag *= -1;
+//     return is;
+// }
+
+// ostream& operator<<(ostream& os, const fushu& f){
+//     os << f.real ;
+//     if(f.imag > 0) os << "+" << f.imag << "i";
+//     if(f.imag < 0) os << f.imag << "i";
+//     return os;
+// }
+
+// int main(){
+//     fushu f;
+//     cin >> f;
+//     cout << f << endl;
+
+//     return 0;
+// }
+
+// class Rectangle : Shape{
+// private:
+//     double w,h;
+// public:
+//     Rectangle(double w,double h):w(w),h(h){}
+//     double getArea(){
+//         return w*h;
+//     }
+//     double getPerim(){
+//         return 2*(w+h);
+//     }
+// };
+
+// class Circle : Shape{
+// private:
+//     double r;
+// public:
+//     Circle(double r):r(r){}
+//     double getArea(){
+//         return PI*r*r;
+//     }
+//     double getPerim(){
+//         return 2*PI*r;
+//     }
+// };
+
+// #include<bits/stdc++.h>
+// using namespace std;
+// #define PI 3.1415926
+
+// class Shape{
+// public:
+//     virtual void area()=0;
+// };
+
+// class Circle : public Shape{
+// public:
+//     Circle(double r):r(r){};
+//     void area(){
+//         // cout << r*r*PI << endl;
+//         printf("%.2f\n",r*r*PI);
+//     }
+// private:
+//     double r;
+// };
+
+// int main()
+// {
+//     double r,h,w,hh,dd;
+//     cin >> r >> h >> w >> hh >> dd;
+//     Circle c(r);
+//     c.area();
+
+//     return 0;
+// }
+
+// #include <iostream>
+// using namespace std;
+
+// class Vehicle {
+// protected:
+//     string NO;  // 编号
+// public:
+//     virtual void display() = 0;  // 输出应收费用
+// };
+
+// class car : public Vehicle {
+// private:
+//     int a;
+//     int b;
+// public:
+//     car(string NO, int a, int b) {
+//         this->NO = NO;
+//         this->a = a;
+//         this->b = b;
+//     }
+//     void display() {
+//         cout << NO << " " << a * 8 + b * 2 << endl;
+//     }
+// };
+
+// class truck : public Vehicle {
+// private:
+//     int a;
+// public:
+//     truck(string NO, int a) {
+//         this->NO = NO;
+//         this->a = a;
+//     }
+//     void display() {
+//         cout << NO << " " << a * 5 << endl;
+//     }
+// };
+
+// class bus : public Vehicle {
+// private:
+//     int a;
+// public:
+//     bus(string NO, int a) {
+//         this->NO = NO;
+//         this->a = a;
+//     }
+//     void display() {
+//         cout << NO << " " << a * 3 << endl;
+//     }
+// };
+
+// int main() {
+//     Vehicle* pv;
+//     int n;
+//     cin >> n;
+//     string NO;
+//     int a, b;
+//     while (n) {
+//         switch (n) {
+//             case 1:
+//                 cin >> NO >> a >> b;
+//                 pv = new car(NO, a, b);
+//                 break;
+//             case 2:
+//                 cin >> NO >> a;
+//                 pv = new truck(NO, a);
+//                 break;
+//             case 3:
+//                 cin >> NO >> a;
+//                 pv = new bus(NO, a);
+//                 break;
+//         }
+//         pv->display();//别忘
+//         cin >> n;
+//     }
+
+//     return 0;
+// }
+
+// #include <iostream>
+// using namespace std;
+
+// void Time(int a, int b, int c) {
+//     if (a > 23 || b > 59 || c > 59) {
+//         throw "The time is wrong!";
+//     } else if (a >= 0 && b >= 0 && c >= 0) {
+//         cout << "The current time is: " << a << ":" << (b < 10 ? "0" : "") << b
+//              << ":" << (c < 10 ? "0" : "") << c << endl;
+//     } else {
+//         throw -1;
+//     }
+// }
+
+// int main() {
+//     double a, b, c;
+//     cin >> a >> b >> c;
+
+//     try {
+//         Time(a, b, c);
+//     }
+
+//     catch (const char* arg) {
+//         cout << arg << endl;
+//     }
+
+//     catch (...) {
+//         cout << "I have catched an exception!" << endl;
+//     }
+// }
+
