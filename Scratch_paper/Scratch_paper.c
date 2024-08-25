@@ -2378,4 +2378,16 @@
 //     }
 // }
 
+#include <stdio.h>
+#include <assert.h>
 
+void divide(int a, int b) {
+    assert(b != 0);  // 确保 b 不为 0
+    printf("Result: %d\n", a / b);
+}
+
+int main() {
+    divide(10, 2);  // 正常
+    divide(10, 0);  // 触发断言
+    return 0;
+}
