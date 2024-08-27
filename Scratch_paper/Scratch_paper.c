@@ -2391,3 +2391,76 @@
 //     divide(10, 0);  // 触发断言
 //     return 0;
 // }
+
+#include <stdio.h>
+struct Term {
+    int ccficient;
+    int exponent;
+};
+
+int main() {
+    int n1, n2;
+    scanf("%d", &n1);
+
+    struct Term poly1[n1];
+
+    for (int i = 0; i < n1; i++) {
+        scanf(" (%d,%d)", &poly1[i].ccficient, &poly1[i].exponent);
+    }
+    scanf("%d", &n2);
+
+    struct Term poly2[n2];
+
+    for (int i = 0; i < n2; i++) {
+        scanf(" (%d,%d)", &poly2[i].ccficient, &poly2[i].exponent);
+    }
+
+    // 执行多项式相加运算
+    int result_size = n1 + n2;  // 结果多项式的最大项数
+    struct Term result[result_size];
+    int i = 0, j = 0, k = 0;
+
+    while (i < n1 && j < n2) {
+        if (poly1[i].exponent < poly2[j].exponent) {
+            result[k++] = poly1[i++];
+        } else if (poly1[i].exponent > poly2[j].exponent) {
+            result[k++] = poly2[j++];
+        } else {
+            // 指数相同，系数相加
+            result[k].exponent = poly1[i].exponent;
+            result[k].ccficient = poly1[i].ccficient + poly2[j].ccficient;
+            i++;
+            j++;
+            k++;
+        }
+    }
+
+    // 处理剩余的项
+    while (i < n1) {
+        result[k++] = poly1[i++];
+    }
+
+    while (j < n2) {
+        result[k++] = poly2[j++];
+    }
+
+    for (int i = 0; i < k; i++) {
+        if (i == 0) {
+            printf("%d", result[i].ccficient);
+        } else {
+            if (result[i].ccficient > 0) {
+                printf("+%d", result[i].ccficient);
+                if (result[i].exponent > 0) {
+                    printf("X");
+                    if (result[i].exponent > 1) {
+                        printf("^%d", result[i].exponent);
+                    }
+                }
+            }
+        }
+    }
+
+    printf("\n");
+
+    return 0;
+}
