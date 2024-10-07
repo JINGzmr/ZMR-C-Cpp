@@ -2465,6 +2465,40 @@
 //     return 0;
 // }
 
+// #include <pthread.h>
+// #include <semaphore.h>
+// #include <stdio.h>
+
+// sem_t semaphore;
+// int shared_data = 0;
+
+// void* thread_function(void* arg) {
+//     sem_wait(&semaphore); // 减少信号量，如果信号量为0则阻塞等待
+//     shared_data++;        // 修改共享数据
+//     printf("Thread %s: shared_data = %d\n", (char*)arg, shared_data);
+//     sem_post(&semaphore); // 增加信号量，释放资源
+//     return NULL;
+// }
+
+// int main() {
+//     pthread_t thread1, thread2;
+
+//     // 初始化信号量，初始值为1
+//     sem_init(&semaphore, 0, 1);
+
+//     pthread_create(&thread1, NULL, thread_function, "A");
+//     pthread_create(&thread2, NULL, thread_function, "B");
+
+//     pthread_join(thread1, NULL);
+//     pthread_join(thread2, NULL);
+
+//     // 销毁信号量
+//     sem_destroy(&semaphore);
+
+//     return 0;
+// }
+
+
 #include <pthread.h>
 #include <semaphore.h>
 #include <stdio.h>
